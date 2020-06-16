@@ -1,15 +1,13 @@
 'use strict';
 
+const _path = require('path');
 const _cx_data = require('cx-data');
-//const _cx_sql = require('./core/cx-sql-pool-manager');
 //const _cx_client_schema = require('./cx-client-schema');
-//const DBContext = require('../cx/data/schema/cx-context');
-
 
 class CXClientContext extends _cx_data.DBContext {
     constructor(pool) {
         // TODO: get proper path like relative to or something
-        super(pool, '../../../cx-client/business');
+        super(pool, _path.join(__dirname, 'business'));
     }
 
 
@@ -39,6 +37,6 @@ module.exports = {
         return new CXClientContext(db_pool);
     },
 
-
+    builder: _cx_data.builder,
 
 }
