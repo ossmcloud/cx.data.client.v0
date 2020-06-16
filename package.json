@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ossmcloud/cx.data.client.v0#readme",
   "dependencies": {
     "cx-core": "file:../cx.core.v0",
+    "cx-core-ui": "file:../cx.core.ui.v0",
     "cx-data": "file:../cx.data.v0",
     "mssql": "^6.2.0"
   }
