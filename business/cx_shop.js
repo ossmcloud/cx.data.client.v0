@@ -17,6 +17,7 @@ class cx_shop_Collection extends _persistentTable.Table {
             id: options.id || 'shop_dropdown',
             placeHolder: options.placeHolder || 'select a shop',
             value: options.value,
+            width: options.width,
             items: [],
         };
 
