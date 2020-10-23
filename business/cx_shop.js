@@ -40,9 +40,11 @@ class cx_shop_Collection extends _persistentTable.Table {
         return _ui.controls.table(this.records, {
             primaryKey: 'shopId',
             path: options.path || 'shop',
+            name: options.name || 'shop',
             tableId: options.tableId || 'cx_shop',
             allowNew: options.allowEdit || null,
             allowEdit: options.allowEdit || false,
+            quickSearch: true,
             columns: options.columns || [
                 { name: 'shopId', title: 'shop id' },
                 { name: 'shopCode', title: 'code' },
@@ -65,7 +67,8 @@ class cx_shop extends _persistentTable.Record {
         if (!options) { options = {}; }
         return _ui.controls.form(this, {
             primaryKey: 'shopId',
-            path: options.path || 'shop',            
+            path: options.path || 'shop',        
+            listPath: options.listPath || 'shops',
             accountId: options.accountId,
             edit: options.edit || false,
             columns: options.columns || []
