@@ -50,8 +50,10 @@ class Persistent_cx_shop_ping_Collection extends _cx_data.DBTable {
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
 class Persistent_cx_shop_ping extends _cx_data.DBRecord {
+    
     constructor(table, defaults) {
         super(table, defaults);
+        
     }
     get FieldNames() { return _fieldNames; }
 

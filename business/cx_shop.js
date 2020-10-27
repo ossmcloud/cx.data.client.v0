@@ -35,12 +35,32 @@ class cx_shop_Collection extends _persistentTable.Table {
         return _ui.controls.dropDown(dropDownOptions);
     }
 
+    // async render(options) {
+    //     if (!options) { options = {}; }
+    //     return _ui.controls.table(this.records, {
+    //         primaryKey: 'shopId',
+    //         path: options.path || '../cx/shop',
+    //         name: options.name || 'shop',
+    //         tableId: options.tableId || 'cx_shop',
+    //         allowNew: options.allowEdit || null,
+    //         allowEdit: options.allowEdit || false,
+    //         quickSearch: true,
+    //         columns: options.columns || [
+    //             { name: 'shopId', title: 'shop id' },
+    //             { name: 'shopCode', title: 'code' },
+    //             { name: 'shopName', title: 'name' },
+    //             { name: 'shopAddress', title: 'address' },
+    //             { name: 'status', title: 'status' },
+    //         ]
+    //     });
+    // }
+
     async render(options) {
         if (!options) { options = {}; }
-        return _ui.controls.table(this.records, {
+        return _ui.controls.tableEx(this.records, {
             primaryKey: 'shopId',
-            path: options.path || 'shop',
-            name: options.name || 'shop',
+            path:  options.path || '../cx/shop',
+            title: options.title || 'shops',
             tableId: options.tableId || 'cx_shop',
             allowNew: options.allowEdit || null,
             allowEdit: options.allowEdit || false,
