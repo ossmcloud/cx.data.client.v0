@@ -13,7 +13,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
     }
 
     async select(params) {
-        
+        if (!params) { params = {};}
         this.query = {
             build: function () {
                 var query = { sql: '', params: [] };
@@ -60,7 +60,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
             path: options.path || '../dtfs/ping',
             title: options.title || 'shop ping history',
             tableId: options.tableId || 'cx_shop_ping',
-            fixHeader: options.fixHeader || true, 
+            fixHeader: options.fixHeader || false, 
             filters: options.filters || null,
             allowNew: false,
             allowEdit: false,
