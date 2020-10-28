@@ -18,6 +18,8 @@ class cx_shop_Collection extends _persistentTable.Table {
             placeHolder: options.placeHolder || 'select a shop',
             value: options.value,
             width: options.width,
+            fieldName: options.fieldName || 'shopId',
+            label: options.label || '',
             items: [],
         };
 
@@ -57,7 +59,7 @@ class cx_shop_Collection extends _persistentTable.Table {
 
     async render(options) {
         if (!options) { options = {}; }
-        return _ui.controls.tableEx(this.records, {
+        return _ui.controls.table(this.records, {
             primaryKey: 'shopId',
             path:  options.path || '../cx/shop',
             title: options.title || 'shops',
