@@ -27,6 +27,11 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
                     query.params.push({ name: 'shopId', value: params.s });
                 }
 
+                if (params.df) {
+                    query.sql += ' and p.created >= @dateFrom';
+                    query.params.push({ name: 'dateFrom', value: params.df });
+                }
+
                 query.sql += ' order by p.created desc';
 
                 //return { sql: 'select top 1000 p.*, s.shopCode, s.shopName from cx_shop_ping p, cx_shop s where p.shopId = s.shopId' }
@@ -96,18 +101,24 @@ class cx_shop_ping extends _persistentTable.Record {
 
     async render(options) {
         if (!options) { options = {}; }
-        return _ui.controls.form(this, {
+        return _ui.controls.formEx(this, {
             primaryKey: 'pingId',
             path: options.path || '../dtfs/ping',
             listPath: options.listPath || '../dtfs/pings',
             accountId: options.accountId,
-            edit: options.edit || false,
-            columns: options.columns || [
-                { name: 'pingId', label: 'id' },
-                { name: 'shopInfo', label: 'shop' },
-                { name: 'pingIP', label: 'ping IP' },
-                { name: 'response', label: 'response' },
-                { name: 'created', label: 'created' },
+            formTitle: options.formTitle || 'dtfs shop ping form',
+            edit: false,    // !IMPORTANT: these records cannot be edited
+            groups: options.groups || [
+                { name: 'main', title: 'main info' },
+                { name: 'ping', title: 'ping info' },
+                { name: 'audit', title: 'audit info' },
+            ],
+            fields: options.fields || [
+                { group: 'main', name: 'pingId', label: 'id', readOnly: true, column: 1 },
+                { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
+                { group: 'ping', name: 'pingIP', label: 'ping IP', width: '150px', column: 1 },
+                { group: 'ping', name: 'response', label: 'ping response', width: '150px', column: 2 },
+                { group: 'audit', name: 'created', label: 'created', readOnly: true },
             ]
         });
     }

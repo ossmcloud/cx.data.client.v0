@@ -14,12 +14,14 @@ class cx_shop_Collection extends _persistentTable.Table {
 
     async renderDropDown(options) {
         var dropDownOptions = {
+            inputType: _ui.controls.Type.SELECT,
             id: options.id || 'shop_dropdown',
             placeHolder: options.placeHolder || 'select a shop',
             value: options.value,
             width: options.width,
+            inline: options.inline,
             fieldName: options.fieldName || 'shopId',
-            label: options.label || '',
+            label: (options.label == undefined) ? 'shop' : options.label,
             items: [],
         };
 
@@ -33,6 +35,8 @@ class cx_shop_Collection extends _persistentTable.Table {
                 text: record.shopName + ' [' + record.shopCode + ']',
             });
         });
+
+        if (options.doNotRender) { return dropDownOptions; }
 
         return _ui.controls.dropDown(dropDownOptions);
     }
@@ -87,13 +91,26 @@ class cx_shop extends _persistentTable.Record {
 
     async render(options) {
         if (!options) { options = {}; }
-        return _ui.controls.form(this, {
+        return _ui.controls.formEx(this, {
             primaryKey: 'shopId',
-            path: options.path || 'shop',        
-            listPath: options.listPath || 'shops',
+            path: options.path || '../cx/shop',        
+            listPath: options.listPath || '../cx/shops',
             accountId: options.accountId,
+            formTitle: options.formTitle || 'shop form',
             edit: options.edit || false,
-            columns: options.columns || []
+            allowEdit: true,
+
+            groups: options.groups || [
+                { name: 'main', title: 'main info' },
+                { name: 'audit', title: 'audit info' },
+            ],
+            fields: options.fields || [
+                { group: 'main', name: 'shopCode', label: 'code', column: 1 },
+                //{ group: 'main', name: 'shopId', label: 'id', readOnly: true, column: 1, inline: true },
+                { group: 'main', name: 'shopName', label: 'name', column: 1 },
+                { group: 'main', name: 'shopAddress', label: 'address', column: 1, width: '300px' },
+                { group: 'audit', name: 'created', label: 'created', readOnly: true },
+            ]
         });
     }
 
