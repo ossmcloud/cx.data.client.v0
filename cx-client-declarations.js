@@ -10,7 +10,7 @@ const CR_SHOP_TRANSMISSION = {
     STATUS: {
         PENDING: 0,
         TRANSMITTING: 1,
-
+        //
         FINALIZING: 7,
         COMPLETE: 8,
         ERROR: 9,

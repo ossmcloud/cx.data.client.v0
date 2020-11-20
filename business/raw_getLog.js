@@ -2,7 +2,6 @@
 //
 // REQUIRE PERSISTENT TABLE
 //
-const _ui = require('cx-core-ui');
 const _persistentTable = require('../persistent/p-raw_getLog');
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
@@ -101,9 +100,11 @@ class raw_getLog_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
-    async render(options) {
+    async renderOptions(options) {
         if (!options) { options = {}; }
-        return _ui.controls.table(this.records, {
+        // TODO: CX: this should come (or partially come) from the BD
+        //           so we could have sort of customizable forms
+        return {
             primaryKey: 'getLogId',
             path: options.path || '../dtfs/getlog',
             title: options.title || 'shop get logs history',
@@ -124,8 +125,34 @@ class raw_getLog_Collection extends _persistentTable.Table {
                 { name: 'getSuccess', title: 'success', align: 'center', width: '70px' },
                 { name: 'created', title: 'created', align: 'center', width: '130px' },
             ]
-        });
+        }
     }
+
+    // async render(options) {
+    //     if (!options) { options = {}; }
+    //     return _ui.controls.table(this.records, {
+    //         primaryKey: 'getLogId',
+    //         path: options.path || '../dtfs/getlog',
+    //         title: options.title || 'shop get logs history',
+    //         tableId: options.tableId || 'raw_getLog',
+    //         fixHeader: options.fixHeader || false,
+    //         filters: options.filters || null,
+    //         allowNew: false,
+    //         allowEdit: false,
+    //         quickSearch: true,
+    //         columns: options.columns || [
+    //             { name: 'getLogId', title: '', align: 'center' },
+    //             { name: 'shopInfo', title: 'shop', width: '200px' },
+    //             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
+    //             { name: 'getDate', title: 'date', align: 'center', width: '130px' },
+    //             { name: 'getModule', title: 'module', align: 'center', width: '70px' },
+    //             { name: 'getReference', title: 'reference' },
+    //             { name: 'getResponse', title: 'response' },
+    //             { name: 'getSuccess', title: 'success', align: 'center', width: '70px' },
+    //             { name: 'created', title: 'created', align: 'center', width: '130px' },
+    //         ]
+    //     });
+    // }
 }
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
@@ -145,14 +172,11 @@ class raw_getLog extends _persistentTable.Record {
         return `[${this.#shopCode}] ${this.#shopName}`;
     }
 
-    async render(options) {
+    async renderOptions(options) {
         if (!options) { options = {}; }
-
-        // var shops = this.table.db.table('cx_shop');
-        // var shopDropDownOptions = await shops.renderDropDown({ value: this.shopId, doNotRender: true });
-        
-
-        return _ui.controls.formEx(this, {
+        // TODO: CX: this should come (or partially come) from the BD
+        //           so we could have sort of customizable forms
+        return {
             id: options.id || 'raw_getLog',
             primaryKey: 'getLogId',
             path: options.path || '../dtfs/getlog',
@@ -170,19 +194,58 @@ class raw_getLog extends _persistentTable.Record {
                 //{ group: 'main', name: 'shopId', label: 'shop', type: _ui.controls.Type.SELECT, options: shopDropDownOptions },
                 { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
                 { group: 'main', name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
-                
-                
+
+
                 { group: 'get', name: 'getModule', label: 'module', align: 'center', width: '70px', column: 1 },
                 { group: 'get', name: 'getReference', label: 'reference', column: 1 },
                 { group: 'get', name: 'getSuccess', label: 'success', align: 'center', width: '70px', column: 1 },
 
                 { group: 'get', name: 'getDate', label: 'date', align: 'center', column: 2 },
                 { group: 'get', name: 'getResponse', label: 'response', column: 2 },
-                
+
                 { group: 'audit', name: 'created', label: 'created', readOnly: true },
             ]
-        });
+        }
     }
+
+    // async render(options) {
+    //     if (!options) { options = {}; }
+
+    //     // var shops = this.table.db.table('cx_shop');
+    //     // var shopDropDownOptions = await shops.renderDropDown({ value: this.shopId, doNotRender: true });
+        
+
+    //     return _ui.controls.formEx(this, {
+    //         id: options.id || 'raw_getLog',
+    //         primaryKey: 'getLogId',
+    //         path: options.path || '../dtfs/getlog',
+    //         listPath: options.listPath || '../dtfs/getlogs',
+    //         accountId: options.accountId,
+    //         formTitle: options.formTitle || 'dtfs get log form',
+    //         edit: false,    // !IMPORTANT: these records cannot be edited
+    //         groups: options.groups || [
+    //             { name: 'main', title: 'main info' },
+    //             { name: 'get', title: 'get info' },
+    //             { name: 'audit', title: 'audit info' },
+    //         ],
+    //         fields: options.fields || [
+    //             { group: 'main', name: 'getLogId', label: 'id', readOnly: true, column: 1 },
+    //             //{ group: 'main', name: 'shopId', label: 'shop', type: _ui.controls.Type.SELECT, options: shopDropDownOptions },
+    //             { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
+    //             { group: 'main', name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
+                
+                
+    //             { group: 'get', name: 'getModule', label: 'module', align: 'center', width: '70px', column: 1 },
+    //             { group: 'get', name: 'getReference', label: 'reference', column: 1 },
+    //             { group: 'get', name: 'getSuccess', label: 'success', align: 'center', width: '70px', column: 1 },
+
+    //             { group: 'get', name: 'getDate', label: 'date', align: 'center', column: 2 },
+    //             { group: 'get', name: 'getResponse', label: 'response', column: 2 },
+                
+    //             { group: 'audit', name: 'created', label: 'created', readOnly: true },
+    //         ]
+    //     });
+    // }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

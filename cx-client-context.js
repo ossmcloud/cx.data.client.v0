@@ -13,11 +13,6 @@ class CXClientContext extends _cx_data.DBContext {
         super(pool, _path.join(__dirname, 'business'));
     }
 
-    
-
-
-
-    
 }
 
 

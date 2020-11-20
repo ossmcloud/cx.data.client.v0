@@ -2,7 +2,6 @@
 //
 // REQUIRE PERSISTENT TABLE
 //
-const _ui = require('cx-core-ui');
 const _persistentTable = require('../persistent/p-cx_shop_ping');
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
@@ -58,14 +57,16 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
-    async render(options) {
+    async renderOptions(options) {
         if (!options) { options = {}; }
-        return _ui.controls.table(this.records, {
+        // TODO: CX: this should come (or partially come) from the BD
+        //           so we could have sort of customizable forms
+        return {
             primaryKey: 'pingId',
             path: options.path || '../dtfs/ping',
             title: options.title || 'shop ping history',
             tableId: options.tableId || 'cx_shop_ping',
-            fixHeader: options.fixHeader || false, 
+            fixHeader: options.fixHeader || false,
             filters: options.filters || null,
             allowNew: false,
             allowEdit: false,
@@ -77,7 +78,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
                 { name: 'response', title: 'response' },
                 { name: 'created', title: 'created', align: 'center', width: '130px' },
             ]
-        });
+        }
     }
 
 }
@@ -99,9 +100,11 @@ class cx_shop_ping extends _persistentTable.Record {
         return `[${this.#shopCode}] ${this.#shopName}`;
     }
 
-    async render(options) {
+    async renderOptions(options) {
         if (!options) { options = {}; }
-        return _ui.controls.formEx(this, {
+        // TODO: CX: this should come (or partially come) from the BD
+        //           so we could have sort of customizable forms
+        return {
             primaryKey: 'pingId',
             path: options.path || '../dtfs/ping',
             listPath: options.listPath || '../dtfs/pings',
@@ -120,8 +123,9 @@ class cx_shop_ping extends _persistentTable.Record {
                 { group: 'ping', name: 'response', label: 'ping response', width: '150px', column: 2 },
                 { group: 'audit', name: 'created', label: 'created', readOnly: true },
             ]
-        });
+        }
     }
+   
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
