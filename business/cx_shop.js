@@ -2,6 +2,7 @@
 //
 // REQUIRE PERSISTENT TABLE
 //
+const _ex = require('cx-core/errors/cx-errors');
 const _ui = require('cx-core-ui');
 const _persistentTable = require('../persistent/p-cx_shop');
 //
@@ -12,9 +13,17 @@ class cx_shop_Collection extends _persistentTable.Table {
         return new cx_shop(this, defaults);
     }
 
-    async renderDropDown(options) {
+    async fetchOrNew(id) {
+        if (id) {
+            return await super.fetch(id);
+        } else {
+            return this.createNew();
+        }
+    }
+
+    async renderDropDownOptions(options) {
+        if (!options) { options = {}; }
         var dropDownOptions = {
-            inputType: _ui.controls.Type.SELECT,
             id: options.id || 'shop_dropdown',
             placeHolder: options.placeHolder || 'select a shop',
             value: options.value,
@@ -24,48 +33,26 @@ class cx_shop_Collection extends _persistentTable.Table {
             label: (options.label == undefined) ? 'shop' : options.label,
             items: [],
         };
-
-        if (this.count() == 0 && !options.noLoad) {
-            await this.select();
-        }
-
+        // load collection if required
+        if (this.count() == 0 && !options.noLoad) { await this.select(); }
+        // populate drop down items
         this.each(function (record) {
             dropDownOptions.items.push({
                 value: record.shopId,
                 text: record.shopName + ' [' + record.shopCode + ']',
             });
         });
-
-        if (options.doNotRender) { return dropDownOptions; }
-
-        return _ui.controls.dropDown(dropDownOptions);
+        //
+        return dropDownOptions;
     }
 
-    // async render(options) {
-    //     if (!options) { options = {}; }
-    //     return _ui.controls.table(this.records, {
-    //         primaryKey: 'shopId',
-    //         path: options.path || '../cx/shop',
-    //         name: options.name || 'shop',
-    //         tableId: options.tableId || 'cx_shop',
-    //         allowNew: options.allowEdit || null,
-    //         allowEdit: options.allowEdit || false,
-    //         quickSearch: true,
-    //         columns: options.columns || [
-    //             { name: 'shopId', title: 'shop id' },
-    //             { name: 'shopCode', title: 'code' },
-    //             { name: 'shopName', title: 'name' },
-    //             { name: 'shopAddress', title: 'address' },
-    //             { name: 'status', title: 'status' },
-    //         ]
-    //     });
-    // }
-
-    async render(options) {
+    async renderOptions(options) {
         if (!options) { options = {}; }
-        return _ui.controls.table(this.records, {
+        // TODO: CX: this should come (or partially come) from the BD
+        //           so we could have sort of customizable forms
+        return {
             primaryKey: 'shopId',
-            path:  options.path || '../cx/shop',
+            path: options.path || '../cx/shop',
             title: options.title || 'shops',
             tableId: options.tableId || 'cx_shop',
             allowNew: options.allowEdit || null,
@@ -78,7 +65,7 @@ class cx_shop_Collection extends _persistentTable.Table {
                 { name: 'shopAddress', title: 'address' },
                 { name: 'status', title: 'status' },
             ]
-        });
+        }
     }
 }
 //
@@ -89,11 +76,13 @@ class cx_shop extends _persistentTable.Record {
         super(table, defaults);
     };
 
-    async render(options) {
+    async renderOptions(options) {
         if (!options) { options = {}; }
-        return _ui.controls.formEx(this, {
+        // TODO: CX: this should come (or partially come) from the BD
+        //           so we could have sort of customizable forms
+        return {
             primaryKey: 'shopId',
-            path: options.path || '../cx/shop',        
+            path: options.path || '../cx/shop',
             listPath: options.listPath || '../cx/shops',
             accountId: options.accountId,
             formTitle: options.formTitle || 'shop form',
@@ -105,17 +94,18 @@ class cx_shop extends _persistentTable.Record {
                 { name: 'audit', title: 'audit info' },
             ],
             fields: options.fields || [
-                { group: 'main', name: 'shopCode', label: 'code', column: 1 },
+                { group: 'main', name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.id) },
                 //{ group: 'main', name: 'shopId', label: 'id', readOnly: true, column: 1, inline: true },
-                { group: 'main', name: 'shopName', label: 'name', column: 1 },
-                { group: 'main', name: 'shopAddress', label: 'address', column: 1, width: '300px' },
+                { group: 'main', name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
+                { group: 'main', name: 'shopAddress', label: 'address', column: 1, width: '300px', validation: '{ "max": 255 }' },
                 { group: 'audit', name: 'created', label: 'created', readOnly: true },
             ]
-        });
+        }
     }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        if (!this.status) { this.status = 0; }
         await super.save()
     }
 }
