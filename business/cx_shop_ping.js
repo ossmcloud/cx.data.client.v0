@@ -65,7 +65,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
             primaryKey: 'pingId',
             path: options.path || '../dtfs/ping',
             title: options.title || 'shop ping history',
-            tableId: options.tableId || 'cx_shop_ping',
+            id: options.id || 'cx_shop_ping',
             fixHeader: options.fixHeader || false,
             filters: options.filters || null,
             allowNew: false,

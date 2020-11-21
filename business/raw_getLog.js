@@ -108,7 +108,7 @@ class raw_getLog_Collection extends _persistentTable.Table {
             primaryKey: 'getLogId',
             path: options.path || '../dtfs/getlog',
             title: options.title || 'shop get logs history',
-            tableId: options.tableId || 'raw_getLog',
+            id: options.id || 'raw_getLog',
             fixHeader: options.fixHeader || false,
             filters: options.filters || null,
             allowNew: false,
@@ -128,31 +128,6 @@ class raw_getLog_Collection extends _persistentTable.Table {
         }
     }
 
-    // async render(options) {
-    //     if (!options) { options = {}; }
-    //     return _ui.controls.table(this.records, {
-    //         primaryKey: 'getLogId',
-    //         path: options.path || '../dtfs/getlog',
-    //         title: options.title || 'shop get logs history',
-    //         tableId: options.tableId || 'raw_getLog',
-    //         fixHeader: options.fixHeader || false,
-    //         filters: options.filters || null,
-    //         allowNew: false,
-    //         allowEdit: false,
-    //         quickSearch: true,
-    //         columns: options.columns || [
-    //             { name: 'getLogId', title: '', align: 'center' },
-    //             { name: 'shopInfo', title: 'shop', width: '200px' },
-    //             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
-    //             { name: 'getDate', title: 'date', align: 'center', width: '130px' },
-    //             { name: 'getModule', title: 'module', align: 'center', width: '70px' },
-    //             { name: 'getReference', title: 'reference' },
-    //             { name: 'getResponse', title: 'response' },
-    //             { name: 'getSuccess', title: 'success', align: 'center', width: '70px' },
-    //             { name: 'created', title: 'created', align: 'center', width: '130px' },
-    //         ]
-    //     });
-    // }
 }
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
@@ -191,7 +166,7 @@ class raw_getLog extends _persistentTable.Record {
             ],
             fields: options.fields || [
                 { group: 'main', name: 'getLogId', label: 'id', readOnly: true, column: 1 },
-                //{ group: 'main', name: 'shopId', label: 'shop', type: _ui.controls.Type.SELECT, options: shopDropDownOptions },
+                //{ group: 'main', name: 'shopId', label: 'shop', type: _ui.controls.CtrlType.SELECT, options: shopDropDownOptions },
                 { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
                 { group: 'main', name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
 
@@ -230,7 +205,7 @@ class raw_getLog extends _persistentTable.Record {
     //         ],
     //         fields: options.fields || [
     //             { group: 'main', name: 'getLogId', label: 'id', readOnly: true, column: 1 },
-    //             //{ group: 'main', name: 'shopId', label: 'shop', type: _ui.controls.Type.SELECT, options: shopDropDownOptions },
+    //             //{ group: 'main', name: 'shopId', label: 'shop', type: _ui.controls.CtrlType.SELECT, options: shopDropDownOptions },
     //             { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
     //             { group: 'main', name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
                 

@@ -54,7 +54,7 @@ class cx_shop_Collection extends _persistentTable.Table {
             primaryKey: 'shopId',
             path: options.path || '../cx/shop',
             title: options.title || 'shops',
-            tableId: options.tableId || 'cx_shop',
+            id: options.id || 'cx_shop',
             allowNew: options.allowEdit || null,
             allowEdit: options.allowEdit || false,
             quickSearch: true,
