@@ -63,12 +63,12 @@ class raw_getLog_Collection extends _persistentTable.Table {
 
                 if (params.df) {
                     query.sql += ' and l.getDate >= @from';
-                    query.params.push({ name: 'from', value: params.df });
+                    query.params.push({ name: 'from', value: params.df + ' 00:00:00' });
                 }
 
                 if (params.dt) {
                     query.sql += ' and l.getDate <= @to';
-                    query.params.push({ name: 'to', value: params.dt });
+                    query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
                 }
 
                 if (params.suc) {
@@ -80,7 +80,7 @@ class raw_getLog_Collection extends _persistentTable.Table {
                 return query;
             }
         }
-        await super.select()
+        await super.select();
     }
 
     async fetch(id) {
