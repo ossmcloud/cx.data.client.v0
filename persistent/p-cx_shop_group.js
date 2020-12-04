@@ -14,17 +14,15 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cx_shop';
+const _tableName = 'cx_shop_group';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    SHOPID: 'shopId',
     SHOPGROUPID: 'shopGroupId',
-    SHOPCODE: 'shopCode',
-    SHOPNAME: 'shopName',
-    SHOPADDRESS: 'shopAddress',
-    STATUS: 'status',
+    GROUPCODE: 'groupCode',
+    GROUPNAME: 'groupName',
+    GROUPCOLOR: 'groupColor',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -35,12 +33,10 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    shopId: { name: 'shopId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    shopGroupId: { name: 'shopGroupId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    shopCode: { name: 'shopCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
-    shopName: { name: 'shopName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
-    shopAddress: { name: 'shopAddress', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: true },
-    status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    shopGroupId: { name: 'shopGroupId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    groupCode: { name: 'groupCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
+    groupName: { name: 'groupName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    groupColor: { name: 'groupColor', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -50,7 +46,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cx_shop_Collection extends _cx_data.DBTable {
+class Persistent_cx_shop_group_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -59,45 +55,33 @@ class Persistent_cx_shop_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cx_shop extends _cx_data.DBRecord {
+class Persistent_cx_shop_group extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
 
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get shopId() {
-        return super.getValue(_fieldNames.SHOPID);
-    }
-
     get shopGroupId() {
         return super.getValue(_fieldNames.SHOPGROUPID);
-    } set shopGroupId(val) {
-        super.setValue(_fieldNames.SHOPGROUPID, val);
     }
 
-    get shopCode() {
-        return super.getValue(_fieldNames.SHOPCODE);
-    } set shopCode(val) {
-        super.setValue(_fieldNames.SHOPCODE, val);
+    get groupCode() {
+        return super.getValue(_fieldNames.GROUPCODE);
+    } set groupCode(val) {
+        super.setValue(_fieldNames.GROUPCODE, val);
     }
 
-    get shopName() {
-        return super.getValue(_fieldNames.SHOPNAME);
-    } set shopName(val) {
-        super.setValue(_fieldNames.SHOPNAME, val);
+    get groupName() {
+        return super.getValue(_fieldNames.GROUPNAME);
+    } set groupName(val) {
+        super.setValue(_fieldNames.GROUPNAME, val);
     }
 
-    get shopAddress() {
-        return super.getValue(_fieldNames.SHOPADDRESS);
-    } set shopAddress(val) {
-        super.setValue(_fieldNames.SHOPADDRESS, val);
-    }
-
-    get status() {
-        return super.getValue(_fieldNames.STATUS);
-    } set status(val) {
-        super.setValue(_fieldNames.STATUS, val);
+    get groupColor() {
+        return super.getValue(_fieldNames.GROUPCOLOR);
+    } set groupColor(val) {
+        super.setValue(_fieldNames.GROUPCOLOR, val);
     }
 
     get created() {
@@ -130,6 +114,6 @@ class Persistent_cx_shop extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cx_shop_Collection,
-    Record: Persistent_cx_shop,
+    Table: Persistent_cx_shop_group_Collection,
+    Record: Persistent_cx_shop_group,
 }

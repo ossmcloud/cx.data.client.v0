@@ -66,6 +66,22 @@ const RAW_GET_REQUEST = {
     }
 }
 
+const RENDER = {
+    TYPE: {
+        LIST: 'list',
+        RECORD: 'record',
+        DROP_DOWN: 'dropdown'
+    },
+    // NOTE: this MUST match:
+    //  ..\cx.sdk.v0\cx.core.ui.v0\cx-core-ui-declarations.js(ControlType)
+    CTRL_TYPE: {
+        TEXT: 'inputText',
+        DATE: 'inputDate',
+        SELECT: 'inputSelect',
+        DROP_DOWN: 'inputDropDown',
+    }
+}
+
 const SQL = {
     MAX_ROWS: 1000
 }
@@ -75,5 +91,6 @@ module.exports = {
     CR_SHOP_CONFIGS: CR_SHOP_CONFIGS,
     CR_SHOP_TRANSMISSION: CR_SHOP_TRANSMISSION,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
+    RENDER: RENDER,
     SQL: SQL,
 }

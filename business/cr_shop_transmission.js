@@ -1,22 +1,13 @@
 'use strict'
 //
-// REQUIRE PERSISTENT TABLE
-//
 const _persistentTable = require('../persistent/p-cr_shop_transmission');
 const _declarations = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
-//
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //
 class cr_shop_transmission_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cr_shop_transmission(this, defaults);
     }
-
-    async renderOptions(options) {
-        return _cx_render.getListOptions(this, options);
-    }
-
 
     async select(params) {
         var _this = this;
@@ -27,6 +18,7 @@ class cr_shop_transmission_Collection extends _persistentTable.Table {
                     select  top ${_declarations.SQL.MAX_ROWS} l.*, s.shopCode, s.shopName
                     from    ${_this.type} l, cx_shop s
                     where   l.${_this.FieldNames.SHOPID} = s.shopId
+                    and     l.${_this.FieldNames.SHOPID} in ${_this.cx.shopList}
                 `
                 if (params.s) {
                     query.sql += ' and l.shopId = @shopId';
@@ -67,6 +59,8 @@ class cr_shop_transmission_Collection extends _persistentTable.Table {
                     from    ${this.type} l, cx_shop s
                     where   l.${this.FieldNames.SHOPID} = s.shopId
                     and     l.${this.FieldNames.TRANSMISSIONID} = @transmissionId
+                    and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+                    and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
                 `
         query.noResult = 'null';
         query.returnFirst = true;
@@ -76,11 +70,8 @@ class cr_shop_transmission_Collection extends _persistentTable.Table {
 
         return super.populate(rawRecord);
     }
-
-    
 }
-//
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
+
 //
 class cr_shop_transmission extends _persistentTable.Record {
     #shopName = '';
@@ -96,23 +87,10 @@ class cr_shop_transmission extends _persistentTable.Record {
     get shopInfo() {
         return `[${this.#shopCode}] ${this.#shopName}`;
     }
-
     get transmissionIdText() {
         return this.transmissionId.toString();
     }
-
-
-    async renderOptions(options) {
-        return _cx_render.getRecordOptions(this, options);
-    }
-
-    async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
-    }
 }
-//
-// EXPORTS ONLY TABLE AND RECORD
 //
 module.exports = {
     Table: cr_shop_transmission_Collection,

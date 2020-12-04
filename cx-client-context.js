@@ -2,15 +2,24 @@
 
 const _path = require('path');
 const _cx_data = require('cx-data');
+const _cx_render = require('./cx-client-render');
 const _cx_client_schema = require('./cx-client-schema');
 const _cx_client_declarations = require('./cx-client-declarations');
 
 const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
 
 class CXClientContext extends _cx_data.DBContext {
-    constructor(pool) {
+    constructor(pool, credentials) {
         // TODO: get proper path like relative to or something
-        super(pool, _path.join(__dirname, 'business'));
+        super(pool, _path.join(__dirname, 'business'), credentials);
+    }
+
+    // TODO: get lits of shop IDs the user has access to
+    get shops() {
+        return [1, 3, 6];
+    }
+    get shopList() {
+        return '(1,3,6)';
     }
 
 }
@@ -26,10 +35,14 @@ module.exports = {
     //
     Schema: _cx_client_schema,
     Const: _cx_client_declarations,
+    Render: _cx_render,
     //
-    get: async function (config) {
-        var db_pool = await _cx_data.getPool(config);
-        return new CXClientContext(db_pool);
+    get: async function (options) {
+        var dbConfig = options.dbConfig || options;
+        var credentials = (options.dbConfig) ? options : null;
+
+        var db_pool = await _cx_data.getPool(dbConfig);
+        return new CXClientContext(db_pool, credentials);
     },
     
     generateTransmissionID(svcName, accountId, shopId) {
