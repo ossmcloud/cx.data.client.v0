@@ -71,11 +71,25 @@ class RenderBase {
 
 
     async filterDropDownOptions(tableName, options) {
-        var table = this.dataSource.db.table(tableName)
+        var table = this.dataSource.cx.table(tableName);
+        if (!options.dropDown) { options.dropDown = {}; }
         options.dropDown = {
             allowAll: true,
             allowNone: true,
         }
+        //options.allowEmpty = '- all -';
+        return await _cx_render.getDropDownOptions(table, options);
+    }
+
+    async fieldDropDownOptions(tableName, options) {
+        var table = this.dataSource.cx.table(tableName);
+        if (!options.dropDown) { options.dropDown = {}; }
+        options.dropDown = {
+            allowAll: false,
+            allowNone: false,
+            allowEmpty: true,
+        }
+
         //options.allowEmpty = '- all -';
         return await _cx_render.getDropDownOptions(table, options);
     }
