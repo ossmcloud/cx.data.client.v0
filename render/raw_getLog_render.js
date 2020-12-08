@@ -10,21 +10,28 @@ class RawGetLog extends RenderBase {
     }
 
     async record() {
-        this.options.groups = [
-            { name: 'main', title: 'main info', columnCount: 3 },
-            { name: 'get', title: 'get info', columnCount: 3 },
-            { name: 'audit', title: 'audit info', columnCount: 3 },
-        ];
         this.options.fields = [
-            { group: 'main', name: 'getLogId', label: 'id', readOnly: true, column: 1 },
-            { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
-            { group: 'main', name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
-            { group: 'get', name: 'getModule', label: 'module', align: 'center', width: '70px', column: 1 },
-            { group: 'get', name: 'getReference', label: 'reference', column: 1 },
-            { group: 'get', name: 'getSuccess', label: 'success', align: 'center', width: '70px', column: 1 },
-            { group: 'get', name: 'getDate', label: 'date', align: 'center', column: 2 },
-            { group: 'get', name: 'getResponse', label: 'response', column: 2 },
-            { group: 'audit', name: 'created', label: 'created', readOnly: true },
+            {
+                group: 'main', title: 'main info', columnCount: 3, fields: [
+                    { name: 'getLogId', label: 'id', readOnly: true, column: 1 },
+                    { name: 'shopInfo', label: 'shop', column: 2 },
+                    { name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
+                ]
+            },
+            {
+                group: 'get', title: 'get info', columnCount: 3, fields: [
+                    { name: 'getModule', label: 'module', align: 'center', width: '70px', column: 1 },
+                    { name: 'getReference', label: 'reference', column: 1 },
+                    { name: 'getSuccess', label: 'success', align: 'center', width: '70px', column: 1 },
+                    { name: 'getDate', label: 'date', align: 'center', column: 2 },
+                    { name: 'getResponse', label: 'response', column: 2 },
+                ]
+            },
+            {
+                group: 'audit', title: 'audit info', columnCount: 3, fields: [
+                    { name: 'created', label: 'created', readOnly: true },
+                ]
+            }
         ];
     }
 

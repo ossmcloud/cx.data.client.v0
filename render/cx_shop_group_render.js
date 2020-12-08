@@ -5,28 +5,79 @@ const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
 class CxShopGroupRender extends RenderBase {
-    
+
     constructor(dataSource, options) {
         super(dataSource, options);
     }
 
+    async getShopListOptions() {
+        var shops = this.dataSource.cx.table(_cxSchema.cx_shop);
+        await shops.select({ sg: this.options.query.id });
+        if (shops.count() > 0) { this.options.allowDelete = false; }
+
+        var shopListOptions = await this.listOptions(shops);
+        shopListOptions.filters = [];
+        shopListOptions.title = '';
+        shopListOptions.allowNew = false;
+        shopListOptions.allowEdit = false;
+        shopListOptions.quickSearch = false;
+
+        shopListOptions.columns.shift();
+        if (this.options.mode == 'view') {
+            // TODO: PERMISSIONS:
+            shopListOptions.actions = [{ label: 'remove', funcName: 'removeShop' }];
+            shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Shop', function: 'addShop' }];
+        }
+        return shopListOptions;
+    }
+
     async record() {
-        this.options.groups = [
-            { name: 'main', title: 'main info', columnCount: 2 },
-            { name: 'audit', title: 'audit info', columnCount: 2 },
-        ];
+        // TODO: PERMISSIONS:
+        this.options.allowEdit = true;
+
+        var shopListOptions = null;
+        if (this.options.mode == 'new') {
+            this.options.allowDelete = false;
+        } else {
+            shopListOptions = await this.getShopListOptions()
+        }
+
         this.options.fields = [
-            { group: 'main', name: _cxSchema.cx_shop_group.GROUPCODE, label: 'code', column: 1, width: '200px', validation: '{ "mandatory": true, "max": 20  }' },
-            { group: 'main', name: _cxSchema.cx_shop_group.GROUPNAME, label: 'name', column: 1, width: '300px', validation: '{ "mandatory": true, "max": 60  }' },
-            { group: 'main', name: _cxSchema.cx_shop_group.GROUPCOLOR, label: 'color', column: 2, width: '100px' },
-            { group: 'audit', name: 'created', label: 'created', column: 1, readOnly: true },
-            { group: 'audit', name: 'createdBy', label: 'created by', column: 1, readOnly: true },
-            { group: 'audit', name: 'modified', label: 'modified', column: 2, readOnly: true },
-            { group: 'audit', name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
-        ];
+            {
+                group: 'all', title: '', columnCount: 2, fields: [
+                    {
+                        group: 'main', title: 'main info', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: _cxSchema.cx_shop_group.GROUPCODE, label: 'code', column: 1, width: '200px', validation: '{ "mandatory": true, "max": 20  }' },
+                            { name: _cxSchema.cx_shop_group.GROUPNAME, label: 'name', column: 1, width: '300px', validation: '{ "mandatory": true, "max": 60  }' },
+                            { name: _cxSchema.cx_shop_group.GROUPCOLOR, label: 'color', column: 2, width: '100px' }
+                        ]
+                    },
+                    {
+                        group: 'audit', title: 'audit info', column: 2, columnCount: 2, inline: true, fields: [
+                            { name: 'created', label: 'created on', column: 1, readOnly: true },
+                            { name: 'createdBy', label: 'by', column: 1, readOnly: true },
+                            { name: 'modified', label: 'modified on', column: 2, readOnly: true },
+                            { name: 'modifiedBy', label: 'by', column: 2, readOnly: true },
+                        ]
+                    }
+                ],
+            }
+        ]
+
+        if (shopListOptions) {
+            this.options.fields.push({
+                group: 'shops', title: 'shops assigned to this group', fields: [
+                    shopListOptions
+                ]
+            })
+        }
     }
 
     async list() {
+        // TODO: PERMISSIONS:
+        this.options.allowNew = true;
+        this.options.allowEdit = true;
+
         this.options.columns = [
             { title: '', name: _cxSchema.cx_shop_group.SHOPGROUPID },
             { title: 'code', name: _cxSchema.cx_shop_group.GROUPCODE },
@@ -51,7 +102,7 @@ class CxShopGroupRender extends RenderBase {
         });
         this.options.items = dropDownItems;
     }
-    
+
 }
-    
+
 module.exports = CxShopGroupRender;

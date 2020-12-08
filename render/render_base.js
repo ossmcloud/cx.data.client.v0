@@ -17,6 +17,7 @@ class RenderBase {
         this.#title = dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
         this.#options = options || {};
 
+
         this.formatOptions();
         
     }
@@ -45,6 +46,15 @@ class RenderBase {
 
         this.options.editMode = (this.options.query) ? this.options.query.e == 'T' : false;
         
+        if (this.options.editMode) {
+            if (this.options.query.id) {
+                this.options.mode = 'edit';
+            } else {
+                this.options.mode = 'new';
+            }
+        } else {
+            this.options.mode = 'view';
+        }
         
     }
 
@@ -55,15 +65,18 @@ class RenderBase {
             await this.list();
         }
         if (renderType == _cxConst.RENDER.TYPE.RECORD) {
+            await this.record();
+
             if (this.options.editMode && !this.options.allowEdit) {
                 this.options.editMode = false;
             }
-            if (this.options.editMode) {
-                this.options.title = (this.options.query.id ? 'edit ' : 'new ') + this.#title;
-            } else {
-                this.options.title = `view ${this.#title}`;
+            if (this.options.title == undefined) {
+                if (this.options.editMode) {
+                    this.options.title = (this.options.query.id ? 'edit ' : 'new ') + this.#title;
+                } else {
+                    this.options.title = `view ${this.#title}`;
+                }
             }
-            await this.record();
         }
         if (renderType == _cxConst.RENDER.TYPE.DROP_DOWN) { await this.dropDown(); }
         return this.#options;
@@ -92,6 +105,12 @@ class RenderBase {
 
         //options.allowEmpty = '- all -';
         return await _cx_render.getDropDownOptions(table, options);
+    }
+
+    async listOptions(table, options) {
+        var listOptions = await _cx_render.getListOptions(table, options);
+        listOptions.records = table.records;
+        return listOptions;
     }
 
 }

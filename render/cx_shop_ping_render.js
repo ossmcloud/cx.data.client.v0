@@ -10,17 +10,28 @@ class RawGetLog extends RenderBase {
     }
 
     async record() {
-        this.options.groups = [
-            { name: 'main', title: 'main info', columnCount: 3 },
-            { name: 'ping', title: 'ping info', columnCount: 3 },
-            { name: 'audit', title: 'audit info', columnCount: 3 },
-        ];
         this.options.fields = [
-            { group: 'main', name: 'pingId', label: 'id', readOnly: true, column: 1 },
-            { group: 'main', name: 'shopInfo', label: 'shop', column: 2 },
-            { group: 'ping', name: 'pingIP', label: 'ping IP', width: '150px', column: 1 },
-            { group: 'ping', name: 'response', label: 'ping response', width: '150px', column: 2 },
-            { group: 'audit', name: 'created', label: 'created', readOnly: true },
+            {
+                group: 'all', title: '', columnCount: 3, fields: [
+                    {
+                        group: 'main', title: 'main info', column: 1, columnCount: 1, fields: [
+                            { group: 'main', name: 'pingId', label: 'id', readOnly: true, column: 1 },
+                            { group: 'main', name: 'shopInfo', label: 'shop', column: 1 }
+                        ]
+                    },
+                    {
+                        group: 'ping', title: 'ping info', column: 2, columnCount: 1, fields: [
+                            { group: 'ping', name: 'pingIP', label: 'ping IP', width: '150px', column: 1 },
+                            { group: 'ping', name: 'response', label: 'ping response', width: '150px', column: 2 },
+                        ]
+                    },
+                    {
+                        group: 'audit', title: 'audit info', column: 3, columnCount: 1, fields: [
+                            { group: 'audit', name: 'created', label: 'created', readOnly: true }
+                        ]
+                    }
+                ]
+            }
         ];
     }
 

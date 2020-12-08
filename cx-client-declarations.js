@@ -77,6 +77,7 @@ const RENDER = {
     CTRL_TYPE: {
         TEXT: 'inputText',
         DATE: 'inputDate',
+        // DATE_TIME: 'inputDateTime',
         SELECT: 'inputSelect',
         DROP_DOWN: 'inputDropDown',
     }

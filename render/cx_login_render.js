@@ -10,22 +10,49 @@ class RawGetLog extends RenderBase {
     }
 
     async record() {
-        this.options.groups = [
-            { name: 'main', title: 'main info', columnCount: 3 },
-            { name: 'audit', title: 'audit info', columnCount: 3 },
-        ];
+        // TODO: PERMISSIONS:
+        this.options.allowEdit = true;
+
         this.options.fields = [
-            { group: 'main', name: _cxSchema.cx_login.EMAIL, label: 'email', column: 1, readOnly: true },
-            { group: 'main', name: _cxSchema.cx_login.FIRSTNAME, label: 'first name', width: '150px', column: 2 },
-            { group: 'main', name: _cxSchema.cx_login.LASTNAME, label: 'last name', width: '150px', column: 2 },
-            { group: 'main', name: _cxSchema.cx_login.JOBTITLE, label: 'job title', width: '150px', column: 3 },
-            { group: 'audit', name: _cxSchema.cx_login.CREATED, label: 'created', readOnly: true, column: 1 },
-            { group: 'audit', name: _cxSchema.cx_login.MASTERLOGINID, label: 'id (master)', readOnly: true, column: 2 },
-            { group: 'audit', name: _cxSchema.cx_login.LOGINID, label: 'id (tenant)', readOnly: true, column: 2 },
+            {
+                group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
+                    { name: _cxSchema.cx_login.EMAIL, label: 'email', column: 1, readOnly: true },
+                    { name: _cxSchema.cx_login.FIRSTNAME, label: 'first name', width: '150px', column: 2 },
+                    { name: _cxSchema.cx_login.LASTNAME, label: 'last name', width: '150px', column: 2 },
+                    { name: _cxSchema.cx_login.JOBTITLE, label: 'job title', width: '150px', column: 3 },
+
+                ]
+            },
+            {
+                group: 'audit', title: 'audit info', columnCount: 3, fields: [
+                    {
+                        group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: _cxSchema.cx_login.MASTERLOGINID, label: 'id (master)', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_login.LOGINID, label: 'id (tenant)', column: 2, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'audit1', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                            { name: 'created', label: 'created', column: 1, readOnly: true },
+                            //{ name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                        ]
+                    },
+                    // {
+                    //     group: 'audit2', title: '', column: 3, columnCount: 2, inline: true, fields: [
+                    //         { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                    //         { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                    //     ]
+                    // }
+                ]
+            }
         ];
     }
 
     async list() {
+        // TODO: PERMISSIONS:
+        this.options.allowNew = true;
+        this.options.allowEdit = true;
+        
         this.options.columns = [
             { name: _cxSchema.cx_login.LOGINID, title: '', align: 'center' },
             { name: _cxSchema.cx_login.MASTERLOGINID, title: 'id', align: 'center' },
@@ -33,8 +60,8 @@ class RawGetLog extends RenderBase {
             { name: _cxSchema.cx_login.FIRSTNAME, title: 'first name', width: '200px' },
             { name: _cxSchema.cx_login.LASTNAME, title: 'last name', width: '200px' },
             { name: _cxSchema.cx_login.JOBTITLE, title: 'job title', width: '200px' },
-           { name: _cxSchema.cx_login.CREATED, title: 'created', width: '200px' },
-            
+            { name: _cxSchema.cx_login.CREATED, title: 'created', width: '200px' },
+
         ];
     }
 }

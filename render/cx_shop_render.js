@@ -11,57 +11,45 @@ class CxShopRender extends RenderBase {
     }
 
     async record() {
+        // TODO: PERMISSIONS:
+        this.options.allowEdit = true;
+
         this.options.fields = [
             {
-                group: 'main', title: 'main info', columnCount: 3, inline:true, fields: [
-                    { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
-                    { name: 'shopName', label: 'name', column: 1, width: '300px', validation: '{ "mandatory": true, "max": 60  }' },
+                group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
+                    { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
+                    { name: 'shopAddress', label: 'address', column: 1, validation: '{ "max": 255 }' },
                     await this.fieldDropDownOptions(_cxSchema.cx_shop_group, {
-                        id: 'shopGroupId', name: 'shopGroupId', column: 2,
-                        validation: '{ "mandatory": true }',
-                        //textField: 'groupInfo',
+                        id: 'shopGroupId', name: 'shopGroupId', column: 2, validation: '{ "mandatory": true }',
                     }),
-                    { name: 'status', label: 'status', column: 2, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
-                    { name: 'shopAddress', label: 'address', column: 3, width: '300px', validation: '{ "max": 255 }' },
+                    { name: 'shopCode', label: 'code', column: 3, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
+                    { name: 'status', label: 'status', column: 3, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
                 ],
             },
             {
-                group: 'audit', title: 'audit info', columnCount: 2, inline: true, fields: [
-                    { name: 'created', label: 'created', column: 1, readOnly: true },
-                    { name: 'createdBy', label: 'created by', column: 1, readOnly: true },
-                    { name: 'modified', label: 'modified', column: 2, readOnly: true },
-                    { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                group: 'audit', title: 'audit info', columnCount: 3, fields: [
+                    {
+                        group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: 'created', label: 'created', column: 1, readOnly: true },
+                            { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'audit2', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                            { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                            { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                        ]
+                    }
                 ]
             }
-
         ]
-
-        // this.options.groups = [
-        //     { name: 'main', title: 'main info', columnCount: 3 },
-        //     { name: 'audit', title: 'audit info', columnCount: 3 },
-        // ];
-        // this.options.fields = [
-        //     { group: 'main', name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
-        //     { group: 'main', name: 'shopName', label: 'name', column: 1, width: '300px', validation: '{ "mandatory": true, "max": 60  }' },
-        //     //{ group: 'main', name: 'groupInfo', label: 'group', column: 2, readOnly: true },
-        //     await this.fieldDropDownOptions(_cxSchema.cx_shop_group, {
-        //         group: 'main', name: 'shopGroupId', column: 2,
-        //         id: 'shopGroupId',
-        //         validation: '{ "mandatory": true }',
-        //         textField: 'groupInfo',
-        //     }),
-        //     { group: 'main', name: 'status', label: 'status', column: 2, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
-        //     { group: 'main', name: 'shopAddress', label: 'address', column: 3, width: '300px', validation: '{ "max": 255 }' },
-
-        //     { group: 'audit', name: 'created', label: 'created', column: 1, readOnly: true },
-        //     { group: 'audit', name: 'createdBy', label: 'created by', column: 1, readOnly: true },
-        //     { group: 'audit', name: 'modified', label: 'modified', column: 2, readOnly: true },
-        //     { group: 'audit', name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
-            
-        // ];
     }
 
     async list() {
+        // TODO: PERMISSIONS:
+        this.options.allowNew = true;
+        this.options.allowEdit = true;
+
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),
             { label: 'code', fieldName: 'sc', name: _cxSchema.cx_shop.SHOPCODE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },

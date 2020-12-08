@@ -10,17 +10,18 @@ class CxShopTransmissionRender extends RenderBase {
     }
 
     async record() {
-        this.options.groups = [
-            { name: 'main', title: 'main info', columnCount: 2 },
-            { name: 'audit', title: 'audit info', columnCount: 2 },
-        ];
         this.options.fields = [
-            { group: 'main', name: 'transmissionId', label: 'transmission ID', width: '150px', readOnly: true, column: 1 },
-            { group: 'main', name: 'shopInfo', label: 'shop', column: 1 },
-            { group: 'main', name: 'message', label: 'message', column: 1 },
-            { group: 'main', name: 'status', label: 'status', width: '100px', column: 2 },
-            { group: 'main', name: 'action', label: 'action', width: '100px', column: 2 },
-            { group: 'audit', name: 'created', label: 'created', readOnly: true },
+            {
+                group: 'main', title: 'main info', columnCount: 2, inline: true, fields: [
+                    { name: 'transmissionId', label: 'transmission ID', width: '150px', readOnly: true, column: 1 },
+                    { name: 'shopInfo', label: 'shop', column: 1 },
+                    { name: 'message', label: 'message', column: 1 },
+                    { name: 'status', label: 'status', width: '100px', column: 2, lookUps: _cxConst.CR_SHOP_TRANSMISSION.STATUS.toList()  },
+                    { name: 'action', label: 'action', width: '100px', column: 2, lookUps: _cxConst.CR_SHOP_TRANSMISSION.ACTION.toList() },
+                    { name: 'created', label: 'created on', column: 2, readOnly: true},
+                ]
+            },
+            
         ];
         if (this.dataSource.status == _cxConst.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING) {
             this.options.buttons.push({ id: 'cr_shop_transmission_abort', text: 'Abort Transmission', function: 'abort' });
