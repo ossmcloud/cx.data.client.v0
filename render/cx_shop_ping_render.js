@@ -9,7 +9,7 @@ class RawGetLog extends RenderBase {
         super(dataSource, options);
     }
 
-    async record() {
+    async _record() {
         this.options.fields = [
             {
                 group: 'all', title: '', columnCount: 3, fields: [
@@ -35,7 +35,7 @@ class RawGetLog extends RenderBase {
         ];
     }
 
-    async list() {
+    async _list() {
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { id: 'cx_ping_ip', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ip', label: 'ping IP', width: '70px' },

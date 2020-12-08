@@ -10,10 +10,7 @@ class CxShopRender extends RenderBase {
         super(dataSource, options);
     }
 
-    async record() {
-        // TODO: PERMISSIONS:
-        this.options.allowEdit = true;
-
+    async _record() {
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
@@ -45,11 +42,8 @@ class CxShopRender extends RenderBase {
         ]
     }
 
-    async list() {
-        // TODO: PERMISSIONS:
-        this.options.allowNew = true;
-        this.options.allowEdit = true;
-
+    async _list() {
+        
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),
             { label: 'code', fieldName: 'sc', name: _cxSchema.cx_shop.SHOPCODE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },

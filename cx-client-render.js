@@ -21,10 +21,10 @@ module.exports = {
     getOptions: async function (renderType, object, options) {
         if (!options) { options = {}; }
         
-        // TODO: PERMISSIONS: based on record type and logged user
-        if (options.allowNew != false) { options.allowNew = false; }
-        if (options.allowEdit != false) { options.allowEdit = false; }
-        options.allowDelete = options.allowDelete || false;
+        // // TODO: PERMISSIONS: based on record type and logged user
+        // if (options.allowNew != false) { options.allowNew = false; }
+        // if (options.allowEdit != false) { options.allowEdit = false; }
+        // options.allowDelete = options.allowDelete || false;
         
         // get from database if any custom one
         var renderOptions = await getCustomOptions(renderType, object, options);

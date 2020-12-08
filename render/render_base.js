@@ -4,6 +4,7 @@ const _cx = require('cx-core');
 const _ex = require('cx-core/errors/cx-errors');
 const _cxConst = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
+const _permission = require('../core/cx-permission-manager');
 
 class RenderBase {
     #title = null;
@@ -16,7 +17,6 @@ class RenderBase {
         // TODO: get data source title
         this.#title = dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
         this.#options = options || {};
-
 
         this.formatOptions();
         
@@ -82,19 +82,43 @@ class RenderBase {
         return this.#options;
     }
 
+    async setPermission(role) {
+        var permissions = await _permission.get(this.dataSource.type, this.options.credentials.roleId);
+        this.options.allowEdit = permissions.allowEdit;
+        this.options.allowNew = permissions.allowNew;
+        this.options.allowView = permissions.allowView;
+    }
+
+    async record(request, h) {
+        await this.setPermission(null);
+        await this._record(request, h);
+    }
+    async _record(request, h) {
+        throw new Error('RenderBase._record not overwritten')
+    }
+
+    async list(request, h) {
+        await this.setPermission(null);
+        await this._list(request, h);
+    }
+    async _list(request, h) {
+        throw new Error('RenderBase._list not overwritten')
+    }
+
 
     async filterDropDownOptions(tableName, options) {
+        if (!options.credentials) { options.credentials = this.options.credentials; }
         var table = this.dataSource.cx.table(tableName);
         if (!options.dropDown) { options.dropDown = {}; }
         options.dropDown = {
             allowAll: true,
             allowNone: true,
         }
-        //options.allowEmpty = '- all -';
         return await _cx_render.getDropDownOptions(table, options);
     }
 
     async fieldDropDownOptions(tableName, options) {
+        if (!options.credentials) { options.credentials = this.options.credentials; }
         var table = this.dataSource.cx.table(tableName);
         if (!options.dropDown) { options.dropDown = {}; }
         options.dropDown = {
@@ -108,6 +132,7 @@ class RenderBase {
     }
 
     async listOptions(table, options) {
+        if (!options.credentials) { options.credentials = this.options.credentials; }
         var listOptions = await _cx_render.getListOptions(table, options);
         listOptions.records = table.records;
         return listOptions;

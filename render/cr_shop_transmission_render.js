@@ -9,7 +9,7 @@ class CxShopTransmissionRender extends RenderBase {
         super(dataSource, options);
     }
 
-    async record() {
+    async _record() {
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 2, inline: true, fields: [
@@ -28,7 +28,7 @@ class CxShopTransmissionRender extends RenderBase {
         }
     }
 
-    async list() {
+    async _list() {
         
         this.options.filters = [
             //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),

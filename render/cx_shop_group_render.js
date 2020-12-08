@@ -15,7 +15,9 @@ class CxShopGroupRender extends RenderBase {
         await shops.select({ sg: this.options.query.id });
         if (shops.count() > 0) { this.options.allowDelete = false; }
 
-        var shopListOptions = await this.listOptions(shops);
+        var shopListOptions = await this.listOptions(shops, {
+            //credentials: this.options.credentials
+        });
         shopListOptions.filters = [];
         shopListOptions.title = '';
         shopListOptions.allowNew = false;
@@ -31,10 +33,7 @@ class CxShopGroupRender extends RenderBase {
         return shopListOptions;
     }
 
-    async record() {
-        // TODO: PERMISSIONS:
-        this.options.allowEdit = true;
-
+    async _record() {
         var shopListOptions = null;
         if (this.options.mode == 'new') {
             this.options.allowDelete = false;
@@ -73,11 +72,7 @@ class CxShopGroupRender extends RenderBase {
         }
     }
 
-    async list() {
-        // TODO: PERMISSIONS:
-        this.options.allowNew = true;
-        this.options.allowEdit = true;
-
+    async _list() {
         this.options.columns = [
             { title: '', name: _cxSchema.cx_shop_group.SHOPGROUPID },
             { title: 'code', name: _cxSchema.cx_shop_group.GROUPCODE },

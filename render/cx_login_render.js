@@ -9,10 +9,7 @@ class RawGetLog extends RenderBase {
         super(dataSource, options);
     }
 
-    async record() {
-        // TODO: PERMISSIONS:
-        this.options.allowEdit = true;
-
+    async _record() {
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
@@ -48,11 +45,7 @@ class RawGetLog extends RenderBase {
         ];
     }
 
-    async list() {
-        // TODO: PERMISSIONS:
-        this.options.allowNew = true;
-        this.options.allowEdit = true;
-        
+    async _list() {
         this.options.columns = [
             { name: _cxSchema.cx_login.LOGINID, title: '', align: 'center' },
             { name: _cxSchema.cx_login.MASTERLOGINID, title: 'id', align: 'center' },
