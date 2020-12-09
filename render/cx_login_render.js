@@ -9,7 +9,36 @@ class RawGetLog extends RenderBase {
         super(dataSource, options);
     }
 
+    async getShopListOptions() {
+        var shops = this.dataSource.cx.table(_cxSchema.cx_shop);
+        await shops.selectByUser(this.options.query.id);
+        if (shops.count() > 0) { this.options.allowDelete = false; }
+
+        var shopListOptions = await this.listOptions(shops);
+        shopListOptions.filters = [];
+        shopListOptions.title = '';
+        shopListOptions.allowNew = false;
+        shopListOptions.allowEdit = false;
+        shopListOptions.quickSearch = false;
+        // remove shop id column
+        shopListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            // TODO: PERMISSIONS:
+            shopListOptions.actions = [{ label: 'remove', funcName: 'removeShop' }];
+            shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Shops', function: 'addShop' }];
+        }
+        return shopListOptions;
+    }
+
     async _record() {
+        var shopListOptions = null;
+        if (this.options.mode == 'new') {
+            this.options.allowDelete = false;
+        } else {
+            shopListOptions = await this.getShopListOptions()
+        }
+
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
@@ -43,6 +72,14 @@ class RawGetLog extends RenderBase {
                 ]
             }
         ];
+
+        if (shopListOptions) {
+            this.options.fields.push({
+                group: 'shops', title: 'shops assigned to this user', fields: [
+                    shopListOptions
+                ]
+            })
+        }
     }
 
     async _list() {

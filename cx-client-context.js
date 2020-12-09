@@ -7,20 +7,38 @@ const _cx_client_schema = require('./cx-client-schema');
 const _cx_client_declarations = require('./cx-client-declarations');
 
 const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
+const { gunzip } = require('zlib');
 
 class CXClientContext extends _cx_data.DBContext {
+    #shops = null;
+    #shopList = null;
     constructor(pool, credentials) {
         // TODO: get proper path like relative to or something
         super(pool, _path.join(__dirname, 'business'), credentials);
+
+       
     }
 
     // TODO: get lits of shop IDs the user has access to
-    get shops() {
-        return [1, 3, 6];
-    }
+    get shops() { return this.#shops };
     get shopList() {
-        return '(1,3,6)';
+        return this.#shopList;
+        //return '(1,3,6)';
     }
+
+    async init() {   
+        
+        var loginShops = this.table(_cx_client_schema.cx_login_shop);
+        await loginShops.select();
+        
+        var _this = this;
+        this.#shops = [];
+        loginShops.eachEx(function (record, idx, t) {
+            _this.#shops.push(record.shopId);
+        });
+        this.#shopList = `(${this.#shops.toString()})`;
+    }
+
 
 }
 
@@ -42,7 +60,9 @@ module.exports = {
         var credentials = (options.dbConfig) ? options : null;
 
         var db_pool = await _cx_data.getPool(dbConfig);
-        return new CXClientContext(db_pool, credentials);
+        var cx = new CXClientContext(db_pool, credentials);
+        await cx.init();
+        return cx;
     },
     
     generateTransmissionID(svcName, accountId, shopId) {

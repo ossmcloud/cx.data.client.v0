@@ -55,6 +55,13 @@ module.exports = {
         CREATED: 'created',
     },
 
+    cx_login_shop: {
+        TBL_NAME: 'cx_login_shop',
+        LOGINSHOPID: 'loginShopId',
+        LOGINID: 'loginId',
+        SHOPID: 'shopId',
+    },
+
     cx_shop: {
         TBL_NAME: 'cx_shop',
         SHOPID: 'shopId',

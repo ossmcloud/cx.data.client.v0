@@ -11,6 +11,43 @@ class cx_shop_Collection extends _persistentTable.Table {
         return new cx_shop(this, defaults);
     }
 
+    async selectByUser(userId) {
+        // TODO: PERMISSION: 
+        var query = {
+            sql: `
+                    select  s.*, g.groupCode, g.groupName
+                    from    cx_shop s
+                    inner   join cx_login_shop l on l.shopId = s.shopId
+                    left    outer join cx_shop_group g on g.shopGroupId = s.shopGroupId
+                    where   l.loginId = @loginId
+                    order by g.groupCode, s.shopCode
+                `,
+            params: [
+                { name: 'loginId', value: userId }
+            ]
+        }
+        return await super.select(query);
+        
+    }
+
+    async selectByUserNot(userId) {
+        // TODO: PERMISSION: 
+        var query = {
+            sql: `
+                    select  s.*, g.groupCode, g.groupName
+                    from    cx_shop s
+                    left    outer join cx_shop_group g on g.shopGroupId = s.shopGroupId
+                    where   s.shopId not in (select shopId from cx_login_shop where loginId = @loginId)
+                    order by g.groupCode, s.shopCode
+                `,
+            params: [
+                { name: 'loginId', value: userId }
+            ]
+        }
+        return await super.select(query);
+
+    }
+
     async select(params) {
         var _this = this;
         this.query = {
@@ -84,10 +121,13 @@ class cx_shop_Collection extends _persistentTable.Table {
 class cx_shop extends _persistentTable.Record {
     #groupName = '';
     #groupCode = '';
+    #check = false;
     constructor(table, defaults) {
         super(table, defaults);
-        this.#groupName = defaults['groupName'] || '';
-        this.#groupCode = defaults['groupCode'] || '';
+        if (defaults) {
+            this.#groupName = defaults['groupName'] || '';
+            this.#groupCode = defaults['groupCode'] || '';
+        }
     };
 
     get groupName() { return this.#groupName; }
@@ -99,10 +139,16 @@ class cx_shop extends _persistentTable.Record {
             return this.groupCode;
         }
     }
+    get check() {
+        return this.#check;
+    } set check(value) {
+        this.#check = value
+    }
    
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        if (!this.status) { this.status = 0; }        
+        if (!this.status) { this.status = 0; }      
+        if (!this.shopGroupId) { this.shopGroupId = null; }
         await super.save()
     }
 }

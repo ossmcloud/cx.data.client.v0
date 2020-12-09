@@ -83,7 +83,7 @@ class RenderBase {
     }
 
     async setPermission(role) {
-        var permissions = await _permission.get(this.dataSource.type, this.options.credentials.roleId);
+        var permissions = await _permission.get(this.dataSource.type, this.dataSource.cx.roleId);
         this.options.allowEdit = permissions.allowEdit;
         this.options.allowNew = permissions.allowNew;
         this.options.allowView = permissions.allowView;
@@ -132,6 +132,7 @@ class RenderBase {
     }
 
     async listOptions(table, options) {
+        if (!options) { options = {}; }
         if (!options.credentials) { options.credentials = this.options.credentials; }
         var listOptions = await _cx_render.getListOptions(table, options);
         listOptions.records = table.records;

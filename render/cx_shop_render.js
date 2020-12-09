@@ -13,11 +13,11 @@ class CxShopRender extends RenderBase {
     async _record() {
         this.options.fields = [
             {
-                group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
+                group: 'main', title: 'main info', columnCount: 3, fields: [
                     { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
                     { name: 'shopAddress', label: 'address', column: 1, validation: '{ "max": 255 }' },
                     await this.fieldDropDownOptions(_cxSchema.cx_shop_group, {
-                        id: 'shopGroupId', name: 'shopGroupId', column: 2, validation: '{ "mandatory": true }',
+                        id: 'shopGroupId', name: 'shopGroupId', column: 2, 
                     }),
                     { name: 'shopCode', label: 'code', column: 3, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
                     { name: 'status', label: 'status', column: 3, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
