@@ -42,7 +42,14 @@ module.exports = {
     },
 
     getListOptions: async function (table, options) {
-        var renderOptions = await  this.getOptions('list', table, options);
+        var renderOptions = await this.getOptions('list', table, options);
+        if (options.listView) {
+            renderOptions.filters = [];
+            renderOptions.title = '';
+            renderOptions.allowNew = false;
+            renderOptions.allowEdit = false;
+            renderOptions.quickSearch = false;
+        }
         return renderOptions;
     },
 

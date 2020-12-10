@@ -19,9 +19,14 @@ class cx_login extends _persistentTable.Record {
         super(table, defaults);
     };
 
-    async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
+    get displayName() {
+        if (this.firstName && this.lastName) {
+            return `${this.firstName} ${this.lastName}`;
+        } else if (this.firstName) {
+            return this.firstName;
+        } else {
+            return this.email;
+        }
     }
 }
 //

@@ -52,7 +52,18 @@ module.exports = {
         FIRSTNAME: 'firstName',
         LASTNAME: 'lastName',
         JOBTITLE: 'jobTitle',
+        ROLEID: 'roleId',
         CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cx_login_roles: {
+        TBL_NAME: 'cx_login_roles',
+        LOGINROLEID: 'loginRoleId',
+        LOGINID: 'loginId',
+        ROLEID: 'roleId',
     },
 
     cx_login_shop: {

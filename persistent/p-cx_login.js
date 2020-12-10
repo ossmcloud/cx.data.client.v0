@@ -25,7 +25,11 @@ const _fieldNames = {
     FIRSTNAME: 'firstName',
     LASTNAME: 'lastName',
     JOBTITLE: 'jobTitle',
+    ROLEID: 'roleId',
     CREATED: 'created',
+    CREATEDBY: 'createdBy',
+    MODIFIED: 'modified',
+    MODIFIEDBY: 'modifiedBy',
 
 }
 //
@@ -38,7 +42,11 @@ const _fields = {
     firstName: { name: 'firstName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     lastName: { name: 'lastName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     jobTitle: { name: 'jobTitle', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    roleId: { name: 'roleId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
+    createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
+    modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -94,10 +102,34 @@ class Persistent_cx_login extends _cx_data.DBRecord {
         super.setValue(_fieldNames.JOBTITLE, val);
     }
 
+    get roleId() {
+        return super.getValue(_fieldNames.ROLEID);
+    } set roleId(val) {
+        super.setValue(_fieldNames.ROLEID, val);
+    }
+
     get created() {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
         super.setValue(_fieldNames.CREATED, val);
+    }
+
+    get createdBy() {
+        return super.getValue(_fieldNames.CREATEDBY);
+    } set createdBy(val) {
+        super.setValue(_fieldNames.CREATEDBY, val);
+    }
+
+    get modified() {
+        return super.getValue(_fieldNames.MODIFIED);
+    } set modified(val) {
+        super.setValue(_fieldNames.MODIFIED, val);
+    }
+
+    get modifiedBy() {
+        return super.getValue(_fieldNames.MODIFIEDBY);
+    } set modifiedBy(val) {
+        super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
 

@@ -26,9 +26,10 @@ class CxShopGroupRender extends RenderBase {
 
         shopListOptions.columns.shift();
         if (this.options.mode == 'view') {
-            // TODO: PERMISSIONS:
-            shopListOptions.actions = [{ label: 'remove', funcName: 'removeShop' }];
-            shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Shop', function: 'addShop' }];
+            if (this.options.allowEdit) {
+                shopListOptions.actions = [{ label: 'remove', funcName: 'removeShop' }];
+                shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Shop', function: 'addShop' }];
+            }
         }
         return shopListOptions;
     }
@@ -78,6 +79,10 @@ class CxShopGroupRender extends RenderBase {
             { title: 'code', name: _cxSchema.cx_shop_group.GROUPCODE },
             { title: 'name', name: _cxSchema.cx_shop_group.GROUPNAME },
             { title: 'color', name: _cxSchema.cx_shop_group.GROUPCOLOR },
+            { title: 'created', name: _cxSchema.cx_shop_group.CREATED },
+            { title: 'by', name: _cxSchema.cx_shop_group.CREATEDBY },
+            { title: 'modified', name: _cxSchema.cx_shop_group.MODIFIED },
+            { title: 'by', name: _cxSchema.cx_shop_group.MODIFIEDBY },
         ];
     }
 

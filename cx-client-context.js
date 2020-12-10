@@ -3,15 +3,16 @@
 const _path = require('path');
 const _cx_data = require('cx-data');
 const _cx_render = require('./cx-client-render');
-const _cx_client_schema = require('./cx-client-schema');
-const _cx_client_declarations = require('./cx-client-declarations');
+const _cxSchema = require('./cx-client-schema');
+const _cxConst = require('./cx-client-declarations');
 
 const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
-const { gunzip } = require('zlib');
 
 class CXClientContext extends _cx_data.DBContext {
     #shops = null;
     #shopList = null;
+    #role = null;
+    #user = null;
     constructor(pool, credentials) {
         // TODO: get proper path like relative to or something
         super(pool, _path.join(__dirname, 'business'), credentials);
@@ -19,26 +20,66 @@ class CXClientContext extends _cx_data.DBContext {
        
     }
 
-    // TODO: get lits of shop IDs the user has access to
-    get shops() { return this.#shops };
-    get shopList() {
-        return this.#shopList;
-        //return '(1,3,6)';
+    get user() {
+        return this.#user;
+    }
+    get userName() {
+        if (!this.#user) { return null; }
+        return `${this.#user.firstName} ${this.#user.lastName}`;
+    }
+    get tUserId() {
+        if (!this.#user) { return null; }
+        return this.#user.loginId;
     }
 
-    async init() {   
-        
-        var loginShops = this.table(_cx_client_schema.cx_login_shop);
-        await loginShops.select();
-        
+    get role() {
+        if (!this.#role) { return null; }
+        return this.#role;
+    } 
+    get roleId() {
+        if (!this.#role) { return 0; }
+        return this.#role.id;
+    } 
+    get roleName() {
+        if (!this.#role) { return ''    ; }
+        return this.#role.name;
+    }
+
+    get shops() { return this.#shops };
+    get shopList() { return this.#shopList; }
+
+    async init() {
+
+        var query = {
+            sql: `
+                    select * from cx_login where masterLoginId = @masterLoginId
+
+                    select  s.*
+                    from    cx_login_shop s
+                    left outer join cx_login l on l.loginId = s.loginId
+                    where   l.masterLoginId = @masterLoginId
+                `,
+            params: [
+                { name: _cxSchema.cx_login.MASTERLOGINID, value: this.userId }
+            ]
+        }
+
+        var response = await this.exec(query);
+        if (response.first() == null) { throw new Error('Not Authorised'); }
+        this.#user = response.first();
+        this.#role = {
+            id: response.first().roleId || 0,
+        }
+        this.#role.name = _cxConst.CX_ROLE.getName(this.#role.id);
+
         var _this = this;
         this.#shops = [];
-        loginShops.eachEx(function (record, idx, t) {
+        response.subResults[0].each(function (record, idx) {
             _this.#shops.push(record.shopId);
         });
         this.#shopList = `(${this.#shops.toString()})`;
+        
     }
-
 
 }
 
@@ -51,8 +92,8 @@ module.exports = {
     CXClientContext: CXClientContext,
     DTFSUtils: DTFSUtils,
     //
-    Schema: _cx_client_schema,
-    Const: _cx_client_declarations,
+    Schema: _cxSchema,
+    Const: _cxConst,
     Render: _cx_render,
     //
     get: async function (options) {

@@ -60,7 +60,9 @@ class RenderBase {
 
     async get(renderType) {
         if (renderType == _cxConst.RENDER.TYPE.LIST) {
-            this.options.title = `${this.#title} list`;
+            if (this.options.title == undefined) {
+                this.options.title = `${this.#title} list`;
+            }
             //this.options.tabTitle = `cx::${this.#title} list`;
             await this.list();
         }
@@ -82,7 +84,7 @@ class RenderBase {
         return this.#options;
     }
 
-    async setPermission(role) {
+    async setPermission() {
         var permissions = await _permission.get(this.dataSource.type, this.dataSource.cx.roleId);
         this.options.allowEdit = permissions.allowEdit;
         this.options.allowNew = permissions.allowNew;
@@ -90,7 +92,7 @@ class RenderBase {
     }
 
     async record(request, h) {
-        await this.setPermission(null);
+        await this.setPermission();
         await this._record(request, h);
     }
     async _record(request, h) {
@@ -98,7 +100,7 @@ class RenderBase {
     }
 
     async list(request, h) {
-        await this.setPermission(null);
+        await this.setPermission();
         await this._list(request, h);
     }
     async _list(request, h) {
