@@ -15,7 +15,7 @@ class CXClientContext extends _cx_data.DBContext {
     #user = null;
     constructor(pool, credentials) {
         // TODO: get proper path like relative to or something
-        super(pool, _path.join(__dirname, 'business'), credentials);
+        super(pool, _path.join(__dirname, 'objectStore'), credentials);
 
        
     }

@@ -3,7 +3,7 @@
 // REQUIRE PERSISTENT TABLE
 //
 const _cxConst = require('../cx-client-declarations');
-const _persistentTable = require('../persistent/p-cx_login_roles');
+const _persistentTable = require('./persistent/p-cx_login_roles');
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //

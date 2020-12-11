@@ -2,7 +2,7 @@
 //
 // REQUIRE PERSISTENT TABLE
 //
-const _persistentTable = require('../persistent/p-raw_getRequest');
+const _persistentTable = require('./persistent/p-raw_getRequest');
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //

@@ -3,7 +3,7 @@
 // REQUIRE PERSISTENT TABLE
 //
 const _cx_schema = require('../cx-client-schema');
-const _persistentTable = require('../persistent/p-cr_shop_configs');
+const _persistentTable = require('./persistent/p-cr_shop_configs');
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //

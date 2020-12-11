@@ -1,6 +1,6 @@
 'use strict'
 //
-const _persistentTable = require('../persistent/p-cr_shop_transmission');
+const _persistentTable = require('./persistent/p-cr_shop_transmission');
 const _declarations = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
 //

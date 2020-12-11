@@ -3,7 +3,7 @@
 const _ex = require('cx-core/errors/cx-errors');
 const _cx_render = require('../cx-client-render');
 const _cx_schema = require('../cx-client-schema');
-const _persistentTable = require('../persistent/p-cx_shop');
+const _persistentTable = require('./persistent/p-cx_shop');
 
 //
 class cx_shop_Collection extends _persistentTable.Table {

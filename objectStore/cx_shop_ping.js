@@ -2,7 +2,7 @@
 //
 // REQUIRE PERSISTENT TABLE
 //
-const _persistentTable = require('../persistent/p-cx_shop_ping');
+const _persistentTable = require('./persistent/p-cx_shop_ping');
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //
