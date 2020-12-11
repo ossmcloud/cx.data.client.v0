@@ -49,7 +49,7 @@ class CXClientContext extends _cx_data.DBContext {
     get shopList() { return this.#shopList; }
 
     async init() {
-
+        // @CLEAN-UP: use schema constants in query below
         var query = {
             sql: `
                     select * from cx_login where masterLoginId = @masterLoginId
@@ -107,7 +107,7 @@ module.exports = {
     },
     
     generateTransmissionID(svcName, accountId, shopId) {
-        // TODO: IMPORTANT NOTE:
+        // TODO-IMPORTANT; NOTE:
         //      the tran id has a tick time stamp, 13 digits
         //      plus we add an identifier for the type of service, the account id and shop id
         //      in addition the accountId and shopId are SQL index fields so could easily be larger than 19 digits long which is the max for big int

@@ -26,7 +26,38 @@ class cx_login_shop_Collection extends _persistentTable.Table {
         }
         return await super.select(query);
     }
+
+    async deleteByUser(loginId, shopId) {
+        var query = {
+            sql: 'delete from cx_login_shop where loginId = @loginId and shopId = @shopId',
+            params: [
+                { name: 'loginId', value: loginId },
+                { name: 'shopId', value: shopId },
+            ]
+        }
+        return await this.cx.exec(query);
+    }
+
+    async updateByUser(loginId, shops) {
+        var errors = '';
+        for (var sx = 0; sx < shops.length; sx++) {
+            try {
+                var loginShop = this.createNew();
+                loginShop.loginId = loginId;
+                loginShop.shopId = shops[sx];
+                await loginShop.save();
+            } catch (error) {
+                errors += `shop id: ${roles[sx]} - error: ${error.message}\n`;
+            }
+        }
+        if (errors) {
+            throw new Error('one or more shops could not be added:\n\n' + errors);
+        }
+    }
+
 }
+
+
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
 //

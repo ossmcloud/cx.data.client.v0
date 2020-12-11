@@ -8,6 +8,7 @@ function enumToList(obj, addEmpty) {
         if (key == 'getName') { continue; }
         if (key == 'CX_ADMIN') { continue; }
         if (key == 'CX_SUPPORT') { continue; }
+        if (key == '_NAME') { continue; }
         enums.push({
             value: obj[key],
             text: key.toLowerCase(),
@@ -23,8 +24,34 @@ function enumGetName(obj, value) {
     }
     return '';
 }
+function enumToListRenderOptions(obj, showId, showCheckBox) {
+    var listOptions = {
+        id: obj._NAME,
+        type: 'table',
+        primaryKey: 'value',
+        columns: []
+    }
+
+    if (showCheckBox) {
+        listOptions.columns.push({ name: 'check', title: '', width: '30px', type: 'check', });
+    }
+    if (showId) {
+        listOptions.columns.push({ name: 'value', title: 'id', width: '30px' });
+    }
+
+    if (obj._NAME) {
+        // @CLEAN-UP: use a clean up routine this is used somewhere else
+        listOptions.columns.push({ name: 'text', title: obj._NAME.replace('cx_', '') });
+        listOptions.records = obj.toList();
+
+    }
+   
+    return listOptions;
+}
 
 const CX_ROLE = {
+    _NAME: 'cx_role',
+
     CX_ADMIN: -9,       // web master access
     CX_SUPPORT: -7,     // ossm support login role
     
@@ -34,10 +61,12 @@ const CX_ROLE = {
     MANAGER: 5,          // handle shop groups, shops, logins
 
     ADMIN: 7,           // full access
-    
 
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     getName: function (value) { return enumGetName(this, value); },
+    listOptions: function (showId, showCheckBox) {
+        return enumToListRenderOptions(this, showId, showCheckBox);
+    }
 }
 
 const CR_SHOP_CONFIGS = {

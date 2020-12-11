@@ -11,6 +11,32 @@ class cx_shop_Collection extends _persistentTable.Table {
         return new cx_shop(this, defaults);
     }
 
+    async updateGroup(groupId, shops) {
+        var query = {
+            sql: `update cx_shop set shopGroupId = @shopGroupId where shopId in (${shops.replace('-', ',')})`,
+            params: [{ name: 'shopGroupId', value: groupId }]
+        }
+        await this.cx.exec(query);
+
+        // var errors = '';
+        // for (var sx = 0; sx < shops.length; sx++) {
+        //     try {
+
+        //         var query = {
+        //             sql: `update cx_shop set shopGroupId = @shopGroupId where shopId in ${shops.replace('-', ',')}`,
+        //             params: [{ name: 'shopGroupId', value: groupId }]
+        //         }
+        //         await this.cx.exec(query);
+                
+        //     } catch (error) {
+        //         errors += `shop id: ${shops[sx]} - error: ${error.message}\n`;
+        //     }
+        // }
+        // if (errors) {
+        //     throw new Error('one or more shops could not be added:\n\n' + errors);
+        // }
+    }
+
     async selectByUser(userId) {
         // TODO: PERMISSION: 
         var query = {

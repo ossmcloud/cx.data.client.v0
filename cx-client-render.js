@@ -5,8 +5,7 @@ const _cxSchema = require('./cx-client-schema');
 
 
 async function getCustomOptions(renderType, table) {
-    // TODO: CX-DATA-CLIENT: check if we have custom options for this render type (list, record)
-    //      use table.cx
+    // @LATER: for the future we can use this to allow for custom searches or stuff
     return null;
 }
 
@@ -20,12 +19,7 @@ async function getDefaultOptions(renderType, table, options) {
 module.exports = {
     getOptions: async function (renderType, object, options) {
         if (!options) { options = {}; }
-        
-        // // TODO: PERMISSIONS: based on record type and logged user
-        // if (options.allowNew != false) { options.allowNew = false; }
-        // if (options.allowEdit != false) { options.allowEdit = false; }
-        // options.allowDelete = options.allowDelete || false;
-        
+       
         // get from database if any custom one
         var renderOptions = await getCustomOptions(renderType, object, options);
         // if not get defaults

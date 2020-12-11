@@ -5,7 +5,7 @@ const _cx = require('../cx-client-declarations');
 const _cx_schema = require('../cx-client-schema');
 
 async function _getEPoSDataExtractCustomScripts(cx, shopId, module) {
-    // TODO: 
+    // @LATER: we can have custom scripts by customer
     return [];
 }
 

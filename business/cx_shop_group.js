@@ -10,6 +10,8 @@ class cx_shop_group_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cx_shop_group(this, defaults);
     }
+
+    
 }
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
@@ -27,9 +29,9 @@ class cx_shop_group extends _persistentTable.Record {
         }
     }
 
-    async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
+    async delete() {
+        // TODO: CX-DATA-CLIENT: check if shop can be deleted
+        await super.delete()
     }
 }
 //
