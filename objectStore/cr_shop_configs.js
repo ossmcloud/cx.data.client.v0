@@ -1,11 +1,7 @@
 'use strict'
 //
-// REQUIRE PERSISTENT TABLE
-//
 const _cx_schema = require('../cx-client-schema');
 const _persistentTable = require('./persistent/p-cr_shop_configs');
-//
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //
 class cr_shop_configs_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -33,9 +29,8 @@ class cr_shop_configs_Collection extends _persistentTable.Table {
         }
         return null;
     }
+    
 }
-//
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
 //
 class cr_shop_configs extends _persistentTable.Record {
     constructor(table, defaults) {
@@ -43,14 +38,17 @@ class cr_shop_configs extends _persistentTable.Record {
     };
 
     async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
+        try {
+            await super.save()
+        } catch (error) {
+            if (error.message.indexOf('IX_cr_shop_configs') > 0) {
+                throw new Error('the configurations already exists on this shop!');
+            } else {
+                throw error;
+            }
+        }
     }
-
-    
 }
-//
-// EXPORTS ONLY TABLE AND RECORD
 //
 module.exports = {
     Table: cr_shop_configs_Collection,

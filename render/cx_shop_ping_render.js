@@ -15,19 +15,19 @@ class RawGetLog extends RenderBase {
                 group: 'all', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 1, fields: [
-                            { group: 'main', name: 'pingId', label: 'id', readOnly: true, column: 1 },
-                            { group: 'main', name: 'shopInfo', label: 'shop', column: 1 }
+                            { name: 'pingId', label: 'id', readOnly: true, column: 1 },
+                            { name: 'shopInfo', label: 'shop', column: 1 }
                         ]
                     },
                     {
                         group: 'ping', title: 'ping info', column: 2, columnCount: 1, fields: [
-                            { group: 'ping', name: 'pingIP', label: 'ping IP', width: '150px', column: 1 },
-                            { group: 'ping', name: 'response', label: 'ping response', width: '150px', column: 2 },
+                            { name: 'pingIP', label: 'ping IP', width: '150px', column: 1 },
+                            { name: 'response', label: 'ping response', width: '150px', column: 2 },
                         ]
                     },
                     {
                         group: 'audit', title: 'audit info', column: 3, columnCount: 1, fields: [
-                            { group: 'audit', name: 'created', label: 'created', readOnly: true }
+                            { name: 'created', label: 'created', readOnly: true }
                         ]
                     }
                 ]

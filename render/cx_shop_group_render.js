@@ -15,15 +15,7 @@ class CxShopGroupRender extends RenderBase {
         await shops.select({ sg: this.options.query.id });
         if (shops.count() > 0) { this.options.allowDelete = false; }
 
-        var shopListOptions = await this.listOptions(shops, {
-            //credentials: this.options.credentials
-        });
-        shopListOptions.filters = [];
-        shopListOptions.title = '';
-        shopListOptions.allowNew = false;
-        shopListOptions.allowEdit = false;
-        shopListOptions.quickSearch = false;
-
+        var shopListOptions = await this.listOptions(shops, { listView: true });
         shopListOptions.columns.shift();
         if (this.options.mode == 'view') {
             if (this.options.allowEdit) {

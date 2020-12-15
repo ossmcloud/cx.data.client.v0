@@ -18,8 +18,7 @@ class CrShopSettingRender extends RenderBase {
         var configListOptions = await this.listOptions(configs, { listView: true });
         configListOptions.quickSearch = true;
         configListOptions.columns.shift();
-        //configListOptions.allowEdit=true;
-    
+        
         if (this.options.mode == 'view') {
             if (this.options.allowEdit) {
                 configListOptions.actions = [];
@@ -53,7 +52,7 @@ class CrShopSettingRender extends RenderBase {
                 group: 'eposOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
-                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: true },
+                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !this.dataSource.isNew() },
                             { name: 'startDate', label: 'start date', column: 1 },
                             { name: 'eposShopCode', label: 'epos code', column: 2 },
                             { name: 'eposShopName', label: 'epos name', column: 2 },
@@ -63,9 +62,9 @@ class CrShopSettingRender extends RenderBase {
                         group: 'pair', title: 'pairing info', column: 2, columnCount: 2, fields: [
                             { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: true },
                             { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.CR_SHOP_SETTING.PAIRING_STATUS.toList() },
-                            { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2 },
-                            { name: 'dtfsPairedMachineOS', label: 'paired machine OS', column: 2 },
-                            { name: 'dtfsPairedMachineIP', label: 'paired machine IP', column: 2 },
+                            { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2, readOnly: true },
+                            { name: 'dtfsPairedMachineOS', label: 'paired machine OS', column: 2, readOnly: true },
+                            { name: 'dtfsPairedMachineIP', label: 'paired machine IP', column: 2, readOnly: true },
                         ],
                     },
                 ]
@@ -73,29 +72,26 @@ class CrShopSettingRender extends RenderBase {
             {
                 group: 'auditOuter', title: '', columnCount: 2, fields: [
                     {
-                        group: 'config', title: 'configurations', column: 1, fields: [
-                            configListOptions
-                        ]
+                        group: 'config', title: 'configurations', column: 1, fields: [configListOptions]
                     },
                     {
-                        group: 'audit', title: 'audit info', column: 2, columnCount: 3, fields: [
+                        group: 'audit', title: 'audit info', column: 2, columnCount: 2, fields: [
                             {
-                                group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                group: 'audit1', title: '', column: 1, columnCount: 1, inline: true, fields: [
                                     { name: 'created', label: 'created', column: 1, readOnly: true },
-                                    //{ name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                                    { name: 'createdBy', label: 'by', column: 1, readOnly: true },
                                 ]
                             },
                             {
-                                group: 'audit2', title: '', column: 2, columnCount: 2, inline: true, fields: [
-                                    // { name: 'modified', label: 'modified', column: 1, readOnly: true },
-                                    // { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                                group: 'audit2', title: '', column: 2, columnCount: 1, inline: true, fields: [
+                                    { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                                    { name: 'modifiedBy', label: 'by', column: 1, readOnly: true },
                                 ]
                             }
                         ]
                     }
                 ]
             },
-            
         ]
 
         if (this.options.mode == 'view') {
@@ -125,6 +121,7 @@ class CrShopSettingRender extends RenderBase {
             
             { title: 'paired PC IP', name: _cxSchema.cr_shop_setting.DTFSPAIREDMACHINEIP },
             { title: 'paired PC name', name: _cxSchema.cr_shop_setting.DTFSPAIREDMACHINENAME },
+            //{ title: 'paired PC OS', name: _cxSchema.cr_shop_setting.DTFSPAIREDMACHINEOS },
 
             //{ title: 'created', name: _cxSchema.cr_shop_setting.CREATED },
             //{ title: 'by', name: _cxSchema.cr_shop_setting.CREATEDBY },

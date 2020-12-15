@@ -1,11 +1,9 @@
 'use strict'
 //
-// REQUIRE PERSISTENT TABLE
-//
 const _cxConst = require('../cx-client-declarations');
 const _persistentTable = require('./persistent/p-cx_login_roles');
 //
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
+// 
 //
 class cx_login_roles_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -52,23 +50,20 @@ class cx_login_roles_Collection extends _persistentTable.Table {
         }
     }
 
-    
+
 }
 //
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
+//
 //
 class cx_login_roles extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
     };
 
-    get roleName() {
-        return _cxConst.CX_ROLE.getName(this.roleId);
-    }
-   
+    get roleName() { return _cxConst.CX_ROLE.getName(this.roleId); }
 }
 //
-// EXPORTS ONLY TABLE AND RECORD
+//
 //
 module.exports = {
     Table: cx_login_roles_Collection,

@@ -1,10 +1,6 @@
 'use strict'
 //
-// REQUIRE PERSISTENT TABLE
-//
 const _persistentTable = require('./persistent/p-cx_login');
-//
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //
 class cx_login_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -24,7 +20,7 @@ class cx_login_Collection extends _persistentTable.Table {
     }
 }
 //
-// NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE
+//
 //
 class cx_login extends _persistentTable.Record {
     constructor(table, defaults) {
@@ -42,7 +38,7 @@ class cx_login extends _persistentTable.Record {
     }
 }
 //
-// EXPORTS ONLY TABLE AND RECORD
+// 
 //
 module.exports = {
     Table: cx_login_Collection,

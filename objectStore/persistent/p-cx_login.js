@@ -25,6 +25,7 @@ const _fieldNames = {
     FIRSTNAME: 'firstName',
     LASTNAME: 'lastName',
     JOBTITLE: 'jobTitle',
+    THEME: 'theme',
     ROLEID: 'roleId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
@@ -42,6 +43,7 @@ const _fields = {
     firstName: { name: 'firstName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     lastName: { name: 'lastName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     jobTitle: { name: 'jobTitle', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    theme: { name: 'theme', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
     roleId: { name: 'roleId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
@@ -100,6 +102,12 @@ class Persistent_cx_login extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.JOBTITLE);
     } set jobTitle(val) {
         super.setValue(_fieldNames.JOBTITLE, val);
+    }
+
+    get theme() {
+        return super.getValue(_fieldNames.THEME);
+    } set theme(val) {
+        super.setValue(_fieldNames.THEME, val);
     }
 
     get roleId() {

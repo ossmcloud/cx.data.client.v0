@@ -25,48 +25,31 @@ function enumGetName(obj, value) {
     return '';
 }
 function enumToListRenderOptions(obj, showId, showCheckBox) {
-    var listOptions = {
-        id: obj._NAME,
-        type: 'table',
-        primaryKey: 'value',
-        columns: []
-    }
-
-    if (showCheckBox) {
-        listOptions.columns.push({ name: 'check', title: '', width: '30px', type: 'check', });
-    }
-    if (showId) {
-        listOptions.columns.push({ name: 'value', title: 'id', width: '30px' });
-    }
-
+    var listOptions = { id: obj._NAME, type: 'table', primaryKey: 'value', columns: [] }
+    if (showCheckBox) { listOptions.columns.push({ name: 'check', title: '', width: '30px', type: 'check', }); }
+    if (showId) { listOptions.columns.push({ name: 'value', title: 'id', width: '30px' }); }
     if (obj._NAME) {
         // @CLEAN-UP: use a clean up routine this is used somewhere else
         listOptions.columns.push({ name: 'text', title: obj._NAME.replace('cx_', '') });
         listOptions.records = obj.toList();
-
     }
-   
     return listOptions;
 }
 
 const CX_ROLE = {
     _NAME: 'cx_role',
-
+    //
     CX_ADMIN: -9,       // web master access
     CX_SUPPORT: -7,     // ossm support login role
-    
     CASHBOOK: 0,        // cash book only
     USER: 1,            // data entry and little more
     SUPERVISOR: 3,       // allow posting, handle dtfs, add/remove shops from logins
     MANAGER: 5,          // handle shop groups, shops, logins
-
     ADMIN: 7,           // full access
-
+    //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     getName: function (value) { return enumGetName(this, value); },
-    listOptions: function (showId, showCheckBox) {
-        return enumToListRenderOptions(this, showId, showCheckBox);
-    }
+    listOptions: function (showId, showCheckBox) { return enumToListRenderOptions(this, showId, showCheckBox); }
 }
 
 const CX_MODULE = {
@@ -80,31 +63,30 @@ const CR_SHOP_CONFIGS = {
     FUELCARD_TENDER: 'FuelCardTender',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
+    TEST_CONFIG: 'TestConfig',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
 const CX_SHOP = {
     STATUS: {
         INACTIVE: 0,
         ACTIVE: 1,
-
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }
-    
 }
 
 const CR_SHOP_TRANSMISSION = {
     STATUS: {
         PENDING: 0,
         TRANSMITTING: 1,
-        //
         FINALIZING: 7,
         COMPLETE: 8,
         ERROR: 9,
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     },
-
 
     ACTION: {
         NONE: 0,
@@ -122,7 +104,6 @@ const CR_SHOP_SETTING = {
     PAIRING_STATUS: {
         NOT_PAIRED: 0,
         PAIRED: 1,
-
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }
@@ -132,10 +113,8 @@ const RAW_GET_REQUEST = {
     STATUS: {
         PENDING: 0,
         PROCESSING: 1,
-
         COMPLETE: 8,
         ERROR: 9,
-
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }
@@ -152,7 +131,6 @@ const RENDER = {
     CTRL_TYPE: {
         TEXT: 'inputText',
         DATE: 'inputDate',
-        // DATE_TIME: 'inputDateTime',
         SELECT: 'inputSelect',
         DROP_DOWN: 'inputDropDown',
     }

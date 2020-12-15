@@ -12,16 +12,10 @@ class RenderBase {
     #dataSource = null;
     constructor(dataSource, options) {
         if (!dataSource) { throw new _ex.CxNullArgError('dataSource'); }
-        
         if (!options) { options = {}; }
-
         this.#dataSource = dataSource;
-        // TODO: get data source title
-        this.#title = options.title || dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
-        this.#options = options || {};
-
+        this.#options = options;
         this.formatOptions();
-        
     }
 
     get options() {
@@ -37,19 +31,23 @@ class RenderBase {
     }
 
     formatOptions() {
-        if (!this.options.id) { this.options.id = this.dataSource.type; }
+        // TODO: get data source title
+        //       we should also get the path and lost path
+        this.#title = this.options.title || this.dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
+        
         this.options.recordTitle = this.#title;
         this.options.recordName = this.dataSource.type;
         if (this.dataSource.table) {
             // this if the data source is a record
-            this.options.primaryKey = this.dataSource.table.primaryKeys[0].name;     
+            this.options.primaryKey = this.dataSource.table.primaryKeys[0].name;
         } else if (this.dataSource.primaryKeys) {
             // this if the data source is a table
-            this.options.primaryKey = this.dataSource.primaryKeys[0].name;     
+            this.options.primaryKey = this.dataSource.primaryKeys[0].name;
         }
 
-        if (this.options.quickSearch != false) { this.options.quickSearch = true; }
         if (!this.options.buttons) { this.options.buttons = []; }
+        if (!this.options.id) { this.options.id = this.dataSource.type; }
+        if (this.options.quickSearch != false) { this.options.quickSearch = true; }
 
         this.options.editMode = (this.options.query) ? this.options.query.e == 'T' : false;
         
@@ -62,7 +60,6 @@ class RenderBase {
         } else {
             this.options.mode = 'view';
         }
-        
     }
 
     async get(renderType) {
@@ -70,7 +67,6 @@ class RenderBase {
             if (this.options.title == undefined) {
                 this.options.title = `${this.#title} list`;
             }
-            //this.options.tabTitle = `cx::${this.#title} list`;
             await this.list();
         }
         if (renderType == _cxConst.RENDER.TYPE.RECORD) {
@@ -79,6 +75,7 @@ class RenderBase {
             if (this.options.editMode && !this.options.allowEdit && !this.options.allowNew) {
                 this.options.editMode = false;
             }
+
             if (this.options.title == undefined) {
                 if (this.options.editMode) {
                     this.options.title = (this.options.query.id ? 'edit ' : 'new ') + this.#title;
@@ -87,7 +84,9 @@ class RenderBase {
                 }
             }
         }
-        if (renderType == _cxConst.RENDER.TYPE.DROP_DOWN) { await this.dropDown(); }
+        if (renderType == _cxConst.RENDER.TYPE.DROP_DOWN) {
+            await this.dropDown();
+        }
         return this.#options;
     }
 
@@ -109,6 +108,7 @@ class RenderBase {
     async list(request, h) {
         await this.setPermission();
         await this._list(request, h);
+       
     }
     async _list(request, h) {
         throw new Error('RenderBase._list not overwritten')
@@ -135,8 +135,6 @@ class RenderBase {
             allowNone: false,
             allowEmpty: true,
         }
-
-        //options.allowEmpty = '- all -';
         return await _cx_render.getDropDownOptions(table, options);
     }
 
@@ -145,6 +143,7 @@ class RenderBase {
         if (!options.credentials) { options.credentials = this.options.credentials; }
         var listOptions = await _cx_render.getListOptions(table, options);
         listOptions.records = table.records;
+
         return listOptions;
     }
 

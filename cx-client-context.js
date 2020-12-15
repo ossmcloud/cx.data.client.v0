@@ -13,12 +13,14 @@ class CXClientContext extends _cx_data.DBContext {
     #shopList = null;
     #role = null;
     #user = null;
+    #theme = null;
     constructor(pool, credentials) {
-        // TODO: get proper path like relative to or something
         super(pool, _path.join(__dirname, 'objectStore'), credentials);
-
-       
     }
+
+    get theme() { return this.#theme; }
+    get shops() { return this.#shops };
+    get shopList() { return this.#shopList; }
 
     get user() {
         return this.#user;
@@ -45,20 +47,16 @@ class CXClientContext extends _cx_data.DBContext {
         return this.#role.name;
     }
 
-    get shops() { return this.#shops };
-    get shopList() { return this.#shopList; }
-
+    
     async init() {
         // @CLEAN-UP: use schema constants in query below
         var query = {
-            sql: `
-                    select * from cx_login where masterLoginId = @masterLoginId
+            sql: `  select * from cx_login where masterLoginId = @masterLoginId
 
                     select  s.*
                     from    cx_login_shop s
                     left outer join cx_login l on l.loginId = s.loginId
-                    where   l.masterLoginId = @masterLoginId
-                `,
+                    where   l.masterLoginId = @masterLoginId`,
             params: [
                 { name: _cxSchema.cx_login.MASTERLOGINID, value: this.userId }
             ]
@@ -66,40 +64,38 @@ class CXClientContext extends _cx_data.DBContext {
 
         var response = await this.exec(query);
         if (response.first() == null) { throw new Error('Not Authorised'); }
+
         this.#user = response.first();
-        this.#role = {
-            id: response.first().roleId || 0,
-        }
+        this.#role = { id: response.first().roleId || 0 }
         this.#role.name = _cxConst.CX_ROLE.getName(this.#role.id);
-
-        var _this = this;
-        this.#shops = [];
-        response.subResults[0].each(function (record, idx) {
-            _this.#shops.push(record.shopId);
-        });
-        this.#shopList = `(${this.#shops.toString()})`;
+        this.#theme = this.#user.theme;
         
+        var shops = [];
+        response.subResults[0].each(function (record, idx) {
+            shops.push(record.shopId);
+        });
+        this.#shops = shops;
+        this.#shopList = `(${this.#shops.toString()})`;
     }
-
 }
 
 
 
 
 module.exports = {
+    // 
     builder: _cx_data.builder,
-    //
-    CXClientContext: CXClientContext,
-    DTFSUtils: DTFSUtils,
     //
     Schema: _cxSchema,
     Const: _cxConst,
     Render: _cx_render,
     //
+    DTFSUtils: DTFSUtils,
+    CXClientContext: CXClientContext,
+    //
     get: async function (options) {
         var dbConfig = options.dbConfig || options;
         var credentials = (options.dbConfig) ? options : null;
-
         var db_pool = await _cx_data.getPool(dbConfig);
         var cx = new CXClientContext(db_pool, credentials);
         await cx.init();
@@ -107,7 +103,7 @@ module.exports = {
     },
     
     generateTransmissionID(svcName, accountId, shopId) {
-        // TODO-IMPORTANT; NOTE:
+        // TODO-IMPORTANT: NOTE:
         //      the tran id has a tick time stamp, 13 digits
         //      plus we add an identifier for the type of service, the account id and shop id
         //      in addition the accountId and shopId are SQL index fields so could easily be larger than 19 digits long which is the max for big int

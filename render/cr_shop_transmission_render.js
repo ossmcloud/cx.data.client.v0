@@ -51,8 +51,8 @@ class CxShopTransmissionRender extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
         ];
         this.options.highlights = [
-            { column: 'status', op: '=', value: _cxConst.CR_SHOP_TRANSMISSION.STATUS.ERROR, style: 'color: #DF0101; background-color: black' },
-            { column: 'status', op: '=', value: _cxConst.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING, style: 'color: yellow; background-color: black' }
+            { column: 'status', op: '=', value: _cxConst.CR_SHOP_TRANSMISSION.STATUS.ERROR, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
+            { column: 'status', op: '=', value: _cxConst.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING, style: 'color: yellow; background-color: var(--element-bg-color);' }
         ];
     }
 

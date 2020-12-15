@@ -32,13 +32,12 @@ async function setLoginLookUpFields(dataSource, fields, users) {
 
     if (fields) {
         fields.forEach(field => {
+            if (field.name == 'created' || field.name == 'modified') { field.readOnly = true; }
             if (field.name == 'createdBy' || field.name == 'modifiedBy') {
                 field.lookUps = users;
                 field.readOnly = true;
             }
-
-            if (field.name == 'createdBy' || field.name == 'modifiedBy') { field.readOnly = true; }
-
+            //
             if (field.fields) { setLoginLookUpFields(dataSource, field.fields, users); }
         });
     }
@@ -49,14 +48,12 @@ async function setLoginLookUpFields(dataSource, fields, users) {
 module.exports = {
     getOptions: async function (renderType, object, options) {
         if (!options) { options = {}; }
-       
         // get from database if any custom one
         var renderOptions = await getCustomOptions(renderType, object, options);
         // if not get defaults
         if (!renderOptions) { renderOptions = await getDefaultOptions(renderType, object, options); }
         // if not too bad !!!!!
         if (!renderOptions) { throw new Error(`no default options for record: ${object.type}`); }
-    
         return renderOptions;
     },
 
@@ -80,7 +77,7 @@ module.exports = {
 
     getRecordOptions: async function (record, options) {
         var renderOptions = await this.getOptions('record', record, options);
-        await setLoginLookUpFields(record, options.fields);
+        if (options) { await setLoginLookUpFields(record, options.fields); }
         return renderOptions;
     }
 }
