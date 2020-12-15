@@ -86,12 +86,12 @@ class raw_getLog_Collection extends _persistentTable.Table {
     }
 
     async fetch(id) {
-        var query = { sql: '', params: [{ name: 'shopId', value: id }] };
+        var query = { sql: '', params: [{ name: 'id', value: id }] };
         query.sql = `
                     select  l.*, s.shopCode, s.shopName
                     from    raw_getLog l, cx_shop s
                     where   l.shopId = s.shopId
-                    and     l.getLogId = @shopId
+                    and     l.getLogId = @id
                 `
         query.noResult = 'null';
         query.returnFirst = true;

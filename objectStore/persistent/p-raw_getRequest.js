@@ -40,7 +40,7 @@ const _fields = {
     getDate: { name: 'getDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
     getModule: { name: 'getModule', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     getReference: { name: 'getReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '((0))' },
+    status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
 

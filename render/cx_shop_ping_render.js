@@ -44,7 +44,7 @@ class RawGetLog extends RenderBase {
         ];
         this.options.columns = [
             { name: 'pingId', title: 'actions', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'shop' },
             { name: 'pingIP', title: 'ping IP', align: 'center', width: '100px' },
             { name: 'response', title: 'response' },
             { name: 'created', title: 'created', align: 'center', width: '130px' },

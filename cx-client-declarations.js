@@ -69,6 +69,13 @@ const CX_ROLE = {
     }
 }
 
+const CX_MODULE = {
+    RETAIL: 'retail',
+    PURCHASE: 'purchase',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+
 const CR_SHOP_CONFIGS = {
     FUELCARD_TENDER: 'FuelCardTender',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
@@ -111,6 +118,16 @@ const CR_SHOP_TRANSMISSION = {
     }
 }
 
+const CR_SHOP_SETTING = {
+    PAIRING_STATUS: {
+        NOT_PAIRED: 0,
+        PAIRED: 1,
+
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    }
+}
+
 const RAW_GET_REQUEST = {
     STATUS: {
         PENDING: 0,
@@ -118,6 +135,9 @@ const RAW_GET_REQUEST = {
 
         COMPLETE: 8,
         ERROR: 9,
+
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }
 }
 
@@ -144,8 +164,10 @@ const SQL = {
 
 module.exports = {
     CX_ROLE: CX_ROLE,
+    CX_MODULE: CX_MODULE,
     CX_SHOP: CX_SHOP,
     CR_SHOP_CONFIGS: CR_SHOP_CONFIGS,
+    CR_SHOP_SETTING: CR_SHOP_SETTING,
     CR_SHOP_TRANSMISSION: CR_SHOP_TRANSMISSION,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     RENDER: RENDER,

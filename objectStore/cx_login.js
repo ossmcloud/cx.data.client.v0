@@ -10,6 +10,18 @@ class cx_login_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cx_login(this, defaults);
     }
+
+    async selectList() {
+        await this.select();
+        var list = [];
+        this.each(function (login) {
+            list.push({
+                value: login.loginId,
+                text: login.displayName,
+            });
+        });
+        return list;
+    }
 }
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD SHOULD BE BUILT HERE

@@ -12,6 +12,12 @@ class cr_shop_configs_Collection extends _persistentTable.Table {
         return new cr_shop_configs(this, defaults);
     }
 
+    async select(shopId) {
+        this.query.clear();
+        this.query.addFilter({ name: _cx_schema.cr_shop_configs.SHOPID, value: shopId });
+        return await super.select();
+    }
+
     async getConfigValue(shopId, configName, parseJason) {
         this.query.clear();
         this.query.addFilter({ name: _cx_schema.cr_shop_configs.SHOPID, value: shopId });

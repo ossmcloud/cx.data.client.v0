@@ -13,9 +13,11 @@ class RenderBase {
     constructor(dataSource, options) {
         if (!dataSource) { throw new _ex.CxNullArgError('dataSource'); }
         
+        if (!options) { options = {}; }
+
         this.#dataSource = dataSource;
         // TODO: get data source title
-        this.#title = dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
+        this.#title = options.title || dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
         this.#options = options || {};
 
         this.formatOptions();
@@ -27,6 +29,11 @@ class RenderBase {
     }
     get dataSource() {
         return this.#dataSource;
+    }
+    get title() {
+        return this.#title
+    } set title(value) {
+        this.#title = value;
     }
 
     formatOptions() {
@@ -69,7 +76,7 @@ class RenderBase {
         if (renderType == _cxConst.RENDER.TYPE.RECORD) {
             await this.record();
 
-            if (this.options.editMode && !this.options.allowEdit) {
+            if (this.options.editMode && !this.options.allowEdit && !this.options.allowNew) {
                 this.options.editMode = false;
             }
             if (this.options.title == undefined) {
