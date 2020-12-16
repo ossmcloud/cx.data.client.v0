@@ -135,7 +135,7 @@ class CrShopSettingRender extends RenderBase {
         this.options.actionsTitle = '';
         this.options.actions = [
             { label: 'pings', link: '/dtfs/pings?s=', target: '_blank' },
-            { label: 'dtfs', link: '//dtfs/transmissions?s=', target: '_blank' },
+            { label: 'dtfs', link: '/dtfs/transmissions?s=', target: '_blank' },
         ]
 
     }
