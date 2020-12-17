@@ -39,14 +39,16 @@ function enumToListRenderOptions(obj, showId, showCheckBox) {
 const CX_ROLE = {
     _NAME: 'cx_role',
     //
-    CX_ADMIN: -9,       // web master access
-    CX_SUPPORT: -7,     // ossm support login role
     CASHBOOK: 0,        // cash book only
     USER: 1,            // data entry and little more
     SUPERVISOR: 3,       // allow posting, handle dtfs, add/remove shops from logins
     MANAGER: 5,          // handle shop groups, shops, logins
     ADMIN: 7,           // full access
     //
+    CX_SUPPORT: 8,     // ossm support login role
+    CX_ADMIN: 9,       // web master access
+
+
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     getName: function (value) { return enumGetName(this, value); },
     listOptions: function (showId, showCheckBox) { return enumToListRenderOptions(this, showId, showCheckBox); }

@@ -5,6 +5,7 @@ const _cx_data = require('cx-data');
 const _cx_render = require('./cx-client-render');
 const _cxSchema = require('./cx-client-schema');
 const _cxConst = require('./cx-client-declarations');
+const _cxEmail = require('./core/cx-email');
 
 const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
 
@@ -75,7 +76,10 @@ class CXClientContext extends _cx_data.DBContext {
             shops.push(record.shopId);
         });
         this.#shops = shops;
-        this.#shopList = `(${this.#shops.toString()})`;
+        this.#shopList = '(0)';
+        if (shops.length > 0) {
+            this.#shopList = `(${this.#shops.toString()})`;
+        }
     }
 }
 
@@ -89,6 +93,7 @@ module.exports = {
     Schema: _cxSchema,
     Const: _cxConst,
     Render: _cx_render,
+    
     //
     DTFSUtils: DTFSUtils,
     CXClientContext: CXClientContext,
