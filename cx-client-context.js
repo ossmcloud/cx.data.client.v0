@@ -65,9 +65,7 @@ class CXClientContext extends _cx_data.DBContext {
             ]
         }
 
-        var response = await this.exec(query);
-        
-       
+        var response = await this.exec(query);       
         if (response.first() == null) { throw new Error('Not Authorised'); }
 
         this.#user = response.first();
