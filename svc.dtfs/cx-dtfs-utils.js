@@ -166,6 +166,7 @@ class DTFSUtils {
         req.status = _cx.RAW_GET_REQUEST.STATUS.PROCESSING;
         req.getReference = (((staticData) ? 'static data: ' : '') + ' request has been picked up!');
         console.log('=== **************************************');
+        console.log(`0: ${req.id}`);
         console.log(`1: ${req.status}`);
         console.log(`2: ${req.getReference}`);
         console.log(`3: ${req.created}`);
