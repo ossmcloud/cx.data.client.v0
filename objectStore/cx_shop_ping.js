@@ -26,7 +26,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
             query.params.push({ name: 'dateFrom', value: params.df });
         }
 
-        query.sql += ' order by p.created desc';
+        query.sql += ' order by p.created desc, p.pingId desc';
 
         await super.select(query);
     }
