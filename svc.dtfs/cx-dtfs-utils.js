@@ -172,7 +172,13 @@ class DTFSUtils {
         console.log(`3: ${req.created}`);
         console.log(`4: ${req.createdBy}`);
         console.log(`5: ${req.getValue('createdBy')}`);
+
+        // TOTO: IMPORTANT: WHY IS CREATED BY NOT PROPERLY POPULATED WHE RUNNING FROM SVC???
         req.createdBy = 1;
+        console.log(`6: ${req.createdBy}`);
+        console.log(`7: ${req.getValue('createdBy')}`);
+
+
         await req.save();
         // package what we need to send back
         var requireDataOptions = {

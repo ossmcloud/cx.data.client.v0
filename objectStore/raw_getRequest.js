@@ -83,6 +83,12 @@ class raw_getRequest extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+
+    async save() {
+        // TOTO: IMPORTANT: WHY IS CREATED BY NOT PROPERLY POPULATED WHE RUNNING FROM SVC???
+        if (!this.createdBy) { this.createdBy = 1; }
+        return super.save();
+    }
 }
 //
 // 
