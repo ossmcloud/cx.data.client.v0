@@ -166,7 +166,10 @@ class DTFSUtils {
         req.status = _cx.RAW_GET_REQUEST.STATUS.PROCESSING;
         req.getReference = (((staticData) ? 'static data: ' : '') + ' request has been picked up!');
         console.log('=== **************************************');
-        console.log(JSON.stringify(req));
+        console.log(`1: ${req.status}`);
+        console.log(`2: ${req.getReference}`);
+        console.log(`3: ${req.created}`);
+        console.log(`4: ${req.createdBy}`);
         await req.save();
         // package what we need to send back
         var requireDataOptions = {
