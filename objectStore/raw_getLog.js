@@ -106,6 +106,7 @@ class raw_getLog extends _persistentTable.Record {
     #shopCode = '';
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
     };
@@ -115,7 +116,7 @@ class raw_getLog extends _persistentTable.Record {
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
     async save() {
-        if (!this.created) { this.created = new Date(); }
+        if (this.isNew()) { this.created = new Date(); }
         await super.save()
     }
 }

@@ -67,7 +67,7 @@ class cx_shop_ping extends _persistentTable.Record {
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
     async save() {
-        if (!this.created) { this.created = new Date(); }
+        if (this.isNew()) { this.created = new Date(); }
         await super.save()
     }
 }

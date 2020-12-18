@@ -68,6 +68,7 @@ class cr_shop_transmission extends _persistentTable.Record {
     #shopCode = '';
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
     };
@@ -87,7 +88,7 @@ class cr_shop_transmission extends _persistentTable.Record {
     }
 
     async save() {
-        if (!this.created) { this.created = new Date(); }
+        if (this.isNew()) { this.created = new Date(); }
         await super.save()
     }
 
