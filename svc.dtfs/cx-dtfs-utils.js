@@ -165,6 +165,8 @@ class DTFSUtils {
         // set status and reference
         req.status = _cx.RAW_GET_REQUEST.STATUS.PROCESSING;
         req.getReference = (((staticData) ? 'static data: ' : '') + ' request has been picked up!');
+        console.log('=== **************************************');
+        console.log(JSON.stringify(req));
         await req.save();
         // package what we need to send back
         var requireDataOptions = {
