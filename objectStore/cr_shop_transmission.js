@@ -10,6 +10,8 @@ class cr_shop_transmission_Collection extends _persistentTable.Table {
     }
 
     async select(params) {
+        if (this.cx.cxSvc == true) { return await super.select(); }
+
         var query = { sql: '', params: [] };
         query.sql = ` select  top ${_declarations.SQL.MAX_ROWS} l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
@@ -41,6 +43,8 @@ class cr_shop_transmission_Collection extends _persistentTable.Table {
     }
 
     async fetch(id) {
+        if (this.cx.cxSvc == true) { return await super.fetch(id); }
+
         var query = { sql: '', params: [{ name: 'transmissionId', value: id }] };
         query.sql = ` select  l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s

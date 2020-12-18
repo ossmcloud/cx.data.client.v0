@@ -9,6 +9,8 @@ class cr_shop_configs_Collection extends _persistentTable.Table {
     }
 
     async select(shopId) {
+        if (this.cx.cxSvc == true) { return await super.select(); }
+        
         this.query.clear();
         this.query.addFilter({ name: _cx_schema.cr_shop_configs.SHOPID, value: shopId });
         return await super.select();

@@ -8,6 +8,8 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
     }
 
     async select(params) {
+        if (this.cx.cxSvc == true) { return await super.select(); }
+        
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
         query.sql = `select  top 1000 p.*, s.shopCode, s.shopName

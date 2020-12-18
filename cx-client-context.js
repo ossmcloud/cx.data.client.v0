@@ -15,6 +15,7 @@ class CXClientContext extends _cx_data.DBContext {
     #role = null;
     #user = null;
     #theme = null;
+    #cxSvc = null;
     constructor(pool, credentials) {
         super(pool, _path.join(__dirname, 'objectStore'), credentials);
     }
@@ -47,11 +48,17 @@ class CXClientContext extends _cx_data.DBContext {
         if (!this.#role) { return ''    ; }
         return this.#role.name;
     }
+    get cxSvc() {
+        return this.#cxSvc;
+    }
 
     
     async init() {
          // TODO: IMPORTANT: if this is called by cx.svc we will have no user
-        if (!this.userId) { return; }
+        if (!this.userId) {
+            this.#cxSvc = true;
+            return;
+        }
         // @CLEAN-UP: use schema constants in query below
         var query = {
             sql: `  select * from cx_login where masterLoginId = @masterLoginId

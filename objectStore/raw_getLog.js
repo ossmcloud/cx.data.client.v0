@@ -44,6 +44,8 @@ class raw_getLog_Collection extends _persistentTable.Table {
     }
 
     async select(params) {
+        if (this.cx.cxSvc == true) { return await super.select(); }
+        
         var query = { sql: '', params: [] };
         query.sql = `
                     select  top 1000 l.*, s.shopCode, s.shopName
