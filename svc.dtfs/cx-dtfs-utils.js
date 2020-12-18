@@ -165,20 +165,10 @@ class DTFSUtils {
         // set status and reference
         req.status = _cx.RAW_GET_REQUEST.STATUS.PROCESSING;
         req.getReference = (((staticData) ? 'static data: ' : '') + ' request has been picked up!');
-        console.log('=== **************************************');
-        console.log(`0: ${req.id}`);
-        console.log(`1: ${req.status}`);
-        console.log(`2: ${req.getReference}`);
-        console.log(`3: ${req.created}`);
-        console.log(`4: ${req.createdBy}`);
-        console.log(`5: ${req.getValue('createdBy')}`);
-
+        
         // TOTO: IMPORTANT: WHY IS CREATED BY NOT PROPERLY POPULATED WHE RUNNING FROM SVC???
         req.createdBy = 1;
-        console.log(`6: ${req.createdBy}`);
-        console.log(`7: ${req.getValue('createdBy')}`);
-
-
+        
         await req.save();
         // package what we need to send back
         var requireDataOptions = {
