@@ -65,6 +65,11 @@ class cx_shop_ping extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+
+    async save() {
+        if (!this.created) { this.created = new Date(); }
+        await super.save()
+    }
 }
 //
 //

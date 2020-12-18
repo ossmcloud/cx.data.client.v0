@@ -45,7 +45,7 @@ class raw_getLog_Collection extends _persistentTable.Table {
 
     async select(params) {
         if (this.cx.cxSvc == true) { return await super.select(); }
-        
+
         var query = { sql: '', params: [] };
         query.sql = `
                     select  top 1000 l.*, s.shopCode, s.shopName
@@ -114,6 +114,10 @@ class raw_getLog extends _persistentTable.Record {
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
+    async save() {
+        if (!this.created) { this.created = new Date(); }
+        await super.save()
+    }
 }
 //
 // 

@@ -86,6 +86,11 @@ class cr_shop_transmission extends _persistentTable.Record {
         await this.save();
     }
 
+    async save() {
+        if (!this.created) { this.created = new Date(); }
+        await super.save()
+    }
+
 }
 //
 module.exports = {
