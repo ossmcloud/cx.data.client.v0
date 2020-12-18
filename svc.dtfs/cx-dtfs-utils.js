@@ -171,6 +171,7 @@ class DTFSUtils {
         console.log(`2: ${req.getReference}`);
         console.log(`3: ${req.created}`);
         console.log(`4: ${req.createdBy}`);
+        console.log(`5: ${req.getValue('createdBy')}`);
         await req.save();
         // package what we need to send back
         var requireDataOptions = {
