@@ -11,9 +11,9 @@ function _sendEmail(options) {
     }
 
     var transporter = nodemailer.createTransport({
-        host: options.host || 'smtp.office365.com', // Office 365 server
-        port: options.port || 587,     // secure SMTP
-        secure: options.secure || false, // false for TLS - as a boolean not string - but the default is false so just remove this completely
+        host: options.host || 'smtp.reg365.net',        // 'smtp.office365.com', // Office 365 server
+        port: options.port || 587,                      // secure SMTP
+        secure: options.secure || false,                // false for TLS - as a boolean not string - but the default is false so just remove this completely
         auth: options.auth,
         tls: options.tls || { ciphers: 'SSLv3' }
     });
@@ -45,10 +45,7 @@ function EMailer(options) {
     this.pass = options.pass;
 
     this.send = async function (options) {
-        async.waterfall([
-            
-        ])
-        
+      
         _sendEmail({
             auth: { user: this.user, pass: this.pass },
             from: this.user,
@@ -74,8 +71,10 @@ module.exports = {
 
     send: function (option) {
         var emailer = new EMailer({
-            user: 'noreply@envisagecloud.net',
-            pass: '3nv1Sage'
+            // user: 'noreply@envisagecloud.net',
+            // pass: '3nv1Sage'
+            user: 'noreply@cloudcx.ie',
+            pass: 'cx@NoR3ply!'
         });
         emailer.send(option);
     }

@@ -50,6 +50,8 @@ class CXClientContext extends _cx_data.DBContext {
 
     
     async init() {
+         // TODO: IMPORTANT: if this is called by cx.svc we will have no user
+        if (!this.userId) { return; }
         // @CLEAN-UP: use schema constants in query below
         var query = {
             sql: `  select * from cx_login where masterLoginId = @masterLoginId
@@ -64,6 +66,8 @@ class CXClientContext extends _cx_data.DBContext {
         }
 
         var response = await this.exec(query);
+        
+       
         if (response.first() == null) { throw new Error('Not Authorised'); }
 
         this.#user = response.first();
