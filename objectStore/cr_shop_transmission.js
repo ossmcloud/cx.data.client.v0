@@ -79,7 +79,7 @@ class cr_shop_transmission extends _persistentTable.Record {
     get transmissionIdText() { return this.transmissionId.toString(); }
 
     async abort() {
-        if (this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING) {
+        if (this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.PENDING && this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING) {
             throw new Error(`transmission cannot be aborted as the current status is ${this.status}`)
         }
         this.status = _declarations.CR_SHOP_TRANSMISSION.STATUS.ERROR;

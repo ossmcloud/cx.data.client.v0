@@ -23,7 +23,7 @@ class CxShopTransmissionRender extends RenderBase {
             },
             
         ];
-        if (this.dataSource.status == _cxConst.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING) {
+        if (this.dataSource.status == _cxConst.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING || this.dataSource.status == _cxConst.CR_SHOP_TRANSMISSION.STATUS.PENDING) {
             this.options.buttons.push({ id: 'cr_shop_transmission_abort', text: 'Abort Transmission', function: 'abort' });
         }
     }
