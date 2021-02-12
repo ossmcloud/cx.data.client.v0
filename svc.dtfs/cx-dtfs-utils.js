@@ -140,7 +140,7 @@ class DTFSUtils {
             requireDataOptions.staticData = ((staticData) ? 'include' : null);
             requireDataOptions.action = 'data';
             requireDataOptions.module = module;
-            requireDataOptions.shop = shopInfo.shopCode;
+            requireDataOptions.shop = shopInfo.eposShopCode;
             requireDataOptions.dsConfig = await _getEPoSDataSourceConfig(this.cx, shopInfo.shopId, requireDataOptions);
         }
 
@@ -177,7 +177,7 @@ class DTFSUtils {
             toDate: _core.date.formatEx({ date: req.getDate, showTime: false }),
             action: 'data',
             module: req.getModule,
-            shop: shopInfo.shopCode,
+            shop: shopInfo.eposShopCode,
             staticData: staticData,
         }
 

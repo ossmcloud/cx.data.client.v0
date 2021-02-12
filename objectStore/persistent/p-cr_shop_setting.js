@@ -33,6 +33,8 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    DTFSPAIREDVERSION: 'dtfsPairedVersion',
+    DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
 
 }
 //
@@ -53,6 +55,8 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    dtfsPairedVersion: { name: 'dtfsPairedVersion', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    dtfsInfoLastRefresh: { name: 'dtfsInfoLastRefresh', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -156,6 +160,18 @@ class Persistent_cr_shop_setting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get dtfsPairedVersion() {
+        return super.getValue(_fieldNames.DTFSPAIREDVERSION);
+    } set dtfsPairedVersion(val) {
+        super.setValue(_fieldNames.DTFSPAIREDVERSION, val);
+    }
+
+    get dtfsInfoLastRefresh() {
+        return super.getValue(_fieldNames.DTFSINFOLASTREFRESH);
+    } set dtfsInfoLastRefresh(val) {
+        super.setValue(_fieldNames.DTFSINFOLASTREFRESH, val);
     }
 
 

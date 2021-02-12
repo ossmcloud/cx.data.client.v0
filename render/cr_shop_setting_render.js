@@ -62,9 +62,11 @@ class CrShopSettingRender extends RenderBase {
                         group: 'pair', title: 'pairing info', column: 2, columnCount: 2, fields: [
                             { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: true },
                             { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.CR_SHOP_SETTING.PAIRING_STATUS.toList() },
+                            { name: 'dtfsPairedVersion', label: 'dtfs version', column: 1, readOnly: true },
                             { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2, readOnly: true },
                             { name: 'dtfsPairedMachineOS', label: 'paired machine OS', column: 2, readOnly: true },
                             { name: 'dtfsPairedMachineIP', label: 'paired machine IP', column: 2, readOnly: true },
+                            { name: 'dtfsInfoLastRefresh', label: 'paired info last refresh', column: 2, readOnly: true },
                         ],
                     },
                 ]
@@ -119,7 +121,7 @@ class CrShopSettingRender extends RenderBase {
             { title: 'start date', name: _cxSchema.cr_shop_setting.STARTDATE },
             { title: 'pairing status', name: _cxSchema.cr_shop_setting.DTFSPAIRINGSTATUS, lookUps: _cxConst.CR_SHOP_SETTING.PAIRING_STATUS.toList() },
             
-            { title: 'paired PC IP', name: _cxSchema.cr_shop_setting.DTFSPAIREDMACHINEIP },
+            { title: 'dtfs version', name: _cxSchema.cr_shop_setting.DTFSPAIREDVERSION },
             { title: 'paired PC name', name: _cxSchema.cr_shop_setting.DTFSPAIREDMACHINENAME },
             //{ title: 'paired PC OS', name: _cxSchema.cr_shop_setting.DTFSPAIREDMACHINEOS },
 

@@ -8,6 +8,9 @@ module.exports = {
         WHOLESALERSHOPCODE: 'wholesalerShopCode',
         WHOLESALERSHOPNAME: 'wholesalerShopName',
         CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cr_shop_configs: {
@@ -16,6 +19,9 @@ module.exports = {
         SHOPID: 'shopId',
         CONFIGNAME: 'configName',
         CONFIGVALUE: 'configValue',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
     },
 
@@ -32,6 +38,11 @@ module.exports = {
         DTFSPAIREDMACHINEOS: 'dtfsPairedMachineOS',
         DTFSPAIREDMACHINEIP: 'dtfsPairedMachineIP',
         CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        DTFSPAIREDVERSION: 'dtfsPairedVersion',
+        DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
     },
 
     cr_shop_transmission: {
@@ -52,6 +63,7 @@ module.exports = {
         FIRSTNAME: 'firstName',
         LASTNAME: 'lastName',
         JOBTITLE: 'jobTitle',
+        THEME: 'theme',
         ROLEID: 'roleId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
@@ -237,6 +249,13 @@ module.exports = {
         STATUS: 'status',
         CREATEDBY: 'createdBy',
         CREATED: 'created',
+    },
+
+    sys_dbInfo: {
+        TBL_NAME: 'sys_dbInfo',
+        DBVERSION: 'dbVersion',
+        DBCREATEDON: 'dbCreatedOn',
+        DBLASTUPDATE: 'dbLastUpdate',
     }
 
 }

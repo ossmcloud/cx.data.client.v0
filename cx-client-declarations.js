@@ -4,8 +4,11 @@ function enumToList(obj, addEmpty) {
     var enums = [];
     if (addEmpty) { enums.push({ value: '', text: (addEmpty == true) ? '' : addEmpty }); }
     for (var key in obj) {
+        // @CLEANUP: use a better way to do this, the 1st three below are functions
         if (key == 'toList') { continue; }
         if (key == 'getName') { continue; }
+        if (key == 'listOptions') { continue; }
+
         if (key == 'CX_ADMIN') { continue; }
         if (key == 'CX_SUPPORT') { continue; }
         if (key == '_NAME') { continue; }
@@ -65,6 +68,7 @@ const CR_SHOP_CONFIGS = {
     FUELCARD_TENDER: 'FuelCardTender',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
+    DTFS_FTP_CONFIG: 'DTFSFTPConfig',
     TEST_CONFIG: 'TestConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
