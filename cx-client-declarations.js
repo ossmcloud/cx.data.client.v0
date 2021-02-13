@@ -126,6 +126,18 @@ const RAW_GET_REQUEST = {
     }
 }
 
+const SYS_SVC_UPGRADE_AUDIT = {
+    STATUS: {
+        PENDING: 0,
+        WAIT_START: 1,
+        UPGRADING: 2,
+        COMPLETE: 8,
+        ERROR: 9,
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    }
+}
+
 const RENDER = {
     TYPE: {
         LIST: 'list',
@@ -154,6 +166,7 @@ module.exports = {
     CR_SHOP_SETTING: CR_SHOP_SETTING,
     CR_SHOP_TRANSMISSION: CR_SHOP_TRANSMISSION,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
+    SYS_SVC_UPGRADE_AUDIT: SYS_SVC_UPGRADE_AUDIT,
     RENDER: RENDER,
     SQL: SQL,
 }

@@ -256,6 +256,19 @@ module.exports = {
         DBVERSION: 'dbVersion',
         DBCREATEDON: 'dbCreatedOn',
         DBLASTUPDATE: 'dbLastUpdate',
+    },
+
+    sys_svcUpgradeAudit: {
+        TBL_NAME: 'sys_svcUpgradeAudit',
+        UPGRADEAUDITID: 'upgradeAuditId',
+        SHOPID: 'shopId',
+        STATUS: 'status',
+        STATUSMESSAGE: 'statusMessage',
+        SERVICENAME: 'serviceName',
+        UPGRADECONFIG: 'upgradeConfig',
+        TRANSMISSIONID: 'transmissionId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
     }
 
 }
