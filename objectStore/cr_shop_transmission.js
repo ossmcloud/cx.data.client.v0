@@ -78,17 +78,24 @@ class cr_shop_transmission extends _persistentTable.Record {
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
     get transmissionIdText() { return this.transmissionId.toString(); }
 
-    async abort() {
+    async abort(message) {
         if (this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.PENDING && this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING) {
             throw new Error(`transmission cannot be aborted as the current status is ${this.status}`)
         }
         this.status = _declarations.CR_SHOP_TRANSMISSION.STATUS.ERROR;
-        this.message = 'transmission manually aborted by: ' + this.cx.userName;
+        
+        this.message = message || ('transmission manually aborted by: ' + this.cx.userName);
+
+        // TODO: we should also set the correspondent raw_getLog adn raw_getRequest (if there)
+
         await this.save();
     }
 
     async save() {
         if (this.isNew()) { this.created = new Date(); }
+        if (this.message.length > 255) {
+            this.message = this.message.substr(0, 255);
+        }
         await super.save()
     }
 
