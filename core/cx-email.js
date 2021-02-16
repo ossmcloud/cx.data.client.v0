@@ -11,7 +11,7 @@ function _sendEmail(options) {
     }
 
     var transporter = nodemailer.createTransport({
-        host: options.host || 'smtp.reg365.net',        // 'smtp.office365.com', // Office 365 server
+        host: options.host || 'smtp.reg365.net',        // Register 365
         port: options.port || 587,                      // secure SMTP
         secure: options.secure || false,                // false for TLS - as a boolean not string - but the default is false so just remove this completely
         auth: options.auth,
@@ -71,8 +71,6 @@ module.exports = {
 
     send: function (option) {
         var emailer = new EMailer({
-            // user: 'noreply@envisagecloud.net',
-            // pass: '3nv1Sage'
             user: 'noreply@cloudcx.ie',
             pass: 'cx@NoR3ply!'
         });
