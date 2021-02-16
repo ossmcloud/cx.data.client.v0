@@ -100,6 +100,18 @@ class cx_shop_Collection extends _persistentTable.Table {
 
         return super.populate(rawRecord);
     }
+
+    async isActive(id) {
+        var query = { sql: '', params: [{ name: this.FieldNames.SHOPID, value: id }] };
+        query.sql = `select  status
+                     from    ${this.type}
+                     where   ${this.FieldNames.SHOPID} = @${this.FieldNames.SHOPID}`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { return false; }
+        return rawRecord.status == 1;
+    }
 }
 //
 //

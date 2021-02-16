@@ -97,9 +97,11 @@ class CrShopSettingRender extends RenderBase {
         ]
 
         if (this.options.mode == 'view') {
-            this.options.buttons.push({ id: 'cr_shop_view_ping', text: 'Ping Audit', link: '../dtfs/pings?s=' + this.dataSource.id });
-            this.options.buttons.push({ id: 'cr_shop_view_transmission', text: 'Get Logs', link: '../dtfs/getlogs?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'cr_shop_view_ping', text: 'Pings Audit', link: '../dtfs/pings?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'cr_shop_view_getLogs', text: 'Get Logs', link: '../dtfs/getlogs?s=' + this.dataSource.id });
             this.options.buttons.push({ id: 'cr_shop_view_transmission', text: 'Transmissions', link: '../dtfs/transmissions?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'cr_shop_view_upgrades', text: 'Upgrades Audit', link: '../sys/upgradeAudits?s=' + this.dataSource.id });
+
         }
     }
 

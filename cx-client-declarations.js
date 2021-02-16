@@ -131,8 +131,16 @@ const SYS_SVC_UPGRADE_AUDIT = {
         PENDING: 0,
         WAIT_START: 1,
         UPGRADING: 2,
+        ABORTED: 7,
         COMPLETE: 8,
         ERROR: 9,
+        
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    },
+
+    SERVICES: {
+        DTFS: 'dtfs',
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }
@@ -148,6 +156,7 @@ const RENDER = {
     //  ..\cx.sdk.v0\cx.core.ui.v0\cx-core-ui-declarations.js(ControlType)
     CTRL_TYPE: {
         TEXT: 'inputText',
+        TEXT_AREA: 'inputTextArea',
         DATE: 'inputDate',
         SELECT: 'inputSelect',
         DROP_DOWN: 'inputDropDown',
