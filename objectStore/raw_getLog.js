@@ -37,7 +37,7 @@ class raw_getLog_Collection extends _persistentTable.Table {
             dates.push({
                 d: res.getDate,
                 toolTip: `${res.logCount} transmission(s)\n${res.logMessage}`,
-                link: `../cr/cashbook?s=${res.shopId}&d=${res.getDate}`,
+                link: `../dtfs/summary?s=${res.shopId}&d=${res.getDate}`,
             })
         });
         return dates;
