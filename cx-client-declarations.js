@@ -1,5 +1,5 @@
 'use strict'
-
+// TODO: move to core sdk
 function enumToList(obj, addEmpty) {
     var enums = [];
     if (addEmpty) { enums.push({ value: '', text: (addEmpty == true) ? '' : addEmpty }); }
