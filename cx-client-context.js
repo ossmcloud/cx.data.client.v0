@@ -54,7 +54,8 @@ class CXClientContext extends _cx_data.DBContext {
 
     
     async init() {
-         // TODO: IMPORTANT: if this is called by cx.svc we will have no user
+         // NOTE: IMPORTANT: if this is called by cx.svc we will have no user
+        // @REVIEW: maybe we can find a better way or use some sort of system user
         if (!this.userId) {
             this.#cxSvc = true;
             return;

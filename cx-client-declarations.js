@@ -4,7 +4,7 @@ function enumToList(obj, addEmpty) {
     var enums = [];
     if (addEmpty) { enums.push({ value: '', text: (addEmpty == true) ? '' : addEmpty }); }
     for (var key in obj) {
-        // @CLEANUP: use a better way to do this, the 1st three below are functions
+        // @CLEAN-UP: use a better way to do this, the 1st three below are functions
         if (key == 'toList') { continue; }
         if (key == 'getName') { continue; }
         if (key == 'listOptions') { continue; }

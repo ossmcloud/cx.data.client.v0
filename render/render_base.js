@@ -31,8 +31,7 @@ class RenderBase {
     }
 
     formatOptions() {
-        // TODO: get data source title
-        //       we should also get the path and lost path
+        // get data source title
         this.#title = this.options.title || this.dataSource.type.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
         
         this.options.recordTitle = this.#title;
