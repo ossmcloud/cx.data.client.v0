@@ -68,6 +68,7 @@ class CXClientContext extends _cx_data.DBContext {
             
             // NOTE: IMPORTANT: check if this is called by cx.svc (we have no user info here)
             if (options.cxSvc) {
+                this.#cxSvc = true;
                 this.#cxSvcInfo = {
                     shopId: options.shopId,
                     shopCode: options.shopCode,
