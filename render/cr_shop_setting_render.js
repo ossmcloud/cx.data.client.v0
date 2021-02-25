@@ -35,6 +35,8 @@ class CrShopSettingRender extends RenderBase {
 
     async _record() {
         var configListOptions = null
+        var newRecord = (this.options.mode == 'new');
+
         if (this.options.mode == 'new') {
             this.options.allowDelete = false;
         } else {
@@ -52,15 +54,15 @@ class CrShopSettingRender extends RenderBase {
                 group: 'eposOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
-                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !this.dataSource.isNew() },
-                            { name: 'startDate', label: 'start date', column: 1 },
-                            { name: 'eposShopCode', label: 'epos code', column: 2 },
-                            { name: 'eposShopName', label: 'epos name', column: 2 },
+                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
+                            { name: 'startDate', label: 'start date', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                            { name: 'eposShopCode', label: 'epos code', column: 2, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                            { name: 'eposShopName', label: 'epos name', column: 2, validation: '{ "mandatory": true }' },
                         ],
                     },
                     {
                         group: 'pair', title: 'pairing info', column: 2, columnCount: 2, fields: [
-                            { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: true },
+                            { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
                             { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.CR_SHOP_SETTING.PAIRING_STATUS.toList() },
                             { name: 'dtfsPairedVersion', label: 'dtfs version', column: 1, readOnly: true },
                             { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2, readOnly: true },
@@ -71,7 +73,10 @@ class CrShopSettingRender extends RenderBase {
                     },
                 ]
             },
-            {
+        ]
+
+        if (!newRecord) {
+            this.options.fields.push({
                 group: 'auditOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'config', title: 'configurations', column: 1, fields: [configListOptions]
@@ -93,8 +98,8 @@ class CrShopSettingRender extends RenderBase {
                         ]
                     }
                 ]
-            },
-        ]
+            });
+        }
 
         if (this.options.mode == 'view') {
             this.options.buttons.push({ id: 'cr_shop_view_ping', text: 'Pings Audit', link: '../dtfs/pings?s=' + this.dataSource.id });
@@ -106,6 +111,8 @@ class CrShopSettingRender extends RenderBase {
     }
 
     async _list() {
+        // NOTE: we overwrite permissions because we only want to create this record from a shop and only if not there already
+        this.options.allowNew = false;
 
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),

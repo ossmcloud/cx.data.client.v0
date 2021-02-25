@@ -57,6 +57,9 @@ class RenderBase {
                 this.options.mode = 'new';
             }
         } else {
+            if (this.dataSource.isNew && this.dataSource.isNew()) { 
+                throw new Error('Cannot display new records in view mode!');
+            }
             this.options.mode = 'view';
         }
     }

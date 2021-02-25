@@ -1,5 +1,7 @@
 'use strict'
 //
+const _cxConst = require('../cx-client-declarations');
+const _cxSchema = require('../cx-client-schema');
 const _persistentTable = require('./persistent/p-cr_shop_setting');
 //
 class cr_shop_setting_Collection extends _persistentTable.Table {
@@ -40,7 +42,7 @@ class cr_shop_setting_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
-    async fetch(id) {
+    async fetch(id, returnNull) {
         var query = {
             sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName
                     from    cr_shop_setting sr
@@ -54,7 +56,10 @@ class cr_shop_setting_Collection extends _persistentTable.Table {
         }
 
         var record = await this.db.exec(query);
-        if (!record) { throw new Error(`${this.type} record [${id}] does not exist or was deleted!`); }
+        if (!record) {
+            if (returnNull) { return null; }
+            throw new Error(`${this.type} record [${id}] does not exist or was deleted!`);
+        }
 
         return super.populate(record);
     }
@@ -82,6 +87,23 @@ class cr_shop_setting extends _persistentTable.Record {
     get groupName() { return this.#groupName; }
     get groupCode() { return this.#groupCode; }
     get groupInfo() { return `[${this.#groupCode}] ${this.#groupName}`; }
+
+    async save() {
+        var newSettings = this.isNew();
+
+        await super.save();
+
+        if (newSettings) {
+            //
+            var query = { sql: '', params: [] };
+            var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
+            for (var ex = 0; ex < epos.length; ex++) {
+                query.sql += `insert into ${_cxSchema.cr_shop_configs.TBL_NAME} (${_cxSchema.cr_shop_configs.SHOPID}, ${_cxSchema.cr_shop_configs.CONFIGNAME}, ${_cxSchema.cr_shop_configs.CONFIGVALUE}, ${_cxSchema.cr_shop_configs.CREATEDBY})`;
+                query.sql += `values (${this.shopId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;
+            }
+            await this.cx.exec(query);
+        }
+    }
 }
 //
 // 

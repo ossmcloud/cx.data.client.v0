@@ -47,7 +47,7 @@ const _fields = {
     eposShopName: { name: 'eposShopName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     startDate: { name: 'startDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     dtfsPairingCode: { name: 'dtfsPairingCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
-    dtfsPairingStatus: { name: 'dtfsPairingStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '((0))' },
+    dtfsPairingStatus: { name: 'dtfsPairingStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: 0 },
     dtfsPairedMachineName: { name: 'dtfsPairedMachineName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     dtfsPairedMachineOS: { name: 'dtfsPairedMachineOS', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     dtfsPairedMachineIP: { name: 'dtfsPairedMachineIP', dataType: 'varchar', pk: false, identity: false, maxLength: 15, null: true },

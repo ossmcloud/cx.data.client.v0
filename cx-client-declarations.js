@@ -64,15 +64,48 @@ const CX_MODULE = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
+
 const CR_SHOP_CONFIGS = {
     FUELCARD_TENDER: 'FuelCardTender',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
-    TEST_CONFIG: 'TestConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
+
+const CX_EPOS_PROVIDER = {
+    CBE: 'CBE',
+    //RS: 'RetailSolution',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+const CX_EPOS_PROVIDERS = {
+    supported: [
+        {
+            type: CX_EPOS_PROVIDER.CBE,
+            configDefaults: [
+                { name: CR_SHOP_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
+                { name: CR_SHOP_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: CR_SHOP_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+            ]
+        }
+    ],
+    get: function (eposCode) {
+        for (var px = 0; px < this.supported.length; px++) {
+            if (this.supported[px].type == eposCode) {
+                return this.supported[px];
+            }
+        }
+        throw new Error(`EPoS Provider ${eposCode} is not supported!`);
+    },
+    getConfigDefaults: function (eposCode) {
+        return this.get(eposCode).configDefaults;
+    }
+}
+
+
+
 
 const CX_SHOP = {
     STATUS: {
@@ -171,6 +204,8 @@ const SQL = {
 module.exports = {
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
+    CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
+    CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
     CR_SHOP_CONFIGS: CR_SHOP_CONFIGS,
     CR_SHOP_SETTING: CR_SHOP_SETTING,

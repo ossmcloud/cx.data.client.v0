@@ -9,7 +9,8 @@ async function getPermission(recordType, role) {
         return { allowNew: (recordType.indexOf('raw_') < 0), allowEdit: true, allowView: true };
     }
 
-    // dtfs stuff
+    //  
+    
     if (recordType.indexOf('raw_') == 0 ||
         recordType == _cxSchema.cx_shop_ping.TBL_NAME ||
         recordType == _cxSchema.cr_shop_transmission.TBL_NAME) {
@@ -20,8 +21,8 @@ async function getPermission(recordType, role) {
     }
 
     if (recordType == _cxSchema.cx_shop.TBL_NAME) {
-        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
-        permission.allowNew = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
     }
     if (recordType == _cxSchema.cx_shop_group.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
@@ -36,7 +37,7 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.cr_shop_setting.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
-        permission.allowNew = false;
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
     if (recordType == _cxSchema.cr_shop_configs.TBL_NAME) {
