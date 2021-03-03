@@ -7,7 +7,7 @@ const _cxSchema = require('./cx-client-schema');
 const _cxConst = require('./cx-client-declarations');
 const _cxEmail = require('./core/cx-email');
 
-const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
+//const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
 
 class CXClientContext extends _cx_data.DBContext {
     #shops = null;
@@ -127,7 +127,7 @@ module.exports = {
     Render: _cx_render,
     
     //
-    DTFSUtils: DTFSUtils,
+    //DTFSUtils: DTFSUtils,
     CXClientContext: CXClientContext,
     //
     get: async function (options) {
