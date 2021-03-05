@@ -14,25 +14,37 @@ class CxShopRender extends RenderBase {
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 3, fields: [
+                    {
+                        group: 'main1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
+                            await this.fieldDropDownOptions(_cxSchema.cx_shop_group, { id: 'shopGroupId', name: 'shopGroupId', column: 2, }),
+                        ]
+                    },
+
+                    
                     { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
-                    { name: 'shopAddress', label: 'address', column: 1, validation: '{ "max": 255 }' },
-                    await this.fieldDropDownOptions(_cxSchema.cx_shop_group, {
-                        id: 'shopGroupId', name: 'shopGroupId', column: 2, 
-                    }),
-                    { name: 'shopCode', label: 'code', column: 3, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
-                    { name: 'status', label: 'status', column: 3, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
+                    
+
+                    { name: 'shopAddress', label: 'address', column: 2, validation: '{ "max": 255 }' },
+                    { name: 'shopPostCode', label: 'post code', column: 2, validation: '{ "max": 50 }' },
+
+                    { name: 'shopLatitude', label: 'latitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
+                    { name: 'shopLongitude', label: 'longitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
+                    
+                    
                 ],
             },
             {
                 group: 'audit', title: 'audit info', columnCount: 3, fields: [
+                    { name: 'status', label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
                     {
-                        group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        group: 'audit1', title: '', column: 2, columnCount: 2, inline: true, fields: [
                             { name: 'created', label: 'created', column: 1, readOnly: true },
                             { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
                         ]
                     },
                     {
-                        group: 'audit2', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                        group: 'audit2', title: '', column: 3, columnCount: 2, inline: true, fields: [
                             { name: 'modified', label: 'modified', column: 1, readOnly: true },
                             { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
                         ]
@@ -59,6 +71,7 @@ class CxShopRender extends RenderBase {
             { title: 'code', name: _cxSchema.cx_shop.SHOPCODE },
             { title: 'name', name: _cxSchema.cx_shop.SHOPNAME },
             { title: 'group', name: 'groupInfo' },
+            { title: 'post code', name: 'shopPostCode' },
             { title: 'status', name: _cxSchema.cx_shop.STATUS, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
             { title: 'created', name: _cxSchema.cx_shop.CREATED },
             { title: 'by', name: _cxSchema.cx_shop.CREATEDBY },

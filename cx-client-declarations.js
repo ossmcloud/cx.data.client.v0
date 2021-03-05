@@ -193,6 +193,7 @@ const RENDER = {
         DATE: 'inputDate',
         SELECT: 'inputSelect',
         DROP_DOWN: 'inputDropDown',
+        NUMERIC: 'inputNumeric',
     }
 }
 

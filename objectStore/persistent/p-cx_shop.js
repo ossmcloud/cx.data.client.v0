@@ -29,6 +29,9 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    SHOPPOSTCODE: 'shopPostCode',
+    SHOPLATITUDE: 'shopLatitude',
+    SHOPLONGITUDE: 'shopLongitude',
 
 }
 //
@@ -45,6 +48,9 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    shopPostCode: { name: 'shopPostCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
+    shopLatitude: { name: 'shopLatitude', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
+    shopLongitude: { name: 'shopLongitude', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
 
 }
 //
@@ -122,6 +128,24 @@ class Persistent_cx_shop extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get shopPostCode() {
+        return super.getValue(_fieldNames.SHOPPOSTCODE);
+    } set shopPostCode(val) {
+        super.setValue(_fieldNames.SHOPPOSTCODE, val);
+    }
+
+    get shopLatitude() {
+        return super.getValue(_fieldNames.SHOPLATITUDE);
+    } set shopLatitude(val) {
+        super.setValue(_fieldNames.SHOPLATITUDE, val);
+    }
+
+    get shopLongitude() {
+        return super.getValue(_fieldNames.SHOPLONGITUDE);
+    } set shopLongitude(val) {
+        super.setValue(_fieldNames.SHOPLONGITUDE, val);
     }
 
 

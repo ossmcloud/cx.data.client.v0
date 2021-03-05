@@ -97,6 +97,9 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        SHOPPOSTCODE: 'shopPostCode',
+        SHOPLATITUDE: 'shopLatitude',
+        SHOPLONGITUDE: 'shopLongitude',
     },
 
     cx_shop_group: {
