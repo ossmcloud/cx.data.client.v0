@@ -1,12 +1,12 @@
 'use strict'
 //
-const _persistentTable = require('./persistent/p-cr_shop_transmission');
+const _persistentTable = require('./persistent/p-epos_transmission');
 const _declarations = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
 //
-class cr_shop_transmission_Collection extends _persistentTable.Table {
+class epos_transmission_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new cr_shop_transmission(this, defaults);
+        return new epos_transmission(this, defaults);
     }
 
     async select(params) {
@@ -66,7 +66,7 @@ class cr_shop_transmission_Collection extends _persistentTable.Table {
 }
 
 //
-class cr_shop_transmission extends _persistentTable.Record {
+class epos_transmission extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
@@ -82,10 +82,10 @@ class cr_shop_transmission extends _persistentTable.Record {
     get transmissionIdText() { return this.transmissionId.toString(); }
 
     async abort(message) {
-        if (this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.PENDING && this.status != _declarations.CR_SHOP_TRANSMISSION.STATUS.TRANSMITTING) {
+        if (this.status != _declarations.EPOS_TRANSMISSION.STATUS.PENDING && this.status != _declarations.EPOS_TRANSMISSION.STATUS.TRANSMITTING) {
             throw new Error(`transmission cannot be aborted as the current status is ${this.status}`)
         }
-        this.status = _declarations.CR_SHOP_TRANSMISSION.STATUS.ERROR;
+        this.status = _declarations.EPOS_TRANSMISSION.STATUS.ERROR;
         
         this.message = message || ('transmission manually aborted by: ' + this.cx.userName);
 
@@ -105,7 +105,7 @@ class cr_shop_transmission extends _persistentTable.Record {
 }
 //
 module.exports = {
-    Table: cr_shop_transmission_Collection,
-    Record: cr_shop_transmission,
+    Table: epos_transmission_Collection,
+    Record: epos_transmission,
 }
 

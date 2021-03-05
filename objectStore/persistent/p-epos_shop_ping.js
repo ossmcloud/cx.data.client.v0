@@ -14,7 +14,7 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cx_shop_ping';
+const _tableName = 'epos_shop_ping';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
@@ -34,13 +34,13 @@ const _fields = {
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     pingIP: { name: 'pingIP', dataType: 'varchar', pk: false, identity: false, maxLength: 15, null: false },
     response: { name: 'response', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: false },
-    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
 
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cx_shop_ping_Collection extends _cx_data.DBTable {
+class Persistent_epos_shop_ping_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -49,11 +49,9 @@ class Persistent_cx_shop_ping_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cx_shop_ping extends _cx_data.DBRecord {
-    
+class Persistent_epos_shop_ping extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
-        
     }
     get FieldNames() { return _fieldNames; }
 
@@ -80,12 +78,18 @@ class Persistent_cx_shop_ping extends _cx_data.DBRecord {
         super.setValue(_fieldNames.RESPONSE, val);
     }
 
+    get created() {
+        return super.getValue(_fieldNames.CREATED);
+    } set created(val) {
+        super.setValue(_fieldNames.CREATED, val);
+    }
+
 
 }
 //
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cx_shop_ping_Collection,
-    Record: Persistent_cx_shop_ping,
+    Table: Persistent_epos_shop_ping_Collection,
+    Record: Persistent_epos_shop_ping,
 }

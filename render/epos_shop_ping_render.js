@@ -4,7 +4,7 @@ const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
-class RawGetLog extends RenderBase {
+class EposShopPing extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
     }
@@ -52,7 +52,7 @@ class RawGetLog extends RenderBase {
     }
 }
 
-module.exports = RawGetLog;
+module.exports = EposShopPing;
 
 
 

@@ -4,7 +4,7 @@ const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
-class CrShopConfig extends RenderBase {
+class EposShopConfig extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
     }
@@ -35,4 +35,4 @@ class CrShopConfig extends RenderBase {
 
 }
 
-module.exports = CrShopConfig;
+module.exports = EposShopConfig;

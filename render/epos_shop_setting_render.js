@@ -4,7 +4,7 @@ const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
-class CrShopSettingRender extends RenderBase {
+class EposShopSettingRender extends RenderBase {
 
     constructor(dataSource, options) {
         super(dataSource, options);
@@ -102,9 +102,9 @@ class CrShopSettingRender extends RenderBase {
         }
 
         if (this.options.mode == 'view') {
-            this.options.buttons.push({ id: 'cr_shop_view_ping', text: 'Pings Audit', link: '../dtfs/pings?s=' + this.dataSource.id });
-            this.options.buttons.push({ id: 'cr_shop_view_getLogs', text: 'Get Logs', link: '../dtfs/getlogs?s=' + this.dataSource.id });
-            this.options.buttons.push({ id: 'cr_shop_view_transmission', text: 'Transmissions', link: '../dtfs/transmissions?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'cr_shop_view_ping', text: 'Pings Audit', link: '../epos/pings?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'cr_shop_view_getLogs', text: 'Get Logs', link: '../raw/getlogs?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'cr_shop_view_transmission', text: 'Transmissions', link: '../epos/transmissions?s=' + this.dataSource.id });
             this.options.buttons.push({ id: 'cr_shop_view_upgrades', text: 'Upgrades Audit', link: '../sys/upgradeAudits?s=' + this.dataSource.id });
 
         }
@@ -145,8 +145,8 @@ class CrShopSettingRender extends RenderBase {
 
         this.options.actionsTitle = '';
         this.options.actions = [
-            { label: 'pings', link: '/dtfs/pings?s=', target: '_blank' },
-            { label: 'dtfs', link: '/dtfs/transmissions?s=', target: '_blank' },
+            { label: 'pings', link: '/epos/pings?s=', target: '_blank' },
+            { label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
         ]
 
     }
@@ -155,7 +155,7 @@ class CrShopSettingRender extends RenderBase {
 
 }
 
-module.exports = CrShopSettingRender;
+module.exports = EposShopSettingRender;
 
 
 

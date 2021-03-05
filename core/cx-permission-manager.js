@@ -12,8 +12,8 @@ async function getPermission(recordType, role) {
     //  
     
     if (recordType.indexOf('raw_') == 0 ||
-        recordType == _cxSchema.cx_shop_ping.TBL_NAME ||
-        recordType == _cxSchema.cr_shop_transmission.TBL_NAME) {
+        recordType == _cxSchema.epos_shop_ping.TBL_NAME ||
+        recordType == _cxSchema.epos_transmission.TBL_NAME) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     } 
     if (recordType == _cxSchema.raw_getRequest.TBL_NAME) {

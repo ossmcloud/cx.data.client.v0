@@ -14,7 +14,7 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cr_shop_transmission';
+const _tableName = 'epos_transmission';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
@@ -36,13 +36,13 @@ const _fields = {
     status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     action: { name: 'action', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     message: { name: 'message', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
 
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cr_shop_transmission_Collection extends _cx_data.DBTable {
+class Persistent_epos_transmission_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -51,7 +51,7 @@ class Persistent_cr_shop_transmission_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cr_shop_transmission extends _cx_data.DBRecord {
+class Persistent_epos_transmission extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
@@ -88,12 +88,18 @@ class Persistent_cr_shop_transmission extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MESSAGE, val);
     }
 
+    get created() {
+        return super.getValue(_fieldNames.CREATED);
+    } set created(val) {
+        super.setValue(_fieldNames.CREATED, val);
+    }
+
 
 }
 //
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cr_shop_transmission_Collection,
-    Record: Persistent_cr_shop_transmission,
+    Table: Persistent_epos_transmission_Collection,
+    Record: Persistent_epos_transmission,
 }

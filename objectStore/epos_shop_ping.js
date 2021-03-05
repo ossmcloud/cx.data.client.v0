@@ -1,10 +1,10 @@
 'use strict'
 //
-const _persistentTable = require('./persistent/p-cx_shop_ping');
+const _persistentTable = require('./persistent/p-epos_shop_ping');
 //
-class cx_shop_ping_Collection extends _persistentTable.Table {
+class epos_shop_ping_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new cx_shop_ping(this, defaults);
+        return new epos_shop_ping(this, defaults);
     }
 
     async select(params) {
@@ -13,7 +13,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
         query.sql = `select  top 1000 p.*, s.shopCode, s.shopName
-                     from    cx_shop_ping p, cx_shop s
+                     from    epos_shop_ping p, cx_shop s
                      where   p.shopId = s.shopId
                      and     p.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
         
@@ -34,7 +34,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
     async fetch(id) {
         var query = { sql: '', params: [{ name: 'pingId', value: id }] };
         query.sql = `select  p.*, s.shopCode, s.shopName
-                     from    cx_shop_ping p, cx_shop s
+                     from    epos_shop_ping p, cx_shop s
                      where   p.shopId = s.shopId
                      and     p.pingId = @pingId
                      and     p.${this.FieldNames.SHOPID} in ${this.cx.shopList} `;
@@ -52,7 +52,7 @@ class cx_shop_ping_Collection extends _persistentTable.Table {
 //
 //
 //
-class cx_shop_ping extends _persistentTable.Record {
+class epos_shop_ping extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
@@ -75,7 +75,7 @@ class cx_shop_ping extends _persistentTable.Record {
 //
 //
 module.exports = {
-    Table: cx_shop_ping_Collection,
-    Record: cx_shop_ping,
+    Table: epos_shop_ping_Collection,
+    Record: epos_shop_ping,
 }
 

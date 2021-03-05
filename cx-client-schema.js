@@ -13,16 +13,6 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
-    cr_shop_transmission: {
-        TBL_NAME: 'cr_shop_transmission',
-        TRANSMISSIONID: 'transmissionId',
-        SHOPID: 'shopId',
-        STATUS: 'status',
-        ACTION: 'action',
-        MESSAGE: 'message',
-        CREATED: 'created',
-    },
-
     cx_login: {
         TBL_NAME: 'cx_login',
         LOGINID: 'loginId',
@@ -82,15 +72,6 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
-    cx_shop_ping: {
-        TBL_NAME: 'cx_shop_ping',
-        PINGID: 'pingId',
-        SHOPID: 'shopId',
-        PINGIP: 'pingIP',
-        RESPONSE: 'response',
-        CREATED: 'created',
-    },
-
     epos_shop_configs: {
         TBL_NAME: 'epos_shop_configs',
         CONFIGID: 'configId',
@@ -101,6 +82,15 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+    },
+
+    epos_shop_ping: {
+        TBL_NAME: 'epos_shop_ping',
+        PINGID: 'pingId',
+        SHOPID: 'shopId',
+        PINGIP: 'pingIP',
+        RESPONSE: 'response',
+        CREATED: 'created',
     },
 
     epos_shop_setting: {
@@ -121,6 +111,16 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+    },
+
+    epos_transmission: {
+        TBL_NAME: 'epos_transmission',
+        TRANSMISSIONID: 'transmissionId',
+        SHOPID: 'shopId',
+        STATUS: 'status',
+        ACTION: 'action',
+        MESSAGE: 'message',
+        CREATED: 'created',
     },
 
     erp_shop_setting: {
