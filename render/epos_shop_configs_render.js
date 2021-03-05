@@ -18,7 +18,7 @@ class CrShopConfig extends RenderBase {
         } else {
             this.options.fields[0].fields.push(await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'config_shopId', name: 'shopId', column: 1 }));
         }
-        this.options.fields[0].fields.push({ name: 'configName', label: 'config name', width: '250px', readOnly: !this.dataSource.isNew(), lookUps: _cxConst.CR_SHOP_CONFIGS.toList(true), validation: '{ "mandatory": true }' });
+        this.options.fields[0].fields.push({ name: 'configName', label: 'config name', width: '250px', readOnly: !this.dataSource.isNew(), lookUps: _cxConst.EPOS_SHOP_CONFIGS.toList(true), validation: '{ "mandatory": true }' });
         this.options.fields[0].fields.push({ name: 'configValue', label: 'config value', validation: '{ "mandatory": true, "max": 500 }' });
     }
 
@@ -27,9 +27,9 @@ class CrShopConfig extends RenderBase {
             this.options.path = '../cx/shopConfigs';
         }
         this.options.columns = [
-            { name: _cxSchema.cr_shop_configs.CONFIGID, title: 'id', align: 'left' },
-            { name: _cxSchema.cr_shop_configs.CONFIGNAME, title: 'name', align: 'left' },
-            { name: _cxSchema.cr_shop_configs.CONFIGVALUE, title: 'value', align: 'left' },
+            { name: _cxSchema.epos_shop_configs.CONFIGID, title: 'id', align: 'left' },
+            { name: _cxSchema.epos_shop_configs.CONFIGNAME, title: 'name', align: 'left' },
+            { name: _cxSchema.epos_shop_configs.CONFIGVALUE, title: 'value', align: 'left' },
         ];
     }
 

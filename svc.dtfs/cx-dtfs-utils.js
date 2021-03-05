@@ -11,7 +11,7 @@
 
 // async function _getEPoSDataSourceConfig(cx, shopId, requireDataOptions) {
 //     // get configuration to connect to local EPoS data source, then load custom scripts (if any)
-//     var dsConfig = await cx.table(_cx_schema.cr_shop_configs).getConfigValue(shopId, _cx.CR_SHOP_CONFIGS.DTFS_DATASOURCE_CONFIG, true);
+//     var dsConfig = await cx.table(_cx_schema.epos_shop_configs).getConfigValue(shopId, _cx.EPOS_SHOP_CONFIGS.DTFS_DATASOURCE_CONFIG, true);
 //     if (!dsConfig) { throw new Error('No EPoS Data Source Config for shop ID: ' + shopId); }
 //     dsConfig.scripts = [];
 //     dsConfig.customScripts = await _getEPoSDataExtractCustomScripts(cx, shopId, requireDataOptions.module);
@@ -65,7 +65,7 @@
 
 // async function _getStartDate(cx, shopId, module) {
 //     if (module != 'retail') { throw new Error('function getStartDate not implemented for module: ' + module); }
-//     var sql = 'SELECT startDate from cr_shop_setting where shopId = @shopId';
+//     var sql = 'SELECT startDate from epos_shop_setting where shopId = @shopId';
 //     var dataSet = await cx.exec({
 //         sql: sql,
 //         params: [{ name: 'shopId', value: shopId }]

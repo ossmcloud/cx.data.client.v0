@@ -2,17 +2,17 @@
 //
 const _cxConst = require('../cx-client-declarations');
 const _cxSchema = require('../cx-client-schema');
-const _persistentTable = require('./persistent/p-cr_shop_setting');
+const _persistentTable = require('./persistent/p-epos_shop_setting');
 //
-class cr_shop_setting_Collection extends _persistentTable.Table {
+class epos_shop_setting_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new cr_shop_setting(this, defaults);
+        return new epos_shop_setting(this, defaults);
     }
 
     async select(params) {
         var query = {
             sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName
-                    from    cr_shop_setting sr
+                    from    epos_shop_setting sr
                     left    outer join cx_shop sx on sx.shopId = sr.shopId
                     left    outer join cx_shop_group sg on sg.shopGroupId = sx.shopGroupId
                     where   sr.shopId in ${this.cx.shopList}`,
@@ -45,7 +45,7 @@ class cr_shop_setting_Collection extends _persistentTable.Table {
     async fetch(id, returnNull) {
         var query = {
             sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName
-                    from    cr_shop_setting sr
+                    from    epos_shop_setting sr
                     left    outer join cx_shop sx on sx.shopId = sr.shopId
                     left    outer join cx_shop_group sg on sg.shopGroupId = sx.shopGroupId
                     where   sr.shopId in ${this.cx.shopList}
@@ -67,7 +67,7 @@ class cr_shop_setting_Collection extends _persistentTable.Table {
 //
 //
 //
-class cr_shop_setting extends _persistentTable.Record {
+class epos_shop_setting extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     #groupName = '';
@@ -98,7 +98,7 @@ class cr_shop_setting extends _persistentTable.Record {
             var query = { sql: '', params: [] };
             var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
             for (var ex = 0; ex < epos.length; ex++) {
-                query.sql += `insert into ${_cxSchema.cr_shop_configs.TBL_NAME} (${_cxSchema.cr_shop_configs.SHOPID}, ${_cxSchema.cr_shop_configs.CONFIGNAME}, ${_cxSchema.cr_shop_configs.CONFIGVALUE}, ${_cxSchema.cr_shop_configs.CREATEDBY})`;
+                query.sql += `insert into ${_cxSchema.epos_shop_configs.TBL_NAME} (${_cxSchema.epos_shop_configs.SHOPID}, ${_cxSchema.epos_shop_configs.CONFIGNAME}, ${_cxSchema.epos_shop_configs.CONFIGVALUE}, ${_cxSchema.epos_shop_configs.CREATEDBY})`;
                 query.sql += `values (${this.shopId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;
             }
             await this.cx.exec(query);
@@ -109,7 +109,7 @@ class cr_shop_setting extends _persistentTable.Record {
 // 
 //
 module.exports = {
-    Table: cr_shop_setting_Collection,
-    Record: cr_shop_setting,
+    Table: epos_shop_setting_Collection,
+    Record: epos_shop_setting,
 }
 

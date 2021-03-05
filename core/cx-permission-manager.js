@@ -35,12 +35,12 @@ async function getPermission(recordType, role) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
-    if (recordType == _cxSchema.cr_shop_setting.TBL_NAME) {
+    if (recordType == _cxSchema.epos_shop_setting.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
-    if (recordType == _cxSchema.cr_shop_configs.TBL_NAME) {
+    if (recordType == _cxSchema.epos_shop_configs.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
         permission.allowNew = false;
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);

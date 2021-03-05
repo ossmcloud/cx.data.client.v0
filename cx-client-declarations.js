@@ -65,7 +65,19 @@ const CX_MODULE = {
 }
 
 
-const CR_SHOP_CONFIGS = {
+
+
+
+const EPOS_SHOP_SETTING = {
+    PAIRING_STATUS: {
+        NOT_PAIRED: 0,
+        PAIRED: 1,
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    }
+}
+
+const EPOS_SHOP_CONFIGS = {
     FUELCARD_TENDER: 'FuelCardTender',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
@@ -85,9 +97,9 @@ const CX_EPOS_PROVIDERS = {
         {
             type: CX_EPOS_PROVIDER.CBE,
             configDefaults: [
-                { name: CR_SHOP_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
-                { name: CR_SHOP_CONFIGS.DTFS_PING_FREQ, value: '600' },
-                { name: CR_SHOP_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+                { name: EPOS_SHOP_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
+                { name: EPOS_SHOP_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_SHOP_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
             ]
         }
     ],
@@ -139,14 +151,7 @@ const CR_SHOP_TRANSMISSION = {
     }
 }
 
-const CR_SHOP_SETTING = {
-    PAIRING_STATUS: {
-        NOT_PAIRED: 0,
-        PAIRED: 1,
-        //
-        toList: function (addEmpty) { return enumToList(this, addEmpty); }
-    }
-}
+
 
 const RAW_GET_REQUEST = {
     STATUS: {
@@ -208,8 +213,8 @@ module.exports = {
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
-    CR_SHOP_CONFIGS: CR_SHOP_CONFIGS,
-    CR_SHOP_SETTING: CR_SHOP_SETTING,
+    EPOS_SHOP_CONFIGS: EPOS_SHOP_CONFIGS,
+    EPOS_SHOP_SETTING: EPOS_SHOP_SETTING,
     CR_SHOP_TRANSMISSION: CR_SHOP_TRANSMISSION,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     SYS_SVC_UPGRADE_AUDIT: SYS_SVC_UPGRADE_AUDIT,

@@ -1,25 +1,25 @@
 'use strict'
 //
 const _cx_schema = require('../cx-client-schema');
-const _persistentTable = require('./persistent/p-cr_shop_configs');
+const _persistentTable = require('./persistent/p-epos_shop_configs');
 //
-class cr_shop_configs_Collection extends _persistentTable.Table {
+class epos_shop_configs_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new cr_shop_configs(this, defaults);
+        return new epos_shop_configs(this, defaults);
     }
 
     async select(shopId) {
         if (this.cx.cxSvc == true) { return await super.select(); }
         
         this.query.clear();
-        this.query.addFilter({ name: _cx_schema.cr_shop_configs.SHOPID, value: shopId });
+        this.query.addFilter({ name: _cx_schema.epos_shop_configs.SHOPID, value: shopId });
         return await super.select();
     }
 
     async getConfigValue(shopId, configName, parseJason) {
         this.query.clear();
-        this.query.addFilter({ name: _cx_schema.cr_shop_configs.SHOPID, value: shopId });
-        this.query.addFilter({ name: _cx_schema.cr_shop_configs.CONFIGNAME, value: configName });
+        this.query.addFilter({ name: _cx_schema.epos_shop_configs.SHOPID, value: shopId });
+        this.query.addFilter({ name: _cx_schema.epos_shop_configs.CONFIGNAME, value: configName });
         var value = null;
         if (await this.select()) {
             value = this.first().configValue;
@@ -34,7 +34,7 @@ class cr_shop_configs_Collection extends _persistentTable.Table {
     
 }
 //
-class cr_shop_configs extends _persistentTable.Record {
+class epos_shop_configs extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
     };
@@ -43,7 +43,7 @@ class cr_shop_configs extends _persistentTable.Record {
         try {
             await super.save()
         } catch (error) {
-            if (error.message.indexOf('IX_cr_shop_configs') > 0) {
+            if (error.message.indexOf('IX_epos_shop_configs') > 0) {
                 throw new Error('the configurations already exists on this shop!');
             } else {
                 throw error;
@@ -53,7 +53,7 @@ class cr_shop_configs extends _persistentTable.Record {
 }
 //
 module.exports = {
-    Table: cr_shop_configs_Collection,
-    Record: cr_shop_configs,
+    Table: epos_shop_configs_Collection,
+    Record: epos_shop_configs,
 }
 

@@ -14,7 +14,7 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cr_shop_setting';
+const _tableName = 'epos_shop_setting';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
@@ -29,12 +29,12 @@ const _fieldNames = {
     DTFSPAIREDMACHINENAME: 'dtfsPairedMachineName',
     DTFSPAIREDMACHINEOS: 'dtfsPairedMachineOS',
     DTFSPAIREDMACHINEIP: 'dtfsPairedMachineIP',
-    CREATED: 'created',
-    CREATEDBY: 'createdBy',
-    MODIFIED: 'modified',
-    MODIFIEDBY: 'modifiedBy',
     DTFSPAIREDVERSION: 'dtfsPairedVersion',
     DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
+    MODIFIED: 'modified',
+    MODIFIEDBY: 'modifiedBy',
+    CREATED: 'created',
+    CREATEDBY: 'createdBy',
 
 }
 //
@@ -47,22 +47,22 @@ const _fields = {
     eposShopName: { name: 'eposShopName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     startDate: { name: 'startDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     dtfsPairingCode: { name: 'dtfsPairingCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
-    dtfsPairingStatus: { name: 'dtfsPairingStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: 0 },
+    dtfsPairingStatus: { name: 'dtfsPairingStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '((0))' },
     dtfsPairedMachineName: { name: 'dtfsPairedMachineName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     dtfsPairedMachineOS: { name: 'dtfsPairedMachineOS', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     dtfsPairedMachineIP: { name: 'dtfsPairedMachineIP', dataType: 'varchar', pk: false, identity: false, maxLength: 15, null: true },
-    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
-    createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
-    modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     dtfsPairedVersion: { name: 'dtfsPairedVersion', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     dtfsInfoLastRefresh: { name: 'dtfsInfoLastRefresh', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
+    modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
+    modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
+    createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cr_shop_setting_Collection extends _cx_data.DBTable {
+class Persistent_epos_shop_setting_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -71,7 +71,7 @@ class Persistent_cr_shop_setting_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cr_shop_setting extends _cx_data.DBRecord {
+class Persistent_epos_shop_setting extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
@@ -138,16 +138,16 @@ class Persistent_cr_shop_setting extends _cx_data.DBRecord {
         super.setValue(_fieldNames.DTFSPAIREDMACHINEIP, val);
     }
 
-    get created() {
-        return super.getValue(_fieldNames.CREATED);
-    } set created(val) {
-        super.setValue(_fieldNames.CREATED, val);
+    get dtfsPairedVersion() {
+        return super.getValue(_fieldNames.DTFSPAIREDVERSION);
+    } set dtfsPairedVersion(val) {
+        super.setValue(_fieldNames.DTFSPAIREDVERSION, val);
     }
 
-    get createdBy() {
-        return super.getValue(_fieldNames.CREATEDBY);
-    } set createdBy(val) {
-        super.setValue(_fieldNames.CREATEDBY, val);
+    get dtfsInfoLastRefresh() {
+        return super.getValue(_fieldNames.DTFSINFOLASTREFRESH);
+    } set dtfsInfoLastRefresh(val) {
+        super.setValue(_fieldNames.DTFSINFOLASTREFRESH, val);
     }
 
     get modified() {
@@ -162,16 +162,16 @@ class Persistent_cr_shop_setting extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    get dtfsPairedVersion() {
-        return super.getValue(_fieldNames.DTFSPAIREDVERSION);
-    } set dtfsPairedVersion(val) {
-        super.setValue(_fieldNames.DTFSPAIREDVERSION, val);
+    get created() {
+        return super.getValue(_fieldNames.CREATED);
+    } set created(val) {
+        super.setValue(_fieldNames.CREATED, val);
     }
 
-    get dtfsInfoLastRefresh() {
-        return super.getValue(_fieldNames.DTFSINFOLASTREFRESH);
-    } set dtfsInfoLastRefresh(val) {
-        super.setValue(_fieldNames.DTFSINFOLASTREFRESH, val);
+    get createdBy() {
+        return super.getValue(_fieldNames.CREATEDBY);
+    } set createdBy(val) {
+        super.setValue(_fieldNames.CREATEDBY, val);
     }
 
 
@@ -180,6 +180,6 @@ class Persistent_cr_shop_setting extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cr_shop_setting_Collection,
-    Record: Persistent_cr_shop_setting,
+    Table: Persistent_epos_shop_setting_Collection,
+    Record: Persistent_epos_shop_setting,
 }
