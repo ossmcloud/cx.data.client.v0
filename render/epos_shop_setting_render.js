@@ -43,74 +43,78 @@ class EposShopSettingRender extends RenderBase {
             configListOptions = await this.getConfigListOptions();
         }
 
+
+        var dtfsSettingDropDown = await this.fieldDropDownOptions(_cxSchema.epos_dtfs_setting, {
+            name: _cxSchema.epos_dtfs_setting.DTFSSETTINGID,
+            validation: '{ "mandatory": true }',
+            readOnly: !newRecord,
+            column: 2,
+        });
+
         this.options.fields = [
-            {
-                group: 'shop', title: 'shop info', columnCount: 3, fields: [
-                    { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
-                    { name: 'groupInfo', label: 'group', column: 2, readOnly: true },
-                ],
-            },
             {
                 group: 'eposOuter', title: '', columnCount: 2, fields: [
                     {
-                        group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
-                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
-                            { name: 'startDate', label: 'start date', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
-                            { name: 'eposShopCode', label: 'epos code', column: 2, readOnly: !newRecord, validation: '{ "mandatory": true }' },
-                            { name: 'eposShopName', label: 'epos name', column: 2, validation: '{ "mandatory": true }' },
-                        ],
+                        group: 'shop', title: 'shop info', columnCount: 2, fields: [
+                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                            { name: 'groupInfo', label: 'group', column: 2, readOnly: true },
+                        ]
                     },
                     {
-                        group: 'pair', title: 'pairing info', column: 2, columnCount: 2, fields: [
-                            { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
-                            { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_SHOP_SETTING.PAIRING_STATUS.toList() },
-                            { name: 'dtfsPairedVersion', label: 'dtfs version', column: 1, readOnly: true },
-                            { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2, readOnly: true },
-                            { name: 'dtfsPairedMachineOS', label: 'paired machine OS', column: 2, readOnly: true },
-                            { name: 'dtfsPairedMachineIP', label: 'paired machine IP', column: 2, readOnly: true },
-                            { name: 'dtfsInfoLastRefresh', label: 'paired info last refresh', column: 2, readOnly: true },
+                        group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
+                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
+                            { name: 'eposShopCode', label: 'epos code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                            { name: 'eposShopName', label: 'epos name', column: 1, validation: '{ "mandatory": true }' },
+                            { name: 'startDate', label: 'start date', column: 2, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                            dtfsSettingDropDown,
+                            
                         ],
                     },
+                   
                 ]
             },
         ]
 
         if (!newRecord) {
-            this.options.fields.push({
-                group: 'auditOuter', title: '', columnCount: 2, fields: [
+            this.options.fields[0].fields.push({
+                group: 'audit', title: 'audit info', column: 2, columnCount: 2, fields: [
                     {
-                        group: 'config', title: 'configurations', column: 1, fields: [configListOptions]
+                        group: 'audit1', title: '', column: 1, columnCount: 1, inline: true, fields: [
+                            { name: 'created', label: 'created', column: 1, readOnly: true },
+                            { name: 'createdBy', label: 'by', column: 1, readOnly: true },
+                        ]
                     },
                     {
-                        group: 'audit', title: 'audit info', column: 2, columnCount: 2, fields: [
-                            {
-                                group: 'audit1', title: '', column: 1, columnCount: 1, inline: true, fields: [
-                                    { name: 'created', label: 'created', column: 1, readOnly: true },
-                                    { name: 'createdBy', label: 'by', column: 1, readOnly: true },
-                                ]
-                            },
-                            {
-                                group: 'audit2', title: '', column: 2, columnCount: 1, inline: true, fields: [
-                                    { name: 'modified', label: 'modified', column: 1, readOnly: true },
-                                    { name: 'modifiedBy', label: 'by', column: 1, readOnly: true },
-                                ]
-                            }
+                        group: 'audit2', title: '', column: 2, columnCount: 1, inline: true, fields: [
+                            { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                            { name: 'modifiedBy', label: 'by', column: 1, readOnly: true },
                         ]
                     }
                 ]
             });
+
+            this.options.fields[0].fields.push({
+                group: 'config', title: 'configurations', column: 2, fields: [configListOptions]
+            });
+
+          
         }
 
         if (this.options.mode == 'view') {
-            this.options.buttons.push({ id: 'cr_shop_view_ping', text: 'Pings Audit', link: '../epos/pings?s=' + this.dataSource.id });
-            this.options.buttons.push({ id: 'cr_shop_view_getLogs', text: 'Get Logs', link: '../raw/getlogs?s=' + this.dataSource.id });
-            this.options.buttons.push({ id: 'cr_shop_view_transmission', text: 'Transmissions', link: '../epos/transmissions?s=' + this.dataSource.id });
-            this.options.buttons.push({ id: 'cr_shop_view_upgrades', text: 'Upgrades Audit', link: '../sys/upgradeAudits?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'epos_shop_dtfs_sett', text: 'Dtfs Settings', link: '../epos/dtfsSetting?id=' + this.dataSource.dtfsSettingId });
+            //this.options.buttons.push({ id: 'epos_shop_view_ping', text: 'Pings Audit', link: '../epos/pings?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'epos_shop_view_getLogs', text: 'Get Logs', link: '../raw/getlogs?s=' + this.dataSource.id });
+            this.options.buttons.push({ id: 'epos_shop_view_transmission', text: 'Transmissions', link: '../epos/transmissions?s=' + this.dataSource.id });
+            //this.options.buttons.push({ id: 'epos_shop_view_upgrades', text: 'Upgrades Audit', link: '../epos/upgradeAudits?s=' + this.dataSource.id });
 
         }
     }
 
     async _list() {
+        if (!this.options.path) {
+            this.options.path = '../epos/shopSetting';
+        }
+
         // NOTE: we overwrite permissions because we only want to create this record from a shop and only if not there already
         this.options.allowNew = false;
 
@@ -128,25 +132,18 @@ class EposShopSettingRender extends RenderBase {
             { title: 'epos code', name: _cxSchema.epos_shop_setting.EPOSSHOPCODE },
             { title: 'epos name', name: _cxSchema.epos_shop_setting.EPOSSHOPNAME },
             { title: 'start date', name: _cxSchema.epos_shop_setting.STARTDATE },
-            { title: 'pairing status', name: _cxSchema.epos_shop_setting.DTFSPAIRINGSTATUS, lookUps: _cxConst.EPOS_SHOP_SETTING.PAIRING_STATUS.toList() },
-            
-            { title: 'dtfs version', name: _cxSchema.epos_shop_setting.DTFSPAIREDVERSION },
-            { title: 'paired PC name', name: _cxSchema.epos_shop_setting.DTFSPAIREDMACHINENAME },
-            //{ title: 'paired PC OS', name: _cxSchema.epos_shop_setting.DTFSPAIREDMACHINEOS },
+            { title: 'dtfs settings', name: 'dtfsInfo' },
 
-            //{ title: 'created', name: _cxSchema.epos_shop_setting.CREATED },
-            //{ title: 'by', name: _cxSchema.epos_shop_setting.CREATEDBY },
-            // { title: 'modified', name: _cxSchema.epos_shop_setting.MODIFIED },
-            // { title: 'by', name: _cxSchema.epos_shop_setting.MODIFIEDBY },
         ];
         this.options.highlights = [
-            { column: _cxSchema.epos_shop_setting.DTFSPAIRINGSTATUS, op: '=', value: _cxConst.EPOS_SHOP_SETTING.PAIRING_STATUS.NOT_PAIRED, style: 'color: red;' },
+            { column: _cxSchema.epos_shop_setting.DTFSSETTINGID, op: '=', value: '[NULL]', style: 'color: red;' },
         ];
 
         this.options.actionsTitle = '';
         this.options.actions = [
+            { label: 'epos', link: '/epos/dtfsSetting?id=', linkParamField: _cxSchema.epos_shop_setting.DTFSSETTINGID , target: '_blank' },
             { label: 'pings', link: '/epos/pings?s=', target: '_blank' },
-            { label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
+            { label: 'transmission', link: '/epos/transmissions?s=', target: '_blank' },
         ]
 
     }

@@ -14,43 +14,39 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'epos_shop_setting';
+const _tableName = 'epos_dtfs_configs';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    SHOPID: 'shopId',
-    EPOSPROVIDER: 'eposProvider',
-    EPOSSHOPCODE: 'eposShopCode',
-    EPOSSHOPNAME: 'eposShopName',
-    STARTDATE: 'startDate',
+    CONFIGID: 'configId',
+    SETTINGID: 'settingId',
+    CONFIGNAME: 'configName',
+    CONFIGVALUE: 'configValue',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
-    DTFSSETTINGID: 'dtfsSettingId',
 
 }
 //
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    shopId: { name: 'shopId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
-    eposProvider: { name: 'eposProvider', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    eposShopCode: { name: 'eposShopCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    eposShopName: { name: 'eposShopName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    startDate: { name: 'startDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
+    configId: { name: 'configId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    settingId: { name: 'settingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    configName: { name: 'configName', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
+    configValue: { name: 'configValue', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: false },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
 
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_epos_shop_setting_Collection extends _cx_data.DBTable {
+class Persistent_epos_dtfs_configs_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -59,41 +55,33 @@ class Persistent_epos_shop_setting_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_epos_shop_setting extends _cx_data.DBRecord {
+class Persistent_epos_dtfs_configs extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
 
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get shopId() {
-        return super.getValue(_fieldNames.SHOPID);
-    } set shopId(val) {
-        super.setValue(_fieldNames.SHOPID, val);
+    get configId() {
+        return super.getValue(_fieldNames.CONFIGID);
     }
 
-    get eposProvider() {
-        return super.getValue(_fieldNames.EPOSPROVIDER);
-    } set eposProvider(val) {
-        super.setValue(_fieldNames.EPOSPROVIDER, val);
+    get settingId() {
+        return super.getValue(_fieldNames.SETTINGID);
+    } set settingId(val) {
+        super.setValue(_fieldNames.SETTINGID, val);
     }
 
-    get eposShopCode() {
-        return super.getValue(_fieldNames.EPOSSHOPCODE);
-    } set eposShopCode(val) {
-        super.setValue(_fieldNames.EPOSSHOPCODE, val);
+    get configName() {
+        return super.getValue(_fieldNames.CONFIGNAME);
+    } set configName(val) {
+        super.setValue(_fieldNames.CONFIGNAME, val);
     }
 
-    get eposShopName() {
-        return super.getValue(_fieldNames.EPOSSHOPNAME);
-    } set eposShopName(val) {
-        super.setValue(_fieldNames.EPOSSHOPNAME, val);
-    }
-
-    get startDate() {
-        return super.getValue(_fieldNames.STARTDATE);
-    } set startDate(val) {
-        super.setValue(_fieldNames.STARTDATE, val);
+    get configValue() {
+        return super.getValue(_fieldNames.CONFIGVALUE);
+    } set configValue(val) {
+        super.setValue(_fieldNames.CONFIGVALUE, val);
     }
 
     get modified() {
@@ -120,18 +108,12 @@ class Persistent_epos_shop_setting extends _cx_data.DBRecord {
         super.setValue(_fieldNames.CREATEDBY, val);
     }
 
-    get dtfsSettingId() {
-        return super.getValue(_fieldNames.DTFSSETTINGID);
-    } set dtfsSettingId(val) {
-        super.setValue(_fieldNames.DTFSSETTINGID, val);
-    }
-
 
 }
 //
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_epos_shop_setting_Collection,
-    Record: Persistent_epos_shop_setting,
+    Table: Persistent_epos_dtfs_configs_Collection,
+    Record: Persistent_epos_dtfs_configs,
 }

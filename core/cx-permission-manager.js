@@ -12,7 +12,7 @@ async function getPermission(recordType, role) {
     //  
     
     if (recordType.indexOf('raw_') == 0 ||
-        recordType == _cxSchema.epos_shop_ping.TBL_NAME ||
+        recordType == _cxSchema.epos_dtfs_ping.TBL_NAME ||
         recordType == _cxSchema.epos_transmission.TBL_NAME) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     } 
@@ -45,9 +45,19 @@ async function getPermission(recordType, role) {
         permission.allowNew = false;
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
+    if (recordType == _cxSchema.epos_dtfs_setting.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.epos_dtfs_configs.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
 
 
-    if (recordType == _cxSchema.sys_svcUpgradeAudit.TBL_NAME) {
+    if (recordType == _cxSchema.epos_dtfs_upgradeAudit.TBL_NAME) {
         permission.allowEdit = false;
         permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);

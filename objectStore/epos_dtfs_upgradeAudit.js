@@ -2,15 +2,15 @@
 //
 const _cxCont = require('../cx-client-declarations');
 const _cxSchema = require('../cx-client-schema');
-const _persistentTable = require('./persistent/p-sys_svcUpgradeAudit');
+const _persistentTable = require('./persistent/p-epos_dtfs_upgradeAudit');
 //
-class sys_svcUpgradeAudit_Collection extends _persistentTable.Table {
+class epos_dtfs_upgradeAudit_Collection extends _persistentTable.Table {
     createNew(defaults) {
         if (!defaults) { defaults = {} }
         if (defaults[this.FieldNames.STATUS] == undefined) {
             defaults[this.FieldNames.STATUS] = _cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING;
         }
-        return new sys_svcUpgradeAudit(this, defaults);
+        return new epos_dtfs_upgradeAudit(this, defaults);
     }
 
     async fetchByTransmission(transmissionId) {
@@ -32,9 +32,9 @@ class sys_svcUpgradeAudit_Collection extends _persistentTable.Table {
     async fetch(id) {
         var query = { sql: '', params: [{ name: this.FieldNames.UPGRADEAUDITID, value: id }] };
         query.sql = `
-                    select  u.*, s.shopCode, s.shopName
+                    select  u.*, s.dtfsSettingName
                     from    ${this.type} u
-                    inner join ${_cxSchema.cx_shop.TBL_NAME} s on s.${_cxSchema.cx_shop.SHOPID} = u.${this.FieldNames.SHOPID}
+                    inner join ${_cxSchema.epos_dtfs_setting.TBL_NAME} s on s.${_cxSchema.epos_dtfs_setting.DTFSSETTINGID} = u.${this.FieldNames.DTFSSETTINGID}
                     where   u.${this.FieldNames.UPGRADEAUDITID} = @${this.FieldNames.UPGRADEAUDITID}
                 `
         query.noResult = 'null';
@@ -46,12 +46,12 @@ class sys_svcUpgradeAudit_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
-    async getPending(shopId) {
-        var query = { sql: '', params: [{ name: this.FieldNames.SHOPID, value: shopId }] };
+    async getPending(dtfsSettingId) {
+        var query = { sql: '', params: [{ name: this.FieldNames.DTFSSETTINGID, value: dtfsSettingId }] };
         query.sql = `
                     select  *
                     from    ${this.type}
-                    where   ${this.FieldNames.SHOPID} = @${this.FieldNames.SHOPID}
+                    where   ${this.FieldNames.DTFSSETTINGID} = @${this.FieldNames.DTFSSETTINGID}
                     and     ${this.FieldNames.STATUS} = ${_cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING}
                     order by ${this.FieldNames.UPGRADEAUDITID} 
                 `
@@ -64,12 +64,12 @@ class sys_svcUpgradeAudit_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
-    async hasRunning(shopId) {
-        var query = { sql: '', params: [{ name: this.FieldNames.SHOPID, value: shopId }] };
+    async hasRunning(dtfsSettingId) {
+        var query = { sql: '', params: [{ name: this.FieldNames.DTFSSETTINGID, value: dtfsSettingId }] };
         query.sql = `
                     select  *
                     from    ${this.type}
-                    where   ${this.FieldNames.SHOPID} = @${this.FieldNames.SHOPID}
+                    where   ${this.FieldNames.DTFSSETTINGID} = @${this.FieldNames.DTFSSETTINGID}
                     and     ${this.FieldNames.STATUS} > ${_cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING}
                     and     ${this.FieldNames.STATUS} < ${_cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.ABORTED}
                     order by ${this.FieldNames.UPGRADEAUDITID} 
@@ -87,38 +87,44 @@ class sys_svcUpgradeAudit_Collection extends _persistentTable.Table {
 
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
-        query.sql = `
-                    select  top 1000 l.*, s.shopCode, s.shopName
-                    from    ${this.type} l, cx_shop s
-                    where   l.shopId = s.shopId
-                    and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
-                `
+
+        var shopFilter = 'in';
+        var shopFilterValue = this.cx.shopList;
         if (params.s) {
-            if (params.s == '@NULL@') {
-                query.sql += ` and l.shopId is null`;
-            } else {
-                query.sql += ' and l.shopId = @shopId';
-                query.params.push({ name: 'shopId', value: params.s });
-            }
+            shopFilter = '=';
+            shopFilterValue = '@shopId';
+            query.params.push({ name: 'shopId', value: params.s });
         }
+
+        query.sql = `select	top 1000 p.*, s.dtfsSettingName, s.dtfsPairedMachineName
+                    from	epos_dtfs_upgradeAudit p
+                    inner join epos_dtfs_setting s on s.dtfsSettingId = p.dtfsSettingId
+                    where	p.dtfsSettingId in (
+                        select	dtfsSettingId 
+                        from	epos_shop_setting ss 
+                        where	ss.dtfsSettingId = s.dtfsSettingId
+                        and		ss.shopId ${shopFilter} ${shopFilterValue}
+                    )`;
+
+
         if (params.tr) {
-            query.sql += ' and l.transmissionId like @transmissionId';
+            query.sql += ' and p.transmissionId like @transmissionId';
             query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
         }
         if (params.df) {
-            query.sql += ' and l.created >= @from';
+            query.sql += ' and p.created >= @from';
             query.params.push({ name: 'from', value: params.df + ' 00:00:00' });
         }
         if (params.dt) {
-            query.sql += ' and l.created <= @to';
+            query.sql += ' and p.created <= @to';
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
         if (params.st) {
-            query.sql += ' and l.status = @status';
+            query.sql += ' and p.status = @status';
             query.params.push({ name: 'status', value: params.st });
         }
 
-        query.sql += ' order by l.created desc';
+        query.sql += ' order by p.created desc';
         await super.select(query);
     }
 
@@ -127,19 +133,15 @@ class sys_svcUpgradeAudit_Collection extends _persistentTable.Table {
 //
 // ----------------------------------------------------------------------------------------
 //
-class sys_svcUpgradeAudit extends _persistentTable.Record {
-    #shopName = '';
-    #shopCode = '';
+class epos_dtfs_upgradeAudit extends _persistentTable.Record {
+    #dtfsInfo = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
-        this.#shopName = defaults['shopName'] || '';
-        this.#shopCode = defaults['shopCode'] || '';
+        this.#dtfsInfo = defaults['dtfsSettingName'] || defaults['dtfsInfo'] || '';
     };
 
-    get shopName() { return this.#shopName; }
-    get shopCode() { return this.#shopCode; }
-    get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+    get dtfsInfo() { return this.#dtfsInfo; }
     get displayName() {
         return this.shopInfo;
     }
@@ -163,7 +165,7 @@ class sys_svcUpgradeAudit extends _persistentTable.Record {
 // ----------------------------------------------------------------------------------------
 //
 module.exports = {
-    Table: sys_svcUpgradeAudit_Collection,
-    Record: sys_svcUpgradeAudit,
+    Table: epos_dtfs_upgradeAudit_Collection,
+    Record: epos_dtfs_upgradeAudit,
 }
 

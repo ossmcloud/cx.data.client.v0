@@ -1,18 +1,6 @@
 'use strict'
 
 module.exports = {
-    cp_shop_setting: {
-        TBL_NAME: 'cp_shop_setting',
-        SHOPID: 'shopId',
-        WHOLESALERPROVIDER: 'wholesalerProvider',
-        WHOLESALERSHOPCODE: 'wholesalerShopCode',
-        WHOLESALERSHOPNAME: 'wholesalerShopName',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
-    },
-
     cx_login: {
         TBL_NAME: 'cx_login',
         LOGINID: 'loginId',
@@ -72,6 +60,57 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    epos_dtfs_configs: {
+        TBL_NAME: 'epos_dtfs_configs',
+        CONFIGID: 'configId',
+        SETTINGID: 'settingId',
+        CONFIGNAME: 'configName',
+        CONFIGVALUE: 'configValue',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+    },
+
+    epos_dtfs_ping: {
+        TBL_NAME: 'epos_dtfs_ping',
+        PINGID: 'pingId',
+        DTFSSETTINGID: 'dtfsSettingId',
+        PINGIP: 'pingIP',
+        RESPONSE: 'response',
+        CREATED: 'created',
+    },
+
+    epos_dtfs_setting: {
+        TBL_NAME: 'epos_dtfs_setting',
+        DTFSSETTINGID: 'dtfsSettingId',
+        DTFSSETTINGNAME: 'dtfsSettingName',
+        DTFSPAIRINGSTATUS: 'dtfsPairingStatus',
+        DTFSPAIRINGCODE: 'dtfsPairingCode',
+        DTFSPAIREDMACHINENAME: 'dtfsPairedMachineName',
+        DTFSPAIREDMACHINEOS: 'dtfsPairedMachineOS',
+        DTFSPAIREDMACHINEIP: 'dtfsPairedMachineIP',
+        DTFSPAIREDVERSION: 'dtfsPairedVersion',
+        DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
+        EPOSPROVIDER: 'eposProvider',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+    },
+
+    epos_dtfs_upgradeAudit: {
+        TBL_NAME: 'epos_dtfs_upgradeAudit',
+        UPGRADEAUDITID: 'upgradeAuditId',
+        DTFSSETTINGID: 'dtfsSettingId',
+        STATUS: 'status',
+        STATUSMESSAGE: 'statusMessage',
+        UPGRADECONFIG: 'upgradeConfig',
+        TRANSMISSIONID: 'transmissionId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+    },
+
     epos_shop_configs: {
         TBL_NAME: 'epos_shop_configs',
         CONFIGID: 'configId',
@@ -84,15 +123,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
     },
 
-    epos_shop_ping: {
-        TBL_NAME: 'epos_shop_ping',
-        PINGID: 'pingId',
-        SHOPID: 'shopId',
-        PINGIP: 'pingIP',
-        RESPONSE: 'response',
-        CREATED: 'created',
-    },
-
     epos_shop_setting: {
         TBL_NAME: 'epos_shop_setting',
         SHOPID: 'shopId',
@@ -100,17 +130,11 @@ module.exports = {
         EPOSSHOPCODE: 'eposShopCode',
         EPOSSHOPNAME: 'eposShopName',
         STARTDATE: 'startDate',
-        DTFSPAIRINGCODE: 'dtfsPairingCode',
-        DTFSPAIRINGSTATUS: 'dtfsPairingStatus',
-        DTFSPAIREDMACHINENAME: 'dtfsPairedMachineName',
-        DTFSPAIREDMACHINEOS: 'dtfsPairedMachineOS',
-        DTFSPAIREDMACHINEIP: 'dtfsPairedMachineIP',
-        DTFSPAIREDVERSION: 'dtfsPairedVersion',
-        DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        DTFSSETTINGID: 'dtfsSettingId',
     },
 
     epos_transmission: {
@@ -121,38 +145,7 @@ module.exports = {
         ACTION: 'action',
         MESSAGE: 'message',
         CREATED: 'created',
-    },
-
-    erp_shop_setting: {
-        TBL_NAME: 'erp_shop_setting',
-        SHOPID: 'shopId',
-        ERPPROVIDER: 'erpProvider',
-        ERPSALESACCOUNTNO: 'erpSalesAccountNo',
-        ERPPAIRINGCODE: 'erpPairingCode',
-        ERPPAIRINGSTATUS: 'erpPairingStatus',
-        ERPPAIREDMACHINENAME: 'erpPairedMachineName',
-        ERPPAIREDMACHINEOS: 'erpPairedMachineOS',
-        ERPPAIREDMACHINEIP: 'erpPairedMachineIP',
-        ERPPAIREDVERSION: 'erpPairedVersion',
-        ERPINFOLASTREFRESH: 'erpInfoLastRefresh',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
-    },
-
-    erp_tran_type: {
-        TBL_NAME: 'erp_tran_type',
-        ERPTRANTYPEID: 'erpTranTypeId',
-        ERPPROVIDER: 'erpProvider',
-        ERPTRANTYPE: 'erpTranType',
-        MODULE: 'module',
-        TRANNAME: 'tranName',
-        DESCRIPTION: 'description',
-        LEDGERSIGN: 'ledgerSign',
-        CREATED: 'created',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
+        DTFSSETTINGID: 'dtfsSettingId',
     },
 
     raw_cr_transaction: {
@@ -291,19 +284,6 @@ module.exports = {
         DBVERSION: 'dbVersion',
         DBCREATEDON: 'dbCreatedOn',
         DBLASTUPDATE: 'dbLastUpdate',
-    },
-
-    sys_svcUpgradeAudit: {
-        TBL_NAME: 'sys_svcUpgradeAudit',
-        UPGRADEAUDITID: 'upgradeAuditId',
-        SHOPID: 'shopId',
-        STATUS: 'status',
-        STATUSMESSAGE: 'statusMessage',
-        SERVICENAME: 'serviceName',
-        UPGRADECONFIG: 'upgradeConfig',
-        TRANSMISSIONID: 'transmissionId',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
     }
 
 }

@@ -10,9 +10,15 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
     }
 
     async select(params) {
+
+        if (!params) {
+            return await super.select();
+        }
+
         var query = {
-            sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName
+            sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName, ds.dtfsSettingName
                     from    epos_shop_setting sr
+                    left    outer join epos_dtfs_setting ds on ds.dtfsSettingId = sr.dtfsSettingId
                     left    outer join cx_shop sx on sx.shopId = sr.shopId
                     left    outer join cx_shop_group sg on sg.shopGroupId = sx.shopGroupId
                     where   sr.shopId in ${this.cx.shopList}`,
@@ -39,13 +45,22 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
             query.sql += `and  sx.eposShopName like @eposShopName`;
             query.params.push({ name: 'eposShopName', value: params.sen + '%' })
         }
+        if (params.dtfs) {
+            if (params.dtfs == '@NULL@') {
+                query.sql += `and  sr.dtfsSettingId is null`;
+            } else {
+                query.sql += `and  sr.dtfsSettingId = @dtfsSettingId`;
+                query.params.push({ name: 'dtfsSettingId', value: params.dtfs })
+            }
+        }
         return await super.select(query);
     }
 
     async fetch(id, returnNull) {
         var query = {
-            sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName
+            sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName, ds.dtfsSettingName
                     from    epos_shop_setting sr
+                    left    outer join epos_dtfs_setting ds on ds.dtfsSettingId = sr.dtfsSettingId
                     left    outer join cx_shop sx on sx.shopId = sr.shopId
                     left    outer join cx_shop_group sg on sg.shopGroupId = sx.shopGroupId
                     where   sr.shopId in ${this.cx.shopList}
@@ -72,6 +87,7 @@ class epos_shop_setting extends _persistentTable.Record {
     #shopCode = '';
     #groupName = '';
     #groupCode = '';
+    #dtfsInfo = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -79,6 +95,7 @@ class epos_shop_setting extends _persistentTable.Record {
         this.#shopCode = defaults['shopCode'] || '';
         this.#groupName = defaults['groupName'] || '';
         this.#groupCode = defaults['groupCode'] || '';
+        this.#dtfsInfo = defaults['dtfsSettingName'] || defaults['dtfsInfo'] || '';
     };
 
     get shopName() { return this.#shopName; }
@@ -87,6 +104,7 @@ class epos_shop_setting extends _persistentTable.Record {
     get groupName() { return this.#groupName; }
     get groupCode() { return this.#groupCode; }
     get groupInfo() { return `[${this.#groupCode}] ${this.#groupName}`; }
+    get dtfsInfo() { return this.#dtfsInfo; }
 
     async save() {
         var newSettings = this.isNew();

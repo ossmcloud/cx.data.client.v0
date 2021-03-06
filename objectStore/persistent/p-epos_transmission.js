@@ -25,6 +25,7 @@ const _fieldNames = {
     ACTION: 'action',
     MESSAGE: 'message',
     CREATED: 'created',
+    DTFSSETTINGID: 'dtfsSettingId',
 
 }
 //
@@ -37,6 +38,7 @@ const _fields = {
     action: { name: 'action', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     message: { name: 'message', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
+    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -92,6 +94,12 @@ class Persistent_epos_transmission extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
         super.setValue(_fieldNames.CREATED, val);
+    }
+
+    get dtfsSettingId() {
+        return super.getValue(_fieldNames.DTFSSETTINGID);
+    } set dtfsSettingId(val) {
+        super.setValue(_fieldNames.DTFSSETTINGID, val);
     }
 
 

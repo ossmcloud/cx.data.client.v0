@@ -5,7 +5,7 @@ const _persistentTable = require('./persistent/p-raw_getRequest');
 class raw_getRequest_Collection extends _persistentTable.Table {
     createNew(defaults) {
         var newRecord = new raw_getRequest(this, defaults);
-        newRecord.createdBy = this.cx.tUserId;
+        //newRecord.createdBy = this.cx.tUserId;
         return newRecord;
     }
 
@@ -86,7 +86,7 @@ class raw_getRequest extends _persistentTable.Record {
 
     async save() {
         // TOTO: IMPORTANT: WHY IS CREATED BY NOT PROPERLY POPULATED WHE RUNNING FROM SVC???
-        if (!this.createdBy) { this.createdBy = 1; }
+        //if (!this.createdBy) { this.createdBy = 1; }
         return super.save();
     }
 }

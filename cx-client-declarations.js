@@ -72,6 +72,7 @@ const EPOS_SHOP_SETTING = {
     PAIRING_STATUS: {
         NOT_PAIRED: 0,
         PAIRED: 1,
+        INACTIVE: 9,
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }

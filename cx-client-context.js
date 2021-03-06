@@ -69,13 +69,18 @@ class CXClientContext extends _cx_data.DBContext {
             // NOTE: IMPORTANT: check if this is called by cx.svc (we have no user info here)
             if (options.cxSvc) {
                 this.#cxSvc = true;
-                this.#cxSvcInfo = {
-                    shopId: options.shopId,
-                    shopCode: options.shopCode,
-                    epos: options.epos,
-                    eposShopCode: options.eposShopCode,
+                if (options.dtfsSettingId) {
+                    this.#cxSvcInfo = {
+                        dtfsSettingId: options.dtfsSettingId,
+                        dtfsInactive: options.dtfsInactive,
+                        shops: options.shops,
+
+                        shopId: options.shopId,
+                        shopCode: options.shopCode,
+                        epos: options.epos,
+                        eposShopCode: options.eposShopCode,
+                    }
                 }
-                
             } else {
                 // @CLEAN-UP: use schema constants in query below
                 var query = {
