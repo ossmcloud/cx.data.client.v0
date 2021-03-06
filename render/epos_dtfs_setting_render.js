@@ -42,7 +42,10 @@ class EposDtfsSettingRender extends RenderBase {
         listOptions.quickSearch = true;
         listOptions.actions = [];
         _core_l.removeFromArray(listOptions.columns, 'name', _cxSchema.epos_shop_setting.DTFSSETTINGID);
+        _core_l.removeFromArray(listOptions.columns, 'name', _cxSchema.epos_shop_setting.EPOSPROVIDER);
         _core_l.removeFromArray(listOptions.columns, 'name', 'groupInfo');
+        _core_l.removeFromArray(listOptions.columns, 'name', 'dtfsInfo');
+        
         
 
         if (this.options.mode == 'view') {
