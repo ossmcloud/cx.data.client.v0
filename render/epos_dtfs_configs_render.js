@@ -15,11 +15,11 @@ class EposDtfsConfig extends RenderBase {
         this.options.fields.push({ group: 'main', title: '', fields: [] });
         if (this.options.dialog) {
             this.options.fields[0].style = 'display: block';
-            this.options.fields[0].fields.push({ name: 'shopId', hidden: true });
+            this.options.fields[0].fields.push({ name: _cxSchema.epos_dtfs_configs.SETTINGID, hidden: true });
         } else {
             this.options.fields[0].fields.push(await this.fieldDropDownOptions(_cxSchema.epos_dtfs_setting, { id: 'epos_settings_id', name: _cxSchema.epos_dtfs_setting.DTFSSETTINGID, column: 1 }));
         }
-        this.options.fields[0].fields.push({ name: 'configName', label: 'config name', width: '250px', readOnly: !this.dataSource.isNew(), lookUps: _cxConst.EPOS_SHOP_CONFIGS.toList(true), validation: '{ "mandatory": true }' });
+        this.options.fields[0].fields.push({ name: 'configName', label: 'config name', width: '250px', readOnly: !this.dataSource.isNew(), lookUps: _cxConst.EPOS_DTFS_CONFIGS.toList(true), validation: '{ "mandatory": true }' });
         this.options.fields[0].fields.push({ name: 'configValue', label: 'config value', validation: '{ "mandatory": true, "max": 500 }' });
     }
 

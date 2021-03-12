@@ -29,7 +29,7 @@ class RawGetRequest extends RenderBase {
                     },
                     {
                         group: 'audit', title: 'audit info', column: 2, fields: [
-                            { name: _cxSchema.epos_dtfs_upgradeAudit.STATUS, label: 'status', lookUps: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.toList(), readOnly: true },
+                            { name: _cxSchema.epos_dtfs_upgradeAudit.STATUS, label: 'status', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.toList(), readOnly: true },
                             { name: _cxSchema.epos_dtfs_upgradeAudit.STATUSMESSAGE, label: 'status message', readOnly: true },
                             { name: 'created', label: 'created', readOnly: true },
                             { name: 'createdBy', label: 'by', readOnly: true },
@@ -40,7 +40,7 @@ class RawGetRequest extends RenderBase {
             }
         ];
 
-        if (this.dataSource.status < _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.ABORTED) {
+        if (this.dataSource.status < _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ABORTED) {
             if (this.options.allowNew && !this.dataSource.isNew()) {
                 this.options.buttons.push({ id: 'epos_dtfs_upgradeAudit_abort', text: 'Abort', function: 'abort' });
             }
@@ -58,24 +58,24 @@ class RawGetRequest extends RenderBase {
             { id: 'cx_transmission', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tr', label: 'transmission' },
             { id: 'cx_date_from', inputType: _cxConst.RENDER.CTRL_TYPE.DATE, fieldName: 'df', label: 'from' },
             { id: 'cx_date_to', inputType: _cxConst.RENDER.CTRL_TYPE.DATE, fieldName: 'dt', label: 'to' },
-            { id: 'cx_status', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'st', label: 'status', width: '100px', items: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.toList('- all -') },
+            { id: 'cx_status', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'st', label: 'status', width: '100px', items: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.toList('- all -') },
         ];
         this.options.columns = [
             { name: TBL.UPGRADEAUDITID, title: '', align: 'center' },
             { name: 'dtfsInfo', title: 'dtfs info', width: '200px' },
             { name: TBL.TRANSMISSIONID, title: 'transmission ID', align: 'center', width: '150px' },
-            { name: TBL.STATUS, title: 'status', lookUps: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.toList() },
+            { name: TBL.STATUS, title: 'status', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.toList() },
             { name: TBL.STATUSMESSAGE, title: 'status message' },
             { name: TBL.CREATED, title: 'created', align: 'center', width: '130px' },
             { name: TBL.CREATEDBY, title: 'by', align: 'left', width: '130px' },
         ];
         this.options.highlights = [
-            { column: TBL.STATUS, op: '=', value: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING, style: 'color: blue;' },
-            { column: TBL.STATUS, op: '=', value: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.WAIT_START, style: 'color: purple;' },
-            { column: TBL.STATUS, op: '=', value: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.UPGRADING, style: 'color: yellow;' },
-            //{ column: TBL.STATUS, op: '=', value: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.COMPLETE, style: 'color: yellow;' },
-            { column: TBL.STATUS, op: '=', value: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.ERROR, style: 'color: red;' },
-            { column: TBL.STATUS, op: '=', value: _cxConst.SYS_SVC_UPGRADE_AUDIT.STATUS.ABORTED, style: 'color: orange;' },
+            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.PENDING, style: 'color: blue;' },
+            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.WAIT_START, style: 'color: purple;' },
+            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.UPGRADING, style: 'color: yellow;' },
+            //{ column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.COMPLETE, style: 'color: yellow;' },
+            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ERROR, style: 'color: red;' },
+            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ABORTED, style: 'color: orange;' },
             
             
         ];

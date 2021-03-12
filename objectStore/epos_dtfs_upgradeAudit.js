@@ -8,7 +8,7 @@ class epos_dtfs_upgradeAudit_Collection extends _persistentTable.Table {
     createNew(defaults) {
         if (!defaults) { defaults = {} }
         if (defaults[this.FieldNames.STATUS] == undefined) {
-            defaults[this.FieldNames.STATUS] = _cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING;
+            defaults[this.FieldNames.STATUS] = _cxCont.EPOS_DTFS_UPGRADE_AUDIT.STATUS.PENDING;
         }
         return new epos_dtfs_upgradeAudit(this, defaults);
     }
@@ -52,7 +52,7 @@ class epos_dtfs_upgradeAudit_Collection extends _persistentTable.Table {
                     select  *
                     from    ${this.type}
                     where   ${this.FieldNames.DTFSSETTINGID} = @${this.FieldNames.DTFSSETTINGID}
-                    and     ${this.FieldNames.STATUS} = ${_cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING}
+                    and     ${this.FieldNames.STATUS} = ${_cxCont.EPOS_DTFS_UPGRADE_AUDIT.STATUS.PENDING}
                     order by ${this.FieldNames.UPGRADEAUDITID} 
                 `
         query.noResult = 'null';
@@ -70,8 +70,8 @@ class epos_dtfs_upgradeAudit_Collection extends _persistentTable.Table {
                     select  *
                     from    ${this.type}
                     where   ${this.FieldNames.DTFSSETTINGID} = @${this.FieldNames.DTFSSETTINGID}
-                    and     ${this.FieldNames.STATUS} > ${_cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.PENDING}
-                    and     ${this.FieldNames.STATUS} < ${_cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.ABORTED}
+                    and     ${this.FieldNames.STATUS} > ${_cxCont.EPOS_DTFS_UPGRADE_AUDIT.STATUS.PENDING}
+                    and     ${this.FieldNames.STATUS} < ${_cxCont.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ABORTED}
                     order by ${this.FieldNames.UPGRADEAUDITID} 
                 `
         query.noResult = 'null';
@@ -147,10 +147,10 @@ class epos_dtfs_upgradeAudit extends _persistentTable.Record {
     }
 
     async abort(message) {
-        if (this.status >= _cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.ABORTED) {
+        if (this.status >= _cxCont.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ABORTED) {
             throw new Error(`upgrade request cannot be aborted as the current status is ${this.status}`)
         }
-        this.status = _cxCont.SYS_SVC_UPGRADE_AUDIT.STATUS.ABORTED;
+        this.status = _cxCont.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ABORTED;
         this.message = message || ('upgrade request manually aborted by: ' + this.cx.userName);
 
         await this.save();

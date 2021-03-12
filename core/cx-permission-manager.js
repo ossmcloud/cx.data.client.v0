@@ -13,7 +13,7 @@ async function getPermission(recordType, role) {
     
     if (recordType.indexOf('raw_') == 0 ||
         recordType == _cxSchema.epos_dtfs_ping.TBL_NAME ||
-        recordType == _cxSchema.epos_transmission.TBL_NAME) {
+        recordType == _cxSchema.epos_dtfs_transmission.TBL_NAME) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     } 
     if (recordType == _cxSchema.raw_getRequest.TBL_NAME) {

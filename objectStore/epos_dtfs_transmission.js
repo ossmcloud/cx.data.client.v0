@@ -1,12 +1,12 @@
 'use strict'
 //
-const _persistentTable = require('./persistent/p-epos_transmission');
+const _persistentTable = require('./persistent/p-epos_dtfs_transmission');
 const _declarations = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
 //
-class epos_transmission_Collection extends _persistentTable.Table {
+class epos_dtfs_transmission_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new epos_transmission(this, defaults);
+        return new epos_dtfs_transmission(this, defaults);
     }
 
     async select(params) {
@@ -45,6 +45,25 @@ class epos_transmission_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
+    async selectByDtfsSettings(dtfsSettingsId, upToStatus) {
+        var query = {
+            sql: '',
+            params: [
+                { name: this.FieldNames.DTFSSETTINGID, value: dtfsSettingsId },
+                { name: this.FieldNames.STATUS, value: upToStatus }
+            ]
+        };
+        query.sql = ` select  top ${_declarations.SQL.MAX_ROWS} t.*, s.shopCode, s.shopName
+                      from    ${this.type} t
+                      inner   join epos_shop_setting ss on ss.shopId = t.shopId
+                      inner   join cx_shop s on s.shopId = ss.shopId
+                      where   ss.${this.FieldNames.DTFSSETTINGID} = @${this.FieldNames.DTFSSETTINGID}
+                      and     t.${this.FieldNames.STATUS} < @${this.FieldNames.STATUS}`;
+        
+        return await super.select(query);
+
+    }
+
     async fetch(id) {
         if (this.cx.cxSvc == true) { return await super.fetch(id); }
 
@@ -63,10 +82,11 @@ class epos_transmission_Collection extends _persistentTable.Table {
 
         return super.populate(rawRecord);
     }
+
 }
 
 //
-class epos_transmission extends _persistentTable.Record {
+class epos_dtfs_transmission extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
@@ -82,10 +102,10 @@ class epos_transmission extends _persistentTable.Record {
     get transmissionIdText() { return this.transmissionId.toString(); }
 
     async abort(message) {
-        if (this.status != _declarations.EPOS_TRANSMISSION.STATUS.PENDING && this.status != _declarations.EPOS_TRANSMISSION.STATUS.TRANSMITTING) {
+        if (this.status != _declarations.EPOS_DTFS_TRANSMISSION.STATUS.PENDING && this.status != _declarations.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING) {
             throw new Error(`transmission cannot be aborted as the current status is ${this.status}`)
         }
-        this.status = _declarations.EPOS_TRANSMISSION.STATUS.ERROR;
+        this.status = _declarations.EPOS_DTFS_TRANSMISSION.STATUS.ERROR;
         
         this.message = message || ('transmission manually aborted by: ' + this.cx.userName);
 
@@ -105,7 +125,7 @@ class epos_transmission extends _persistentTable.Record {
 }
 //
 module.exports = {
-    Table: epos_transmission_Collection,
-    Record: epos_transmission,
+    Table: epos_dtfs_transmission_Collection,
+    Record: epos_dtfs_transmission,
 }
 

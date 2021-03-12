@@ -29,6 +29,7 @@ const _fieldNames = {
     DTFSPAIREDVERSION: 'dtfsPairedVersion',
     DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
     EPOSPROVIDER: 'eposProvider',
+    STARTDATE: 'startDate',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     CREATED: 'created',
@@ -49,6 +50,7 @@ const _fields = {
     dtfsPairedVersion: { name: 'dtfsPairedVersion', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     dtfsInfoLastRefresh: { name: 'dtfsInfoLastRefresh', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     eposProvider: { name: 'eposProvider', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
+    startDate: { name: 'startDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
@@ -130,6 +132,12 @@ class Persistent_epos_dtfs_setting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EPOSPROVIDER);
     } set eposProvider(val) {
         super.setValue(_fieldNames.EPOSPROVIDER, val);
+    }
+
+    get startDate() {
+        return super.getValue(_fieldNames.STARTDATE);
+    } set startDate(val) {
+        super.setValue(_fieldNames.STARTDATE, val);
     }
 
     get modified() {

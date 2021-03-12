@@ -14,7 +14,7 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'epos_transmission';
+const _tableName = 'epos_dtfs_transmission';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
@@ -44,7 +44,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_epos_transmission_Collection extends _cx_data.DBTable {
+class Persistent_epos_dtfs_transmission_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -53,7 +53,7 @@ class Persistent_epos_transmission_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_epos_transmission extends _cx_data.DBRecord {
+class Persistent_epos_dtfs_transmission extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
@@ -108,6 +108,6 @@ class Persistent_epos_transmission extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_epos_transmission_Collection,
-    Record: Persistent_epos_transmission,
+    Table: Persistent_epos_dtfs_transmission_Collection,
+    Record: Persistent_epos_dtfs_transmission,
 }

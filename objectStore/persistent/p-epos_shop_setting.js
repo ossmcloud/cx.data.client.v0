@@ -23,7 +23,6 @@ const _fieldNames = {
     EPOSPROVIDER: 'eposProvider',
     EPOSSHOPCODE: 'eposShopCode',
     EPOSSHOPNAME: 'eposShopName',
-    STARTDATE: 'startDate',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     CREATED: 'created',
@@ -39,7 +38,6 @@ const _fields = {
     eposProvider: { name: 'eposProvider', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     eposShopCode: { name: 'eposShopCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     eposShopName: { name: 'eposShopName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    startDate: { name: 'startDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
@@ -88,12 +86,6 @@ class Persistent_epos_shop_setting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EPOSSHOPNAME);
     } set eposShopName(val) {
         super.setValue(_fieldNames.EPOSSHOPNAME, val);
-    }
-
-    get startDate() {
-        return super.getValue(_fieldNames.STARTDATE);
-    } set startDate(val) {
-        super.setValue(_fieldNames.STARTDATE, val);
     }
 
     get modified() {

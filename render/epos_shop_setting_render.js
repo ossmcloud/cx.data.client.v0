@@ -65,7 +65,7 @@ class EposShopSettingRender extends RenderBase {
                             { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
                             { name: 'eposShopCode', label: 'epos code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
                             { name: 'eposShopName', label: 'epos name', column: 1, validation: '{ "mandatory": true }' },
-                            { name: 'startDate', label: 'start date', column: 2, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                            
                             dtfsSettingDropDown,
                             
                         ],
@@ -131,7 +131,6 @@ class EposShopSettingRender extends RenderBase {
             { title: 'epos provider', name: _cxSchema.epos_shop_setting.EPOSPROVIDER },
             { title: 'epos code', name: _cxSchema.epos_shop_setting.EPOSSHOPCODE },
             { title: 'epos name', name: _cxSchema.epos_shop_setting.EPOSSHOPNAME },
-            { title: 'start date', name: _cxSchema.epos_shop_setting.STARTDATE },
             { title: 'dtfs settings', name: 'dtfsInfo' },
 
         ];

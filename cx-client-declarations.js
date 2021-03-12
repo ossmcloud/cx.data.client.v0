@@ -68,7 +68,7 @@ const CX_MODULE = {
 
 
 
-const EPOS_SHOP_SETTING = {
+const EPOS_DTFS_SETTING = {
     PAIRING_STATUS: {
         NOT_PAIRED: 0,
         PAIRED: 1,
@@ -78,7 +78,7 @@ const EPOS_SHOP_SETTING = {
     }
 }
 
-const EPOS_SHOP_CONFIGS = {
+const EPOS_DTFS_CONFIGS = {
     FUELCARD_TENDER: 'FuelCardTender',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
@@ -98,9 +98,9 @@ const CX_EPOS_PROVIDERS = {
         {
             type: CX_EPOS_PROVIDER.CBE,
             configDefaults: [
-                { name: EPOS_SHOP_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
-                { name: EPOS_SHOP_CONFIGS.DTFS_PING_FREQ, value: '600' },
-                { name: EPOS_SHOP_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+                { name: EPOS_DTFS_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
             ]
         }
     ],
@@ -129,7 +129,7 @@ const CX_SHOP = {
     }
 }
 
-const EPOS_TRANSMISSION = {
+const EPOS_DTFS_TRANSMISSION = {
     STATUS: {
         PENDING: 0,
         TRANSMITTING: 1,
@@ -165,7 +165,7 @@ const RAW_GET_REQUEST = {
     }
 }
 
-const SYS_SVC_UPGRADE_AUDIT = {
+const EPOS_DTFS_UPGRADE_AUDIT = {
     STATUS: {
         PENDING: 0,
         WAIT_START: 1,
@@ -214,11 +214,11 @@ module.exports = {
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
-    EPOS_SHOP_CONFIGS: EPOS_SHOP_CONFIGS,
-    EPOS_SHOP_SETTING: EPOS_SHOP_SETTING,
-    EPOS_TRANSMISSION: EPOS_TRANSMISSION,
+    EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
+    EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
+    EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
-    SYS_SVC_UPGRADE_AUDIT: SYS_SVC_UPGRADE_AUDIT,
+    EPOS_DTFS_UPGRADE_AUDIT: EPOS_DTFS_UPGRADE_AUDIT,
     RENDER: RENDER,
     SQL: SQL,
 }

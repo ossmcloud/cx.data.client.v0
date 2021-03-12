@@ -80,12 +80,13 @@ class EposDtfsSettingRender extends RenderBase {
                     group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
                         { name: 'dtfsSettingName', label: 'name', column: 1 },
                         { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
+                        { name: 'startDate', label: 'start date', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
                     ],
                 },
                 {
                     group: 'pair', title: 'pairing info', column: 2, columnCount: 2, fields: [
                         { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
-                        { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_SHOP_SETTING.PAIRING_STATUS.toList() },
+                        { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
                         { name: 'dtfsPairedVersion', label: 'dtfs version', column: 1, readOnly: true },
                         { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2, readOnly: true },
                         { name: 'dtfsPairedMachineOS', label: 'paired machine OS', column: 2, readOnly: true },
@@ -152,18 +153,19 @@ class EposDtfsSettingRender extends RenderBase {
             { title: 'name', name: _cxSchema.epos_dtfs_setting.DTFSSETTINGNAME },
             { title: 'epos provider', name: _cxSchema.epos_dtfs_setting.EPOSPROVIDER },
             
-            { title: 'pairing status', name: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, lookUps: _cxConst.EPOS_SHOP_SETTING.PAIRING_STATUS.toList() },
+            { title: 'pairing status', name: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
             
             { title: 'dtfs version', name: _cxSchema.epos_dtfs_setting.DTFSPAIREDVERSION },
             { title: 'paired PC name', name: _cxSchema.epos_dtfs_setting.DTFSPAIREDMACHINENAME },
             { title: 'paired PC OS', name: _cxSchema.epos_dtfs_setting.DTFSPAIREDMACHINEOS },
             { title: 'paired PC IP', name: _cxSchema.epos_dtfs_setting.DTFSPAIREDMACHINEIP },
             { title: 'info last refreshed', name: _cxSchema.epos_dtfs_setting.DTFSINFOLASTREFRESH },
+            { title: 'start date', name: _cxSchema.epos_dtfs_setting.STARTDATE },
 
             
         ];
         this.options.highlights = [
-            { column: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, op: '=', value: _cxConst.EPOS_SHOP_SETTING.PAIRING_STATUS.NOT_PAIRED, style: 'color: red;' },
+            { column: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, op: '=', value: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.NOT_PAIRED, style: 'color: red;' },
         ];
 
         this.options.actionsTitle = '';

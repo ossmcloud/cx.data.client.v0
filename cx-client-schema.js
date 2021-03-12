@@ -93,6 +93,7 @@ module.exports = {
         DTFSPAIREDVERSION: 'dtfsPairedVersion',
         DTFSINFOLASTREFRESH: 'dtfsInfoLastRefresh',
         EPOSPROVIDER: 'eposProvider',
+        STARTDATE: 'startDate',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
@@ -129,7 +130,6 @@ module.exports = {
         EPOSPROVIDER: 'eposProvider',
         EPOSSHOPCODE: 'eposShopCode',
         EPOSSHOPNAME: 'eposShopName',
-        STARTDATE: 'startDate',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
@@ -137,8 +137,8 @@ module.exports = {
         DTFSSETTINGID: 'dtfsSettingId',
     },
 
-    epos_transmission: {
-        TBL_NAME: 'epos_transmission',
+    epos_dtfs_transmission: {
+        TBL_NAME: 'epos_dtfs_transmission',
         TRANSMISSIONID: 'transmissionId',
         SHOPID: 'shopId',
         STATUS: 'status',
