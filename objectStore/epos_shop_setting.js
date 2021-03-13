@@ -27,29 +27,29 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
 
         if (params.sg) {
             if (params.sg == '@NULL@') {
-                query.sql += `and  sg.shopGroupId is null`;
+                query.sql += ` and  sg.shopGroupId is null`;
             } else {
-                query.sql += `and  sg.shopGroupId = @shopGroupId`;
+                query.sql += ` and  sg.shopGroupId = @shopGroupId`;
                 query.params.push({ name: 'shopGroupId', value: params.sg })
             }
         }
         if (params.sc) {
-            query.sql += `and  sx.shopCode like @shopCode`;
+            query.sql += ` and  sx.shopCode like @shopCode`;
             query.params.push({ name: 'shopCode', value: params.sc + '%' })
         }
         if (params.sec) {
-            query.sql += `and  sx.eposShopCode like @eposShopCode`;
+            query.sql += ` and  sx.eposShopCode like @eposShopCode`;
             query.params.push({ name: 'eposShopCode', value: params.sec + '%' })
         }
         if (params.sen) {
-            query.sql += `and  sx.eposShopName like @eposShopName`;
+            query.sql += ` and  sx.eposShopName like @eposShopName`;
             query.params.push({ name: 'eposShopName', value: params.sen + '%' })
         }
         if (params.dtfs) {
             if (params.dtfs == '@NULL@') {
-                query.sql += `and  sr.dtfsSettingId is null`;
+                query.sql += ` and  sr.dtfsSettingId is null`;
             } else {
-                query.sql += `and  sr.dtfsSettingId = @dtfsSettingId`;
+                query.sql +=  ` and  sr.dtfsSettingId = @dtfsSettingId`;
                 query.params.push({ name: 'dtfsSettingId', value: params.dtfs })
             }
         }
