@@ -166,6 +166,7 @@ class EposDtfsSettingRender extends RenderBase {
         ];
         this.options.highlights = [
             { column: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, op: '=', value: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.NOT_PAIRED, style: 'color: red;' },
+            { column: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, op: '=', value: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.INACTIVE, style: 'color: orange;' },
         ];
 
         this.options.actionsTitle = '';
