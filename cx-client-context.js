@@ -139,6 +139,19 @@ module.exports = {
         // NOTE: cx.app will call this with an object with options.dbConfig property
         //       cx.svc will call this with an object that is the dbConfig
         var dbConfig = options.dbConfig || options;
+
+        // TODO: SHOULD NOT BE HERE BUT ON .ENV FILE ???
+
+        // @WORKING: should I use pool management by user ???
+        dbConfig.noPullManager = false;
+        dbConfig.config.connectionTimeout = 60000;
+        dbConfig.config.requestTimeout = 60000;
+        dbConfig.config.pool = {
+            max: 20,
+            min: 0,
+            idleTimeoutMillis: 60000
+        }
+        
         var credentials = (options.dbConfig) ? options : null;
         var db_pool = await _cx_data.getPool(dbConfig);
         var cx = new CXClientContext(db_pool, credentials);
