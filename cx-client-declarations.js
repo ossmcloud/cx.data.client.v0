@@ -129,6 +129,24 @@ const CX_SHOP = {
     }
 }
 
+const CR_CASH_BOOK = {
+    STATUS: {
+        Transferring: 0,           // task is transferring/transforming data from the raw tables
+        New: 1,                    // data is ready but never seen/saved by user
+        Pending: 2,                // user saved but did not submit
+        Error: 3,                  // something went wrong while transferring or during user stuff
+        Submitted: 4,              // user sent this for poosting
+        Posting: 5,                // erps.exe has picked up the stuff to post
+        Posted: 6,                 // posted successfully
+        PostingError: 7,           // error while posting
+        Deleted: 9,                // cash book deleted    <== @REVIEW not sure about this
+
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) { return enumGetName(this, value); },
+    }
+}
+
 const EPOS_DTFS_TRANSMISSION = {
     STATUS: {
         PENDING: 0,
@@ -214,6 +232,7 @@ module.exports = {
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
+    CR_CASH_BOOK: CR_CASH_BOOK,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

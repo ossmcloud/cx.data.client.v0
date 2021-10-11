@@ -1,17 +1,17 @@
 'use strict'
 //
-const _persistentTable = require('./persistent/p-epos_dtfs_transmission');
+const _core = require('cx-core');
+const _persistentTable = require('./persistent/p-cr_cb_transaction');
 const _declarations = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
 //
-class epos_dtfs_transmission_Collection extends _persistentTable.Table {
+class cr_cb_transaction_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new epos_dtfs_transmission(this, defaults);
+        return new cr_cb_transaction(this, defaults);
     }
 
+    
     async select(params) {
-        
-        if (this.cx.cxSvc == true) { return await super.select(); }
 
         if (!params) { params = {}; }
 
@@ -20,7 +20,7 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
                       and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
-        
+
         if (params.s) {
             query.sql += ' and l.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
@@ -45,33 +45,15 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
-    async selectByDtfsSettings(dtfsSettingsId, upToStatus) {
-        var query = {
-            sql: '',
-            params: [
-                { name: this.FieldNames.DTFSSETTINGID, value: dtfsSettingsId },
-                { name: this.FieldNames.STATUS, value: upToStatus }
-            ]
-        };
-        query.sql = ` select  top ${_declarations.SQL.MAX_ROWS} t.*, s.shopCode, s.shopName
-                      from    ${this.type} t
-                      inner   join epos_shop_setting ss on ss.shopId = t.shopId
-                      inner   join cx_shop s on s.shopId = ss.shopId
-                      where   ss.${this.FieldNames.DTFSSETTINGID} = @${this.FieldNames.DTFSSETTINGID}
-                      and     t.${this.FieldNames.STATUS} < @${this.FieldNames.STATUS}`;
-        
-        return await super.select(query);
-
-    }
 
     async fetch(id) {
         if (this.cx.cxSvc == true) { return await super.fetch(id); }
 
-        var query = { sql: '', params: [{ name: 'transmissionId', value: id }] };
+        var query = { sql: '', params: [{ name: 'cbTranId', value: id }] };
         query.sql = ` select  l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
-                      and     l.${this.FieldNames.TRANSMISSIONID} = @transmissionId`;
+                      and     l.${this.FieldNames.CBTRANID} = @cbTranId`;
         query.noResult = 'null';
         query.returnFirst = true;
 
@@ -82,9 +64,10 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
     }
 
 }
-
 //
-class epos_dtfs_transmission extends _persistentTable.Record {
+// ----------------------------------------------------------------------------------------
+//
+class cr_cb_transaction extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
@@ -98,32 +81,20 @@ class epos_dtfs_transmission extends _persistentTable.Record {
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
     get transmissionIdText() { return this.transmissionId.toString(); }
+    get dateStr() { return _core.date.format({ date: this.date }) }
 
-    async abort(message) {
-        if (this.status != _declarations.EPOS_DTFS_TRANSMISSION.STATUS.PENDING && this.status != _declarations.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING) {
-            throw new Error(`transmission cannot be aborted as the current status is ${this.status}`)
-        }
-        this.status = _declarations.EPOS_DTFS_TRANSMISSION.STATUS.ERROR;
-        
-        this.message = message || ('transmission manually aborted by: ' + this.cx.userName);
 
-        // TODO: we should also set the correspondent raw_getLog adn raw_getRequest (if there)
-
-        await this.save();
-    }
 
     async save() {
-        if (this.isNew()) { this.created = new Date(); }
-        if (this.message.length > 255) {
-            this.message = this.message.substr(0, 255);
-        }
+        // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
-
 }
 //
+// ----------------------------------------------------------------------------------------
+//
 module.exports = {
-    Table: epos_dtfs_transmission_Collection,
-    Record: epos_dtfs_transmission,
+    Table: cr_cb_transaction_Collection,
+    Record: cr_cb_transaction,
 }
 
