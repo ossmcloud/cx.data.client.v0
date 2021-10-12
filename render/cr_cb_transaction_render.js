@@ -51,6 +51,8 @@ class CRCashBookRender extends RenderBase {
             { name: 'totalSales', title: 'sales', align: 'right', width: '90px', },
             { name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', },
             { name: 'tillDifference', title: 'diff', align: 'right', width: '90px', },
+            { name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', },
+            { name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', },
 
             { name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'created', title: 'created', align: 'center', width: '130px' },

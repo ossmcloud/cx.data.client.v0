@@ -41,7 +41,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
             query.sql += ' and l.status = @status';
             query.params.push({ name: 'status', value: params.st });
         }
-        query.sql += ' order by l.created desc';
+        query.sql += ' order by l.date';
         return await super.select(query);
     }
 
