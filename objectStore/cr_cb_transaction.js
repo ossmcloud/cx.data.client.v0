@@ -30,11 +30,11 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
             query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
         }
         if (params.df) {
-            query.sql += ' and l.created >= @from';
+            query.sql += ' and l.date >= @from';
             query.params.push({ name: 'from', value: params.df + ' 00:00:00' });
         }
         if (params.dt) {
-            query.sql += ' and l.created <= @to';
+            query.sql += ' and l.date <= @to';
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
         if (params.st) {

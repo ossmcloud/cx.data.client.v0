@@ -88,6 +88,8 @@ class CRCashBookRender extends RenderBase {
             { name: _cxSchema.cr_transaction.VALUEDISCOUNT, title: 'discount', align: 'right', width: '90px', },
             { name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, title: 'promo', align: 'right', width: '90px', },
 
+            { name: _cxSchema.cr_transaction.CHANGE, title: 'change', align: 'right', width: '90px', },
+
             { name: 'created', title: 'created', align: 'center', width: '130px' },
         ];
         this.options.highlights = [
