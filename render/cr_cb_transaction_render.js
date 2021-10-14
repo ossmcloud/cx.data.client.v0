@@ -60,8 +60,14 @@ class CRCashBookRender extends RenderBase {
         this.options.highlights = [
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Error, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingError, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
-            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.New, style: 'color: cyan; ' },
-            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: yellow; background-color: var(--element-bg-color);' }
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.New, style: 'color: var(--main-color-3); ' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Refresh, style: 'color: grey; ' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Delete, style: 'color: purple; ' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.DeleteAndPull, style: 'color: purple; ' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: orange; background-color: var(--element-bg-color);' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Transferring, style: 'color: grey; ' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Posting, style: 'color: grey; ' },
+            
         ];
     }
 
