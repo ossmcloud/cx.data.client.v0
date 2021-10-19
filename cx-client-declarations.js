@@ -135,13 +135,16 @@ const CR_CASH_BOOK = {
         New: 1,                    // data is ready but never seen/saved by user
         Pending: 2,                // user saved but did not submit
         Refresh: 3,                // user requested dtfs refresh
-        Submitted: 4,              // user sent this for poosting
-        Posting: 5,                // erps.exe has picked up the stuff to post
-        Posted: 6,                 // posted successfully
-        Error: 7,                  // something went wrong while transferring or during user stuff
-        PostingError: 8,           // error while posting
-        DeleteAndPull: 9,                 // cash book to be deleted
-        Delete: 10,                 // cash book to be deleted
+
+        PostingPrep: 4,            // user sent this for poosting
+        PostingReady: 5,           //
+        Posting: 6,                // erps.exe has picked up the stuff to post
+        Posted: 8,                 // posted successfully
+
+        Error: 97,                 // something went wrong while transferring or during user stuff
+        PostingError: 98,          // error while posting
+        DeleteAndPull: 99,         // cash book to be deleted and re-gathered
+        Delete: 100,               // cash book to be deleted
 
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); },
