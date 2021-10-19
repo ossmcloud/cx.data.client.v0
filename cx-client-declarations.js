@@ -1,6 +1,8 @@
 'use strict'
 // TODO: move to core sdk
-function enumToList(obj, addEmpty) {
+function enumToList(obj, addEmpty, aliases) {
+    if (!aliases) { aliases = {}; }
+
     var enums = [];
     if (addEmpty) { enums.push({ value: '', text: (addEmpty == true) ? '' : addEmpty }); }
     for (var key in obj) {
@@ -12,18 +14,24 @@ function enumToList(obj, addEmpty) {
         if (key == 'CX_ADMIN') { continue; }
         if (key == 'CX_SUPPORT') { continue; }
         if (key == '_NAME') { continue; }
+
+
         enums.push({
             value: obj[key],
-            text: key.toLowerCase(),
+            text: (aliases[key]) ? aliases[key] : key.toLowerCase(),
         });
     }
     return enums;
 }
-function enumGetName(obj, value) {
+function enumGetName(obj, value, aliases) {
+    if (!aliases) { aliases = {}; }
     for (var key in obj) {
         if (key == 'toList') { continue; }
         if (key == 'getName') { continue; }
-        if (obj[key] == value) { return key.toLowerCase(); }
+        if (obj[key] == value) {
+            if (aliases[key]) { return aliases[key] }
+            return key.toLowerCase();
+        }
     }
     return '';
 }
@@ -138,7 +146,8 @@ const CR_CASH_BOOK = {
 
         PostingPrep: 4,            // user sent this for poosting
         PostingReady: 5,           //
-        Posting: 6,                // erps.exe has picked up the stuff to post
+        Posting: 6,                // erps.exe has to  pick up the stuff to post
+        PostingRunning: 7,         // erps.exe has picked up the stuff to post
         Posted: 8,                 // posted successfully
 
         Error: 97,                 // something went wrong while transferring or during user stuff
@@ -147,8 +156,20 @@ const CR_CASH_BOOK = {
         Delete: 100,               // cash book to be deleted
 
         //
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
-        getName: function (value) { return enumGetName(this, value); },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                PostingPrep: 'preparing for posting',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                PostingPrep: 'preparing for posting',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+            });
+        },
     }
 }
 
@@ -196,7 +217,7 @@ const EPOS_DTFS_UPGRADE_AUDIT = {
         ABORTED: 7,
         COMPLETE: 8,
         ERROR: 9,
-        
+
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     },

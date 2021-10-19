@@ -65,7 +65,10 @@ class CRCashBookRender extends RenderBase {
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Delete, style: 'color: purple; ' },
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.DeleteAndPull, style: 'color: purple; ' },
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: orange; background-color: var(--element-bg-color);' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingReady, style: 'color: cyan; background-color: var(--element-bg-color);' },
+            
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Transferring, style: 'color: grey; ' },
+            { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingPrep, style: 'color: grey; ' },
             { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Posting, style: 'color: grey; ' },
             
         ];
