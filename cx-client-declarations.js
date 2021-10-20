@@ -1,4 +1,7 @@
 'use strict'
+
+const { getValue } = require("cx-data/schema/cx-record-field");
+
 // TODO: move to core sdk
 function enumToList(obj, addEmpty, aliases) {
     if (!aliases) { aliases = {}; }
@@ -9,6 +12,7 @@ function enumToList(obj, addEmpty, aliases) {
         // @CLEAN-UP: use a better way to do this, the 1st three below are functions
         if (key == 'toList') { continue; }
         if (key == 'getName') { continue; }
+        if (key == 'getStyle') { continue; }
         if (key == 'listOptions') { continue; }
 
         if (key == 'CX_ADMIN') { continue; }
@@ -170,6 +174,52 @@ const CR_CASH_BOOK = {
                 DeleteAndPull: 'delete and pull again',
             });
         },
+        getStyle: function (status, returnObject) {
+            var color = 'var(--main-color)';
+            var bkgColor = '';
+            
+            if (status == this.Transferring) {
+                color = 'gray';
+            } else if (status == this.New) {
+                color = 'var(--main-color-3)';
+            } else if (status == this.Pending) {
+                color = 'orange';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Refresh) {
+                color = 'gray';
+            } else if (status == this.PostingPrep) {
+                color = 'gray';
+            } else if (status == this.PostingReady) {
+                color = 'darkturquoise';
+            } else if (status == this.Posting) {
+                color = 'gray';
+            } else if (status == this.PostingRunning) {
+                color = 'gray';
+            } else if (status == this.Posted) {
+                color = 'teal';
+            } else if (status == this.PostingError) {
+                color = '#DF0101';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Error) {
+                color = '#DF0101';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Delete) {
+                color = 'purple';
+            } else if (status == this.DeleteAndPull) {
+                color = 'purple';
+            }
+
+            if (returnObject) {
+                return {
+                    color: color,
+                    bkgColor: bkgColor
+                }
+            }
+
+            var style = 'color: ' + color + '; ';
+            if (bkgColor) { style += ('background-color: ' + bkgColor + '; '); }
+            return style;
+        }
     }
 }
 

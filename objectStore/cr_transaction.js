@@ -27,6 +27,11 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.sql += ' and t.cbTranId = @cbTranId';
             query.params.push({ name: 'cbTranId', value: params.cb });
         }
+        if (params.cb_h) {
+            query.sql += ' and tranType.cbHeading = @cbHeading';
+            query.params.push({ name: 'cbHeading', value: params.cb_h });
+        }
+
         if (params.tt) {
             query.sql += ' and tranType.cbTranTypeId = @cbTranTypeId';
             query.params.push({ name: 'cbTranTypeId', value: params.tt });
