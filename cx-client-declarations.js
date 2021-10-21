@@ -176,42 +176,57 @@ const CR_CASH_BOOK = {
         },
         getStyle: function (status, returnObject) {
             var color = 'var(--main-color)';
+            var colorRgb = 'var(--main-color)';
             var bkgColor = '';
             
             if (status == this.Transferring) {
                 color = 'gray';
+                colorRgb = '128,128,128';
             } else if (status == this.New) {
-                color = 'var(--main-color-3)';
+                color = 'blue';
+                colorRgb = '0,0,255';
             } else if (status == this.Pending) {
                 color = 'orange';
+                colorRgb = '255,165,0';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Refresh) {
                 color = 'gray';
+                colorRgb = '128,128,128';
             } else if (status == this.PostingPrep) {
                 color = 'gray';
+                colorRgb = '128,128,128';
             } else if (status == this.PostingReady) {
                 color = 'darkturquoise';
+                colorRgb = '0,206,209';
             } else if (status == this.Posting) {
                 color = 'gray';
+                colorRgb = '128,128,128';
             } else if (status == this.PostingRunning) {
                 color = 'gray';
+                colorRgb = '128,128,128';
             } else if (status == this.Posted) {
                 color = 'teal';
+                colorRgb = '0,128,128';
             } else if (status == this.PostingError) {
                 color = '#DF0101';
+                colorRgb = '223,1,1';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Error) {
                 color = '#DF0101';
+                colorRgb = '223,1,1';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Delete) {
                 color = 'purple';
+                colorRgb = '128,0,128';
             } else if (status == this.DeleteAndPull) {
                 color = 'purple';
+                colorRgb = '128,0,128';
             }
 
             if (returnObject) {
                 return {
                     color: color,
+                    colorRgb: colorRgb,
                     bkgColor: bkgColor
                 }
             }
