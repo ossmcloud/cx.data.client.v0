@@ -71,8 +71,8 @@ module.exports = {
 
     send: function (option) {
         var emailer = new EMailer({
-            user: 'noreply@cloudcx.ie',
-            pass: 'cx@NoR3ply!'
+            user: option.user,
+            pass: option.pass,
         });
         emailer.send(option);
     }
