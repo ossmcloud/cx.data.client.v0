@@ -25,6 +25,7 @@ class RawGetRequest extends RenderBase {
             {
                 group: 'get', title: 'get info', columnCount: 4, fields: [
                     { name: 'getDate', label: 'date', align: 'center', type: 'inputDate', column: 1, validation: '{ "mandatory": true }' },
+                    { name: 'svcName', label: 'service', align: 'center', column: 1 },
                     { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.CX_MODULE.toList(true), },
                     { name: 'getReference', label: 'message', column: 2, readOnly: true },
                     { name: 'status', label: 'status', column: 2, lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList(), readOnly: true },
@@ -59,6 +60,7 @@ class RawGetRequest extends RenderBase {
             { name: 'shopInfo', title: 'shop', width: '200px' },
             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'getDate', title: 'date', align: 'center', width: '130px' },
+            { name: 'svcName', title: 'service', align: 'center', width: '9px' },
             { name: 'getModule', title: 'module', align: 'center', width: '70px' },
             { name: 'getReference', title: 'message' },
             { name: 'status', title: 'status', lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList()  },

@@ -22,11 +22,13 @@ const _fieldNames = {
     GETLOGID: 'getLogId',
     TRANSMISSIONID: 'transmissionID',
     SHOPID: 'shopId',
+    SVCNAME: 'svcName',
     GETDATE: 'getDate',
     GETMODULE: 'getModule',
     GETREFERENCE: 'getReference',
     GETRESPONSE: 'getResponse',
     GETSUCCESS: 'getSuccess',
+    TRANSFERRED: 'transferred',
     CREATED: 'created',
 
 }
@@ -37,11 +39,13 @@ const _fields = {
     getLogId: { name: 'getLogId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    svcName: { name: 'svcName', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
     getDate: { name: 'getDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
     getModule: { name: 'getModule', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     getReference: { name: 'getReference', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     getResponse: { name: 'getResponse', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     getSuccess: { name: 'getSuccess', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
+    transferred: { name: 'transferred', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
 
 }
@@ -80,6 +84,12 @@ class Persistent_raw_getLog extends _cx_data.DBRecord {
         super.setValue(_fieldNames.SHOPID, val);
     }
 
+    get svcName() {
+        return super.getValue(_fieldNames.SVCNAME);
+    } set svcName(val) {
+        super.setValue(_fieldNames.SVCNAME, val);
+    }
+
     get getDate() {
         return super.getValue(_fieldNames.GETDATE);
     } set getDate(val) {
@@ -108,6 +118,12 @@ class Persistent_raw_getLog extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.GETSUCCESS);
     } set getSuccess(val) {
         super.setValue(_fieldNames.GETSUCCESS, val);
+    }
+
+    get transferred() {
+        return super.getValue(_fieldNames.TRANSFERRED);
+    } set transferred(val) {
+        super.setValue(_fieldNames.TRANSFERRED, val);
     }
 
     get created() {

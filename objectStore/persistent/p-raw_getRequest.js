@@ -22,6 +22,7 @@ const _fieldNames = {
     GETREQUESTID: 'getRequestId',
     TRANSMISSIONID: 'transmissionID',
     SHOPID: 'shopId',
+    SVCNAME: 'svcName',
     GETDATE: 'getDate',
     GETMODULE: 'getModule',
     GETREFERENCE: 'getReference',
@@ -37,6 +38,7 @@ const _fields = {
     getRequestId: { name: 'getRequestId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    svcName: { name: 'svcName', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: false },
     getDate: { name: 'getDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
     getModule: { name: 'getModule', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     getReference: { name: 'getReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
@@ -80,6 +82,12 @@ class Persistent_raw_getRequest extends _cx_data.DBRecord {
         super.setValue(_fieldNames.SHOPID, val);
     }
 
+    get svcName() {
+        return super.getValue(_fieldNames.SVCNAME);
+    } set svcName(val) {
+        super.setValue(_fieldNames.SVCNAME, val);
+    }
+
     get getDate() {
         return super.getValue(_fieldNames.GETDATE);
     } set getDate(val) {
@@ -104,17 +112,18 @@ class Persistent_raw_getRequest extends _cx_data.DBRecord {
         super.setValue(_fieldNames.STATUS, val);
     }
 
+    get createdBy() {
+        return super.getValue(_fieldNames.CREATEDBY);
+    } set createdBy(val) {
+        super.setValue(_fieldNames.CREATEDBY, val);
+    }
+
     get created() {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
         super.setValue(_fieldNames.CREATED, val);
     }
 
-    get createdBy() {
-        return super.getValue(_fieldNames.CREATEDBY);
-    } set createdBy(val) {
-        super.setValue(_fieldNames.CREATEDBY, val);
-    }
 
 }
 //
