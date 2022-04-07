@@ -13,7 +13,7 @@ async function getCustomOptions(renderType, table) {
 async function getDefaultOptions(renderType, table, options) {
     var renderer = require(`./render/${table.type}_render`);
     var renderOptions = new renderer(table, options);
-    return renderOptions.get(renderType);
+    return renderOptions.get(renderType, options.dropDownSelectOptions);
 }
 
 async function setLoginLookUpColumns(dataSource, options) {

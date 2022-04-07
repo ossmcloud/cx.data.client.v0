@@ -64,15 +64,15 @@ class RenderBase {
         }
     }
 
-    async get(renderType) {
+    async get(renderType, options) {
         if (renderType == _cxConst.RENDER.TYPE.LIST) {
             if (this.options.title == undefined) {
                 this.options.title = `${this.#title} list`;
             }
-            await this.list();
+            await this.list(options);
         }
         if (renderType == _cxConst.RENDER.TYPE.RECORD) {
-            await this.record();
+            await this.record(options);
 
             if (this.options.editMode && !this.options.allowEdit && !this.options.allowNew) {
                 this.options.editMode = false;
@@ -87,7 +87,7 @@ class RenderBase {
             }
         }
         if (renderType == _cxConst.RENDER.TYPE.DROP_DOWN) {
-            await this.dropDown();
+            await this.dropDown(options);
         }
         return this.#options;
     }

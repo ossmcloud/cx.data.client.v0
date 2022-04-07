@@ -56,6 +56,10 @@ async function getPermission(recordType, role) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
+    if (recordType == _cxSchema.cx_traderAccount.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
+    }
 
     if (recordType == _cxSchema.epos_dtfs_upgradeAudit.TBL_NAME) {
         permission.allowEdit = false;
