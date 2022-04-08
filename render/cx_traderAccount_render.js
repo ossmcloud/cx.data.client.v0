@@ -36,7 +36,7 @@ class CXTraderAccount extends RenderBase {
                     {
                         group: 'mapping', title: 'erp mapping', column: 2, columnCount: 1, fields: [
                             await this.fieldDropDownOptions(_cxSchema.erp_traderAccount, {
-                                id: 'traderAccountId', name: 'erpTraderAccountId', column: 1, dropDownSelectOptions: {
+                                id: 'erpTraderAccountId', name: 'erpTraderAccountId', column: 1, dropDownSelectOptions: {
                                     s: this.dataSource.shopId,
                                     tt: this.dataSource.traderType,
                                 }
@@ -63,22 +63,6 @@ class CXTraderAccount extends RenderBase {
                     }
                 ]
             }
-            // {
-            //     group: 'get', title: 'get info', columnCount: 4, fields: [
-            //         { name: 'getDate', label: 'date', align: 'center', type: 'inputDate', column: 1, validation: '{ "mandatory": true }' },
-            //         { name: 'svcName', label: 'service', align: 'center', column: 1 },
-            //         { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.CX_MODULE.toList(true), },
-            //         { name: 'getReference', label: 'message', column: 2, readOnly: true },
-            //         { name: 'status', label: 'status', column: 2, lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList(), readOnly: true },
-            //     ]
-            // },
-            // {
-            //     group: 'audit', title: 'audit info', columnCount: 4, fields: [
-            //         { name: 'created', label: 'created', readOnly: true },
-            //         { name: 'createdBy', label: 'by', readOnly: true },
-            //         { name: 'getRequestId', label: 'id', readOnly: true, column: 2 },
-            //     ]
-            // }
         ];
 
         // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
@@ -88,23 +72,16 @@ class CXTraderAccount extends RenderBase {
 
     async _list() {
         this.options.recordTitle = 'trader account';
-        //var users = await this.dataSource.cx.table(_cxSchema.cx_login).selectList();
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
-            { id: 'cx_trader_type', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'tt', label: 'trader type', width: '100px', items: [{ value: '', text: ' - all -' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }] },
+            { id: 'cx_trader_type', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'tt', label: 'trader type', width: '100px', items: _cxConst.CX_TRADER_TYPE.toList(true) },
             { id: 'cx_trader_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tc', label: 'trader code' },
             { id: 'cx_trader_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tn', label: 'trader name' },
-            // { id: 'cx_is_wholesaler', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'isWholesaler', label: 'is wholesaler' },
-            // { id: 'cx_wholesaler_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'wholesalerCode', label: 'wholesaler code' },
-            // { id: 'cx_erp_info', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'erpTraderInfo', label: 'erp trader account' },
-            //isWholesaler
-            //wholesalerCode
-            //erpTraderInfo
-
         ];
         this.options.columns = [
             { name: 'traderAccountId', title: '', align: 'center' },
             { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'traderType', title: 'type' },
             { name: 'traderCode', title: 'trader code' },
             { name: 'traderName', title: 'trader name' },
             { name: 'isWholesaler', title: 'is wholesaler' },
@@ -113,11 +90,10 @@ class CXTraderAccount extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
-        // this.options.highlights = [
-        //     { column: _cxSchema.raw_getRequest.STATUS, op: '=', value: _cxConst.RAW_GET_REQUEST.STATUS.ERROR, style: 'color: red;' },
-        //     { column: _cxSchema.raw_getRequest.STATUS, op: '=', value: _cxConst.RAW_GET_REQUEST.STATUS.PROCESSING, style: 'color: yellow;' },
-        //     { column: _cxSchema.raw_getRequest.STATUS, op: '=', value: _cxConst.RAW_GET_REQUEST.STATUS.PENDING, style: 'color: blue;' },
-        // ];
+        this.options.highlights = [
+            { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.CUSTOMER, style: 'color: green;' },
+            { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.SUPPLIER, style: 'color: blue;' },
+        ];
 
     }
 

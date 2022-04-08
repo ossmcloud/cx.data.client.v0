@@ -43,14 +43,45 @@ class erp_traderAccount_Collection extends _persistentTable.Table {
        
         await super.select(query);
     }
+
+    async fetch(id) {
+        var query = { sql: '', params: [{ name: 'traderAccountId', value: id }] };
+
+        var shopFilter = 'in';
+        var shopFilterValue = this.cx.shopList;
+        query.sql = `select	t.*, s.shopCode, s.shopName
+                    from	erp_traderAccount t
+                    inner join cx_shop s on s.shopId = t.shopId
+                    where	s.shopId ${shopFilter} ${shopFilterValue}
+                    and     t.traderAccountId = @traderAccountId`;
+
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { return null; }
+
+        return super.populate(rawRecord);
+    }
+
+
 }
 //
 // ----------------------------------------------------------------------------------------
 //
 class erp_traderAccount extends _persistentTable.Record {
+    #shopName = '';
+    #shopCode = '';
     constructor(table, defaults) {
         super(table, defaults);
+        this.#shopName = defaults['shopName'] || '';
+        this.#shopCode = defaults['shopCode'] || '';
     };
+
+    get shopName() { return this.#shopName; }
+    get shopCode() { return this.#shopCode; }
+    get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

@@ -60,6 +60,12 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
     }
+    if (recordType == _cxSchema.erp_traderAccount.TBL_NAME) {
+        permission.allowEdit = false;
+        // @REVIEW: should we let users add accounts here, as long as they provide the right code when the account is received from erps itt'll be updated
+        //          this could let user go on with posting if they need to map something
+        permission.allowNew = false;
+    }
 
     if (recordType == _cxSchema.epos_dtfs_upgradeAudit.TBL_NAME) {
         permission.allowEdit = false;

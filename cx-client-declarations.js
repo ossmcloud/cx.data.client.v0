@@ -141,6 +141,13 @@ const CX_SHOP = {
     }
 }
 
+const CX_TRADER_TYPE = {
+    CUSTOMER: 'C',
+    SUPPLIER: 'S',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+
 const CR_CASH_BOOK = {
     STATUS: {
         Transferring: 0,           // task is transferring/transforming data from the raw tables
@@ -324,11 +331,12 @@ module.exports = {
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
     CR_CASH_BOOK: CR_CASH_BOOK,
+    CX_TRADER_TYPE: CX_TRADER_TYPE,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,
-    RAW_GET_REQUEST: RAW_GET_REQUEST,
     EPOS_DTFS_UPGRADE_AUDIT: EPOS_DTFS_UPGRADE_AUDIT,
+    RAW_GET_REQUEST: RAW_GET_REQUEST,
     RENDER: RENDER,
     SQL: SQL,
 }
