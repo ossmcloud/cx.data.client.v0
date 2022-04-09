@@ -66,6 +66,17 @@ async function getPermission(recordType, role) {
         //          this could let user go on with posting if they need to map something
         permission.allowNew = false;
     }
+    if (recordType == _cxSchema.erp_shop_setting.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.erp_dtfs_setting.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
 
     if (recordType == _cxSchema.epos_dtfs_upgradeAudit.TBL_NAME) {
         permission.allowEdit = false;
