@@ -4,27 +4,24 @@ const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
-class ErpTraderAccount extends RenderBase {
+class ErpBankAccount extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
-        this.title = 'erp shop setting';
+        this.title = 'erp bank account';
     }
 
     async _record() {
         this.options.fields = [
             {
-                group: 'settingOuter', title: '', columnCount: 2, fields: [
+                group: 'bankOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
-                            { name: 'erpProvider', label: 'erp provider', column: 2, readOnly: true },
-                            { name: 'erpCompanyName', label: 'erp company name', column: 1 },
-                            { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 2 },
-                            { name: 'erpCustomerAccountName', label: 'erp EPoS Account name', column: 1 },
-                            { name: 'erpCostCentre', label: 'force gl segment 2', column: 2 },
-                            { name: 'erpDepartment', label: 'force gl segment 3', column: 1 },
-                            { name: 'dtfsSettingId', label: 'ERPS Settings', column: 2 },
-                            
+                            { name: 'code', label: 'Code', column: 1, readOnly: true },
+                            { name: 'description', label: 'Name', column: 2, readOnly: true },
+                            { name: 'countryCode', label: 'Country', column: 1, readOnly: true },
+                            { name: 'currencyCode', label: 'Currency', column: 2, readOnly: true },
+
                         ]
                     },
                     {
@@ -47,37 +44,49 @@ class ErpTraderAccount extends RenderBase {
             }
         ];
 
-        // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
-        //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
-        // }
     }
 
     async _list() {
-        this.options.recordTitle = 'erp shop settings';
+        this.options.recordTitle = 'bank account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            { id: 'cx_bank_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'bc', label: 'bank code' },
+            { id: 'cx_bank_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'bd', label: 'bank name' },
         ];
         this.options.columns = [
-            { name: 'shopId', title: '', align: 'center' },
+            { name: 'erpBankAccountId', title: '', align: 'center' },
             { name: 'shopInfo', title: 'shop', width: '200px' },
-            { name: 'erpProvider', title: 'erp provider' },
-            { name: 'erpCompanyName', title: 'erp company name' },
-            { name: 'erpCustomerAccount', title: 'erp EPoS account code' },
-            { name: 'erpCustomerAccountName', title: 'erp EPoS account name' },
-            { name: 'erpCostCentre', title: 'gl segment 2' },
-            { name: 'erpDepartment', title: 'gl segment 3' },
-            { name: 'dtfsSettingId', title: 'ERPS Settings' },
+            { name: 'code', title: 'bank code' },
+            { name: 'description', title: 'bank name' },
+            { name: 'countryCode', title: 'country' },
+            { name: 'currencyCode', title: 'currency' },
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
-            { name: 'modified', title: 'modified', align: 'center', width: '130px' },
-            { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
         ];
-        
+
+
     }
 
-    
+    async dropDown(options) {
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp bank account'; }
+        if (this.options.label == undefined) { this.options.label = 'erp bank account'; }
+
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record.erpBankAccountId,
+                text: '[' + record.code + '] ' + record.description,
+            });
+        });
+        this.options.items = dropDownItems;
+    }
+
+
 }
 
-module.exports = ErpTraderAccount;
+module.exports = ErpBankAccount;
 
 

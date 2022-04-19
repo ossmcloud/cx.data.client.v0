@@ -70,8 +70,10 @@ const CX_ROLE = {
 }
 
 const CX_MODULE = {
+    STATIC: 'static',
     RETAIL: 'retail',
     PURCHASE: 'purchase',
+
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
@@ -144,6 +146,14 @@ const CX_SHOP = {
 const CX_TRADER_TYPE = {
     CUSTOMER: 'C',
     SUPPLIER: 'S',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+
+const CX_MAP_CONFIG_TYPE = {
+    TRAN_TYPE: 1,
+    GL_MAP: 2,
+    TAX_MAP: 3,
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
@@ -330,8 +340,9 @@ module.exports = {
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
-    CR_CASH_BOOK: CR_CASH_BOOK,
+    CX_MAP_CONFIG_TYPE: CX_MAP_CONFIG_TYPE,
     CX_TRADER_TYPE: CX_TRADER_TYPE,
+    CR_CASH_BOOK: CR_CASH_BOOK,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

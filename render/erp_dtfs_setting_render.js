@@ -17,9 +17,9 @@ class ErpTraderAccount extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'erpProvider', label: 'erp provider', column: 2, readOnly: true },
-                            { name: 'dtfsSettingName', label: 'settings name', column: 1, readOnly: false },
+                            { name: 'dtfsSettingName', label: 'settings name', column: 1 },
                             { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true },
-                            { name: 'dtfsPairingCode', label: 'erp EPoS account code', column: 2, readOnly: false },
+                            { name: 'dtfsPairingCode', label: 'erp EPoS account code', column: 2 },
                             { name: 'dtfsPairedMachineName', label: 'erp EPoS Account name', column: 1, readOnly: true },
                             { name: 'dtfsPairedMachineOS', label: 'force gl segment 2', column: 2, readOnly: true },
                             { name: 'dtfsPairedMachineIP', label: 'force gl segment 3', column: 1, readOnly: true },

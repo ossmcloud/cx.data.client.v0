@@ -19,7 +19,7 @@ class erp_dtfs_setting_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
 
-        query.sql = `select	top 1000 t.*
+        query.sql = `select	distinct top 1000 t.*
                     from	erp_dtfs_setting t
                     inner join erp_shop_setting s on s.dtfsSettingId = t.dtfsSettingId
                     where	s.shopId ${shopFilter} ${shopFilterValue}`;
