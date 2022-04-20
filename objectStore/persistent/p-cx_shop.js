@@ -32,6 +32,11 @@ const _fieldNames = {
     SHOPPOSTCODE: 'shopPostCode',
     SHOPLATITUDE: 'shopLatitude',
     SHOPLONGITUDE: 'shopLongitude',
+    TRANTYPECONFIGID: 'tranTypeConfigId',
+    DEPMAPCONFIGID: 'depMapConfigId',
+    TAXMAPCONFIGID: 'taxMapConfigId',
+    CURRENCYCODE: 'currencyCode',
+    SHOPCOLOR: 'shopColor',
 
 }
 //
@@ -51,6 +56,11 @@ const _fields = {
     shopPostCode: { name: 'shopPostCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     shopLatitude: { name: 'shopLatitude', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
     shopLongitude: { name: 'shopLongitude', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
+    tranTypeConfigId: { name: 'tranTypeConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    depMapConfigId: { name: 'depMapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    currencyCode: { name: 'currencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
+    shopColor: { name: 'shopColor', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
 
 }
 //
@@ -146,6 +156,36 @@ class Persistent_cx_shop extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SHOPLONGITUDE);
     } set shopLongitude(val) {
         super.setValue(_fieldNames.SHOPLONGITUDE, val);
+    }
+
+    get tranTypeConfigId() {
+        return super.getValue(_fieldNames.TRANTYPECONFIGID);
+    } set tranTypeConfigId(val) {
+        super.setValue(_fieldNames.TRANTYPECONFIGID, val);
+    }
+
+    get depMapConfigId() {
+        return super.getValue(_fieldNames.DEPMAPCONFIGID);
+    } set depMapConfigId(val) {
+        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
+    }
+
+    get taxMapConfigId() {
+        return super.getValue(_fieldNames.TAXMAPCONFIGID);
+    } set taxMapConfigId(val) {
+        super.setValue(_fieldNames.TAXMAPCONFIGID, val);
+    }
+
+    get currencyCode() {
+        return super.getValue(_fieldNames.CURRENCYCODE);
+    } set currencyCode(val) {
+        super.setValue(_fieldNames.CURRENCYCODE, val);
+    }
+
+    get shopColor() {
+        return super.getValue(_fieldNames.SHOPCOLOR);
+    } set shopColor(val) {
+        super.setValue(_fieldNames.SHOPCOLOR, val);
     }
 
 

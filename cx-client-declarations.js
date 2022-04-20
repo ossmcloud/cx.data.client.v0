@@ -182,6 +182,7 @@ const CR_CASH_BOOK = {
                 PostingPrep: 'preparing for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors'
             });
         },
         getName: function (value) {
@@ -189,6 +190,7 @@ const CR_CASH_BOOK = {
                 PostingPrep: 'preparing for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors'
             });
         },
         getStyle: function (status, returnObject) {
