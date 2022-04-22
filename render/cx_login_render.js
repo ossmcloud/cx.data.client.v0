@@ -107,7 +107,7 @@ class CXLogin extends RenderBase {
 
     async _list() {
         this.options.columns = [
-            { name: _cxSchema.cx_login.LOGINID, title: '', align: 'center' },
+            { name: _cxSchema.cx_login.LOGINID, title: ' ', align: 'center' },
             { name: _cxSchema.cx_login.MASTERLOGINID, title: 'id', align: 'center' },
             { name: _cxSchema.cx_login.EMAIL, title: 'email' },
             { name: _cxSchema.cx_login.ROLEID, title: 'role', lookUps: _cxConst.CX_ROLE.toList() },

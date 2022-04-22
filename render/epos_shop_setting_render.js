@@ -125,7 +125,7 @@ class EposShopSettingRender extends RenderBase {
             { label: 'epos name', fieldName: 'sen', name: _cxSchema.epos_shop_setting.EPOSSHOPNAME, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         ];
         this.options.columns = [
-            { title: '', name: _cxSchema.epos_shop_setting.SHOPID },
+            { title: ' ', name: _cxSchema.epos_shop_setting.SHOPID },
             { title: 'store', name: 'shopInfo' },
             { title: 'group', name: 'groupInfo' },
             { title: 'epos provider', name: _cxSchema.epos_shop_setting.EPOSPROVIDER },

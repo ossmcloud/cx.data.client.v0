@@ -59,7 +59,7 @@ class ErpTraderAccount extends RenderBase {
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
         ];
         this.options.columns = [
-            { name: 'dtfsSettingId', title: '', align: 'center' },
+            { name: 'dtfsSettingId', title: ' ', align: 'center' },
             { name: 'dtfsSettingName', title: 'settings name' },
             { name: 'erpProvider', title: 'erp provider' },
             { name: 'dtfsPairingStatus', title: 'pairing status' },

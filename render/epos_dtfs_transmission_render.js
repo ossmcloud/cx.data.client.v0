@@ -42,7 +42,7 @@ class EposTransmissionRender extends RenderBase {
             }
         ];
         this.options.columns = [
-            { name: 'transmissionId', title: '', align: 'center' },
+            { name: 'transmissionId', title: ' ', align: 'center' },
             { name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'status', title: 'status', align: 'center', width: '130px', lookUps: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.toList(), },

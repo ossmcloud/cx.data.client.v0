@@ -44,7 +44,7 @@ class RawGetLog extends RenderBase {
             { id: 'cx_success', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'suc', label: 'success', width: '50px', placeHolder: 'either', items: [{ value: '', text: 'either' }, { value: 'true', text: 'true' }, { value: 'false', text: 'false' }] },
         ];
         this.options.columns = [
-            { name: 'getLogId', title: '', align: 'center' },
+            { name: 'getLogId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'getDate', title: 'date', align: 'center', width: '130px' },

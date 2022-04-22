@@ -56,7 +56,7 @@ class ErpTaxAccount extends RenderBase {
             { id: 'cx_tax_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'txd', label: 'Tax Name' },
         ];
         this.options.columns = [
-            { name: 'erpTaxAccountId', title: '', align: 'center' },
+            { name: 'erpTaxAccountId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'code', title: 'Tax code' },
             { name: 'rate', title: 'Tax Rate' },

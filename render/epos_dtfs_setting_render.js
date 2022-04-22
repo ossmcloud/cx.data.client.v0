@@ -149,7 +149,7 @@ class EposDtfsSettingRender extends RenderBase {
         //     { label: 'epos name', fieldName: 'sen', name: _cxSchema.epos_dtfs_setting.EPOSSHOPNAME, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         // ];
         this.options.columns = [
-            { title: '', name: _cxSchema.epos_dtfs_setting.DTFSSETTINGID },
+            { title: ' ', name: _cxSchema.epos_dtfs_setting.DTFSSETTINGID },
             { title: 'name', name: _cxSchema.epos_dtfs_setting.DTFSSETTINGNAME },
             { title: 'epos provider', name: _cxSchema.epos_dtfs_setting.EPOSPROVIDER },
             

@@ -117,7 +117,7 @@ class CRCashBookRender extends RenderBase {
             { label: 'cashbook heading', fieldName: 'cb_h', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
         ];
         this.options.columns = [
-            { name: 'tranId', title: '', align: 'center' },
+            { name: 'tranId', title: ' ', align: 'center' },
 
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, title: 'date', align: 'center', width: '130px' },

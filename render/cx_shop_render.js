@@ -70,7 +70,7 @@ class CxShopRender extends RenderBase {
             },
         ];
         this.options.columns = [
-            { title: '', name: _cxSchema.cx_shop.SHOPID },
+            { title: ' ', name: _cxSchema.cx_shop.SHOPID },
             { title: 'code', name: _cxSchema.cx_shop.SHOPCODE },
             { title: 'name', name: _cxSchema.cx_shop.SHOPNAME },
             { title: 'group', name: 'groupInfo' },

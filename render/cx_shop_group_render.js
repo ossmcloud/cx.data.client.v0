@@ -67,7 +67,7 @@ class CxShopGroupRender extends RenderBase {
 
     async _list() {
         this.options.columns = [
-            { title: '', name: _cxSchema.cx_shop_group.SHOPGROUPID },
+            { title: ' ', name: _cxSchema.cx_shop_group.SHOPGROUPID },
             { title: 'code', name: _cxSchema.cx_shop_group.GROUPCODE },
             { title: 'name', name: _cxSchema.cx_shop_group.GROUPNAME },
             { title: 'color', name: _cxSchema.cx_shop_group.GROUPCOLOR },

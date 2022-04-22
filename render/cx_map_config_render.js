@@ -14,7 +14,7 @@ class CxMapConfig extends RenderBase {
         var newRecord = (this.options.mode == 'new');
         this.options.fields = [
             {
-                group: 'outerInfo', title: '', columnCount: 2, fields: [
+                group: 'outerInfo', title: ' ', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'name', label: 'Name', column: 1 },

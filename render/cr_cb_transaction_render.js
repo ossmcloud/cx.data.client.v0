@@ -42,7 +42,7 @@ class CRCashBookRender extends RenderBase {
             }
         ];
         this.options.columns = [
-            { name: 'cbTranId', title: '', align: 'center' },
+            { name: 'cbTranId', title: ' ', align: 'center' },
             
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'date', title: 'date', align: 'center', width: '130px' },

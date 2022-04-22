@@ -79,7 +79,7 @@ class CXTraderAccount extends RenderBase {
             { id: 'cx_trader_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tn', label: 'trader name' },
         ];
         this.options.columns = [
-            { name: 'traderAccountId', title: '', align: 'center' },
+            { name: 'traderAccountId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'traderType', title: 'type' },
             { name: 'traderCode', title: 'trader code' },

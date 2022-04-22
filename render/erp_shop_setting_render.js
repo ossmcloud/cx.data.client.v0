@@ -58,7 +58,7 @@ class ErpTraderAccount extends RenderBase {
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
         ];
         this.options.columns = [
-            { name: 'shopId', title: '', align: 'center' },
+            { name: 'shopId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'erpProvider', title: 'erp provider' },
             { name: 'erpCompanyName', title: 'erp company name' },

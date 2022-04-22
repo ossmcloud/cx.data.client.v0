@@ -56,7 +56,7 @@ class RawGetRequest extends RenderBase {
             { id: 'cx_status', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'st', label: 'status', width: '100px', items: _cxConst.RAW_GET_REQUEST.STATUS.toList('- all -') },
         ];
         this.options.columns = [
-            { name: 'getRequestId', title: '', align: 'center' },
+            { name: 'getRequestId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'getDate', title: 'date', align: 'center', width: '130px' },

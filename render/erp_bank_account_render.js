@@ -54,7 +54,7 @@ class ErpBankAccount extends RenderBase {
             { id: 'cx_bank_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'bd', label: 'bank name' },
         ];
         this.options.columns = [
-            { name: 'erpBankAccountId', title: '', align: 'center' },
+            { name: 'erpBankAccountId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'code', title: 'bank code' },
             { name: 'description', title: 'bank name' },

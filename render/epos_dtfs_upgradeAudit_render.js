@@ -61,7 +61,7 @@ class RawGetRequest extends RenderBase {
             { id: 'cx_status', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'st', label: 'status', width: '100px', items: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.toList('- all -') },
         ];
         this.options.columns = [
-            { name: TBL.UPGRADEAUDITID, title: '', align: 'center' },
+            { name: TBL.UPGRADEAUDITID, title: ' ', align: 'center' },
             { name: 'dtfsInfo', title: 'dtfs info', width: '200px' },
             { name: TBL.TRANSMISSIONID, title: 'transmission ID', align: 'center', width: '150px' },
             { name: TBL.STATUS, title: 'status', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.toList() },

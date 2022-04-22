@@ -53,7 +53,7 @@ class ErpGLAccount extends RenderBase {
             { id: 'cx_gl_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'gld', label: 'GL description' },
         ];
         this.options.columns = [
-            { name: 'erpGLAccountId', title: '', align: 'center' },
+            { name: 'erpGLAccountId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'code', title: 'GL code' },
             { name: 'costCentre', title: 'GL Sub Code 1' },
