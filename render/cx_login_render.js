@@ -15,7 +15,7 @@ class CXLogin extends RenderBase {
         if (shops.count() > 0) { this.options.allowDelete = false; }
 
         var shopListOptions = await this.listOptions(shops, { listView: true });
-        // remove shop id and other columns 
+        // remove store id and other columns
         shopListOptions.columns.shift();
         shopListOptions.columns.splice(4);
 
@@ -23,7 +23,7 @@ class CXLogin extends RenderBase {
             // NOTE: if user has no allow view we should not get here anyway
             if (this.options.allowView) {
                 shopListOptions.actions = [{ label: 'remove', funcName: 'removeShop' }];
-                shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Shops', function: 'addShop' }];
+                shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Stores', function: 'addShop' }];
             }
         }
         return shopListOptions;
@@ -98,7 +98,7 @@ class CXLogin extends RenderBase {
         if (shopListOptions) {
             this.options.fields.push({
                 group: 'sublists', columnCount: 2, fields: [
-                    { group: 'shops', title: 'shops assigned to this user', column: 1, fields: [shopListOptions] },
+                    { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },
                     { group: 'roles', title: 'roles assigned to this user', column: 2, width: '300px', fields: [roleListOptions] }
                 ]
             });

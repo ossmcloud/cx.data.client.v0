@@ -166,13 +166,13 @@ module.exports = {
         if (svcName == 'dtfs') { svcId = '10'; }
         if (svcName == 'sage200') { svcId = '20'; }
         if (svcName == 'sage50') { svcId = '30'; }
-        // also, each transmission relates to a single shop, so we append the shop id
+        // also, each transmission relates to a single store, so we append the store id
         var transmissionId = svcId + accountId.toString() + shopId.toString();
         // we also use the system ticks we should make it unique
 
         // TODO-IMPORTANT: NOTE:
         //      the tran id has a tick time stamp, 13 digits
-        //      plus we add an identifier for the type of service, the account id and shop id
+        //      plus we add an identifier for the type of service, the account id and store id
         //      in addition the accountId and shopId are SQL index fields so could easily be larger than 19 digits long which is the max for big int
         //      SOLUTIONS:
         //          change the transmissionId field in SQL to varchar

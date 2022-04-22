@@ -14,7 +14,7 @@ class RawGetLog extends RenderBase {
             {
                 group: 'main', title: 'main info', columnCount: 3, fields: [
                     { name: 'getLogId', label: 'id', readOnly: true, column: 1 },
-                    { name: 'shopInfo', label: 'shop', column: 2 },
+                    { name: 'shopInfo', label: 'store', column: 2 },
                     { name: 'transmissionID', label: 'transmission ID', width: '150px', column: 3 },
                 ]
             },
@@ -45,7 +45,7 @@ class RawGetLog extends RenderBase {
         ];
         this.options.columns = [
             { name: 'getLogId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'getDate', title: 'date', align: 'center', width: '130px' },
             { name: 'getModule', title: 'module', align: 'center', width: '70px' },

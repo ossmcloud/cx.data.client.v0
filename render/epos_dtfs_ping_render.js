@@ -16,7 +16,7 @@ class EposDtfsPing extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 1, fields: [
                             { name: 'pingId', label: 'id', readOnly: true, column: 1 },
-                            { name: 'dtfsInfo', label: 'shop', column: 1 }
+                            { name: 'dtfsInfo', label: 'store', column: 1 }
                         ]
                     },
                     {

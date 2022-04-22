@@ -15,7 +15,7 @@ class RawGetRequest extends RenderBase {
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 4, fields: [
-                    //{ name: 'shopInfo', label: 'shop', column: 2 },
+                    //{ name: 'shopInfo', label: 'store', column: 2 },
                     await this.fieldDropDownOptions(_cxSchema.cx_shop, {
                         id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }'
                     }),
@@ -57,7 +57,7 @@ class RawGetRequest extends RenderBase {
         ];
         this.options.columns = [
             { name: 'getRequestId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'transmissionID', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'getDate', title: 'date', align: 'center', width: '130px' },
             { name: 'svcName', title: 'service', align: 'center', width: '9px' },

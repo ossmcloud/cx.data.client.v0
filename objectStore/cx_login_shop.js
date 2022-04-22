@@ -39,11 +39,11 @@ class cx_login_shop_Collection extends _persistentTable.Table {
                 loginShop.shopId = shops[sx];
                 await loginShop.save();
             } catch (error) {
-                errors += `shop id: ${roles[sx]} - error: ${error.message}\n`;
+                errors += `store id: ${roles[sx]} - error: ${error.message}\n`;
             }
         }
         if (errors) {
-            throw new Error('one or more shops could not be added:\n\n' + errors);
+            throw new Error('one or more stores could not be added:\n\n' + errors);
         }
     }
 

@@ -16,7 +16,7 @@ class ErpTraderAccount extends RenderBase {
                 group: 'traderOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
                             { name: 'traderType', label: 'type', column: 2, readOnly: true },
                             { name: 'traderCode', label: 'Code', column: 1, readOnly: true },
                             { name: 'traderName', label: 'Name', column: 2, readOnly: true },
@@ -67,7 +67,7 @@ class ErpTraderAccount extends RenderBase {
         ];
         this.options.columns = [
             { name: 'traderAccountId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'traderType', title: 'type' },
             { name: 'traderCode', title: 'trader code' },
             { name: 'traderName', title: 'trader name' },

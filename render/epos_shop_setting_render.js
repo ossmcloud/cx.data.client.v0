@@ -55,8 +55,8 @@ class EposShopSettingRender extends RenderBase {
             {
                 group: 'eposOuter', title: '', columnCount: 2, fields: [
                     {
-                        group: 'shop', title: 'shop info', columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                        group: 'store', title: 'store info', columnCount: 2, fields: [
+                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
                             { name: 'groupInfo', label: 'group', column: 2, readOnly: true },
                         ]
                     },
@@ -115,18 +115,18 @@ class EposShopSettingRender extends RenderBase {
             this.options.path = '../epos/shopSetting';
         }
 
-        // NOTE: we overwrite permissions because we only want to create this record from a shop and only if not there already
+        // NOTE: we overwrite permissions because we only want to create this record from a store and only if not there already
         this.options.allowNew = false;
 
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),
-            { label: 'shop code', fieldName: 'sc', name: 'shopCode', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+            { label: 'store code', fieldName: 'sc', name: 'shopCode', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'epos code', fieldName: 'sec', name: _cxSchema.epos_shop_setting.EPOSSHOPCODE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'epos name', fieldName: 'sen', name: _cxSchema.epos_shop_setting.EPOSSHOPNAME, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         ];
         this.options.columns = [
             { title: '', name: _cxSchema.epos_shop_setting.SHOPID },
-            { title: 'shop', name: 'shopInfo' },
+            { title: 'store', name: 'shopInfo' },
             { title: 'group', name: 'groupInfo' },
             { title: 'epos provider', name: _cxSchema.epos_shop_setting.EPOSPROVIDER },
             { title: 'epos code', name: _cxSchema.epos_shop_setting.EPOSSHOPCODE },

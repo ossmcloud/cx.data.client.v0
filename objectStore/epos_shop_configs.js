@@ -44,7 +44,7 @@ class epos_shop_configs extends _persistentTable.Record {
             await super.save()
         } catch (error) {
             if (error.message.indexOf('IX_epos_shop_configs') > 0) {
-                throw new Error('the configurations already exists on this shop!');
+                throw new Error('the configurations already exists on this store!');
             } else {
                 throw error;
             }

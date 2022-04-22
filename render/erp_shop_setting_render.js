@@ -7,7 +7,7 @@ const RenderBase = require('./render_base');
 class ErpTraderAccount extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
-        this.title = 'erp shop setting';
+        this.title = 'erp store setting';
     }
 
     async _record() {
@@ -16,7 +16,7 @@ class ErpTraderAccount extends RenderBase {
                 group: 'settingOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
                             { name: 'erpProvider', label: 'erp provider', column: 2, readOnly: true },
                             { name: 'erpCompanyName', label: 'erp company name', column: 1 },
                             { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 2 },
@@ -53,13 +53,13 @@ class ErpTraderAccount extends RenderBase {
     }
 
     async _list() {
-        this.options.recordTitle = 'erp shop settings';
+        this.options.recordTitle = 'erp store settings';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
         ];
         this.options.columns = [
             { name: 'shopId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'erpProvider', title: 'erp provider' },
             { name: 'erpCompanyName', title: 'erp company name' },
             { name: 'erpCustomerAccount', title: 'erp EPoS account code' },

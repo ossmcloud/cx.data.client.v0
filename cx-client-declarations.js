@@ -56,8 +56,8 @@ const CX_ROLE = {
     //
     CASHBOOK: 0,        // cash book only
     USER: 1,            // data entry and little more
-    SUPERVISOR: 3,       // allow posting, handle dtfs, add/remove shops from logins
-    MANAGER: 5,          // handle shop groups, shops, logins
+    SUPERVISOR: 3,       // allow posting, handle dtfs, add/remove stores from logins
+    MANAGER: 5,          // handle store groups, stores, logins
     ADMIN: 7,           // full access
     //
     CX_SUPPORT: 8,     // ossm support login role
@@ -202,11 +202,11 @@ const CR_CASH_BOOK = {
                 color = 'gray';
                 colorRgb = '128,128,128';
             } else if (status == this.New) {
-                color = 'blue';
-                colorRgb = '0,0,255';
+                color = '#ffca3a';
+                colorRgb = '255,202,58';
             } else if (status == this.Pending) {
-                color = 'orange';
-                colorRgb = '255,165,0';
+                color = '#ffca3a';
+                colorRgb = '255,202,58';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Refresh) {
                 color = 'gray';
@@ -215,8 +215,8 @@ const CR_CASH_BOOK = {
                 color = 'gray';
                 colorRgb = '128,128,128';
             } else if (status == this.PostingReady) {
-                color = 'darkturquoise';
-                colorRgb = '0,206,209';
+                color = '#1982c4';
+                colorRgb = '25,130,196';
             } else if (status == this.Posting) {
                 color = 'gray';
                 colorRgb = '128,128,128';
@@ -224,22 +224,22 @@ const CR_CASH_BOOK = {
                 color = 'gray';
                 colorRgb = '128,128,128';
             } else if (status == this.Posted) {
-                color = 'teal';
-                colorRgb = '0,128,128';
+                color = '#8ac926';
+                colorRgb = '138,201,38';
             } else if (status == this.PostingError) {
-                color = '#DF0101';
-                colorRgb = '223,1,1';
+                color = '#ea1e25';
+                colorRgb = '234,30,37';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Error) {
-                color = '#DF0101';
-                colorRgb = '223,1,1';
+                color = '#ea1e25';
+                colorRgb = '234,30,37';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Delete) {
-                color = 'purple';
-                colorRgb = '128,0,128';
+                color = '#53318a';
+                colorRgb = '83,49,138';
             } else if (status == this.DeleteAndPull) {
-                color = 'purple';
-                colorRgb = '128,0,128';
+                color = '#53318a';
+                colorRgb = '83,49,138';
             }
 
             if (returnObject) {

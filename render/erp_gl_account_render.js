@@ -16,7 +16,7 @@ class ErpGLAccount extends RenderBase {
                 group: 'bankOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
                             { name: 'code', label: 'Code', column: 1, readOnly: true },
                             { name: 'costCentre', label: 'Sub Code 1', column: 2, readOnly: true },
                             { name: 'department', label: 'Sub Code 2', column: 3, readOnly: true },
@@ -54,7 +54,7 @@ class ErpGLAccount extends RenderBase {
         ];
         this.options.columns = [
             { name: 'erpGLAccountId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'code', title: 'GL code' },
             { name: 'costCentre', title: 'GL Sub Code 1' },
             { name: 'department', title: 'GL Sub Code 2' },

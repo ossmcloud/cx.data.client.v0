@@ -123,7 +123,7 @@ class EposDtfsSettingRender extends RenderBase {
                 ]
             });
             listsGroup.fields.push({
-                group: 'shops', title: 'epos shops', column: 2, fields: [shopListOptions]
+                group: 'shops', title: 'epos stores', column: 2, fields: [shopListOptions]
             })
         }
 
@@ -139,12 +139,12 @@ class EposDtfsSettingRender extends RenderBase {
 
     async _list() {
        
-        // NOTE: we overwrite permissions because we only want to create this record from a shop and only if not there already
+        // NOTE: we overwrite permissions because we only want to create this record from a store and only if not there already
         this.options.allowNew = false;
 
         // this.options.filters = [
         //     await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),
-        //     { label: 'shop code', fieldName: 'sc', name: 'shopCode', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+        //     { label: 'store code', fieldName: 'sc', name: 'shopCode', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         //     { label: 'epos code', fieldName: 'sec', name: _cxSchema.epos_dtfs_setting.EPOSSHOPCODE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         //     { label: 'epos name', fieldName: 'sen', name: _cxSchema.epos_dtfs_setting.EPOSSHOPNAME, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         // ];

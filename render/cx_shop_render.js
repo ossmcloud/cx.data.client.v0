@@ -21,9 +21,12 @@ class CxShopRender extends RenderBase {
                         ]
                     },
 
-                    
-                    { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
-                    
+                    {
+                        group: 'main1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
+                            { name: 'shopColor', label: 'color', column: 2 },
+                        ]
+                    },
 
                     { name: 'shopAddress', label: 'address', column: 2, validation: '{ "max": 255 }' },
                     { name: 'shopPostCode', label: 'post code', column: 2, validation: '{ "max": 50 }' },
@@ -84,8 +87,8 @@ class CxShopRender extends RenderBase {
     }
 
     async dropDown() {
-        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a shop'; }
-        if (this.options.label == undefined) { this.options.label = 'shop'; }
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a store'; }
+        if (this.options.label == undefined) { this.options.label = 'store'; }
 
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(); }
@@ -120,8 +123,8 @@ module.exports = CxShopRender;
 //         id: options.id || table.type,
 //         path: options.path,
 //         recordName: table.type,
-//         recordTitle: 'shop',
-//         title: options.title || 'shops',
+//         recordTitle: 'store',
+//         title: options.title || 'stores',
 //         primaryKey: table.primaryKeys[0].name,
 //         fixHeader: options.fixHeader || false,
 //         allowNew: options.allowNew || false,
@@ -157,13 +160,13 @@ module.exports = CxShopRender;
 //     var dropDownOptions = {
 //         id: options.id || (table.type + '_dropDown'),
 //         recordName: table.type,
-//         recordTitle: 'shop',
-//         placeHolder: options.placeHolder || 'select a shop',
+//         recordTitle: 'store',
+//         placeHolder: options.placeHolder || 'select a store',
 //         value: options.value,
 //         width: options.width,
 //         inline: options.inline,
 //         fieldName: options.fieldName || table.primaryKeys[0].name,
-//         label: (options.label == undefined) ? 'shop' : options.label,
+//         label: (options.label == undefined) ? 'store' : options.label,
 //         items: [],
 //     };
 //     // load collection if required
@@ -183,15 +186,15 @@ module.exports = CxShopRender;
 
 // async function record(record, options) {
 //     if (!options) { options = {}; }
-   
+
 //     var renderOptions = {
 //         accountId: options.accountId,
 //         id: options.id || record.type,
 //         path: options.path,
 //         listPath: options.listPath,
 //         recordName: record.type,
-//         recordTitle: 'shop',
-//         title: options.title || 'shop form',
+//         recordTitle: 'store',
+//         title: options.title || 'store form',
 //         primaryKey: record.table.primaryKeys[0].name,
 //         editMode: options.editMode || false,
 //         allowEdit: options.allowEdit || false,

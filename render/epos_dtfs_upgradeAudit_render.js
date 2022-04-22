@@ -17,7 +17,7 @@ class RawGetRequest extends RenderBase {
                 group: 'main', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'upgrade info', fields: [
-                            //{ name: 'dtfsInfo', label: 'shop', column: 2 },
+                            //{ name: 'dtfsInfo', label: 'store', column: 2 },
                             await this.fieldDropDownOptions(_cxSchema.epos_dtfs_setting, {
                                 id: _cxSchema.epos_dtfs_upgradeAudit.DTFSSETTINGID, name: 'dtfsSettingId', validation: '{ "mandatory": true }'
                             }),

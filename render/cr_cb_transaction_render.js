@@ -14,7 +14,7 @@ class CRCashBookRender extends RenderBase {
     //         {
     //             group: 'main', title: 'main info', columnCount: 2, inline: true, fields: [
     //                 { name: 'transmissionId', label: 'transmission ID', width: '150px', readOnly: true, column: 1 },
-    //                 { name: 'shopInfo', label: 'shop', column: 1 },
+    //                 { name: 'shopInfo', label: 'store', column: 1 },
     //                 { name: 'message', label: 'message', column: 1 },
     //                 { name: 'status', label: 'status', width: '100px', column: 2, lookUps: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.toList() },
     //                 { name: 'action', label: 'action', width: '100px', column: 2, lookUps: _cxConst.EPOS_DTFS_TRANSMISSION.ACTION.toList() },
@@ -44,7 +44,7 @@ class CRCashBookRender extends RenderBase {
         this.options.columns = [
             { name: 'cbTranId', title: '', align: 'center' },
             
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'date', title: 'date', align: 'center', width: '130px' },
             { name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), },
             { name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), },

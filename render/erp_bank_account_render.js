@@ -16,7 +16,7 @@ class ErpBankAccount extends RenderBase {
                 group: 'bankOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
                             { name: 'code', label: 'Code', column: 1, readOnly: true },
                             { name: 'description', label: 'Name', column: 2, readOnly: true },
                             { name: 'countryCode', label: 'Country', column: 1, readOnly: true },
@@ -55,7 +55,7 @@ class ErpBankAccount extends RenderBase {
         ];
         this.options.columns = [
             { name: 'erpBankAccountId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'code', title: 'bank code' },
             { name: 'description', title: 'bank name' },
             { name: 'countryCode', title: 'country' },

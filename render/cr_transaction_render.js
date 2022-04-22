@@ -16,7 +16,7 @@ class CRCashBookRender extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, inline: true, fields: [
                             { name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 },
-                            { name: 'shopInfo', label: 'shop', column: 1 },
+                            { name: 'shopInfo', label: 'store', column: 1 },
                             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1 },
                             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 },
                             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, label: 'epos tran no', column: 1 },
@@ -119,7 +119,7 @@ class CRCashBookRender extends RenderBase {
         this.options.columns = [
             { name: 'tranId', title: '', align: 'center' },
 
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, title: 'date', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, title: 'date/time', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, title: 'epos tran. no' },

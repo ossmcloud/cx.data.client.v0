@@ -13,6 +13,7 @@ class raw_getLog_Collection extends _persistentTable.Table {
 
     async getDates(params) {
         if (!params) { params = {}; }
+        
         var query = {};
         query.sql = `select shopId, replace(convert(varchar, getDate, 111),'/','-') as [getDate], count(getLogId) as logCount, max(getResponse) as logMessage
                     from raw_getLog
@@ -46,36 +47,42 @@ class raw_getLog_Collection extends _persistentTable.Table {
     async select(params) {
         if (this.cx.cxSvc == true) { return await super.select(); }
 
-        var query = { sql: '', params: [] };
-        query.sql = `
+        if (params.sql) {
+            return await super.select(params);
+
+        } else {
+            var query = { sql: '', params: [] };
+            query.sql = `
                     select  top 1000 l.*, s.shopCode, s.shopName
                     from    raw_getLog l, cx_shop s
                     where   l.shopId = s.shopId
                     and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
                 `
-        if (params.s) {
-            query.sql += ' and l.shopId = @shopId';
-            query.params.push({ name: 'shopId', value: params.s });
-        }
-        if (params.tr) {
-            query.sql += ' and l.transmissionId like @transmissionId';
-            query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
-        }
-        if (params.df) {
-            query.sql += ' and l.getDate >= @from';
-            query.params.push({ name: 'from', value: params.df + ' 00:00:00' });
-        }
-        if (params.dt) {
-            query.sql += ' and l.getDate <= @to';
-            query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
-        }
-        if (params.suc) {
-            query.sql += ' and l.getSuccess = @success';
-            query.params.push({ name: 'success', value: (params.suc === 'true') });
-        }
+            if (params.s) {
+                query.sql += ' and l.shopId = @shopId';
+                query.params.push({ name: 'shopId', value: params.s });
+            }
+            if (params.tr) {
+                query.sql += ' and l.transmissionId like @transmissionId';
+                query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
+            }
+            if (params.df) {
+                query.sql += ' and l.getDate >= @from';
+                query.params.push({ name: 'from', value: params.df + ' 00:00:00' });
+            }
+            if (params.dt) {
+                query.sql += ' and l.getDate <= @to';
+                query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
+            }
+            if (params.suc) {
+                query.sql += ' and l.getSuccess = @success';
+                query.params.push({ name: 'success', value: (params.suc === 'true') });
+            }
 
-        query.sql += ' order by l.created desc';
-        await super.select(query);
+            query.sql += ' order by l.created desc';
+            return await super.select(query);
+            
+        }
     }
 
     async fetch(id) {

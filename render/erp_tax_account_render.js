@@ -16,7 +16,7 @@ class ErpTaxAccount extends RenderBase {
                 group: 'bankOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 3, fields: [
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
+                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
                             { name: 'code', label: 'Code', column: 1, readOnly: true },
                             { name: 'rate', label: 'Rate', column: 2, readOnly: true },
                             { name: 'description', label: 'Name', column: 3, readOnly: true },
@@ -57,7 +57,7 @@ class ErpTaxAccount extends RenderBase {
         ];
         this.options.columns = [
             { name: 'erpTaxAccountId', title: '', align: 'center' },
-            { name: 'shopInfo', title: 'shop', width: '200px' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'code', title: 'Tax code' },
             { name: 'rate', title: 'Tax Rate' },
             { name: 'description', title: 'Tax Name' },

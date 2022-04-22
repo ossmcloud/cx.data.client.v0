@@ -20,7 +20,7 @@ class CxShopGroupRender extends RenderBase {
         if (this.options.mode == 'view') {
             if (this.options.allowEdit) {
                 shopListOptions.actions = [{ label: 'remove', funcName: 'removeShop' }];
-                shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Shop', function: 'addShop' }];
+                shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Store', function: 'addShop' }];
             }
         }
         return shopListOptions;
@@ -58,7 +58,7 @@ class CxShopGroupRender extends RenderBase {
 
         if (shopListOptions) {
             this.options.fields.push({
-                group: 'shops', title: 'shops assigned to this group', fields: [
+                group: 'shops', title: 'stores assigned to this group', fields: [
                     shopListOptions
                 ]
             })
@@ -80,7 +80,7 @@ class CxShopGroupRender extends RenderBase {
 
     async dropDown() {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a group'; }
-        if (this.options.label == undefined) { this.options.label = 'shop group'; }
+        if (this.options.label == undefined) { this.options.label = 'store group'; }
 
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(); }
