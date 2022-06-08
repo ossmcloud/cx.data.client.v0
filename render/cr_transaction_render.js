@@ -3,6 +3,7 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
+const objBuilder = require('cx-data/builder/obj-builder');
 
 class CRCashBookRender extends RenderBase {
     constructor(dataSource, options) {
@@ -150,7 +151,20 @@ class CRCashBookRender extends RenderBase {
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.New, style: 'color: darkturquoise; ' },
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: yellow; background-color: var(--element-bg-color);' }
         ];
-        this.options.allowEditCondition = function (object) {
+
+        this.options.actionsShowFirst = true;
+        this.options.actions = [
+            { label: 'delete', funcName: 'deleteManualTransaction' },
+            { label: 'edit', funcName: 'editManualTransaction' },
+            //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
+        ]
+
+        // this.options.allowEditCondition = function (object) {
+        //     return object.isManual;
+        // }
+
+        this.allowActionCondition = function (action, object) {
+            // TODO: also do not allow if cb processed some-how
             return object.isManual;
         }
 

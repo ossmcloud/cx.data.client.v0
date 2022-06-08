@@ -10,14 +10,14 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         return new cr_cb_transaction(this, defaults);
     }
 
-    
+
     async select(params) {
 
         if (!params) { params = {}; }
 
         if (params.sql) {
             return await super.select(params);
-            
+
         } else {
 
             var query = { sql: '', params: [] };
@@ -89,6 +89,72 @@ class cr_cb_transaction extends _persistentTable.Record {
     get transmissionIdText() { return this.transmissionId.toString(); }
     get dateStr() { return _core.date.format({ date: this.date }) }
 
+
+    async refreshTotals(save) {
+        // TODO: 
+        if (this.status != _declarations.CR_CASH_BOOK.STATUS.New && this.status != _declarations.CR_CASH_BOOK.STATUS.Pending && this.status != _declarations.CR_CASH_BOOK.STATUS.Error) {
+            throw new Error('Cannot refresh cash book totals as status is: ' + this.status);
+        }
+        // IMPORTANT-NOTE: the query to calculate till cash bok totals must be the same as cx.svc.task.v1\Workers\DtfsCRWorker.TransformData_CashBookTotals
+        var query = {
+            sql: `
+                declare @sales money; declare @sales_acc money; declare @lodg money; declare @lodg_acc money; declare @other money;
+
+                select	@sales                          = SUM(case isnull(crTran.customerAccount, '') when '' then crTran.valueGross else 0 end),
+                        @sales_acc                      = SUM(case isnull(crTran.customerAccount, '') when '' then 0 else crTran.valueGross end)
+
+                from	cr_transaction crTran
+                inner   join cr_tran_type_config tranType 
+                            ON tranType.tranTypeConfigId = crTran.tranTypeConfigId
+                inner   join cr_cb_tran_type cbTranType  
+                            ON tranType.cbTranTypeId = cbTranType.cbTranTypeId
+
+                where	cbTranId                        = @cbTranId
+                and		cbTranType.tillDiffImpact       > 0
+                and     crTran.voided                   = 0
+                and     crTran.ignored                  = 0
+                
+                select	@lodg                           = SUM(case isnull(crTran.customerAccount, '') when '' then crTran.valueGross else 0 end),
+                        @lodg_acc                       = SUM(case isnull(crTran.customerAccount, '') when '' then 0 else crTran.valueGross end)
+                from	cr_transaction crTran
+                inner   join cr_tran_type_config tranType 
+                            ON tranType.tranTypeConfigId = crTran.tranTypeConfigId
+                inner   join cr_cb_tran_type cbTranType 
+                            ON tranType.cbTranTypeId = cbTranType.cbTranTypeId
+
+                where	cbTranId                        = @cbTranId
+                and		cbTranType.tillDiffImpact       < 0
+                and     crTran.voided                   = 0
+                and     crTran.ignored                  = 0
+                
+                select  @sales as totalSales, @sales_acc as totalAccountSales, @lodg as totalLodgement, @lodg_acc as totalAccountLodgement, (@lodg - @sales) as tillDifference
+            `
+        }
+
+        query.params = [{ name: 'cbTranId', value: this.id }];
+
+        query.returnFirst = true;
+
+        var result = await this.cx.exec(query);
+        //console.log(result);
+
+        this.totalSales = result.totalSales;
+        this.totalAccountSales = result.totalAccountSales;
+        this.totalLodgement = result.totalLodgement;
+        this.totalAccountLodgement = result.totalAccountLodgement;
+        this.tillDifference = result.tillDifference;
+
+        // @WORKING: move
+        if (this.tillDifference != 0) {
+            this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
+            this.statusMessage = 'Calculated Till difference is not zero!';
+        } else {
+            this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
+            this.statusMessage = 'Pending posting...';
+        }
+
+        if (save) { await this.save(); }
+    }
 
 
     async save() {

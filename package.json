@@ -1,25 +1,25 @@
 {
-  "name": "cx-data-client",
-  "version": "1.0.0",
-  "description": "",
-  "main": "cx-client-context.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ossmcloud/cx.data.client.v0.git"
-  },
-  "author": "peppo",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ossmcloud/cx.data.client.v0/issues"
-  },
-  "homepage": "https://github.com/ossmcloud/cx.data.client.v0#readme",
-  "dependencies": {
-    "cx-core": "git+https://github.com/ossmcloud/cx.core.v0.git",
-    "cx-data": "git+https://github.com/ossmcloud/cx.data.v0.git",
-    "mssql": "^6.3.0",
-    "nodemailer": "^6.4.17"
-  }
+    "name": "cx-data-client",
+    "version": "1.0.0",
+    "description": "",
+    "main": "cx-client-context.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ossmcloud/cx.data.client.v0.git"
+    },
+    "author": "peppo",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ossmcloud/cx.data.client.v0/issues"
+    },
+    "homepage": "https://github.com/ossmcloud/cx.data.client.v0#readme",
+    "dependencies": {
+        "cx-core": "file:../cx.core.v0",
+        "cx-data": "file:../cx.data.v0",
+        "mssql": "^6.3.0",
+        "nodemailer": "^6.4.17"
+    }
 }
