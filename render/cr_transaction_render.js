@@ -10,13 +10,15 @@ class CRCashBookRender extends RenderBase {
     }
 
     async _record() {
+        this.options.allowEdit = this.dataSource.isManual;
+
         this.options.fields = [
             {
                 group: 'mainOuter', title: '', columnCount: 4, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, inline: true, fields: [
                             { name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 },
-                            { name: 'shopInfo', label: 'store', column: 1 },
+                            { name: 'shopInfo', label: 'store', readOnly: true, column: 1 },
                             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1 },
                             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 },
                             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, label: 'epos tran no', column: 1 },
@@ -37,7 +39,7 @@ class CRCashBookRender extends RenderBase {
                         group: 'value', title: 'values info', column: 2, columnCount: 2, inline: true, fields: [
                             { name: _cxSchema.cr_transaction.VALUEGROSS, label: 'gross', column: 1 },
                             { name: _cxSchema.cr_transaction.VALUENET, label: 'net', column: 1 },
-                            { name: _cxSchema.cr_transaction.VALUENET, label: 'tax', column: 1 },
+                            { name: _cxSchema.cr_transaction.VALUETAX, label: 'tax', column: 1 },
                             { name: _cxSchema.cr_transaction.VALUEDISCOUNT, label: 'discount', column: 1 },
                             { name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, label: 'promo', column: 1 },
                             { name: _cxSchema.cr_transaction.CASHBACK, label: 'cashback', column: 1 },
@@ -48,7 +50,7 @@ class CRCashBookRender extends RenderBase {
 
                             { name: _cxSchema.cr_transaction.RAW_VALUEGROSS, label: 'gross (raw)', column: 2 },
                             { name: _cxSchema.cr_transaction.RAW_VALUENET, label: 'net (raw)', column: 2 },
-                            { name: _cxSchema.cr_transaction.RAW_VALUENET, label: 'tax (raw)', column: 2 },
+                            { name: _cxSchema.cr_transaction.RAW_VALUETAX, label: 'tax (raw)', column: 2 },
                             { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNT, label: 'discount (raw)', column: 2 },
                             { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNTPROMO, label: 'promo (raw)', column: 2 },
 
@@ -63,10 +65,10 @@ class CRCashBookRender extends RenderBase {
                             { name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', column: 1 },
                             { name: _cxSchema.cr_transaction.CASHIERID, label: 'cashier id', column: 1 },
                             { name: _cxSchema.cr_transaction.TILLID, label: 'till id', column: 1 },
-                            
+
                             { name: _cxSchema.cr_transaction.VOIDED, label: 'voided', column: 2 },
-                            { name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', column: 2 },
-                            { name: _cxSchema.cr_transaction.ISDUPLICATE, label: 'duplicate', column: 2 },
+                            { name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', readOnly: true, column: 2 },
+                            { name: _cxSchema.cr_transaction.ISDUPLICATE, label: 'duplicate', readOnly: true, column: 2 },
                             { name: _cxSchema.cr_transaction.IGNORED, label: 'ignored', column: 2 },
                             { name: _cxSchema.cr_transaction.PAIDINOUTREASONID, label: 'paid in/out reason', column: 2 },
                             { name: _cxSchema.cr_transaction.PAIDINOUTREASONDESCRIPTION, label: 'paid in/out description', column: 2 },
@@ -78,7 +80,7 @@ class CRCashBookRender extends RenderBase {
                             { name: _cxSchema.cr_transaction.CARDTYPE, label: 'card type', column: 1 },
                             { name: _cxSchema.cr_transaction.CARDNAME, label: 'card name', column: 1 },
                             { name: _cxSchema.cr_transaction.BUNKERED, label: 'bunkered', column: 1 },
-                            
+
                         ]
                     }
                 ]
@@ -142,11 +144,17 @@ class CRCashBookRender extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
         ];
         this.options.highlights = [
+            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Error, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingError, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.New, style: 'color: darkturquoise; ' },
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: yellow; background-color: var(--element-bg-color);' }
         ];
+        this.options.allowEditCondition = function (object) {
+            return object.isManual;
+        }
+
+
     }
 
 }

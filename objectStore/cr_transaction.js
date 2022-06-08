@@ -50,11 +50,16 @@ class cr_transaction_Collection extends _persistentTable.Table {
         }
         if (params.e_tt) {
             query.sql += ` and t.${this.FieldNames.TRANSACTIONTYPE} like @${this.FieldNames.TRANSACTIONTYPE}`;
-            query.params.push({ name: this.FieldNames.TRANSACTIONTYPE, value: params.e_tt + '%'});
+            query.params.push({ name: this.FieldNames.TRANSACTIONTYPE, value: params.e_tt + '%' });
         }
         if (params.e_ts) {
             query.sql += ` and t.${this.FieldNames.TRANSACTIONSUBTYPE} like @${this.FieldNames.TRANSACTIONSUBTYPE}`;
             query.params.push({ name: this.FieldNames.TRANSACTIONSUBTYPE, value: params.e_ts + '%' });
+        }
+
+        if (params.manual) {
+            query.sql += ` and t.${this.FieldNames.ISMANUAL} = @${this.FieldNames.ISMANUAL}`;
+            query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T') ? 1 : 0 });
         }
 
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
