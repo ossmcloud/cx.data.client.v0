@@ -107,8 +107,8 @@ class CXTraderAccount extends RenderBase {
         var dropDownItems = [];
         this.dataSource.each(function (record) {
             dropDownItems.push({
-                value: record.traderAccountId,
-                text: '[' + record.traderCode + ']' + record.traderName,
+                value: record[options.valueField || _cxSchema.cx_traderAccount.TRADERACCOUNTID],
+                text: '[' + record.traderCode + '] ' + record.traderName,
             });
         });
         this.options.items = dropDownItems;

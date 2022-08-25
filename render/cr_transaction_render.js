@@ -10,8 +10,33 @@ class CRCashBookRender extends RenderBase {
         super(dataSource, options);
     }
 
+
+
     async _record() {
         this.options.allowEdit = this.dataSource.isManual;
+
+        var depLookUp = null; var subDepLookUp = null; var taxCodeLookUp = null;
+        var tranTypeLookUp = null; var tranSubTypeLookUp = null;
+        
+
+        if (this.options.allowEdit) {    
+            //
+            tranSubTypeLookUp = [];
+            var tranTypes = this.dataSource.cx.table(_cxSchema.cr_tran_type_config);
+            tranTypeLookUp = await tranTypes.toLookUpList(this.dataSource.shopId);
+            if (this.dataSource.transactionType) { tranSubTypeLookUp = await tranTypes.toLookUpList(this.dataSource.shopId, this.dataSource.transactionType); }
+
+            //
+            subDepLookUp = [];
+            var departments = this.dataSource.cx.table(_cxSchema.cx_map_config_dep);
+            depLookUp = await departments.toLookUpList(this.dataSource.shopId);
+            if (this.dataSource.department) { subDepLookUp = await departments.toLookUpList(this.dataSource.shopId, this.dataSource.department); }
+
+            //
+            var taxCodes = this.dataSource.cx.table(_cxSchema.cx_map_config_tax);
+            taxCodeLookUp = await taxCodes.toLookUpList(this.dataSource.shopId);
+        }
+
 
         this.options.fields = [
             {
@@ -24,8 +49,10 @@ class CRCashBookRender extends RenderBase {
                             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 },
                             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, label: 'epos tran no', column: 1 },
                             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONID, label: 'epos tran id', column: 1 },
-                            { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, label: 'epos tran type', column: 1 },
-                            { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, label: 'sub-type' },
+                            
+                            
+                            { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, label: 'epos tran type', column: 1, lookUps: tranTypeLookUp },
+                            { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, label: 'sub-type', column: 1, lookUps: tranSubTypeLookUp },
 
                             { name: _cxSchema.cr_transaction.REFERENCE1, label: 'reference 1', column: 2 },
                             { name: _cxSchema.cr_transaction.REFERENCE2, label: 'reference 2', column: 2 },
@@ -55,15 +82,24 @@ class CRCashBookRender extends RenderBase {
                             { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNT, label: 'discount (raw)', column: 2 },
                             { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNTPROMO, label: 'promo (raw)', column: 2 },
 
-                            { name: _cxSchema.cr_transaction.TAXCODE, label: 'tax code', column: 2 },
+                            { name: _cxSchema.cr_transaction.TAXCODE, label: 'tax code', lookUps: taxCodeLookUp, column: 2 },
                             { name: _cxSchema.cr_transaction.TAXRATE, label: 'tax rate', column: 2 },
                         ]
                     },
                     {
                         group: 'other', title: 'other info', column: 3, columnCount: 2, inline: true, fields: [
-                            { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, label: 'customer account', column: 1 },
-                            { name: _cxSchema.cr_transaction.DEPARTMENT, label: 'department', column: 1 },
-                            { name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', column: 1 },
+                          //  { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, label: 'customer account', column: 1 },
+                            //await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, { id: 'traderAccountId', name: 'traderCode', column: 1, }),
+                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                                id: _cxSchema.cr_transaction.CUSTOMERACCOUNT, name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, column: 1, dropDownSelectOptions: {
+                                    s: this.dataSource.shopId,
+                                    tt: 'C',
+                                    valueField: _cxSchema.cx_traderAccount.TRADERCODE
+                                }
+                            }),
+
+                            { name: _cxSchema.cr_transaction.DEPARTMENT, label: 'department', lookUps: depLookUp, column: 1 },
+                            { name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', lookUps: subDepLookUp, column: 1 },
                             { name: _cxSchema.cr_transaction.CASHIERID, label: 'cashier id', column: 1 },
                             { name: _cxSchema.cr_transaction.TILLID, label: 'till id', column: 1 },
 

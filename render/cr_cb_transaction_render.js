@@ -43,7 +43,7 @@ class CRCashBookRender extends RenderBase {
         ];
         this.options.columns = [
             { name: 'cbTranId', title: ' ', align: 'center' },
-            
+
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'date', title: 'date', align: 'center', width: '130px' },
             { name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), },
@@ -69,21 +69,13 @@ class CRCashBookRender extends RenderBase {
                 style: _cxConst.CR_CASH_BOOK.STATUS.getStyle(s.value),
             })
         }
-        // this.options.highlights = [
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Error, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingError, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.New, style: 'color: var(--main-color-3); ' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Refresh, style: 'color: grey; ' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Delete, style: 'color: purple; ' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.DeleteAndPull, style: 'color: purple; ' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: orange; background-color: var(--element-bg-color);' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingReady, style: 'color: darkturquoise; ' },
-            
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Transferring, style: 'color: grey; ' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingPrep, style: 'color: grey; ' },
-        //     { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Posting, style: 'color: grey; ' },
-            
-        // ];
+        this.options.highlights.push({
+            column: 'statusMessage',
+            op: '=',
+            value: 'Calculated Till difference is not zero!',
+            style: 'color: indianred;'
+        })
+
     }
 
 }

@@ -65,8 +65,15 @@ class CxMapConfig extends RenderBase {
         ];
 
         this.options.actions = [
-            { label: 'configs', link: '/cr/config/tran-type-mapping?id=', target: '_blank' },
+            //{ label: 'configs', link: '/cr/config/' + this.dataSource.type.replaceAll('_', '-') + 's?id=', target: '_blank'},
+            {
+                label: 'configs', target: '_blank', func: function (object) {
+                    return '/cr/config/cx-map-configs?type=' + object.mapTypeId + '&mid=' + object.mapConfigId;
+                }
+            },
+
             //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
+            
         ]
 
 
