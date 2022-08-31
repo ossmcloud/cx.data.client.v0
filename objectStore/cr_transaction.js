@@ -62,6 +62,12 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T') ? 1 : 0 });
         }
 
+        if (params.declarations) {
+            query.sql += ` and t.${this.FieldNames.ISMANUAL} = 1`;
+            query.sql += ` and tranType.requiresDeclaration = 1`;
+            
+        }
+
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
         return await super.select(query);
     }

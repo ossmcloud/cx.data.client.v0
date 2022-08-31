@@ -12,13 +12,24 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         var query = { sql: '', params: [] };
         query.sql = `select	c.*, ct.code as cbTranType, et.tranName as erpTranType
                     from	cr_tran_type_config c
-                    left outer join cr_cb_tran_type ct ON c.cbTranTypeId = ct.cbTranTypeId
-                    left outer join sys_erp_tran_type et ON c.erpTranTypeId = et.tranTypeId
+                    inner join      cx_shop             s   ON c.mapConfigId = s.tranTypeConfigId
+                    left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
+                    left outer join sys_erp_tran_type   et  ON c.erpTranTypeId = et.tranTypeId
                     where   1 = 1`;
 
         if (params.mid) {
             query.sql += ' and mapConfigId = @mapConfigId';
             query.params.push({ name: 'mapConfigId', value: params.mid });
+        }
+
+        if (params.s) {
+            query.sql += ' and s.shopId = @shopId';
+            query.params.push({ name: 'shopId', value: params.s });
+        }
+
+        if (params.decla) {
+            query.sql += ' and c.requiresDeclaration = @requiresDeclaration';
+            query.params.push({ name: 'requiresDeclaration', value: (params.decla == 'T') ? 1 : 0 });
         }
 
         query.sql += ' order by eposTranType, eposTranSubType';
@@ -41,7 +52,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             where	    s.shopId = @shopId
             and		    tt.cbTranTypeId is not null
             and		    tt.eposTranType = @eposTranType
-            --and		tt.allowEdit = 1
+            and		    tt.allowEdit = 1
             group by    cbTranTypeId, eposTranSubType, [description]
             order by    cbTranTypeId, eposTranSubType`;
 
@@ -52,9 +63,9 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             inner join      cx_shop s ON tt.mapConfigId = s.tranTypeConfigId
             where	        s.shopId = @shopId
             and		        tt.cbTranTypeId is not null
-            --and		    tt.allowEdit = 1
-            group by    cbTranTypeId, eposTranType, cbHeading
-            order by    cbTranTypeId, eposTranType`;
+            and		        tt.allowEdit = 1
+            group by        cbTranTypeId, eposTranType, cbHeading
+            order by        cbTranTypeId, eposTranType`;
         }
 
         var lookUpValues = [{ value: '', text: '' }];
