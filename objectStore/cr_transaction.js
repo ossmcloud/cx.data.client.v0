@@ -62,7 +62,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T') ? 1 : 0 });
         }
 
-        if (params.declarations) {
+        if (params.decla) {
             query.sql += ` and t.${this.FieldNames.ISMANUAL} = 1`;
             query.sql += ` and tranType.requiresDeclaration = 1`;
             

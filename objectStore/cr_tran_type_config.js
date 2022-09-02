@@ -10,12 +10,21 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
     async select(params) {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
-        query.sql = `select	c.*, ct.code as cbTranType, et.tranName as erpTranType
+
+        if (params.s) {
+            query.sql = `select	c.*, ct.code as cbTranType, et.tranName as erpTranType
                     from	cr_tran_type_config c
                     inner join      cx_shop             s   ON c.mapConfigId = s.tranTypeConfigId
                     left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
                     left outer join sys_erp_tran_type   et  ON c.erpTranTypeId = et.tranTypeId
                     where   1 = 1`;
+        } else {
+            query.sql = `select	c.*, ct.code as cbTranType, et.tranName as erpTranType
+                    from	cr_tran_type_config c
+                    left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
+                    left outer join sys_erp_tran_type   et  ON c.erpTranTypeId = et.tranTypeId
+                    where   1 = 1`;
+        }
 
         if (params.mid) {
             query.sql += ' and mapConfigId = @mapConfigId';
@@ -32,7 +41,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             query.params.push({ name: 'requiresDeclaration', value: (params.decla == 'T') ? 1 : 0 });
         }
 
-        query.sql += ' order by eposTranType, eposTranSubType';
+        query.sql += ' order by cbHeading, description';
         await super.select(query);
     }
 
