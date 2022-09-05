@@ -36,9 +36,23 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
 
+        if (params.e_tt) {
+            query.sql += ' and c.eposTranType = @eposTranType';
+            query.params.push({ name: 'eposTranType', value: params.e_tt });
+        }
+
+        if (params.e_st) {
+            query.sql += ' and c.eposTranSubType = @eposTranSubType';
+            query.params.push({ name: 'eposTranSubType', value: params.e_st });
+        }
+
+
         if (params.decla) {
-            query.sql += ' and c.requiresDeclaration = @requiresDeclaration';
-            query.params.push({ name: 'requiresDeclaration', value: (params.decla == 'T') ? 1 : 0 });
+            if (params.decla == 'T') {
+                query.sql += ' and c.requiresDeclaration > 0';
+            } else {
+                query.sql += ' and c.requiresDeclaration = 0';
+            }
         }
 
         query.sql += ' order by cbHeading, description';
@@ -61,7 +75,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             where	    s.shopId = @shopId
             and		    tt.cbTranTypeId is not null
             and		    tt.eposTranType = @eposTranType
-            and		    tt.allowEdit = 1
+            and		    (tt.allowEdit = 1 or tt.requiresDeclaration > 1)
             group by    cbTranTypeId, eposTranSubType, [description]
             order by    cbTranTypeId, eposTranSubType`;
 
@@ -72,7 +86,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             inner join      cx_shop s ON tt.mapConfigId = s.tranTypeConfigId
             where	        s.shopId = @shopId
             and		        tt.cbTranTypeId is not null
-            and		        tt.allowEdit = 1
+            and		        (tt.allowEdit = 1 or tt.requiresDeclaration > 1)
             group by        cbTranTypeId, eposTranType, cbHeading
             order by        cbTranTypeId, eposTranType`;
         }

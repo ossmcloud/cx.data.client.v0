@@ -36,6 +36,11 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.sql += ' and tranType.cbTranTypeId = @cbTranTypeId';
             query.params.push({ name: 'cbTranTypeId', value: params.tt });
         }
+
+        if (params.ttt) {
+            query.sql += ' and tranType.tranTypeConfigId = @tranTypeConfigId';
+            query.params.push({ name: 'tranTypeConfigId', value: params.ttt });
+        }
         if (params.df) {
             query.sql += ' and t.transactionDate >= @from';
             query.params.push({ name: 'from', value: params.df + ' 00:00:00' });
@@ -64,7 +69,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
 
         if (params.decla) {
             query.sql += ` and t.${this.FieldNames.ISMANUAL} = 1`;
-            query.sql += ` and tranType.requiresDeclaration = 1`;
+            query.sql += ` and tranType.requiresDeclaration > 0`;
             
         }
 

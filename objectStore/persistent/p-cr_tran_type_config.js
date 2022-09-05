@@ -59,7 +59,7 @@ const _fields = {
     allowNew: { name: 'allowNew', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     allowEdit: { name: 'allowEdit', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     allowDelete: { name: 'allowDelete', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
-    requiresDeclaration: { name: 'requiresDeclaration', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    requiresDeclaration: { name: 'requiresDeclaration', dataType: 'int', pk: false, identity: false, maxLength: 1, null: true },
     invertSign: { name: 'invertSign', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     ignore: { name: 'ignore', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     duplicateAs: { name: 'duplicateAs', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
