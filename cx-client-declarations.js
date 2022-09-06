@@ -159,6 +159,14 @@ const CX_MAP_CONFIG_TYPE = {
 }
 
 const CR_CASH_BOOK = {
+    REQUIRE_DECLARATION: {
+        NO: 0,
+        YES: 1,
+        FORCE: 2,
+        toList: function () {
+            return enumToList(this);
+        }
+    },
     STATUS: {
         Transferring: 0,           // task is transferring/transforming data from the raw tables
         New: 1,                    // data is ready but never seen/saved by user
@@ -197,7 +205,7 @@ const CR_CASH_BOOK = {
             var color = 'var(--main-color)';
             var colorRgb = 'var(--main-color)';
             var bkgColor = '';
-            
+
             if (status == this.Transferring) {
                 color = 'gray';
                 colorRgb = '128,128,128';

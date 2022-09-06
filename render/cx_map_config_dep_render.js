@@ -11,54 +11,58 @@ class CxMapConfigRender extends RenderBase {
     }
 
     async _record() {
-        // this.options.fields = [
-        //     {
-        //         group: 'main', title: 'main info', columnCount: 3, fields: [
-        //             {
-        //                 group: 'main1', title: '', column: 1, columnCount: 2, inline: true, fields: [
-        //                     { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
-        //                     await this.fieldDropDownOptions(_cxSchema.cx_shop_group, { id: 'shopGroupId', name: 'shopGroupId', column: 2, }),
-        //                 ]
-        //             },
+        var shop = this.dataSource.cx.table(_cxSchema.cx_shop);
+        await shop.select({ ddcfg: this.dataSource.mapConfigId });
+        shop = shop.first();
+        var shopId = (shop) ? shop.shopId : -1;
 
-        //             {
-        //                 group: 'main1', title: '', column: 1, columnCount: 2, inline: true, fields: [
-        //                     { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
-        //                     { name: 'shopColor', label: 'color', column: 2 },
-        //                 ]
-        //             },
+        this.options.fields = [
+            {
+                group: 'mainOuter', title: '', columnCount: 4, fields: [
+                    {
+                        group: 'main', title: 'main info', columnCount: 1, column: 1, inLine: true, fields: [
+                            { name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, label: 'epos department', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, label: 'epos sub department', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'erp', title: 'erp mapping info', columnCount: 1, column: 2, inLine: true, fields: [
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (sales)',
+                                id: _cxSchema.cx_map_config_dep.SALEACCOUNTID, name: _cxSchema.cx_map_config_dep.SALEACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (cogs)',
+                                id: _cxSchema.cx_map_config_dep.COGSACCOUNTID, name: _cxSchema.cx_map_config_dep.COGSACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (purchase)',
+                                id: _cxSchema.cx_map_config_dep.PURCHASEACCOUNTID, name: _cxSchema.cx_map_config_dep.PURCHASEACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (accruals)',
+                                id: _cxSchema.cx_map_config_dep.ACCRUALACCOUNTID, name: _cxSchema.cx_map_config_dep.ACCRUALACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                        ]
+                    },
+                    {
+                        group: 'audit', title: 'audit info', column: 3, columnCount: 1, inLine: true, fields: [
+                            { name: _cxSchema.cx_map_config_dep.CREATEDBY, label: 'created by', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_dep.CREATED, label: 'created on', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_dep.MODIFIEDBY, label: 'modified by', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_dep.MODIFIED, label: 'modified on', column: 1, readOnly: true },
+                        ]
+                    }
+                ]
+            }
+        ];
 
-        //             { name: 'shopAddress', label: 'address', column: 2, validation: '{ "max": 255 }' },
-        //             { name: 'shopPostCode', label: 'post code', column: 2, validation: '{ "max": 50 }' },
-
-        //             { name: 'shopLatitude', label: 'latitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
-        //             { name: 'shopLongitude', label: 'longitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
-
-
-        //         ],
-        //     },
-        //     {
-        //         group: 'audit', title: 'audit info', columnCount: 3, fields: [
-        //             { name: 'status', label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CX_SHOP.STATUS.toList() },
-        //             {
-        //                 group: 'audit1', title: '', column: 2, columnCount: 2, inline: true, fields: [
-        //                     { name: 'created', label: 'created', column: 1, readOnly: true },
-        //                     { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
-        //                 ]
-        //             },
-        //             {
-        //                 group: 'audit2', title: '', column: 3, columnCount: 2, inline: true, fields: [
-        //                     { name: 'modified', label: 'modified', column: 1, readOnly: true },
-        //                     { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
-        //                 ]
-        //             }
-        //         ]
-        //     }
-        // ]
     }
 
-    async _list() {
 
+
+    async _list() {
         this.options.filters = [
             //await this.filterDropDownOptions(_cxSchema.cx_map_config, { fieldName: 'map' }),
             { label: 'department', fieldName: 'dep', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },

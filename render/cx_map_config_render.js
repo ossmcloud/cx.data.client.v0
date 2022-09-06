@@ -67,7 +67,7 @@ class CxMapConfig extends RenderBase {
         this.options.actions = [
             //{ label: 'configs', link: '/cr/config/' + this.dataSource.type.replaceAll('_', '-') + 's?id=', target: '_blank'},
             {
-                label: 'configs', target: '_blank', func: function (object) {
+                label: 'configs', target: '_self', func: function (object) {
                     return '/cr/config/cx-map-configs?type=' + object.mapTypeId + '&mid=' + object.mapConfigId;
                 }
             },

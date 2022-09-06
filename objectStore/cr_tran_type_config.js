@@ -59,6 +59,18 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
+    async toLookUpListByCfg(mapConfigId, addEmpty) {
+        await this.select({ mid: mapConfigId });
+        var lookUpValues = [];
+        if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.tranTypeConfigId,
+                text: `[${rec.eposTranType}/${rec.eposTranSubType}] ${rec.description} (${rec.cbHeading})`
+            })
+        });
+        return lookUpValues;
+    }
 
     async toLookUpList(shopId, tranType) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };

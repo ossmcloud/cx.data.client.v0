@@ -10,6 +10,45 @@ class CxMapConfigRender extends RenderBase {
         super(dataSource, options);
     }
 
+    async _record() {
+        var shop = this.dataSource.cx.table(_cxSchema.cx_shop);
+        await shop.select({ txcfg: this.dataSource.mapConfigId });
+        shop = shop.first();
+        var shopId = (shop) ? shop.shopId : -1;
+
+        this.options.fields = [
+            {
+                group: 'mainOuter', title: '', columnCount: 4, fields: [
+                    {
+                        group: 'main', title: 'main info', columnCount: 1, column: 1, inLine: true, fields: [
+                            { name: _cxSchema.cx_map_config_tax.EPOSTAXCODE, label: 'epos tax code', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_tax.EPOSTAXRATE, label: 'epos tax rate', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_tax.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'erp', title: 'erp mapping info', columnCount: 1, column: 2, inLine: true, fields: [
+                            await this.fieldDropDownOptions(_cxSchema.erp_tax_account, {
+                                label: 'Tax Account',
+                                id: _cxSchema.cx_map_config_tax.TAXACCOUNTID, name: _cxSchema.cx_map_config_tax.TAXACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            
+                        ]
+                    },
+                    {
+                        group: 'audit', title: 'audit info', column: 3, columnCount: 1, inLine: true, fields: [
+                            { name: _cxSchema.cx_map_config_tax.CREATEDBY, label: 'created by', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_tax.CREATED, label: 'created on', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_tax.MODIFIEDBY, label: 'modified by', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_tax.MODIFIED, label: 'modified on', column: 1, readOnly: true },
+                        ]
+                    }
+                ]
+            }
+        ];
+
+    }
+
 
     async _list() {
 

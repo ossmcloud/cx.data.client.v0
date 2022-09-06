@@ -26,11 +26,11 @@ module.exports = {
         TOTALACCOUNTSALES: 'totalAccountSales',
         TOTALACCOUNTLODGEMENT: 'totalAccountLodgement',
         TRANSMISSIONID: 'transmissionId',
-        ERPTRANSMISSIONID: 'erpTransmissionId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ERPTRANSMISSIONID: 'erpTransmissionId',
     },
 
     cr_erp_transaction: {
@@ -241,6 +241,7 @@ module.exports = {
         SALEACCOUNTID: 'saleAccountId',
         PURCHASEACCOUNTID: 'purchaseAccountId',
         ACCRUALACCOUNTID: 'accrualAccountId',
+        COGSACCOUNTID: 'cogsAccountId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
@@ -270,10 +271,6 @@ module.exports = {
         SHOPNAME: 'shopName',
         SHOPADDRESS: 'shopAddress',
         STATUS: 'status',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
         SHOPPOSTCODE: 'shopPostCode',
         SHOPLATITUDE: 'shopLatitude',
         SHOPLONGITUDE: 'shopLongitude',
@@ -282,6 +279,10 @@ module.exports = {
         TAXMAPCONFIGID: 'taxMapConfigId',
         CURRENCYCODE: 'currencyCode',
         SHOPCOLOR: 'shopColor',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cx_shop_group: {
@@ -313,11 +314,11 @@ module.exports = {
         PHONE: 'phone',
         ISWHOLESALER: 'isWholesaler',
         WHOLESALERCODE: 'wholesalerCode',
-        ERPTRADERACCOUNTID: 'erpTraderAccountId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ERPTRADERACCOUNTID: 'erpTraderAccountId',
     },
 
     epos_dtfs_configs: {
@@ -541,6 +542,7 @@ module.exports = {
         TRADERCODE: 'traderCode',
         TRADERNAME: 'traderName',
         COUNTRYCODE: 'countryCode',
+        CURRENCYCODE: 'currencyCode',
         ADDRESS1: 'address1',
         ADDRESS2: 'address2',
         ADDRESS3: 'address3',
@@ -703,7 +705,6 @@ module.exports = {
         TRADERCODE: 'traderCode',
         TRADERNAME: 'traderName',
         COUNTRYCODE: 'countryCode',
-        CURRENCYCODE: 'currencyCode',
         ADDRESS1: 'address1',
         ADDRESS2: 'address2',
         ADDRESS3: 'address3',
@@ -711,6 +712,7 @@ module.exports = {
         POSTCODE: 'postCode',
         CONTACT: 'contact',
         PHONE: 'phone',
+        CURRENCYCODE: 'currencyCode',
     },
 
     raw_getLog: {
@@ -718,14 +720,14 @@ module.exports = {
         GETLOGID: 'getLogId',
         TRANSMISSIONID: 'transmissionID',
         SHOPID: 'shopId',
-        SVCNAME: 'svcName',
         GETDATE: 'getDate',
         GETMODULE: 'getModule',
         GETREFERENCE: 'getReference',
         GETRESPONSE: 'getResponse',
         GETSUCCESS: 'getSuccess',
-        TRANSFERRED: 'transferred',
         CREATED: 'created',
+        TRANSFERRED: 'transferred',
+        SVCNAME: 'svcName',
     },
 
     raw_getRequest: {
@@ -733,13 +735,13 @@ module.exports = {
         GETREQUESTID: 'getRequestId',
         TRANSMISSIONID: 'transmissionID',
         SHOPID: 'shopId',
-        SVCNAME: 'svcName',
         GETDATE: 'getDate',
         GETMODULE: 'getModule',
         GETREFERENCE: 'getReference',
         STATUS: 'status',
         CREATEDBY: 'createdBy',
         CREATED: 'created',
+        SVCNAME: 'svcName',
     },
 
     sys_dbInfo: {

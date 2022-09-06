@@ -19,7 +19,7 @@ class erp_gl_account_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
 
-        query.sql = `select	top 1000 t.*, s.shopCode, s.shopName
+        query.sql = `select	t.*, s.shopCode, s.shopName
                     from	erp_gl_account t
                     inner join cx_shop s on s.shopId = t.shopId
                     where	s.shopId ${shopFilter} ${shopFilterValue}`;

@@ -81,7 +81,7 @@ class ErpTaxAccount extends RenderBase {
         var dropDownItems = [];
         this.dataSource.each(function (record) {
             dropDownItems.push({
-                value: record.erpGLAccountId,
+                value: record.erpTaxAccountId,
                 text: '[' + record.code + '] ' + record.description,
             });
         });

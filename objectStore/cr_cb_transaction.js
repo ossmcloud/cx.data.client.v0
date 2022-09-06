@@ -69,6 +69,33 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+    async fetchByDate(shopId, date) {
+        if (this.cx.cxSvc == true) { return await super.fetch(id); }
+
+        var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
+        
+        query.sql = ` select  top 1 l.*, s.shopCode, s.shopName
+                      from    ${this.type} l, cx_shop s
+                      where   l.${this.FieldNames.SHOPID} = s.shopId
+                      and     l.${this.FieldNames.SHOPID} = @shopId`;
+        
+        if (date) {
+            query.params.push({ name: 'date', value: date });
+            query.sql += `\nand     l.${this.FieldNames.DATE} <= @date`;
+        }
+        query.sql += `\norder by l.date desc`;
+        
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { throw new Error(`${this.type} no cash-book found for this shop [${shopId}]!`); }
+
+        return super.populate(rawRecord);
+    }
+
+   
+
 }
 //
 // ----------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@ const _fieldNames = {
     SALEACCOUNTID: 'saleAccountId',
     PURCHASEACCOUNTID: 'purchaseAccountId',
     ACCRUALACCOUNTID: 'accrualAccountId',
+    COGSACCOUNTID: 'cogsAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -45,6 +46,7 @@ const _fields = {
     saleAccountId: { name: 'saleAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     purchaseAccountId: { name: 'purchaseAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     accrualAccountId: { name: 'accrualAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    cogsAccountId: { name: 'cogsAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -114,6 +116,12 @@ class Persistent_cx_map_config_dep extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ACCRUALACCOUNTID);
     } set accrualAccountId(val) {
         super.setValue(_fieldNames.ACCRUALACCOUNTID, val);
+    }
+
+    get cogsAccountId() {
+        return super.getValue(_fieldNames.COGSACCOUNTID);
+    } set cogsAccountId(val) {
+        super.setValue(_fieldNames.COGSACCOUNTID, val);
     }
 
     get created() {

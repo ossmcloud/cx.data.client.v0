@@ -79,6 +79,18 @@ class cx_shop_Collection extends _persistentTable.Table {
             query.sql += ` and ${this.FieldNames.STATUS} = @${this.FieldNames.STATUS}`;
             query.params.push({ name: this.FieldNames.STATUS, value: params.ss });
         }
+        if (params.ttcfg) {
+            query.sql += ` and ${this.FieldNames.TRANTYPECONFIGID} = @${this.FieldNames.TRANTYPECONFIGID}`;
+            query.params.push({ name: this.FieldNames.TRANTYPECONFIGID, value: params.ttcfg });
+        }
+        if (params.ddcfg) {
+            query.sql += ` and ${this.FieldNames.DEPMAPCONFIGID} = @${this.FieldNames.DEPMAPCONFIGID}`;
+            query.params.push({ name: this.FieldNames.DEPMAPCONFIGID, value: params.ddcfg });
+        }
+        if (params.txcfg) {
+            query.sql += ` and ${this.FieldNames.TAXMAPCONFIGID} = @${this.FieldNames.TAXMAPCONFIGID}`;
+            query.params.push({ name: this.FieldNames.TAXMAPCONFIGID, value: params.txcfg });
+        }
         query.sql += ` order by ${this.FieldNames.SHOPCODE}`;
 
         await super.select(query);
