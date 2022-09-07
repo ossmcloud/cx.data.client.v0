@@ -13,7 +13,7 @@ class CrTranTypeConfigRender extends RenderBase {
     async _record() {
 
         var shop = this.dataSource.cx.table(_cxSchema.cx_shop);
-        await shop.select({ ttcfg: this.dataSource.mapConfigId });
+        await shop.select({ ttcfg: this.dataSource.mapConfigId, order: _cxSchema.cx_shop.SHOPID });
         shop = shop.first();
         var shopId = (shop) ? shop.shopId : -1;
 
@@ -26,15 +26,17 @@ class CrTranTypeConfigRender extends RenderBase {
         var erpTranTypeLookUps = this.dataSource.cx.table(_cxSchema.sys_erp_tran_type);
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('', true);
         
+        var readOnlyIfNotNew = !this.dataSource.isNew();
 
         this.options.fields = [
             {
                 group: 'mainOuter', title: '', columnCount: 4, fields: [
                     {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 1, inline: true, fields: [
-                            { name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, label: 'Type', readOnly: true, column: 1 },
-                            { name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, label: 'Sub Type', readOnly: true, column: 1 },
+                            { name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, label: 'Type', readOnly: readOnlyIfNotNew, column: 1 },
+                            { name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, label: 'Sub Type', readOnly: readOnlyIfNotNew, column: 1 },
                             { name: _cxSchema.cr_tran_type_config.DESCRIPTION, label: 'Description', column: 1 },
+                            { name: _cxSchema.cr_tran_type_config.MAPCONFIGID, label: 'MapConfig', hidden: true, column: 1 },
                         ]
                     },
 
@@ -107,8 +109,8 @@ class CrTranTypeConfigRender extends RenderBase {
         this.options.columns = [
             { title: ' ', name: _cxSchema.cr_tran_type_config.TRANTYPECONFIGID },
             { title: 'map id', name: _cxSchema.cr_tran_type_config.MAPCONFIGID },
-            { title: 'department', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
-            { title: 'sub-department', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE },
+            { title: 'epos tran. type', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
+            { title: 'epos tran. sub-type', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE },
             { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
 
             { title: 'c/b tran. type', name: 'cbTranType' },

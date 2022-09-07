@@ -75,6 +75,13 @@ class CRCashBookRender extends RenderBase {
             value: 'Calculated Till difference is not zero!',
             style: 'color: indianred;'
         })
+        this.options.highlights.push({
+            column: 'tillDifference',
+            op: '!=',
+            value: 0,
+            style: 'color: indianred;'
+        })
+
 
     }
 

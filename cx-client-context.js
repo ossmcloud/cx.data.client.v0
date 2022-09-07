@@ -145,7 +145,7 @@ module.exports = {
         // @WORKING: should I use pool management by user ???
         dbConfig.noPullManager = false;
         dbConfig.config.connectionTimeout = 60000;
-        dbConfig.config.requestTimeout = 60000;
+        dbConfig.config.requestTimeout = 180000;
         dbConfig.config.pool = {
             max: 20,
             min: 0,

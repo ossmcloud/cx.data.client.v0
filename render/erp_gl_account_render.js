@@ -7,7 +7,7 @@ const RenderBase = require('./render_base');
 class ErpGLAccount extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
-        this.title = 'erp bank account';
+        this.title = 'erp gl account';
     }
 
     async _record() {
@@ -17,9 +17,13 @@ class ErpGLAccount extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
-                            { name: 'code', label: 'Code', column: 1, readOnly: true },
-                            { name: 'costCentre', label: 'Sub Code 1', column: 2, readOnly: true },
-                            { name: 'department', label: 'Sub Code 2', column: 3, readOnly: true },
+                            {
+                                group: 'specification', title: '', column: 1, columnCount: 3, inline: true, fields: [
+                                    { name: 'code', label: 'Code', column: 1, readOnly: true },
+                                    { name: 'costCentre', label: 'Sub Code 1', column: 2, readOnly: true },
+                                    { name: 'department', label: 'Sub Code 2', column: 3, readOnly: true },
+                                ]
+                            },
                             { name: 'description', label: 'Name', column: 1, readOnly: true },
                         ]
                     },

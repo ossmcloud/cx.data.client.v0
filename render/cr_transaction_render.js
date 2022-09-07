@@ -23,8 +23,8 @@ class CRCashBookRender extends RenderBase {
             //
             tranSubTypeLookUp = [];
             var tranTypes = this.dataSource.cx.table(_cxSchema.cr_tran_type_config);
-            tranTypeLookUp = await tranTypes.toLookUpList(this.dataSource.shopId);
-            if (this.dataSource.transactionType) { tranSubTypeLookUp = await tranTypes.toLookUpList(this.dataSource.shopId, this.dataSource.transactionType); }
+            tranTypeLookUp = await tranTypes.toLookUpListByShop(this.dataSource.shopId);
+            if (this.dataSource.transactionType) { tranSubTypeLookUp = await tranTypes.toLookUpListByShop(this.dataSource.shopId, this.dataSource.transactionType); }
 
             //
             subDepLookUp = [];
@@ -199,8 +199,12 @@ class CRCashBookRender extends RenderBase {
         //     return object.isManual;
         // }
 
-        this.allowActionCondition = function (action, object) {
+        this.options.allowActionCondition = function (action, object) {
             // TODO: also do not allow if cb processed some-how
+            // if (!object.isManual) { return false; }
+            // var query = { sql: 'select status from cr_cb_transaction where cbTranId=@cbTranId', params: [{ name: 'cbTranId', value: object.cbTranId }] };
+            // var cbStatus = await this.dataSource.cx.exec(query);
+            // return !(cbStatus == _cx.Const.CR_CASH_BOOK.STATUS.New || cbStatus == _cx.Const.CR_CASH_BOOK.STATUS.Pending || cbStatus == _cx.Const.CR_CASH_BOOK.STATUS);
             return object.isManual;
         }
 

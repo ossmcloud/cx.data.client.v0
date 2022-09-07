@@ -72,7 +72,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         return lookUpValues;
     }
 
-    async toLookUpList(shopId, tranType) {
+    async toLookUpListByShop(shopId, tranType) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
 
         var valueFieldName = 'eposTranType';

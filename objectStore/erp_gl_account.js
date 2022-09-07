@@ -45,7 +45,7 @@ class erp_gl_account_Collection extends _persistentTable.Table {
     }
 
     async fetch(id) {
-        var query = { sql: '', params: [{ name: 'erpBankAccountId', value: id }] };
+        var query = { sql: '', params: [{ name: 'erpGLAccountId', value: id }] };
 
         var shopFilter = 'in';
         var shopFilterValue = this.cx.shopList;
@@ -53,7 +53,7 @@ class erp_gl_account_Collection extends _persistentTable.Table {
                     from	erp_gl_account t
                     inner join cx_shop s on s.shopId = t.shopId
                     where	s.shopId ${shopFilter} ${shopFilterValue}
-                    and     t.erpBankAccountId = @erpBankAccountId`;
+                    and     t.erpGLAccountId = @erpGLAccountId`;
 
         query.noResult = 'null';
         query.returnFirst = true;

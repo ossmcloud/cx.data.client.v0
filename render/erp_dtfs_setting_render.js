@@ -18,13 +18,13 @@ class ErpTraderAccount extends RenderBase {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'erpProvider', label: 'erp provider', column: 2, readOnly: true },
                             { name: 'dtfsSettingName', label: 'settings name', column: 1 },
-                            { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true },
-                            { name: 'dtfsPairingCode', label: 'erp EPoS account code', column: 2 },
-                            { name: 'dtfsPairedMachineName', label: 'erp EPoS Account name', column: 1, readOnly: true },
-                            { name: 'dtfsPairedMachineOS', label: 'force gl segment 2', column: 2, readOnly: true },
-                            { name: 'dtfsPairedMachineIP', label: 'force gl segment 3', column: 1, readOnly: true },
-                            { name: 'dtfsPairedVersion', label: 'ERPS Settings', column: 2, readOnly: true },
-                            { name: 'dtfsInfoLastRefresh', label: 'ERPS Settings', column: 2, readOnly: true },
+                            { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
+                            { name: 'dtfsPairingCode', label: 'pairing code', column: 2 },
+                            { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 1, readOnly: true },
+                            { name: 'dtfsPairedMachineOS', label: 'paired machine os', column: 2, readOnly: true },
+                            { name: 'dtfsPairedMachineIP', label: 'paired machine ip', column: 1, readOnly: true },
+                            { name: 'dtfsPairedVersion', label: 'paired erps version', column: 2, readOnly: true },
+                            { name: 'dtfsInfoLastRefresh', label: 'info last refreshed', column: 2, readOnly: true },
 
                         ]
                     },
@@ -62,7 +62,7 @@ class ErpTraderAccount extends RenderBase {
             { name: 'dtfsSettingId', title: ' ', align: 'center' },
             { name: 'dtfsSettingName', title: 'settings name' },
             { name: 'erpProvider', title: 'erp provider' },
-            { name: 'dtfsPairingStatus', title: 'pairing status' },
+            { name: 'dtfsPairingStatus', title: 'pairing status', lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
             { name: 'dtfsPairedMachineName', title: 'paired machine name' },
             { name: 'dtfsPairedMachineOS', title: 'paired machine OS' },
             { name: 'dtfsPairedMachineIP', title: 'paired machine IP' },
@@ -73,6 +73,15 @@ class ErpTraderAccount extends RenderBase {
             { name: 'modified', title: 'modified', align: 'center', width: '130px' },
             { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
         ];
+
+        this.options.highlights = [];
+        this.options.highlights.push({
+            column: 'dtfsPairingStatus',
+            op: '!=',
+            value: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.PAIRED,
+            style: 'color: indianred;'
+        })
+
 
     }
 

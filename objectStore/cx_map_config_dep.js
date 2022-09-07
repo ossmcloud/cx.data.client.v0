@@ -35,8 +35,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             select	eposSubDepartment, 
                 SUBSTRING((eposDescription), CHARINDEX('/', eposDescription + '/') + 1, 99) as eposDescription
                 
-            from	MRP.cx_map_config_dep dep
-            inner join MRP.cx_shop s on dep.mapConfigId = s.depMapConfigId
+            from	cx_map_config_dep dep
+            inner join cx_shop s on dep.mapConfigId = s.depMapConfigId
             where	s.shopId = @shopId
             and		dep.eposDepartment = @eposDepartment
 

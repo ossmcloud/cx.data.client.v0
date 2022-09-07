@@ -116,6 +116,9 @@ class cr_cb_transaction extends _persistentTable.Record {
     get transmissionIdText() { return this.transmissionId.toString(); }
     get dateStr() { return _core.date.format({ date: this.date }) }
 
+    get canEdit() {
+        return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status ==_declarations.CR_CASH_BOOK.STATUS.Error)
+    }
 
     async refreshTotals(save) {
         // TODO: 
@@ -174,7 +177,7 @@ class cr_cb_transaction extends _persistentTable.Record {
         // @WORKING: move
         if (this.tillDifference != 0) {
             this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
-            this.statusMessage = 'Calculated Till difference is not zero!';
+            this.statusMessage = 'calculated till difference is not zero!';
         } else {
             this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
             this.statusMessage = 'Pending posting...';

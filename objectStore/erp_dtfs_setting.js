@@ -53,6 +53,20 @@ class erp_dtfs_setting_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+    async toLookUpList(addEmpty) {
+        await this.select()
+
+        var dropDownItems = [];
+        if (addEmpty) { dropDownItems.push({ vale: '', text: '' }); }
+        this.each(function (record) {
+            dropDownItems.push({
+                value: record.dtfsSettingId,
+                text: record.dtfsSettingName,
+            });
+        });
+        return dropDownItems;
+    }
+
 }
 //
 // ----------------------------------------------------------------------------------------

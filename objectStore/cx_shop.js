@@ -91,8 +91,11 @@ class cx_shop_Collection extends _persistentTable.Table {
             query.sql += ` and ${this.FieldNames.TAXMAPCONFIGID} = @${this.FieldNames.TAXMAPCONFIGID}`;
             query.params.push({ name: this.FieldNames.TAXMAPCONFIGID, value: params.txcfg });
         }
-        query.sql += ` order by ${this.FieldNames.SHOPCODE}`;
-
+        if (params.order) {
+            query.sql += ` order by ${params.order}`;   
+        } else {
+            query.sql += ` order by ${this.FieldNames.SHOPCODE}`;
+        }
         await super.select(query);
     }
 

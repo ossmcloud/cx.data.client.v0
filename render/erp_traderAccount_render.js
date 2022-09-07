@@ -7,7 +7,7 @@ const RenderBase = require('./render_base');
 class ErpTraderAccount extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
-        this.title = 'erp account';
+        this.title = 'erp trader account';
     }
 
     async _record() {

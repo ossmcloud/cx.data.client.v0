@@ -3,6 +3,7 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
+const cxSqlPoolManager = require('cx-data/core/cx-sql-pool-manager');
 
 class CxShopRender extends RenderBase {
 
@@ -11,13 +12,19 @@ class CxShopRender extends RenderBase {
     }
 
     async _record() {
+
+        var configLookUp_tranType = await this.dataSource.cx.table(_cxSchema.cx_map_config).toLookUpList(_cxConst.CX_MAP_CONFIG_TYPE.TRAN_TYPE, true);
+        var configLookUp_depMap = await this.dataSource.cx.table(_cxSchema.cx_map_config).toLookUpList(_cxConst.CX_MAP_CONFIG_TYPE.GL_MAP, true);
+        var configLookUp_taxMap = await this.dataSource.cx.table(_cxSchema.cx_map_config).toLookUpList(_cxConst.CX_MAP_CONFIG_TYPE.TAX_MAP, true);
+
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 3, fields: [
                     {
-                        group: 'main1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        group: 'main1', title: '', column: 1, columnCount: 3, inline: true, fields: [
                             { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
-                            await this.fieldDropDownOptions(_cxSchema.cx_shop_group, { id: 'shopGroupId', name: 'shopGroupId', column: 2, }),
+                            { name: 'currencyCode', label: 'currency', column: 2, validation: '{ "mandatory": true, "max": 3  }', readOnly: (this.dataSource.id > 0) },
+                            await this.fieldDropDownOptions(_cxSchema.cx_shop_group, { id: 'shopGroupId', name: 'shopGroupId', column: 3, }),
                         ]
                     },
 
@@ -36,6 +43,13 @@ class CxShopRender extends RenderBase {
                     
                     
                 ],
+            },
+            {
+                group: 'config', title: 'map configurations', columnCount: 3, fields: [
+                    { name: 'tranTypeConfigId', label: 'Transaction Types', column: 1, lookUps: configLookUp_tranType },
+                    { name: 'depMapConfigId', label: 'Department Mappings', column: 2, lookUps: configLookUp_depMap },
+                    { name: 'taxMapConfigId', label: 'Tax Mappings', column: 3, lookUps: configLookUp_taxMap },
+                ]
             },
             {
                 group: 'audit', title: 'audit info', columnCount: 3, fields: [

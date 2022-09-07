@@ -28,6 +28,20 @@ class cx_map_config_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
+
+    async toLookUpList(type, addEmpty) {
+        await this.select({ mt: type })
+        
+        var dropDownItems = [];
+        if (addEmpty) { dropDownItems.push({ vale: '', text: '' }); }
+        this.each(function (record) {
+            dropDownItems.push({
+                value: record.mapConfigId,
+                text: '[' + record.mapTypeId + '] ' + record.name,
+            });
+        });
+        return dropDownItems;
+    }
     
 }
 //
