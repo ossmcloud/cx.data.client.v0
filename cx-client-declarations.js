@@ -178,6 +178,7 @@ const CR_CASH_BOOK = {
         Posting: 6,                // erps.exe has to  pick up the stuff to post
         PostingRunning: 7,         // erps.exe has picked up the stuff to post
         Posted: 8,                 // posted successfully
+        PostingUndo: 9,            // reset to pending
 
         Error: 97,                 // something went wrong while transferring or during user stuff
         PostingError: 98,          // error while posting

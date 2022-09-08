@@ -130,7 +130,8 @@ class CrTranTypeConfigRender extends RenderBase {
         ];
 
         this.options.highlights = [
-            { column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true, style: 'color: gray; font-style: italic;' }
+            { column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true, style: 'color: gray; font-style: italic;' },
+            { column: _cxSchema.cr_tran_type_config.CBTRANTYPEID, op: '<', value: 0, style: 'color: teal; font-style: italic;' }
         ];
 
     }

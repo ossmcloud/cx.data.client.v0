@@ -70,7 +70,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
         if (params.decla) {
             query.sql += ` and t.${this.FieldNames.ISMANUAL} = 1`;
             query.sql += ` and tranType.requiresDeclaration > 0`;
-            
+
         }
 
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
@@ -113,7 +113,23 @@ class cr_transaction extends _persistentTable.Record {
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
     async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        if (this.isManual) {
+            // we must have a value gross provided, zero will do (not sure why) but it has to be passed
+            if (this.valueGross == null || this.valueGross == undefined) {
+                this.brokenRules.push({
+                    field: this.getField(this.FieldNames.VALUEGROSS),
+                    message: 'null value not allowed'
+                });
+            }
+
+            // NOTE: if there is no customer associated with the transaction the system wants a null
+            if (this.customerAccount == '') { this.customerAccount = null; }
+
+            // populate tax and net if not passed
+            if (!this.valueTax) { this.valueTax = 0; }
+            if (!this.valueNet) { this.valueNet = parseFloat(this.valueGross) - parseFloat(this.valueTax); }
+        }
+
         await super.save()
     }
 }

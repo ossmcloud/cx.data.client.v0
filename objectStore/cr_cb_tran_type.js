@@ -19,6 +19,7 @@ class cr_cb_tran_type_Collection extends _persistentTable.Table {
                 text: `${rec.code} (${rec.tillDiffImpact})`
             })
         });
+
         return lookUpValues;
     }
 }
