@@ -4,7 +4,7 @@ const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
-class EposDtfsPing extends RenderBase {
+class ErpDtfsPing extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
     }
@@ -37,7 +37,7 @@ class EposDtfsPing extends RenderBase {
 
     async _list() {
         this.options.filters = [
-            await this.filterDropDownOptions(_cxSchema.epos_dtfs_setting, { fieldName: 'ss' }),
+            await this.filterDropDownOptions(_cxSchema.erp_dtfs_setting, { fieldName: 'ss' }),
             { id: 'cx_ping_ip', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ip', label: 'ping IP', width: '70px' },
             { id: 'cx_date_from', inputType: _cxConst.RENDER.CTRL_TYPE.DATE, fieldName: 'df', label: 'from', width: '130px' },
             { id: 'cx_date_to', inputType: _cxConst.RENDER.CTRL_TYPE.DATE, fieldName: 'dt', label: 'to', width: '130px' },
@@ -52,7 +52,7 @@ class EposDtfsPing extends RenderBase {
     }
 }
 
-module.exports = EposDtfsPing;
+module.exports = ErpDtfsPing;
 
 
 

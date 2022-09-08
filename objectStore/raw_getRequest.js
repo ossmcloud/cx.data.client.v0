@@ -45,6 +45,11 @@ class raw_getRequest_Collection extends _persistentTable.Table {
             query.params.push({ name: 'status', value: params.st });
         }
 
+        if (params.svc) {
+            query.sql += ' and l.svcName = @svcName';
+            query.params.push({ name: 'svcName', value: params.svc });
+        }
+
         query.sql += ' order by l.created desc';
         await super.select(query);
     }

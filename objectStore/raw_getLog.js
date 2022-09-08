@@ -78,6 +78,10 @@ class raw_getLog_Collection extends _persistentTable.Table {
                 query.sql += ' and l.getSuccess = @success';
                 query.params.push({ name: 'success', value: (params.suc === 'true') });
             }
+            if (params.svc) {
+                query.sql += ' and l.svcName = @svcName';
+                query.params.push({ name: 'svcName', value: params.svc });
+            }
 
             query.sql += ' order by l.created desc';
             return await super.select(query);
