@@ -135,6 +135,7 @@ class cr_tran_type_config extends _persistentTable.Record {
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        
         await super.save()
     }
 }

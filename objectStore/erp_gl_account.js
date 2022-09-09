@@ -22,7 +22,8 @@ class erp_gl_account_Collection extends _persistentTable.Table {
         query.sql = `select	top 1000 t.*, s.shopCode, s.shopName
                     from	erp_gl_account t
                     inner join cx_shop s on s.shopId = t.shopId
-                    where	s.shopId ${shopFilter} ${shopFilterValue}`;
+                    where	s.shopId ${shopFilter} ${shopFilterValue}
+                    AND     isnull(t.costCentre, '') = ''`;
 
         // if (params.tt) {
         //     query.sql += ' and t.traderType = @traderType';

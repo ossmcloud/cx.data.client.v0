@@ -61,23 +61,18 @@ class CrTranTypeConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp configurations', column: 3, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 1, lookUps: erpTranTypeLookUps },
-                            //{ name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, label: 'A/C Ref', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
-                                id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: {
-                                    s: shopId,
-                                    tt: 'C',
-                                    //valueField: _cxSchema.cx_traderAccount.TRADERCODE
-                                }
+                                id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
                             }),
-                            //{ name: _cxSchema.cr_tran_type_config.ERPGLACCOUNTID, label: 'ERP GL Account', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 id: _cxSchema.cr_tran_type_config.ERPGLACCOUNTID, name: _cxSchema.cr_tran_type_config.ERPGLACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
-                            //{ name: _cxSchema.cr_tran_type_config.ERPCBACCOUNTID, label: 'ERP CB Account', column: 1 },
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'erp CONTRA GL account', id: _cxSchema.cr_tran_type_config.ERPGLCONTRAACCOUNTID, name: _cxSchema.cr_tran_type_config.ERPGLCONTRAACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
                             await this.fieldDropDownOptions(_cxSchema.erp_bank_account, {
                                 id: _cxSchema.cr_tran_type_config.ERPCBACCOUNTID, name: _cxSchema.cr_tran_type_config.ERPCBACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
-                            //{ name: _cxSchema.cr_tran_type_config.ERPTAXACCOUNTID, label: 'ERP Tax Account', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.erp_tax_account, {
                                 id: _cxSchema.cr_tran_type_config.ERPTAXACCOUNTID, name: _cxSchema.cr_tran_type_config.ERPTAXACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),

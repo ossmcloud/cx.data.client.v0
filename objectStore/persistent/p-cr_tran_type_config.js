@@ -37,11 +37,13 @@ const _fieldNames = {
     TRADERACCOUNT: 'traderAccount',
     ERPGLACCOUNTID: 'erpGLAccountId',
     ERPCBACCOUNTID: 'erpCBAccountId',
+    ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
     ERPTAXACCOUNTID: 'erpTaxAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    
 
 }
 //
@@ -59,18 +61,20 @@ const _fields = {
     allowNew: { name: 'allowNew', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     allowEdit: { name: 'allowEdit', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     allowDelete: { name: 'allowDelete', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
-    requiresDeclaration: { name: 'requiresDeclaration', dataType: 'int', pk: false, identity: false, maxLength: 1, null: true },
+    requiresDeclaration: { name: 'requiresDeclaration', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     invertSign: { name: 'invertSign', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     ignore: { name: 'ignore', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     duplicateAs: { name: 'duplicateAs', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     traderAccount: { name: 'traderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpGLAccountId: { name: 'erpGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTaxAccountId: { name: 'erpTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    
 
 }
 //
@@ -192,6 +196,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         super.setValue(_fieldNames.ERPGLACCOUNTID, val);
     }
 
+    get erpGLContraAccountId() {
+        return super.getValue(_fieldNames.ERPGLCONTRAACCOUNTID);
+    } set erpGLContraAccountId(val) {
+        super.setValue(_fieldNames.ERPGLCONTRAACCOUNTID, val);
+    }
+
     get erpCBAccountId() {
         return super.getValue(_fieldNames.ERPCBACCOUNTID);
     } set erpCBAccountId(val) {
@@ -228,6 +238,7 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
+  
 
 }
 //

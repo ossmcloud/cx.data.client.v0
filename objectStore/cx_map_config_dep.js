@@ -79,7 +79,7 @@ class cx_map_config_dep extends _persistentTable.Record {
     };
 
     async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        
         await super.save()
     }
 }

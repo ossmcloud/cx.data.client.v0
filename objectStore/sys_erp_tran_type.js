@@ -16,7 +16,7 @@ class sys_erp_tran_type_Collection extends _persistentTable.Table {
         super.each(function (rec) {
             lookUpValues.push({
                 value: rec.tranTypeId,
-                text: `[${rec.tranCode}] ${rec.tranName}`
+                text: `[${rec.erpProvider} : ${rec.tranCode}] ${rec.tranName}`
             })
         });
         return lookUpValues;

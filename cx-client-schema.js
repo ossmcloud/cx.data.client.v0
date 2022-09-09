@@ -127,6 +127,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
     },
 
     cr_transaction: {
