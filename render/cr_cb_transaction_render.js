@@ -70,16 +70,13 @@ class CRCashBookRender extends RenderBase {
             })
         }
         this.options.highlights.push({
-            column: 'statusMessage',
-            op: '=',
-            value: 'Calculated Till difference is not zero!',
-            style: 'color: indianred;'
-        })
-        this.options.highlights.push({
             column: 'tillDifference',
-            op: '!=',
-            value: 0,
-            style: 'color: indianred;'
+            customStyle: function (object, value, highlight) {
+                if (value == 0) { return; }
+                if (object.status == _cxConst.CR_CASH_BOOK.STATUS.New || object.status == _cxConst.CR_CASH_BOOK.STATUS.Pending || object.status == _cxConst.CR_CASH_BOOK.STATUS.PostingReady) {
+                    return 'background-color: rgba(255,0,0,0.10);'
+                }
+            }
         })
 
 
