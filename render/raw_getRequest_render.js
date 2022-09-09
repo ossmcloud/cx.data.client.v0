@@ -26,7 +26,7 @@ class RawGetRequest extends RenderBase {
                 group: 'get', title: 'get info', columnCount: 4, fields: [
                     { name: 'getDate', label: 'date', align: 'center', type: 'inputDate', column: 1, validation: '{ "mandatory": true }' },
                     { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.CX_MODULE.toList(true), },
-                    { name: 'svcName', label: 'service', align: 'center', column: 1, readOnly: true, value: this.options.query.svc },
+                    { name: 'svcName', label: 'service', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.SERVICES.toList(true)  },
                     { name: 'getReference', label: 'message', column: 2, readOnly: true },
                     { name: 'status', label: 'status', column: 2, lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList(), readOnly: true },
                 ]

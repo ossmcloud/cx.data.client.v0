@@ -54,7 +54,7 @@ class raw_getRequest_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
-    async fetch(id) {
+    async fetch(id, defaults) {
         var query = { sql: '', params: [{ name: 'id', value: id }] };
         query.sql = `
                     select  l.*, s.shopCode, s.shopName
@@ -66,7 +66,7 @@ class raw_getRequest_Collection extends _persistentTable.Table {
         query.returnFirst = true;
 
         var rawRecord = await this.db.exec(query);
-        if (!rawRecord) { return this.createNew(); }
+        if (!rawRecord) { return this.createNew(defaults); }
 
         return super.populate(rawRecord);
     }

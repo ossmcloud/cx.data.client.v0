@@ -1,7 +1,5 @@
 'use strict'
 
-const { getValue } = require("cx-data/schema/cx-record-field");
-
 // TODO: move to core sdk
 function enumToList(obj, addEmpty, aliases) {
     if (!aliases) { aliases = {}; }
@@ -315,8 +313,10 @@ const EPOS_DTFS_UPGRADE_AUDIT = {
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     },
 
+    // TODO: move to own enum
     SERVICES: {
         DTFS: 'dtfs',
+        ERPS: 'erps',
         //
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     }
