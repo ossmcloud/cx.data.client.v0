@@ -33,6 +33,7 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.MANAGER);
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.ADMIN);
     }
 
     

@@ -97,6 +97,7 @@ class RenderBase {
         this.options.allowEdit = permissions.allowEdit;
         this.options.allowNew = permissions.allowNew;
         this.options.allowView = permissions.allowView;
+        this.options.allowDelete = permissions.allowDelete;
     }
 
     async record(request, h) {
