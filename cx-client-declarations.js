@@ -165,6 +165,20 @@ const CR_CASH_BOOK = {
             return enumToList(this);
         }
     },
+    STATE: {
+        Pending: [1, 2],
+        Processing: [0, 3, 4, 99, 100],
+        PendingPost: [5],
+        ProcessingPost: [6, 7, 9],
+        Posted: [8],
+        Error: [97, 98],
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                PendingPost: 'pending posting',
+                ProcessingPost: 'posting running',
+            });
+        },
+    },
     STATUS: {
         Transferring: 0,           // task is transferring/transforming data from the raw tables
         New: 1,                    // data is ready but never seen/saved by user
@@ -189,7 +203,8 @@ const CR_CASH_BOOK = {
                 PostingPrep: 'preparing for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
-                PostingError: 'posting errors'
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
             });
         },
         getName: function (value) {
@@ -197,7 +212,8 @@ const CR_CASH_BOOK = {
                 PostingPrep: 'preparing for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
-                PostingError: 'posting errors'
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
             });
         },
         getStyle: function (status, returnObject) {

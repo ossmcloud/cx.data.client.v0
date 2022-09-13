@@ -36,14 +36,29 @@ class CRCashBookRender extends RenderBase {
             { label: 'transmission', fieldName: 'tr', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-            {
+            { label: 'batch', fieldName: 'batch', type: _cxConst.RENDER.CTRL_TYPE.TEXT, hidden: true },
+        ];
+
+        if (this.options.query.batch == 'T') {
+            this.options.title = 'cash-book batch processing';
+            this.options.showButtons = [];
+            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'check all', function: 'checkAll' });
+            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'uncheck all', function: 'uncheckAll' });
+            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'submit for posting', function: 'submitForPosting' });
+        } else {
+            this.options.filters.push({
+                label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
+                items: _cxConst.CR_CASH_BOOK.STATE.toList('- all -'),
+            });
+            this.options.filters.push({
                 label: 'status', fieldName: 'st', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
                 items: _cxConst.CR_CASH_BOOK.STATUS.toList('- all -'),
-            }
-        ];
+            });
+        }
+
+        
         this.options.columns = [
             { name: 'cbTranId', title: ' ', align: 'center' },
-
             { name: 'shopInfo', title: 'store', width: '200px' },
             { name: 'date', title: 'date', align: 'center', width: '130px' },
             { name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), },
@@ -53,10 +68,16 @@ class CRCashBookRender extends RenderBase {
             { name: 'tillDifference', title: 'diff', align: 'right', width: '90px', },
             { name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', },
             { name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', },
-
             { name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'created', title: 'created', align: 'center', width: '130px' },
+          
         ];
+
+
+        if (this.options.query.batch == 'T') {
+            this.options.columns.splice(1, 0, { name: 'check', title: 'post', width: '30px', type: 'check' });
+        }
+
 
         this.options.highlights = [];
         var statuses = _cxConst.CR_CASH_BOOK.STATUS.toList();

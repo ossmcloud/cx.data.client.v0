@@ -42,9 +42,17 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                 query.sql += ' and l.date <= @to';
                 query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
             }
-            if (params.st) {
-                query.sql += ' and l.status = @status';
-                query.params.push({ name: 'status', value: params.st });
+            if (params.batch == 'T') {
+                query.sql += ' and l.status in (1, 2)';
+            } else {
+                if (params.st) {
+                    query.sql += ' and l.status = @status';
+                    query.params.push({ name: 'status', value: params.st });
+                }
+                if (params.sta) {
+                    query.sql += ' and l.status in (' + params.sta + ')';
+                    //query.params.push({ name: 'statuses', value: [1,2] });
+                }
             }
             query.sql += ' order by l.date desc';
             return await super.select(query);
@@ -73,18 +81,18 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         if (this.cx.cxSvc == true) { return await super.fetch(id); }
 
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
-        
+
         query.sql = ` select  top 1 l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
                       and     l.${this.FieldNames.SHOPID} = @shopId`;
-        
+
         if (date) {
             query.params.push({ name: 'date', value: date });
             query.sql += `\nand     l.${this.FieldNames.DATE} <= @date`;
         }
         query.sql += `\norder by l.date desc`;
-        
+
         query.noResult = 'null';
         query.returnFirst = true;
 
@@ -94,7 +102,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
-   
+
 
 }
 //
@@ -117,7 +125,7 @@ class cr_cb_transaction extends _persistentTable.Record {
     get dateStr() { return _core.date.format({ date: this.date }) }
 
     get canEdit() {
-        return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status ==_declarations.CR_CASH_BOOK.STATUS.Error)
+        return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status == _declarations.CR_CASH_BOOK.STATUS.Error)
     }
 
     async refreshTotals(save) {
