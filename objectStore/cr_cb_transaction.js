@@ -43,7 +43,18 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                 query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
             }
             if (params.batch == 'T') {
-                query.sql += ' and l.status in (1, 2)';
+                var allowedStatuses = [-1];
+                if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Refresh || params.tst == _declarations.CR_CASH_BOOK.STATUS.PostingPrep) {
+                    allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.New);
+                    allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.Pending);
+                    if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Refresh) { allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.Error); }
+
+                } else if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Posting || params.tst == _declarations.CR_CASH_BOOK.STATUS.Pending) {
+                    allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.PostingReady);
+                    
+                    
+                }
+                query.sql += ' and l.status in (' + allowedStatuses.join(',') + ')';
             } else {
                 if (params.st) {
                     query.sql += ' and l.status = @status';

@@ -40,11 +40,19 @@ class CRCashBookRender extends RenderBase {
         ];
 
         if (this.options.query.batch == 'T') {
+            this.options.filters.push({ label: 'target status (value)', fieldName: 'tst',   type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true });
+            this.options.filters.push({ label: 'target status', fieldName: 'target_status', value: _cxConst.CR_CASH_BOOK.STATUS.getName(this.options.query.tst), readOnly: true });
+            // this.options.filters.push({
+            //     label: 'target status', fieldName: 'tst', width: '200px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
+            //     lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(),
+            //     readOnly: true
+            // });
+
             this.options.title = 'cash-book batch processing';
             this.options.showButtons = [];
             this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'check all', function: 'checkAll' });
             this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'uncheck all', function: 'uncheckAll' });
-            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'submit for posting', function: 'submitForPosting' });
+            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
         } else {
             this.options.filters.push({
                 label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
