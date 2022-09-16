@@ -30,6 +30,8 @@ class CRCashBookRender extends RenderBase {
 
     async _list() {
 
+        var isBatchProcessing = (this.options.query && this.options.query.batch == 'T');
+
         this.options.filters = [
             //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
@@ -39,7 +41,7 @@ class CRCashBookRender extends RenderBase {
             { label: 'batch', fieldName: 'batch', type: _cxConst.RENDER.CTRL_TYPE.TEXT, hidden: true },
         ];
 
-        if (this.options.query.batch == 'T') {
+        if (isBatchProcessing) {
             this.options.filters.push({ label: 'target status (value)', fieldName: 'tst',   type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true });
             this.options.filters.push({ label: 'target status', fieldName: 'target_status', value: _cxConst.CR_CASH_BOOK.STATUS.getName(this.options.query.tst), readOnly: true });
             // this.options.filters.push({
@@ -81,10 +83,7 @@ class CRCashBookRender extends RenderBase {
           
         ];
 
-
-        if (this.options.query.batch == 'T') {
-            this.options.columns.splice(1, 0, { name: 'check', title: 'post', width: '30px', type: 'check' });
-        }
+        if (isBatchProcessing) { this.options.columns.splice(1, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
 
 
         this.options.highlights = [];
