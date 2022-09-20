@@ -57,6 +57,8 @@ class CXLogin extends RenderBase {
         }
 
         this.options.fields = [
+            { name: 'tfaQr', hidden: true },
+            { name: 'tfaKey', hidden: true },
             {
                 group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
                     { name: _cxSchema.cx_login.EMAIL, label: 'email', column: 1, readOnly: !this.dataSource.isNew(), validation: '{ "mandatory": true, "max": 255  }' },
@@ -102,6 +104,19 @@ class CXLogin extends RenderBase {
                     { group: 'roles', title: 'roles assigned to this user', column: 2, width: '300px', fields: [roleListOptions] }
                 ]
             });
+        }
+
+
+        if (this.options.mode == 'view') {
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                if (this.dataSource.status == 0) {
+                    this.options.buttons.push({ id: 'cx_login', text: '2fa Barcode', function: 'show2faQCode' });
+                }
+            }
+            // this.options.buttons.push({ id: 'epos_dtfs_view_getLogs', text: 'Get Logs', link: '../raw/getlogs?s=' + this.dataSource.id });
+            // this.options.buttons.push({ id: 'epos_dtfs_view_transmission', text: 'Transmissions', link: '../epos/transmissions?s=' + this.dataSource.id });
+            // this.options.buttons.push({ id: 'epos_dtfs_view_upgrades', text: 'Upgrades Audit', link: '../epos/upgradeAudits?s=' + this.dataSource.id });
+
         }
     }
 
