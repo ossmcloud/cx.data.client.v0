@@ -18,7 +18,7 @@ async function getDefaultOptions(renderType, table, options) {
 
 async function setLoginLookUpColumns(dataSource, options) {
     if (options.columns) {
-        var users = await dataSource.cx.table(_cxSchema.cx_login).selectList();
+        var users = await dataSource.cx.table(_cxSchema.cx_login).selectList(true);
         options.columns.forEach(col => {
             if (col.name == 'createdBy' || col.name == 'modifiedBy') {
                 col.lookUps = users;

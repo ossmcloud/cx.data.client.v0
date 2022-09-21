@@ -61,7 +61,12 @@ class CXLogin extends RenderBase {
             { name: 'tfaKey', hidden: true },
             {
                 group: 'main', title: 'main info', columnCount: 3, inline: true, fields: [
-                    { name: _cxSchema.cx_login.EMAIL, label: 'email', column: 1, readOnly: !this.dataSource.isNew(), validation: '{ "mandatory": true, "max": 255  }' },
+                    {
+                        group: 'main', columnCount: 2, inline: true, fields: [
+                            { name: _cxSchema.cx_login.EMAIL, label: 'email', column: 1, readOnly: !this.dataSource.isNew(), validation: '{ "mandatory": true, "max": 255  }' },
+                            { name: 'status', label: 'status', column: 2, readOnly: true, lookUps: _cxConst.CX_LOGIN_STATUS.toList() },
+                        ]
+                    },
                     {
                         name: _cxSchema.cx_login.ROLEID, label: 'current role', column: 1,
                         lookUps: _cxConst.CX_ROLE.toList(),
@@ -109,7 +114,7 @@ class CXLogin extends RenderBase {
 
         if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
-                if (this.dataSource.status == 0) {
+                if (this.dataSource.status <= 0) {
                     this.options.buttons.push({ id: 'cx_login', text: '2fa Barcode', function: 'show2faQCode' });
                 }
             }

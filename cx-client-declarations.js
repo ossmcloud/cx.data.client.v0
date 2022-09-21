@@ -67,6 +67,17 @@ const CX_ROLE = {
     listOptions: function (showId, showCheckBox) { return enumToListRenderOptions(this, showId, showCheckBox); }
 }
 
+const CX_LOGIN_STATUS = {
+    NOT_VERIFIED: -1,
+    VERIFIED: 0,
+    ACTIVE: 1,
+    LOCKED: 9,
+    DELETED: 99,
+
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+
 const CX_MODULE = {
     STATIC: 'static',
     RETAIL: 'retail',
@@ -130,7 +141,11 @@ const CX_EPOS_PROVIDERS = {
 }
 
 
-
+const CX_SYS_USERS = {
+    SYSTEM: -1,
+    DTFS: -2,
+    ERPS: -3,
+}
 
 const CX_SHOP = {
     STATUS: {
@@ -276,6 +291,39 @@ const CR_CASH_BOOK = {
             var style = 'color: ' + color + '; ';
             if (bkgColor) { style += ('background-color: ' + bkgColor + '; '); }
             return style;
+        },
+
+        getStyleInverted: function (status) {
+            var color = 'var(--main-color)';
+            var bkgColor = '';
+
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning) {
+                color = 'white';
+                bkgColor = 'gray';
+            } else if (status == this.New || status == this.Pending) {
+                color = 'black';
+                bkgColor = '#ffca3a';
+            } else if (status == this.PostingReady) {
+                color = 'white';
+                bkgColor = '#1982c4';
+            } else if (status == this.Posted) {
+                color = 'darkgreen';
+                bkgColor = '#8ac926';
+            } else if (status == this.PostingError) {
+                color = 'white';
+                bkgColor = '#ea1e25';
+            } else if (status == this.Error) {
+                color = 'white';
+                bkgColor = '#ea1e25';
+            } else if (status == this.Delete) {
+                color = 'white';
+                bkgColor = '#53318a';
+            } else if (status == this.DeleteAndPull) {
+                color = 'white';
+                bkgColor = '#53318a';
+            }
+
+            return `color: ${color}; background-color: ${bkgColor};`;
         }
     }
 }
@@ -362,6 +410,8 @@ const SQL = {
 }
 
 module.exports = {
+    CX_SYS_USERS: CX_SYS_USERS,
+    CX_LOGIN_STATUS: CX_LOGIN_STATUS,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,

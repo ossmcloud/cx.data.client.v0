@@ -42,7 +42,7 @@ class CRCashBookRender extends RenderBase {
         ];
 
         if (isBatchProcessing) {
-            this.options.filters.push({ label: 'target status (value)', fieldName: 'tst',   type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true });
+            this.options.filters.push({ label: 'target status (value)', fieldName: 'tst', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true });
             this.options.filters.push({ label: 'target status', fieldName: 'target_status', value: _cxConst.CR_CASH_BOOK.STATUS.getName(this.options.query.tst), readOnly: true });
             // this.options.filters.push({
             //     label: 'target status', fieldName: 'tst', width: '200px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
@@ -66,44 +66,61 @@ class CRCashBookRender extends RenderBase {
             });
         }
 
-        
-        this.options.columns = [
-            { name: 'cbTranId', title: ' ', align: 'center' },
-            { name: 'shopInfo', title: 'store', width: '200px' },
-            { name: 'date', title: 'date', align: 'center', width: '130px' },
-            { name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), },
-            { name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), },
-            { name: 'totalSales', title: 'sales', align: 'right', width: '90px', },
-            { name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', },
-            { name: 'tillDifference', title: 'diff', align: 'right', width: '90px', },
-            { name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', },
-            { name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', },
-            { name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' },
-            { name: 'created', title: 'created', align: 'center', width: '130px' },
-          
-        ];
 
-        if (isBatchProcessing) { this.options.columns.splice(1, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
+        this.options.columns = [];
+        if (isBatchProcessing) { this.options.columns.push({ name: 'check', title: 'post', width: '30px', type: 'check' }); }
+        this.options.columns.push({ name: 'cbTranId', title: ' ', align: 'center' });
+        this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
+        this.options.columns.push({ name: 'date', title: 'date', align: 'center', width: '130px' });
+        if (isBatchProcessing) { this.options.columns.push({ name: 'statusX', title: ' ', unbound: true }); }
+        this.options.columns.push({ name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
+        this.options.columns.push({ name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
+        this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', });
+        this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', });
+        this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', });
+        this.options.columns.push({ name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', });
+        this.options.columns.push({ name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', });
+        this.options.columns.push({ name: 'modified', title: 'modified on', align: 'center', width: '130px' });
+        this.options.columns.push({ name: 'modifiedBy', title: 'by' });
+        this.options.columns.push({ name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' });
+
+        //if (isBatchProcessing) { this.options.columns.splice(1, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
 
 
-        this.options.highlights = [];
+        this.options.cellHighlights = [];
+        var applyToColumn = 'status';
+        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        if (isBatchProcessing) {
+            applyToColumn = 'statusX';
+            applyStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+        }
+
         var statuses = _cxConst.CR_CASH_BOOK.STATUS.toList();
         for (let sx = 0; sx < statuses.length; sx++) {
             const s = statuses[sx];
-            this.options.highlights.push({
+            this.options.cellHighlights.push({
                 column: 'status',
                 op: '=',
                 value: s.value,
-                style: _cxConst.CR_CASH_BOOK.STATUS.getStyle(s.value),
+                //style: _cxConst.CR_CASH_BOOK.STATUS.getStyleInverted(s.value) + 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;',
+                //style: _cxConst.CR_CASH_BOOK.STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                style: _cxConst.CR_CASH_BOOK.STATUS.getStyleInverted(s.value) + applyStyle,
+                columns: [applyToColumn]
             })
         }
-        this.options.highlights.push({
+
+        //this.options.highlights = [];
+        this.options.cellHighlights.push({
             column: 'tillDifference',
+            columns: ['tillDifference'],
             customStyle: function (object, value, highlight) {
-                if (value == 0) { return; }
-                if (object.status == _cxConst.CR_CASH_BOOK.STATUS.New || object.status == _cxConst.CR_CASH_BOOK.STATUS.Pending || object.status == _cxConst.CR_CASH_BOOK.STATUS.PostingReady) {
-                    return 'background-color: rgba(255,0,0,0.10);'
-                }
+                //if (value == 0) { return; }
+                //if (object.status == _cxConst.CR_CASH_BOOK.STATUS.New || object.status == _cxConst.CR_CASH_BOOK.STATUS.Pending || object.status == _cxConst.CR_CASH_BOOK.STATUS.PostingReady) {
+                    //return 'background-color: rgba(255,0,0,0.10);'
+                    if (value < 0) { return 'font-weight: bold; color: red;'; }
+                    if (value > 0) { return 'color: #34ad68;'; }
+                    return 'color: var(--element-bd-color);';
+                //}
             }
         })
 
