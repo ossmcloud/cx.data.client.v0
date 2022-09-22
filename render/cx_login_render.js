@@ -114,9 +114,9 @@ class CXLogin extends RenderBase {
 
         if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
-                if (this.dataSource.status <= 0) {
-                    this.options.buttons.push({ id: 'cx_login', text: '2fa Barcode', function: 'show2faQCode' });
-                }
+                if (this.dataSource.status < 0) { this.options.buttons.push({ id: 'cx_login', text: 'Verify Login', function: 'verifyLogin' }); }
+                if (this.dataSource.status >= 0) { this.options.buttons.push({ id: 'cx_login', text: 'Reset Login', function: 'resetLogin' }); }
+                if (this.dataSource.status <= 0) { this.options.buttons.push({ id: 'cx_login', text: '2fa Barcode', function: 'show2faQCode' }); }
             }
             // this.options.buttons.push({ id: 'epos_dtfs_view_getLogs', text: 'Get Logs', link: '../raw/getlogs?s=' + this.dataSource.id });
             // this.options.buttons.push({ id: 'epos_dtfs_view_transmission', text: 'Transmissions', link: '../epos/transmissions?s=' + this.dataSource.id });
