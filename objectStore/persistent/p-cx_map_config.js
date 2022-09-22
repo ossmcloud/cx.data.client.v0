@@ -24,6 +24,7 @@ const _fieldNames = {
     EPOSPROVIDER: 'eposProvider',
     ERPPROVIDER: 'erpProvider',
     NAME: 'name',
+    MAPMASTERSHOP: 'mapMasterShop',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -39,6 +40,7 @@ const _fields = {
     eposProvider: { name: 'eposProvider', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     erpProvider: { name: 'erpProvider', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
+    mapMasterShop: { name: 'mapMasterShop', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -90,6 +92,12 @@ class Persistent_cx_map_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.NAME);
     } set name(val) {
         super.setValue(_fieldNames.NAME, val);
+    }
+
+    get mapMasterShop() {
+        return super.getValue(_fieldNames.MAPMASTERSHOP);
+    } set mapMasterShop(val) {
+        super.setValue(_fieldNames.MAPMASTERSHOP, val);
     }
 
     get created() {

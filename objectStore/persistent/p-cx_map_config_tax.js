@@ -26,6 +26,7 @@ const _fieldNames = {
     EPOSTAXRATE: 'eposTaxRate',
     EPOSDESCRIPTION: 'eposDescription',
     TAXACCOUNTID: 'taxAccountId',
+    PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -36,13 +37,14 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     mapConfigId: { name: 'mapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     eposCurrencyCode: { name: 'eposCurrencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: false },
     eposTaxCode: { name: 'eposTaxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     eposTaxRate: { name: 'eposTaxRate', dataType: 'decimal', pk: false, identity: false, maxLength: 5, null: true },
     eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     taxAccountId: { name: 'taxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    purchaseTaxAccountId: { name: 'purchaseTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -106,6 +108,12 @@ class Persistent_cx_map_config_tax extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TAXACCOUNTID);
     } set taxAccountId(val) {
         super.setValue(_fieldNames.TAXACCOUNTID, val);
+    }
+
+    get purchaseTaxAccountId() {
+        return super.getValue(_fieldNames.PURCHASETAXACCOUNTID);
+    } set purchaseTaxAccountId(val) {
+        super.setValue(_fieldNames.PURCHASETAXACCOUNTID, val);
     }
 
     get created() {

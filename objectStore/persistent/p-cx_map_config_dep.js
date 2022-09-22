@@ -28,6 +28,7 @@ const _fieldNames = {
     PURCHASEACCOUNTID: 'purchaseAccountId',
     ACCRUALACCOUNTID: 'accrualAccountId',
     COGSACCOUNTID: 'cogsAccountId',
+    WASTEACCOUNTID: 'wasteAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -38,7 +39,7 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    depMapConfigId: { name: 'depMapConfigId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     mapConfigId: { name: 'mapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
@@ -47,6 +48,7 @@ const _fields = {
     purchaseAccountId: { name: 'purchaseAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     accrualAccountId: { name: 'accrualAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     cogsAccountId: { name: 'cogsAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    wasteAccountId: { name: 'wasteAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -122,6 +124,12 @@ class Persistent_cx_map_config_dep extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.COGSACCOUNTID);
     } set cogsAccountId(val) {
         super.setValue(_fieldNames.COGSACCOUNTID, val);
+    }
+
+    get wasteAccountId() {
+        return super.getValue(_fieldNames.WASTEACCOUNTID);
+    } set wasteAccountId(val) {
+        super.setValue(_fieldNames.WASTEACCOUNTID, val);
     }
 
     get created() {

@@ -10,9 +10,12 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
     async select(params) {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
-        query.sql = `select	tax.*, ('[' + etax.code + '] ' + etax.description + '(' + convert(varchar, etax.rate) + '%) - ' + etax.currencyCode) as taxAccount
+        query.sql = `select	tax.*, 
+                            ('[' + etax.code + '] ' + etax.description + '(' + convert(varchar, etax.rate) + '%) - ' + etax.currencyCode) as taxAccount,
+                            ('[' + etaxp.code + '] ' + etaxp.description + '(' + convert(varchar, etaxp.rate) + '%) - ' + etaxp.currencyCode) as taxAccountPurchase
                     from	cx_map_config_tax tax
                     left outer join erp_tax_account etax ON tax.taxAccountId = etax.erpTaxAccountId
+                    left outer join erp_tax_account etaxp ON tax.purchaseTaxAccountId = etaxp.erpTaxAccountId
                     where   1 = 1`;
 
         if (params.mid) {
@@ -56,14 +59,17 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
 //
 class cx_map_config_tax extends _persistentTable.Record {
     #taxAccount = '';
+    #taxAccountPurchase = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (defaults) {
             this.#taxAccount = defaults['taxAccount'] || '';
+            this.#taxAccountPurchase = defaults['taxAccountPurchase'] || '';
         }
     };
 
     get taxAccount() { return this.#taxAccount; }
+    get taxAccountPurchase() { return this.#taxAccountPurchase; }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

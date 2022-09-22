@@ -18,6 +18,10 @@ class CxMapConfig extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'name', label: 'Name', column: 1 },
+                            //{ name: 'mapMasterShop', label: 'map master shop', column: 1 },
+                            await this.fieldDropDownOptions(_cxSchema.cx_shop, {
+                                id: 'mapMasterShop', name: 'mapMasterShop', column: 1, validation: '{ "mandatory": true }'
+                            }),
                             { name: 'mapTypeId', label: 'map type', column: 2, lookUps: _cxConst.CX_MAP_CONFIG_TYPE.toList(), readOnly: !newRecord },
                             { name: 'eposProvider', label: 'EPoS', column: 1, readOnly: !newRecord },
                             { name: 'erpProvider', label: 'ERP', column: 2, readOnly: !newRecord },
@@ -58,6 +62,7 @@ class CxMapConfig extends RenderBase {
             { name: 'mapConfigId', title: '', align: 'center' },
             { name: 'name', title: 'name' },
             { name: 'mapTypeId', title: 'map type', width: '200px', lookUps: _cxConst.CX_MAP_CONFIG_TYPE.toList() },
+            { name: 'mapMasterShop', title: 'map master shop' },
             { name: 'eposProvider', title: 'epos provider' },
             { name: 'erpProvider', title: 'erp provider' },
             { name: 'created', title: 'created', align: 'center', width: '130px' },

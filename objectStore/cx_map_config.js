@@ -42,6 +42,21 @@ class cx_map_config_Collection extends _persistentTable.Table {
         });
         return dropDownItems;
     }
+
+    async fetch(id) {
+        var query = { sql: '', params: [{ name: this.FieldNames.MAPCONFIGID, value: id }] };
+        query.sql = `select  *
+                     from    ${this.type}
+                     where   ${this.FieldNames.MAPCONFIGID} = @${this.FieldNames.MAPCONFIGID}`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
+
+        return super.populate(rawRecord);
+    }
+
     
 }
 //
@@ -52,6 +67,7 @@ class cx_map_config extends _persistentTable.Record {
         super(table, defaults);
     };
 
+    
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

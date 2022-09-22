@@ -11,10 +11,10 @@ class CxMapConfigRender extends RenderBase {
     }
 
     async _record() {
-        var shop = this.dataSource.cx.table(_cxSchema.cx_shop);
-        await shop.select({ ddcfg: this.dataSource.mapConfigId });
-        shop = shop.first();
-        var shopId = (shop) ? shop.shopId : -1;
+        
+        var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
+        mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
+        var shopId = mapConfig.mapMasterShop;
 
         this.options.fields = [
             {
@@ -35,6 +35,10 @@ class CxMapConfigRender extends RenderBase {
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 label: 'GL Account (cogs)',
                                 id: _cxSchema.cx_map_config_dep.COGSACCOUNTID, name: _cxSchema.cx_map_config_dep.COGSACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (waste)',
+                                id: _cxSchema.cx_map_config_dep.WASTEACCOUNTID, name: _cxSchema.cx_map_config_dep.WASTEACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 label: 'GL Account (purchase)',

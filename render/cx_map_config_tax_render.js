@@ -11,10 +11,9 @@ class CxMapConfigRender extends RenderBase {
     }
 
     async _record() {
-        var shop = this.dataSource.cx.table(_cxSchema.cx_shop);
-        await shop.select({ txcfg: this.dataSource.mapConfigId });
-        shop = shop.first();
-        var shopId = (shop) ? shop.shopId : -1;
+        var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
+        mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
+        var shopId = mapConfig.mapMasterShop;
 
         this.options.fields = [
             {
@@ -29,8 +28,12 @@ class CxMapConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp mapping info', columnCount: 1, column: 2, inLine: true, fields: [
                             await this.fieldDropDownOptions(_cxSchema.erp_tax_account, {
-                                label: 'Tax Account',
+                                label: 'Tax Account (sales)',
                                 id: _cxSchema.cx_map_config_tax.TAXACCOUNTID, name: _cxSchema.cx_map_config_tax.TAXACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_tax_account, {
+                                label: 'Tax Account (purchase)',
+                                id: _cxSchema.cx_map_config_tax.PURCHASETAXACCOUNTID, name: _cxSchema.cx_map_config_tax.PURCHASETAXACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
                             
                         ]
@@ -66,6 +69,7 @@ class CxMapConfigRender extends RenderBase {
             { title: 'currency', name: _cxSchema.cx_map_config_tax.EPOSCURRENCYCODE },
 
             { title: 'erp tax code', name: 'taxAccount' },
+            { title: 'erp tax code (purchase)', name: 'taxAccountPurchase' },
             
             { title: 'created', name: _cxSchema.cr_tran_type_config.CREATED },
             { title: 'by', name: _cxSchema.cr_tran_type_config.CREATEDBY },

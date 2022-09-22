@@ -11,11 +11,9 @@ class CrTranTypeConfigRender extends RenderBase {
     }
 
     async _record() {
-
-        var shop = this.dataSource.cx.table(_cxSchema.cx_shop);
-        await shop.select({ ttcfg: this.dataSource.mapConfigId, order: _cxSchema.cx_shop.SHOPID });
-        shop = shop.first();
-        var shopId = (shop) ? shop.shopId : -1;
+        var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
+        mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
+        var shopId = mapConfig.mapMasterShop;
 
         var cbTranTypeLookUps = this.dataSource.cx.table(_cxSchema.cr_cb_tran_type);
         cbTranTypeLookUps = await cbTranTypeLookUps.toLookUpList(true);

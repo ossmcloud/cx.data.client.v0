@@ -127,6 +127,9 @@ class cx_shop_Collection extends _persistentTable.Table {
         if (!rawRecord) { return false; }
         return rawRecord.status == 1;
     }
+
+    
+
 }
 //
 //
