@@ -307,7 +307,10 @@ const CR_CASH_BOOK = {
             if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning) {
                 color = 'white';
                 bkgColor = 'gray';
-            } else if (status == this.New || status == this.Pending) {
+            } else if (status == this.New) {
+                color = 'black';
+                bkgColor = '#Ffe4a0';
+            } else if (status == this.Pending) {
                 color = 'black';
                 bkgColor = '#ffca3a';
             } else if (status == this.PostingReady) {
