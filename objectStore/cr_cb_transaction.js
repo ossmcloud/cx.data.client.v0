@@ -194,13 +194,15 @@ class cr_cb_transaction extends _persistentTable.Record {
         this.tillDifference = result.tillDifference;
 
         // @WORKING: move
-        if (this.tillDifference != 0) {
-            this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
-            this.statusMessage = 'calculated till difference is not zero!';
-        } else {
-            this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
-            this.statusMessage = 'Pending posting...';
-        }
+        // if (this.tillDifference != 0) {
+        //     if (this.status == _declarations.CR_CASH_BOOK.STATUS.New) {
+        //         //this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
+        //         this.statusMessage = 'calculated till difference is not zero!';
+        //     }
+        // } else {
+        //     this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
+        //     this.statusMessage = 'Pending posting...';
+        // }
 
         if (save) { await this.save(); }
     }
