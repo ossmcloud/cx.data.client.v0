@@ -20,7 +20,7 @@ class CxMapConfig extends RenderBase {
                             { name: 'name', label: 'Name', column: 1 },
                             //{ name: 'mapMasterShop', label: 'map master shop', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.cx_shop, {
-                                id: 'mapMasterShop', name: 'mapMasterShop', column: 1, validation: '{ "mandatory": true }'
+                                id: 'mapMasterShop', name: 'mapMasterShop', column: 1, validation: '{ "mandatory": true }', label: 'map master shop'
                             }),
                             { name: 'mapTypeId', label: 'map type', column: 2, lookUps: _cxConst.CX_MAP_CONFIG_TYPE.toList(), readOnly: !newRecord },
                             { name: 'eposProvider', label: 'EPoS', column: 1, readOnly: !newRecord },
@@ -46,6 +46,15 @@ class CxMapConfig extends RenderBase {
                 ]
             }
         ];
+
+        if (!newRecord) {
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                if (this.dataSource.mapTypeId == _cxConst.CX_MAP_CONFIG_TYPE.GL_MAP) {
+                    this.options.buttons.push({ id: 'cx_import_map_export', text: 'Export Map', function: 'exportMap' });
+                    this.options.buttons.push({ id: 'cx_import_map', text: 'Import Map', function: 'importMap' });
+                }
+            }
+        }
 
     }
 

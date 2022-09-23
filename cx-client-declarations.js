@@ -88,7 +88,14 @@ const CX_MODULE = {
 }
 
 
+const CX_SERVICES = {
+    DTFS: 'dtfs',
+    ERPS: 'erps',
+    ERP: 'erp',
 
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
 
 
 const EPOS_DTFS_SETTING = {
@@ -414,6 +421,7 @@ module.exports = {
     CX_LOGIN_STATUS: CX_LOGIN_STATUS,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
+    CX_SERVICES: CX_SERVICES,
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,
