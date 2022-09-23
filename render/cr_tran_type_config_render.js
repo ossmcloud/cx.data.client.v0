@@ -143,7 +143,7 @@ class CrTranTypeConfigRender extends RenderBase {
                 } else if (value == 3) {
                     return 'background-color: rgb(83,49,138); color: white; ' + appendStyle;
                 } else if (value == 9) {
-                    return 'background-color: yellow; color: black; ' + appendStyle;
+                    return 'background-color: #FFCD00; color: black; ' + appendStyle;
                 } else if (value < 0) {
                     return 'background-color: orange; color: white; ' + appendStyle;
                 } else {
@@ -157,7 +157,21 @@ class CrTranTypeConfigRender extends RenderBase {
             columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
             op: '=',
             value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.FORCE,
-            style: 'background-color: orange; color: white; ',
+            style: 'background-color: indianred; color: whitesmoke; font-weight: bold; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION,
+            columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
+            op: '=',
+            value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.YES,
+            style: 'background-color: #FFCD00; color: black; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION,
+            columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
+            op: '=',
+            value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.NO,
+            style: 'border: 1px dotted gray; color: silver; ' + appendStyle,
         })
 
     }

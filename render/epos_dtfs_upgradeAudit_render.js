@@ -72,8 +72,8 @@ class RawGetRequest extends RenderBase {
         this.options.highlights = [
             { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.PENDING, style: 'color: blue;' },
             { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.WAIT_START, style: 'color: purple;' },
-            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.UPGRADING, style: 'color: yellow;' },
-            //{ column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.COMPLETE, style: 'color: yellow;' },
+            { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.UPGRADING, style: 'color: #FFCD00;' },
+            //{ column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.COMPLETE, style: 'color: #FFCD00;' },
             { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ERROR, style: 'color: red;' },
             { column: TBL.STATUS, op: '=', value: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.STATUS.ABORTED, style: 'color: orange;' },
             
