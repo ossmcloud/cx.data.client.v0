@@ -17,13 +17,13 @@ class CrTranTypeConfigRender extends RenderBase {
 
         var cbTranTypeLookUps = this.dataSource.cx.table(_cxSchema.cr_cb_tran_type);
         cbTranTypeLookUps = await cbTranTypeLookUps.toLookUpList(true);
-        
+
         var duplicateAsLookUps = this.dataSource.cx.table(_cxSchema.cr_tran_type_config);
         duplicateAsLookUps = await duplicateAsLookUps.toLookUpListByCfg(this.dataSource.mapConfigId, true);
 
         var erpTranTypeLookUps = this.dataSource.cx.table(_cxSchema.sys_erp_tran_type);
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('', true);
-        
+
         var readOnlyIfNotNew = !this.dataSource.isNew();
 
         this.options.fields = [
@@ -51,8 +51,8 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 3 },
                                 ]
                             },
-                            
-                            
+
+
                         ]
                     },
 
@@ -101,7 +101,8 @@ class CrTranTypeConfigRender extends RenderBase {
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cr_tran_type_config.TRANTYPECONFIGID },
-            { title: 'map id', name: _cxSchema.cr_tran_type_config.MAPCONFIGID },
+            //{ title: 'map id', name: _cxSchema.cr_tran_type_config.MAPCONFIGID },
+            //{ title: 'r', name: 's', unbound: true, align: 'center', width: '15px' },
             { title: 'epos tran. type', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
             { title: 'epos tran. sub-type', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE },
             { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
@@ -126,6 +127,38 @@ class CrTranTypeConfigRender extends RenderBase {
             { column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true, style: 'color: gray; font-style: italic;' },
             { column: _cxSchema.cr_tran_type_config.CBTRANTYPEID, op: '<', value: 0, style: 'color: teal; font-style: italic;' }
         ];
+
+        var appendStyle = 'padding: 3px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: 'cbTranTypeId',
+            columns: ['cbTranType'],
+            customStyle: function (object, value, highlight) {
+                if (value == null) {
+                    return 'height: 15px; border: 1px dotted gray; color: white; ' + appendStyle;
+                } else if (value == 1) {
+                    return 'background-color: green; color: white; ' + appendStyle;
+                } else if (value == 2) {
+                    return 'background-color: #1982c4; color: white; ' + appendStyle;
+                } else if (value == 3) {
+                    return 'background-color: rgb(83,49,138); color: white; ' + appendStyle;
+                } else if (value == 9) {
+                    return 'background-color: yellow; color: black; ' + appendStyle;
+                } else if (value < 0) {
+                    return 'background-color: orange; color: white; ' + appendStyle;
+                } else {
+                    return 'background-color: gray; color: white; ' + appendStyle;
+                }
+            }
+        })
+
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION,
+            columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
+            op: '=',
+            value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.FORCE,
+            style: 'background-color: orange; color: white; ',
+        })
 
     }
 

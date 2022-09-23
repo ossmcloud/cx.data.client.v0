@@ -62,7 +62,10 @@ class CxMapConfigRender extends RenderBase {
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cx_map_config_tax.TAXMAPCONFIGID },
-            { title: 'map id', name: _cxSchema.cx_map_config_tax.MAPCONFIGID },
+            //{ title: 'map id', name: _cxSchema.cx_map_config_tax.MAPCONFIGID },
+            { title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' },
+            { title: 'p', name: 'status_p', unbound: true, align: 'center', width: '15px' },
+
             { title: 'tax code', name: _cxSchema.cx_map_config_tax.EPOSTAXCODE },
             { title: 'tax name', name: _cxSchema.cx_map_config_tax.EPOSDESCRIPTION },
             { title: 'tax rate', name: _cxSchema.cx_map_config_tax.EPOSTAXRATE },
@@ -76,6 +79,31 @@ class CxMapConfigRender extends RenderBase {
             { title: 'modified', name: _cxSchema.cr_tran_type_config.MODIFIED },
             { title: 'by', name: _cxSchema.cr_tran_type_config.MODIFIEDBY },
         ];
+
+        var appendStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: 'status_r',
+            columns: ['status_r'],
+            customStyle: function (object, value, highlight) {
+                if (object[_cxSchema.cx_map_config_tax.TAXACCOUNTID] == null) {
+                    return 'background-color: red; ' + appendStyle;
+                } else {
+                    return 'background-color: green; ' + appendStyle;
+                }
+            }
+        })
+        this.options.cellHighlights.push({
+            column: 'status_p',
+            columns: ['status_p'],
+            customStyle: function (object, value, highlight) {
+                if (object[_cxSchema.cx_map_config_tax.PURCHASETAXACCOUNTID] == null) {
+                    return 'background-color: red; ' + appendStyle;
+                } else {
+                    return 'background-color: green; ' + appendStyle;
+                }
+            }
+        })
 
     }
 

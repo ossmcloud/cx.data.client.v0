@@ -76,7 +76,9 @@ class CxMapConfigRender extends RenderBase {
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cx_map_config_dep.DEPMAPCONFIGID },
-            { title: 'map id', name: _cxSchema.cx_map_config_dep.MAPCONFIGID },
+            //{ title: 'map id', name: _cxSchema.cx_map_config_dep.MAPCONFIGID },
+            { title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' },
+            { title: 'p', name: 'status_p', unbound: true, align: 'center', width: '15px' },
             { title: 'department', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT },
             { title: 'sub-department', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT },
             { title: 'description', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION },
@@ -86,6 +88,35 @@ class CxMapConfigRender extends RenderBase {
             { title: 'modified', name: _cxSchema.cx_map_config_dep.MODIFIED },
             { title: 'by', name: _cxSchema.cx_map_config_dep.MODIFIEDBY },
         ];
+
+        var appendStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: 'status_r',
+            columns: ['status_r'],
+            customStyle: function (object, value, highlight) {
+                if (object[_cxSchema.cx_map_config_dep.SALEACCOUNTID] == null) {
+                    return 'background-color: red; ' + appendStyle;
+                } else if (object[_cxSchema.cx_map_config_dep.COGSACCOUNTID] == null || object[_cxSchema.cx_map_config_dep.WASTEACCOUNTID] == null) {
+                    return 'background-color: orange; ' + appendStyle;
+                } else {
+                    return 'background-color: green; ' + appendStyle;
+                }
+            }
+        })
+        this.options.cellHighlights.push({
+            column: 'status_p',
+            columns: ['status_p'],
+            customStyle: function (object, value, highlight) {
+                if (object[_cxSchema.cx_map_config_dep.PURCHASEACCOUNTID] == null) {
+                    return 'background-color: red; ' + appendStyle;
+                } else if (object[_cxSchema.cx_map_config_dep.ACCRUALACCOUNTID] == null) {
+                    return 'background-color: orange; ' + appendStyle;
+                } else {
+                    return 'background-color: green; ' + appendStyle;
+                }
+            }
+        })
         
     }
 

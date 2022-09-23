@@ -90,10 +90,28 @@ class CXTraderAccount extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
-        this.options.highlights = [
-            { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.CUSTOMER, style: 'color: green;' },
-            { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.SUPPLIER, style: 'color: blue;' },
-        ];
+        // this.options.highlights = [
+        //     { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.CUSTOMER, style: 'color: green;' },
+        //     { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.SUPPLIER, style: 'color: blue;' },
+        // ];
+
+        var appendStyle = 'padding: 3px 5px 1px 5px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_traderAccount.TRADERTYPE,
+            columns: [_cxSchema.cx_traderAccount.TRADERTYPE],
+            op: '=',
+            value: _cxConst.CX_TRADER_TYPE.CUSTOMER,
+            style: 'background-color: green; color: white; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_traderAccount.TRADERTYPE,
+            columns: [_cxSchema.cx_traderAccount.TRADERTYPE],
+            op: '=',
+            value: _cxConst.CX_TRADER_TYPE.SUPPLIER,
+            style: 'background-color: #1982c4; color: white; ' + appendStyle,
+        })
+        //'#1982c4'
 
     }
 
