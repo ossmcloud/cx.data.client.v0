@@ -247,8 +247,8 @@ const CR_CASH_BOOK = {
                 color = 'gray';
                 colorRgb = '128,128,128';
             } else if (status == this.New) {
-                color = '#ffca3a';
-                colorRgb = '255,202,58';
+                color = '#Ffe4a0';
+                colorRgb = '255,228,160';
             } else if (status == this.Pending) {
                 color = '#ffca3a';
                 colorRgb = '255,202,58';
