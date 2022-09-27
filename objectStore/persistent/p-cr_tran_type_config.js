@@ -37,13 +37,13 @@ const _fieldNames = {
     TRADERACCOUNT: 'traderAccount',
     ERPGLACCOUNTID: 'erpGLAccountId',
     ERPCBACCOUNTID: 'erpCBAccountId',
-    ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
     ERPTAXACCOUNTID: 'erpTaxAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    
+    ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
+    EXCONDITION: 'exCondition',
 
 }
 //
@@ -67,14 +67,14 @@ const _fields = {
     duplicateAs: { name: 'duplicateAs', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     traderAccount: { name: 'traderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpGLAccountId: { name: 'erpGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTaxAccountId: { name: 'erpTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    
+    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    exCondition: { name: 'exCondition', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -196,12 +196,6 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         super.setValue(_fieldNames.ERPGLACCOUNTID, val);
     }
 
-    get erpGLContraAccountId() {
-        return super.getValue(_fieldNames.ERPGLCONTRAACCOUNTID);
-    } set erpGLContraAccountId(val) {
-        super.setValue(_fieldNames.ERPGLCONTRAACCOUNTID, val);
-    }
-
     get erpCBAccountId() {
         return super.getValue(_fieldNames.ERPCBACCOUNTID);
     } set erpCBAccountId(val) {
@@ -238,7 +232,18 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-  
+    get erpGLContraAccountId() {
+        return super.getValue(_fieldNames.ERPGLCONTRAACCOUNTID);
+    } set erpGLContraAccountId(val) {
+        super.setValue(_fieldNames.ERPGLCONTRAACCOUNTID, val);
+    }
+
+    get exCondition() {
+        return super.getValue(_fieldNames.EXCONDITION);
+    } set exCondition(val) {
+        super.setValue(_fieldNames.EXCONDITION, val);
+    }
+
 
 }
 //

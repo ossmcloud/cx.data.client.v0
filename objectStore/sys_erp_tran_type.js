@@ -16,9 +16,9 @@ class sys_erp_tran_type_Collection extends _persistentTable.Table {
         super.each(function (rec) {
 
             // TODO: currently not fully supported
-            if (rec.tranTypeId == 7 || rec.tranTypeId == 8 || rec.tranTypeId == 9 || rec.tranTypeId == 10) {
-                return;
-            }
+            // if (rec.tranTypeId == 7 || rec.tranTypeId == 8 || rec.tranTypeId == 9 || rec.tranTypeId == 10) {
+            //     return;
+            // }
 
             lookUpValues.push({
                 value: rec.tranTypeId,

@@ -33,6 +33,7 @@ class CrTranTypeConfigRender extends RenderBase {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, label: 'Type', readOnly: readOnlyIfNotNew, column: 1 },
                             { name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, label: 'Sub Type', readOnly: readOnlyIfNotNew, column: 1 },
+                            { name: _cxSchema.cr_tran_type_config.EXCONDITION, label: 'Extra Conditions', column: 1 },
                             { name: _cxSchema.cr_tran_type_config.DESCRIPTION, label: 'Description', column: 1 },
                             { name: _cxSchema.cr_tran_type_config.MAPCONFIGID, label: 'MapConfig', hidden: true, column: 1 },
                         ]
@@ -94,8 +95,10 @@ class CrTranTypeConfigRender extends RenderBase {
     async _list() {
 
         this.options.filters = [
-            { label: 'tran type', fieldName: 'tt', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-            { label: 'tran sub-type', fieldName: 'ts', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+            { label: 'map type', fieldName: 'type', name: 'type', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true},
+            { label: 'map id', fieldName: 'mid', name: _cxSchema.cr_tran_type_config.MAPCONFIGID, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, readOnly: true },
+            { label: 'tran type', fieldName: 'e_tt', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+            { label: 'tran sub-type', fieldName: 'e_st', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'description', fieldName: 'desc', name: _cxSchema.cr_tran_type_config.DESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
 
         ];
@@ -106,7 +109,7 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'epos tran. type', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
             { title: 'epos tran. sub-type', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE },
             { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
-
+            { title: ' ', name: 'exConditionIcon', unbound: true },
             { title: 'c/b tran. type', name: 'cbTranType' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING },
             { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList() },
@@ -130,6 +133,18 @@ class CrTranTypeConfigRender extends RenderBase {
 
         var appendStyle = 'padding: 3px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: 'exCondition',
+            columns: ['exConditionIcon'],
+            customStyle: function (object, value, highlight) {
+                if (value == null || value == '') {
+                    return '';
+                } else {
+                    return 'background-color: gray; color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                }
+            }
+        });
+
         this.options.cellHighlights.push({
             column: 'cbTranTypeId',
             columns: ['cbTranType'],
