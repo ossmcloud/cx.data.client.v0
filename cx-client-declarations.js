@@ -11,6 +11,7 @@ function enumToList(obj, addEmpty, aliases) {
         if (key == 'toList') { continue; }
         if (key == 'getName') { continue; }
         if (key == 'getStyle') { continue; }
+        if (key == 'getStyleInverted') { continue; }
         if (key == 'listOptions') { continue; }
 
         if (key == 'CX_ADMIN') { continue; }
@@ -227,6 +228,7 @@ const CR_CASH_BOOK = {
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
                 PostingRunning: 'posting running',
+                PostingUndo: 'reset posting running',
             });
         },
         getName: function (value) {
@@ -239,101 +241,82 @@ const CR_CASH_BOOK = {
             });
         },
         getStyle: function (status, returnObject) {
-            var color = 'var(--main-color)';
-            var colorRgb = 'var(--main-color)';
-            var bkgColor = '';
+            var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.Transferring) {
-                color = 'gray';
-                colorRgb = '128,128,128';
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+                color = '128,128,128';
+                bkgColor = '';
             } else if (status == this.New) {
-                color = '#Ffe4a0';
-                colorRgb = '255,228,160';
+                color = '255,202,58';
             } else if (status == this.Pending) {
-                color = '#ffca3a';
-                colorRgb = '255,202,58';
+                color = '1,202,218';
                 bkgColor = 'var(--element-bg-color)';
-            } else if (status == this.Refresh) {
-                color = 'gray';
-                colorRgb = '128,128,128';
-            } else if (status == this.PostingPrep) {
-                color = 'gray';
-                colorRgb = '128,128,128';
             } else if (status == this.PostingReady) {
-                color = '#1982c4';
-                colorRgb = '25,130,196';
-            } else if (status == this.Posting) {
-                color = 'gray';
-                colorRgb = '128,128,128';
-            } else if (status == this.PostingRunning) {
-                color = 'gray';
-                colorRgb = '128,128,128';
+                color = '25,130,196';
             } else if (status == this.Posted) {
-                color = '#8ac926';
-                colorRgb = '138,201,38';
+                color = '138,201,38';
             } else if (status == this.PostingError) {
-                color = '#ea1e25';
-                colorRgb = '234,30,37';
+                color = '234,30,37';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Error) {
-                color = '#ea1e25';
-                colorRgb = '234,30,37';
+                color = '234,30,37';
                 bkgColor = 'var(--element-bg-color)';
             } else if (status == this.Delete) {
-                color = '#53318a';
-                colorRgb = '83,49,138';
+                color = '83,49,138';
             } else if (status == this.DeleteAndPull) {
-                color = '#53318a';
-                colorRgb = '83,49,138';
+                color = '83,49,138';
             }
 
-            if (returnObject) {
-                return {
-                    color: color,
-                    colorRgb: colorRgb,
-                    bkgColor: bkgColor
-                }
-            }
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
 
-            var style = 'color: ' + color + '; ';
-            if (bkgColor) { style += ('background-color: ' + bkgColor + '; '); }
+            if (returnObject) { return styles; }
+
+            var style = 'color: ' + styles.color + '; ';
+            if (bkgColor) { style += ('background-color: ' + styles.bkgColor + '; '); }
             return style;
         },
 
-        getStyleInverted: function (status) {
-            var color = 'var(--main-color)';
-            var bkgColor = '';
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning) {
-                color = 'white';
-                bkgColor = 'gray';
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
             } else if (status == this.New) {
-                color = 'black';
-                bkgColor = '#Ffe4a0';
+                color = '0,0,0';
+                bkgColor = '255,202,58';
             } else if (status == this.Pending) {
-                color = 'black';
-                bkgColor = '#ffca3a';
+                color = '0,0,0';
+                bkgColor = '1,202,218';
             } else if (status == this.PostingReady) {
-                color = 'white';
-                bkgColor = '#1982c4';
+                color = '255,255,255';
+                bkgColor = '25,130,196';
             } else if (status == this.Posted) {
-                color = 'darkgreen';
-                bkgColor = '#8ac926';
+                color = '0,100,0';
+                bkgColor = '138,201,38';
             } else if (status == this.PostingError) {
-                color = 'white';
-                bkgColor = '#ea1e25';
+                color = '255,255,255';
+                bkgColor = '234,30,37';
             } else if (status == this.Error) {
-                color = 'white';
-                bkgColor = '#ea1e25';
+                color = '255,255,255';
+                bkgColor = '234,30,37';
             } else if (status == this.Delete) {
-                color = 'white';
-                bkgColor = '#53318a';
+                color = '255,255,255';
+                bkgColor = '83,49,138';
             } else if (status == this.DeleteAndPull) {
-                color = 'white';
-                bkgColor = '#53318a';
+                color = '255,255,255';
+                bkgColor = '83,49,138';
             }
 
-            return `color: ${color}; background-color: ${bkgColor};`;
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
     }
 }
