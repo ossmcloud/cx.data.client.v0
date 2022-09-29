@@ -249,8 +249,8 @@ const CR_CASH_BOOK = {
             } else if (status == this.New) {
                 color = '255,202,58';
             } else if (status == this.Pending) {
-                color = '1,202,218';
-                bkgColor = 'var(--element-bg-color)';
+                color = '246,71,146';
+                //bkgColor = 'var(--element-bg-color)';
             } else if (status == this.PostingReady) {
                 color = '25,130,196';
             } else if (status == this.Posted) {
@@ -288,8 +288,8 @@ const CR_CASH_BOOK = {
                 color = '0,0,0';
                 bkgColor = '255,202,58';
             } else if (status == this.Pending) {
-                color = '0,0,0';
-                bkgColor = '1,202,218';
+                color = '255,255,255';
+                bkgColor = '246,71,146';
             } else if (status == this.PostingReady) {
                 color = '255,255,255';
                 bkgColor = '25,130,196';
