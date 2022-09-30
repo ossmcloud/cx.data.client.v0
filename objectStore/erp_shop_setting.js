@@ -53,6 +53,21 @@ class erp_shop_setting_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+
+    async getErpName(shopId) {
+        var query = {
+            sql: 'select p.name, erpSett.erpCompanyName from erp_shop_setting erpSett left outer join sys_provider p ON erpSett.erpProvider = p.code where erpSett.shopId = @shopId',
+            params: [{ name: 'shopId', value: shopId }],
+            returnFirst: true,
+            noResult: 'null'
+        }
+        var erpName = await this.cx.exec(query);
+        if (erpName) { erpName = erpName.name; }
+        if (!erpName) { erpName = 'ERP'; }
+        return erpName;
+    }
+
+
 }
 //
 // ----------------------------------------------------------------------------------------

@@ -78,6 +78,9 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
 
         return super.populate(record);
     }
+
+
+   
 }
 //
 //

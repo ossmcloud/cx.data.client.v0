@@ -6,6 +6,7 @@ const _cx_render = require('./cx-client-render');
 const _cxSchema = require('./cx-client-schema');
 const _cxConst = require('./cx-client-declarations');
 const _cxEmail = require('./core/cx-email');
+const _crPrefEngine = require('./cr/cr-preference-engine');
 
 //const DTFSUtils = require('./svc.dtfs/cx-dtfs-utils');
 
@@ -18,6 +19,7 @@ class CXClientContext extends _cx_data.DBContext {
     #cxSvc = false;
     #cxSvcInfo = null;
     #accountId = null;
+    #crPrefEngine = null;
     constructor(pool, credentials) {
         super(pool, _path.join(__dirname, 'objectStore'), credentials);
     }
@@ -57,7 +59,9 @@ class CXClientContext extends _cx_data.DBContext {
     get cxSvcInfo() {
         return this.#cxSvcInfo;
     }
-
+    get crPref() {
+        return this.#crPrefEngine;
+    }
 
     
     async init(options) {
@@ -112,6 +116,8 @@ class CXClientContext extends _cx_data.DBContext {
                 if (shops.length > 0) {
                     this.#shopList = `(${this.#shops.toString()})`;
                 }
+
+                this.#crPrefEngine = new _crPrefEngine.CRPreferenceEngine(this);
 
             }
         } catch (error) {

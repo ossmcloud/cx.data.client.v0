@@ -102,6 +102,57 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    cr_preference: {
+        TBL_NAME: 'cr_preference',
+        PREFERENCEID: 'preferenceId',
+        NAME: 'name',
+        TYPE: 'type',
+        DESCRIPTION: 'description',
+        DEFAULTVALUE: 'defaultValue',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cr_preference_config: {
+        TBL_NAME: 'cr_preference_config',
+        PREFERENCEID: 'preferenceId',
+        PREFERENCERECORDID: 'preferenceRecordId',
+        RECORDID: 'recordId',
+        VALUE: 'value',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cr_preference_record: {
+        TBL_NAME: 'cr_preference_record',
+        PREFERENCERECORDID: 'preferenceRecordId',
+        PREFERENCEID: 'preferenceId',
+        LEVELID: 'levelId',
+        RECORDTYPE: 'recordType',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cr_preference_value: {
+        TBL_NAME: 'cr_preference_value',
+        PREFERENCEVALUEID: 'preferenceValueId',
+        PREFERENCEID: 'preferenceId',
+        TYPE: 'type',
+        VALUE: 'value',
+        LABEL: 'label',
+        ISDEFAULT: 'isDefault',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     cr_tran_type_config: {
         TBL_NAME: 'cr_tran_type_config',
         TRANTYPECONFIGID: 'tranTypeConfigId',

@@ -16,7 +16,7 @@ class ErpTraderAccount extends RenderBase {
 
         this.options.fields = [
             {
-                group: 'settingOuter', title: '', columnCount: 2, fields: [
+                group: 'settingOuter', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
@@ -49,6 +49,13 @@ class ErpTraderAccount extends RenderBase {
                 ]
             }
         ];
+
+        var prefListOptions = await this.getPreferenceListOptions(_cxSchema.erp_shop_setting.TBL_NAME, this.dataSource.id);
+        this.options.fields[0].fields.push({
+            group: 'sublists', columnCount: 1, column: 3, fields: [
+                { group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] }
+            ]
+        });
 
         // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
         //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });

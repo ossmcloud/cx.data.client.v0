@@ -21,9 +21,12 @@ class erp_dtfs_setting_Collection extends _persistentTable.Table {
 
         query.sql = `select	distinct top 1000 t.*
                     from	erp_dtfs_setting t
-                    inner join erp_shop_setting s on s.dtfsSettingId = t.dtfsSettingId
+                    left outer join erp_shop_setting s on s.dtfsSettingId = t.dtfsSettingId
                     where	s.shopId ${shopFilter} ${shopFilterValue}`;
 
+        if (shopFilter == 'in') {
+            query.sql += ' or s.shopId is null';
+        }
         // if (params.tt) {
         //     query.sql += ' and t.traderType = @traderType';
         //     query.params.push({ name: 'traderType', value: params.tt });

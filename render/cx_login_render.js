@@ -102,11 +102,16 @@ class CXLogin extends RenderBase {
             }
         ];
 
+        
+        
         if (shopListOptions) {
+            var prefListOptions = await this.getPreferenceListOptions(_cxSchema.cx_login.TBL_NAME, this.dataSource.id);
             this.options.fields.push({
                 group: 'sublists', columnCount: 2, fields: [
                     { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },
-                    { group: 'roles', title: 'roles assigned to this user', column: 2, width: '300px', fields: [roleListOptions] }
+                    { group: 'preferences', title: 'preferences', column: 2, width: '400px', fields: [prefListOptions] },
+                    { group: 'roles', title: 'roles assigned to this user', column: 2, width: '400px', fields: [roleListOptions] },
+                    
                 ]
             });
         }
