@@ -36,8 +36,9 @@ class cr_preference_Collection extends _persistentTable.Table {
         var preferences = await this.db.exec(query);
 
         var listOptions = {
-            title: '',
+            title: 'system preferences',
             listView: true,
+            quickSearch: true,
             records: preferences.rows,
             columns: [
                 { name: 'name', title: 'preference' },

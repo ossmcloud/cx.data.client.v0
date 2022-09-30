@@ -26,6 +26,8 @@ class CXLogin extends RenderBase {
                 shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Stores', function: 'addShop' }];
             }
         }
+
+        shopListOptions.quickSearch = true;
         return shopListOptions;
     }
 
@@ -109,8 +111,8 @@ class CXLogin extends RenderBase {
             this.options.fields.push({
                 group: 'sublists', columnCount: 2, fields: [
                     { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },
-                    { group: 'preferences', title: 'preferences', column: 2, width: '400px', fields: [prefListOptions] },
-                    { group: 'roles', title: 'roles assigned to this user', column: 2, width: '400px', fields: [roleListOptions] },
+                    { group: 'preferences', title: 'preferences', column: 2, width: '500px', fields: [prefListOptions] },
+                    { group: 'roles', title: 'roles assigned to this user', column: 2, width: '500px', fields: [roleListOptions] },
                     
                 ]
             });
