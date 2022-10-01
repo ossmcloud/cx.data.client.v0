@@ -24,7 +24,7 @@ class cr_preference_Collection extends _persistentTable.Table {
 
                 from	cr_preference p
                 inner join cr_preference_record pr ON pr.preferenceId = p.preferenceId
-                left outer join cr_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
+                --left outer join cr_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
                 where	pr.recordType = @recordType
                 order by p.name desc`,
             params: [

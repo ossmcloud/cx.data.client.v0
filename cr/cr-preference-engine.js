@@ -75,12 +75,12 @@ class CRPreferenceEngine {
             prefValue = prefValue.value;
         }
 
-        if (prefValueType == 'bool') {
+        if (prefValueType == 'bool' || prefValueType == 'boolean') {
             prefValue = prefValue.toLowerCase().trim();
             return (prefValue == 'true' || prefValue == 't' || prefValue == '1' || prefValue == 'on' || prefValue == 'yes' || prefValue == 'y')
         }
 
-        if (prefValueType == 'float' || prefValueType == 'decimal') {
+        if (prefValueType == 'float' || prefValueType == 'decimal' || prefValueType == 'double') {
             prefValue = parseFloat(prefValue);
             return isNaN(prefValue) ? null : prefValue;
         }

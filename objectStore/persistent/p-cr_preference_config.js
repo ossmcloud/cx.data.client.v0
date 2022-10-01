@@ -35,7 +35,7 @@ const _fieldNames = {
 const _fields = {
     preferenceId: { name: 'preferenceId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
     preferenceRecordId: { name: 'preferenceRecordId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
-    recordId: { name: 'recordId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    recordId: { name: 'recordId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
     value: { name: 'value', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },

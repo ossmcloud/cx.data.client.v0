@@ -107,7 +107,7 @@ class CXLogin extends RenderBase {
         
         
         if (shopListOptions) {
-            var prefListOptions = await this.getPreferenceListOptions(_cxSchema.cx_login.TBL_NAME, this.dataSource.id);
+            var prefListOptions = await this.getPreferenceListOptions();
             this.options.fields.push({
                 group: 'sublists', columnCount: 2, fields: [
                     { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },

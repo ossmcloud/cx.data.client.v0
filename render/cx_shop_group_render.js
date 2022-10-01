@@ -23,6 +23,7 @@ class CxShopGroupRender extends RenderBase {
                 shopListOptions.showButtons = [{ id: 'cr_shop_add', text: 'Add Store', function: 'addShop' }];
             }
         }
+        shopListOptions.quickSearch = true;
         return shopListOptions;
     }
 
@@ -57,11 +58,19 @@ class CxShopGroupRender extends RenderBase {
         ]
 
         if (shopListOptions) {
-            this.options.fields.push({
-                group: 'shops', title: 'stores assigned to this group', fields: [
-                    shopListOptions
+            var prefListOptions = await this.getPreferenceListOptions();
+            var subLists = {
+                group: 'sublists', columnCount: 2, fields: [
+                    { group: 'shops', title: 'stores assigned to this group', column: 1, fields: [shopListOptions] },
+                    { group: 'preferences', title: 'preferences', width: '500px', column: 2, fields: [prefListOptions] }
+                    
                 ]
-            })
+            }
+            this.options.fields.push(subLists);
+
+            // this.options.fields.push(
+            //     { group: 'shops', title: 'stores assigned to this group', fields: [shopListOptions] }
+            // )
         }
     }
 

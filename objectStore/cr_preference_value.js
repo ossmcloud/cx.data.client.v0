@@ -6,6 +6,20 @@ class cr_preference_value_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cr_preference_value(this, defaults);
     }
+
+
+
+    async select(params) {
+        if (!params) { params = {}; }
+        var query = {
+            sql: `select * from ${this.type} where ${this.FieldNames.PREFERENCEID} = @${this.FieldNames.PREFERENCEID}`,
+            params: [
+                { name: this.FieldNames.PREFERENCEID, value: params.pref }
+            ]
+        };
+
+        return await super.select(query);
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

@@ -151,51 +151,8 @@ class RenderBase {
     }
 
 
-    async getPreferenceListOptions(recordType, recordId) {
-        return await this.dataSource.cx.table('cr_preference').getPreferenceListOptions(recordType, recordId, (this.options.mode == 'view'));
-        // var query = {
-        //     sql: `select	p.preferenceId, p.name, p.type, pr.recordType, pr.levelId, 
-        //                 (select pc.recordId from cr_preference_config pc where pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId and pc.recordId = @recordId) as recordId,
-        //                 (case p.type 
-        //                     when 'value' then
-        //                         (select pv.label from cr_preference_value pv where pv.preferenceValueId = (select pc.value from cr_preference_config pc where pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId and pc.recordId = @recordId) ) 
-        //                     else
-        //                         (select pc.value from cr_preference_config pc where pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId and pc.recordId = @recordId) 
-        //                 end ) as [value]
-
-        //         from	cr_preference p
-        //         inner join cr_preference_record pr ON pr.preferenceId = p.preferenceId
-        //         left outer join cr_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
-        //         where	pr.recordType = @recordType
-        //         order by p.name desc`,
-        //     params: [
-        //         { name: 'recordId', value: recordId },
-        //         { name: 'recordType', value: recordType },
-        //     ]
-        // }
-
-        // var preferences = await this.dataSource.cx.exec(query);
-
-        // var listOptions = {
-        //     title: '',
-        //     listView: true,
-        //     records: preferences.rows,
-        //     columns: [
-        //         { name: 'name', title: 'preference' },
-        //         { name: 'type', title: 'type', width: '75px', align: 'center' },
-        //         { name: 'value', title: 'value', width: '250px' },
-        //     ],
-
-        // }
-
-        // if (this.options.mode == 'view') {
-        //     listOptions.showButtons = [
-        //         { id: 'cr_pref_edit', text: 'Edit Preferences', function: 'editPreferences' }
-        //     ]
-        // }
-
-        // return listOptions;
-        
+    async getPreferenceListOptions() {
+        return await this.dataSource.cx.table('cr_preference').getPreferenceListOptions(this.dataSource.type, this.dataSource.id, (this.options.mode == 'view'));
     }
 
 

@@ -8,7 +8,31 @@ class cr_preference_config_Collection extends _persistentTable.Table {
     }
 
 
-    
+
+    async fetch(prefId, prefRecId, recId) {
+        if (this.cx.cxSvc == true) { return await super.fetch(id); }
+
+        var query = {
+            sql: '', params: [
+                { name: this.FieldNames.PREFERENCEID, value: prefId },
+                { name: this.FieldNames.PREFERENCERECORDID, value: prefRecId },
+                { name: this.FieldNames.RECORDID, value: recId }
+            ]
+        };
+        query.sql = ` select  *
+                      from    ${this.type}
+                      where   ${this.FieldNames.PREFERENCEID} = @${this.FieldNames.PREFERENCEID}
+                      and     ${this.FieldNames.PREFERENCERECORDID} = @${this.FieldNames.PREFERENCERECORDID}
+                      and     ${this.FieldNames.RECORDID} = @${this.FieldNames.RECORDID}`
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { return null; }
+
+        return super.populate(rawRecord);
+    }
+
 
 }
 //

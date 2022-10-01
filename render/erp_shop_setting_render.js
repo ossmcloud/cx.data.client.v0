@@ -50,7 +50,7 @@ class ErpTraderAccount extends RenderBase {
             }
         ];
 
-        var prefListOptions = await this.getPreferenceListOptions(_cxSchema.erp_shop_setting.TBL_NAME, this.dataSource.id);
+        var prefListOptions = await this.getPreferenceListOptions();
         this.options.fields[0].fields.push({
             group: 'sublists', columnCount: 1, column: 3, fields: [
                 { group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] }
