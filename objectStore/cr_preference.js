@@ -1,5 +1,6 @@
 'use strict'
 //
+const _cxl = require('cx-core/core/cx-core-lists');
 const _persistentTable = require('./persistent/p-cr_preference');
 //
 class cr_preference_Collection extends _persistentTable.Table {
@@ -7,6 +8,26 @@ class cr_preference_Collection extends _persistentTable.Table {
         return new cr_preference(this, defaults);
     }
 
+    async select(params) {
+        if (!params) { params = {}; }
+
+        var sqlSelectFields = '';
+        for (var key in this.FieldNames) {
+            if (sqlSelectFields.length > 0) { sqlSelectFields += ','; }
+            if (this.FieldNames[key] == this.FieldNames.DEFAULTVALUE) {
+                sqlSelectFields += `case ${this.FieldNames.TYPE} when 'value' then (select label from cr_preference_value where preferenceValueId = ${this.FieldNames.DEFAULTVALUE}) else ${this.FieldNames.DEFAULTVALUE} end as ${this.FieldNames.DEFAULTVALUE}`;
+            } else {
+                sqlSelectFields += this.FieldNames[key]
+            }
+        }
+
+        var query = {
+            sql: `  select ${sqlSelectFields}
+                    from ${this.type} order by ${this.FieldNames.PREFERENCEID}`
+        }
+
+        return await super.select(query);
+    }
 
     async getPreferenceListOptions(recordType, recordId, allowEdit) {
         var query = {
@@ -53,8 +74,6 @@ class cr_preference_Collection extends _persistentTable.Table {
         }
 
         if (allowEdit) {
-            // TODO: re-enable when ready
-            //listOptions.showButtons = [{ id: 'cr_pref_edit', text: 'Edit Preferences', function: 'editPreferences' }];
             listOptions.actions = [{ label: 'edit', funcName: 'editPreference' }];
         }
 

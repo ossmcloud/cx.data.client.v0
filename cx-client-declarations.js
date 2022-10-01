@@ -391,9 +391,14 @@ const RENDER = {
         TEXT: 'inputText',
         TEXT_AREA: 'inputTextArea',
         DATE: 'inputDate',
+        NUMERIC: 'inputNumeric',
+        CHECK: 'inputCheckBox',
         SELECT: 'inputSelect',
         DROP_DOWN: 'inputDropDown',
-        NUMERIC: 'inputNumeric',
+        TABLE: 'table',
+        FORM: 'form',
+        GROUP: 'controlGroup',
+        HIDDEN: 'inputHidden',
     }
 }
 

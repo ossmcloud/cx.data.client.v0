@@ -8,6 +8,18 @@ class cr_preference_config_Collection extends _persistentTable.Table {
     }
 
 
+    async select(params) {
+        if (!params) { params = {} };
+
+        var query = {
+            sql: `select * from ${this.type} where ${this.FieldNames.PREFERENCEID} = @${this.FieldNames.PREFERENCEID}`,
+            params: [
+                { name: this.FieldNames.PREFERENCEID, value: params.pref }
+            ]
+        };
+
+        return await super.select(query);
+    }
 
     async fetch(prefId, prefRecId, recId) {
         if (this.cx.cxSvc == true) { return await super.fetch(id); }
