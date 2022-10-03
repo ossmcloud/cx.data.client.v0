@@ -17,9 +17,9 @@ class CRCashBookRender extends RenderBase {
 
         var depLookUp = null; var subDepLookUp = null; var taxCodeLookUp = null;
         var tranTypeLookUp = null; var tranSubTypeLookUp = null;
-        
 
-        if (this.options.allowEdit) {    
+
+        if (this.options.allowEdit) {
             //
             tranSubTypeLookUp = [];
             var tranTypes = this.dataSource.cx.table(_cxSchema.cr_tran_type_config);
@@ -37,93 +37,155 @@ class CRCashBookRender extends RenderBase {
             taxCodeLookUp = await taxCodes.toLookUpList(this.dataSource.shopId);
         }
 
+        var tranTypeCfg = null; var showAllFields = this.options.query.show == 'all_fields';
+        if (this.dataSource.tranTypeConfigId) {
+            tranTypeCfg = await this.dataSource.cx.table(_cxSchema.cr_tran_type_config).fetch(this.dataSource.tranTypeConfigId, true);
+        }
+        
 
-        this.options.fields = [
-            {
-                group: 'mainOuter', title: '', columnCount: 4, fields: [
-                    {
-                        group: 'main', title: 'main info', column: 1, columnCount: 2, inline: true, fields: [
-                            { name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 },
-                            { name: 'shopInfo', label: 'store', readOnly: true, column: 1 },
-                            { name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1 },
-                            { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 },
-                            { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, label: 'epos tran no', column: 1 },
-                            { name: _cxSchema.cr_transaction.EPOSTRANSACTIONID, label: 'epos tran id', column: 1 },
-                            
-                            
-                            { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, label: 'epos tran type', column: 1, lookUps: tranTypeLookUp },
-                            { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, label: 'sub-type', column: 1, lookUps: tranSubTypeLookUp },
 
-                            { name: _cxSchema.cr_transaction.REFERENCE1, label: 'reference 1', column: 2 },
-                            { name: _cxSchema.cr_transaction.REFERENCE2, label: 'reference 2', column: 2 },
-                            { name: _cxSchema.cr_transaction.LINENUMBER, label: 'line', column: 2 },
-                            { name: _cxSchema.cr_transaction.QUANTITY, label: 'quantity', column: 2 },
-                            { name: _cxSchema.cr_transaction.ITEMBARCODE, label: 'barcode', column: 2 },
-                            { name: _cxSchema.cr_transaction.ITEMDESCRIPTION, label: 'item description', column: 2 },
-                            { name: _cxSchema.cr_transaction.PLUCODE, label: 'plu code', column: 2 },
-                        ]
-                    },
-                    {
-                        group: 'value', title: 'values info', column: 2, columnCount: 2, inline: true, fields: [
-                            { name: _cxSchema.cr_transaction.VALUEGROSS, label: 'gross', column: 1 },
-                            { name: _cxSchema.cr_transaction.VALUENET, label: 'net', column: 1 },
-                            { name: _cxSchema.cr_transaction.VALUETAX, label: 'tax', column: 1 },
-                            { name: _cxSchema.cr_transaction.VALUEDISCOUNT, label: 'discount', column: 1 },
-                            { name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, label: 'promo', column: 1 },
-                            { name: _cxSchema.cr_transaction.CASHBACK, label: 'cashback', column: 1 },
-                            { name: _cxSchema.cr_transaction.CHANGE, label: 'change', column: 1 },
+        var fgMainInfo = { group: 'main', title: 'main info', column: 1, columnCount: 2, inline: true, fields: [] }
+        var fgValueInfo = { group: 'value', title: 'values info', column: 2, columnCount: 2, inline: true, fields: [] }
+        var fgOtherInfo = { group: 'other', title: 'other info', column: 3, columnCount: 2, inline: true, fields: [] };
+        var fgFuelInfo = { group: 'fuel', title: 'fuel info', column: 4, columnCount: 1, fields: [] };
+        var fdTraderAccount = await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+            id: _cxSchema.cr_transaction.CUSTOMERACCOUNT, name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, column: 1, dropDownSelectOptions: {
+                s: this.dataSource.shopId,
+                tt: 'C',
+                valueField: _cxSchema.cx_traderAccount.TRADERCODE
+            }
+        });
 
-                            { name: _cxSchema.cr_transaction.UNITPRICE, label: 'unit price', column: 1 },
-                            { name: _cxSchema.cr_transaction.UNITCOST, label: 'unit cost', column: 1 },
+        if (!tranTypeCfg || showAllFields) {
+            fgMainInfo.fields = [
+                { name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 },
+                { name: 'shopInfo', label: 'store', readOnly: true, column: 1 },
+                { name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1 },
+                { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 },
+                { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, label: 'epos tran no', column: 1 },
+                { name: _cxSchema.cr_transaction.EPOSTRANSACTIONID, label: 'epos tran id', column: 1 },
+                { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, label: 'epos tran type', column: 1, lookUps: tranTypeLookUp },
+                { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, label: 'sub-type', column: 1, lookUps: tranSubTypeLookUp },
+                { name: _cxSchema.cr_transaction.REFERENCE1, label: 'reference 1', column: 2 },
+                { name: _cxSchema.cr_transaction.REFERENCE2, label: 'reference 2', column: 2 },
+                { name: _cxSchema.cr_transaction.LINENUMBER, label: 'line', column: 2 },
+                { name: _cxSchema.cr_transaction.QUANTITY, label: 'quantity', column: 2 },
+                { name: _cxSchema.cr_transaction.ITEMBARCODE, label: 'barcode', column: 2 },
+                { name: _cxSchema.cr_transaction.ITEMDESCRIPTION, label: 'item description', column: 2 },
+                { name: _cxSchema.cr_transaction.PLUCODE, label: 'plu code', column: 2 },
+            ];
+            fgValueInfo.fields = [
+                { name: _cxSchema.cr_transaction.VALUEGROSS, label: 'gross', column: 1 },
+                { name: _cxSchema.cr_transaction.VALUENET, label: 'net', column: 1 },
+                { name: _cxSchema.cr_transaction.VALUETAX, label: 'tax', column: 1 },
+                { name: _cxSchema.cr_transaction.VALUEDISCOUNT, label: 'discount', column: 1 },
+                { name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, label: 'promo', column: 1 },
+                { name: _cxSchema.cr_transaction.CASHBACK, label: 'cashback', column: 1 },
+                { name: _cxSchema.cr_transaction.CHANGE, label: 'change', column: 1 },
 
-                            { name: _cxSchema.cr_transaction.RAW_VALUEGROSS, label: 'gross (raw)', column: 2 },
-                            { name: _cxSchema.cr_transaction.RAW_VALUENET, label: 'net (raw)', column: 2 },
-                            { name: _cxSchema.cr_transaction.RAW_VALUETAX, label: 'tax (raw)', column: 2 },
-                            { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNT, label: 'discount (raw)', column: 2 },
-                            { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNTPROMO, label: 'promo (raw)', column: 2 },
+                { name: _cxSchema.cr_transaction.UNITPRICE, label: 'unit price', column: 1 },
+                { name: _cxSchema.cr_transaction.UNITCOST, label: 'unit cost', column: 1 },
 
-                            { name: _cxSchema.cr_transaction.TAXCODE, label: 'tax code', lookUps: taxCodeLookUp, column: 2 },
-                            { name: _cxSchema.cr_transaction.TAXRATE, label: 'tax rate', column: 2 },
-                        ]
-                    },
-                    {
-                        group: 'other', title: 'other info', column: 3, columnCount: 2, inline: true, fields: [
-                          //  { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, label: 'customer account', column: 1 },
-                            //await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, { id: 'traderAccountId', name: 'traderCode', column: 1, }),
-                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
-                                id: _cxSchema.cr_transaction.CUSTOMERACCOUNT, name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, column: 1, dropDownSelectOptions: {
-                                    s: this.dataSource.shopId,
-                                    tt: 'C',
-                                    valueField: _cxSchema.cx_traderAccount.TRADERCODE
-                                }
-                            }),
+                { name: _cxSchema.cr_transaction.RAW_VALUEGROSS, label: 'gross (raw)', column: 2 },
+                { name: _cxSchema.cr_transaction.RAW_VALUENET, label: 'net (raw)', column: 2 },
+                { name: _cxSchema.cr_transaction.RAW_VALUETAX, label: 'tax (raw)', column: 2 },
+                { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNT, label: 'discount (raw)', column: 2 },
+                { name: _cxSchema.cr_transaction.RAW_VALUEDISCOUNTPROMO, label: 'promo (raw)', column: 2 },
 
-                            { name: _cxSchema.cr_transaction.DEPARTMENT, label: 'department', lookUps: depLookUp, column: 1 },
-                            { name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', lookUps: subDepLookUp, column: 1 },
-                            { name: _cxSchema.cr_transaction.CASHIERID, label: 'cashier id', column: 1 },
-                            { name: _cxSchema.cr_transaction.TILLID, label: 'till id', column: 1 },
+                { name: _cxSchema.cr_transaction.TAXCODE, label: 'tax code', lookUps: taxCodeLookUp, column: 2 },
+                { name: _cxSchema.cr_transaction.TAXRATE, label: 'tax rate', column: 2 },
+            ];
+            fgOtherInfo.fields = [
+                fdTraderAccount,
 
-                            { name: _cxSchema.cr_transaction.VOIDED, label: 'voided', column: 2 },
-                            { name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', readOnly: true, column: 2 },
-                            { name: _cxSchema.cr_transaction.ISDUPLICATE, label: 'duplicate', readOnly: true, column: 2 },
-                            { name: _cxSchema.cr_transaction.IGNORED, label: 'ignored', column: 2 },
-                            { name: _cxSchema.cr_transaction.PAIDINOUTREASONID, label: 'paid in/out reason', column: 2 },
-                            { name: _cxSchema.cr_transaction.PAIDINOUTREASONDESCRIPTION, label: 'paid in/out description', column: 2 },
-                        ]
-                    },
-                    {
-                        group: 'fuel', title: 'fuel info', column: 4, columnCount: 1, fields: [
-                            { name: _cxSchema.cr_transaction.PUMPNUMBER, label: 'pump number', column: 1 },
-                            { name: _cxSchema.cr_transaction.CARDTYPE, label: 'card type', column: 1 },
-                            { name: _cxSchema.cr_transaction.CARDNAME, label: 'card name', column: 1 },
-                            { name: _cxSchema.cr_transaction.BUNKERED, label: 'bunkered', column: 1 },
+                { name: _cxSchema.cr_transaction.DEPARTMENT, label: 'department', lookUps: depLookUp, column: 1 },
+                { name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', lookUps: subDepLookUp, column: 1 },
+                { name: _cxSchema.cr_transaction.CASHIERID, label: 'cashier id', column: 1 },
+                { name: _cxSchema.cr_transaction.TILLID, label: 'till id', column: 1 },
 
-                        ]
-                    }
-                ]
-            },
+                { name: _cxSchema.cr_transaction.VOIDED, label: 'voided', column: 2 },
+                { name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', readOnly: true, column: 2 },
+                { name: _cxSchema.cr_transaction.ISDUPLICATE, label: 'duplicate', readOnly: true, column: 2 },
+                { name: _cxSchema.cr_transaction.IGNORED, label: 'ignored', column: 2 },
+                { name: _cxSchema.cr_transaction.PAIDINOUTREASONID, label: 'paid in/out reason', column: 2 },
+                { name: _cxSchema.cr_transaction.PAIDINOUTREASONDESCRIPTION, label: 'paid in/out description', column: 2 },
+            ];
+            fgFuelInfo.fields = [
+                { name: _cxSchema.cr_transaction.PUMPNUMBER, label: 'pump number', column: 1 },
+                { name: _cxSchema.cr_transaction.CARDTYPE, label: 'card type', column: 1 },
+                { name: _cxSchema.cr_transaction.CARDNAME, label: 'card name', column: 1 },
+                { name: _cxSchema.cr_transaction.BUNKERED, label: 'bunkered', column: 1 },
 
-        ];
+            ];
+
+        } else {
+
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 });
+            fgMainInfo.fields.push({ name: 'shopInfo', label: 'store', readOnly: true, column: 1 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1, validation: '{ "mandatory": true }' });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, label: 'epos tran no', column: 1 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.EPOSTRANSACTIONID, label: 'epos tran id', column: 1 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.TRANSACTIONTYPE, label: 'epos tran type', column: 1, lookUps: tranTypeLookUp, readOnly: true });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, label: 'sub-type', column: 1, lookUps: tranSubTypeLookUp, readOnly: true });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.REFERENCE1, label: 'reference 1', column: 2, validation: '{ "mandatory": true }' });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.REFERENCE2, label: 'reference 2', column: 2 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.LINENUMBER, label: 'line', column: 2 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.QUANTITY, label: 'quantity', column: 2 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.ITEMBARCODE, label: 'barcode', column: 2 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.ITEMDESCRIPTION, label: 'item description', column: 2 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.PLUCODE, label: 'plu code', column: 2 });
+
+            if (tranTypeCfg.cbTranTypeId == 2 || tranTypeCfg.cbTranTypeId == 3 || tranTypeCfg.cbTranTypeId == 4) {
+                // Lodgement, Pay-Ins/Outs, Supplier Payouts
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.VALUEGROSS, label: 'amount', column: 1, validation: '{ "mandatory": true }' });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.CASHBACK, label: 'cashback', column: 1 });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.CHANGE, label: 'change', column: 1 });
+
+                fgOtherInfo.fields.push(fdTraderAccount);
+
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.PAIDINOUTREASONID, label: 'paid in/out reason', column: 2 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.PAIDINOUTREASONDESCRIPTION, label: 'paid in/out description', column: 2 });
+
+            } else {
+                // SALES, others, Wastage
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.VALUEGROSS, label: 'gross', column: 1, validation: '{ "mandatory": true }' });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.VALUENET, label: 'net', column: 1, validation: '{ "mandatory": true }' });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.VALUETAX, label: 'tax', column: 1, validation: '{ "mandatory": true }' });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.VALUEDISCOUNT, label: 'discount', column: 1 });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, label: 'promo', column: 1 });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.UNITPRICE, label: 'unit price', column: 1 });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.UNITCOST, label: 'unit cost', column: 1 });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.TAXCODE, label: 'tax code', lookUps: taxCodeLookUp, column: 2, validation: '{ "mandatory": true }' });
+                fgValueInfo.fields.push({ name: _cxSchema.cr_transaction.TAXRATE, label: 'tax rate', column: 2, validation: '{ "mandatory": true }' });
+
+                fgOtherInfo.fields.push(fdTraderAccount);
+
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.DEPARTMENT, label: 'department', lookUps: depLookUp, column: 1, validation: '{ "mandatory": true }' });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', lookUps: subDepLookUp, column: 1 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.CASHIERID, label: 'cashier id', column: 1 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.TILLID, label: 'till id', column: 1 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.VOIDED, label: 'voided', column: 2 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', readOnly: true, column: 2 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.ISDUPLICATE, label: 'duplicate', readOnly: true, column: 2 });
+                fgOtherInfo.fields.push({ name: _cxSchema.cr_transaction.IGNORED, label: 'ignored', column: 2 });
+            }
+
+        }
+
+
+
+        this.options.fields = [{ group: 'mainOuter', title: '', columnCount: 4, fields: [fgMainInfo, fgValueInfo] }];
+        if (fgOtherInfo.fields.length > 0) {
+            this.options.fields[0].fields.push(fgOtherInfo);
+            this.options.fields[0].columnCount += 1;
+            fgOtherInfo.column = this.options.fields[0].columnCount;
+        }
+        if (fgFuelInfo.fields.length > 0) {
+            this.options.fields[0].fields.push(fgFuelInfo);
+            this.options.fields[0].columnCount += 1;
+            fgFuelInfo.column = this.options.fields[0].columnCount;
+        }
 
         this.options.buttons.push({ id: 'cr_cb_view', text: 'View Cash Book', function: 'viewCashBook' });
         // if (this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING || this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.PENDING) {

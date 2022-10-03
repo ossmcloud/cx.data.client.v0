@@ -46,6 +46,10 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             query.params.push({ name: 'eposTranSubType', value: params.e_st });
         }
 
+        if (params.manual == 'T') {
+            query.sql += ' and c.allowEdit = 1';
+        }
+
 
         if (params.decla) {
             if (params.decla == 'T') {
@@ -59,8 +63,8 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
-    async toLookUpListByCfg(mapConfigId, addEmpty) {
-        await this.select({ mid: mapConfigId });
+    async toLookUpListByCfg(mapConfigId, addEmpty, allowEditOnly) {
+        await this.select({ mid: mapConfigId, manual: ((allowEditOnly) ? 'T' : 'F') });
         var lookUpValues = [];
         if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
         super.each(function (rec) {
