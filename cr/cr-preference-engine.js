@@ -3,6 +3,7 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const _core = require('cx-core');
+const _cored = require('cx-core/core/cx-core-date');
 
 async function getPrefConfigs(cx, prefId) {
     var query = {
@@ -97,6 +98,11 @@ class CRPreferenceEngine {
         if (prefValueType == 'object' || prefValueType == 'json') {
             return JSON.parse(prefValue);
         }
+
+        if (prefValueType == 'date') {
+            return _cored.parseEx(prefValue);
+        }
+
 
 
 

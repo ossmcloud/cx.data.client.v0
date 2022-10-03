@@ -2,6 +2,7 @@
 
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
+const { trimRight } = require('cx-core/core/cx-core-text');
 
 async function getPermission(recordType, role) {
     var permission = { allowNew: false, allowEdit: false, allowView: true };
@@ -116,7 +117,9 @@ async function getPermission(recordType, role) {
     }
 
     if (!permission.allowView) {
-        throw new Error('You have no permission to access this record');
+        var ex = new Error('You have no permission to access this record');
+        ex.permissionViolation = true;
+        throw ex;
     }
 
     return permission;

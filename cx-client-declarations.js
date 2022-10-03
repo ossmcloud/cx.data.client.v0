@@ -64,7 +64,11 @@ const CX_ROLE = {
 
 
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
-    getName: function (value) { return enumGetName(this, value); },
+    getName: function (value) {
+        if (value == 9) { return 'cx admin'; }
+        if (value == 8) { return 'cx support'; }
+        return enumGetName(this, value);
+    },
     listOptions: function (showId, showCheckBox) { return enumToListRenderOptions(this, showId, showCheckBox); }
 }
 

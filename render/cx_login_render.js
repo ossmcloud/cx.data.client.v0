@@ -104,8 +104,8 @@ class CXLogin extends RenderBase {
             }
         ];
 
-        
-        
+
+
         if (shopListOptions) {
             var prefListOptions = await this.getPreferenceListOptions();
             this.options.fields.push({
@@ -113,7 +113,7 @@ class CXLogin extends RenderBase {
                     { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },
                     { group: 'preferences', title: 'preferences', column: 2, width: '500px', fields: [prefListOptions] },
                     { group: 'roles', title: 'roles assigned to this user', column: 2, width: '500px', fields: [roleListOptions] },
-                    
+
                 ]
             });
         }
@@ -133,17 +133,38 @@ class CXLogin extends RenderBase {
     }
 
     async _list() {
+        var lookUps = _cxConst.CX_ROLE.toList();
+        lookUps.push({ value: 8, text: 'cx support' });
+        lookUps.push({ value: 9, text: 'cx admin' });
+        
         this.options.columns = [
             { name: _cxSchema.cx_login.LOGINID, title: ' ', align: 'center' },
             { name: _cxSchema.cx_login.MASTERLOGINID, title: 'id', align: 'center', width: '50px' },
             { name: _cxSchema.cx_login.EMAIL, title: 'email' },
-            { name: _cxSchema.cx_login.ROLEID, title: 'role', lookUps: _cxConst.CX_ROLE.toList() },
+            { name: _cxSchema.cx_login.ROLEID, title: 'role', width: '100px', lookUps: lookUps },
             { name: _cxSchema.cx_login.FIRSTNAME, title: 'first name', width: '200px' },
             { name: _cxSchema.cx_login.LASTNAME, title: 'last name', width: '200px' },
             { name: _cxSchema.cx_login.JOBTITLE, title: 'job title', width: '200px' },
             { name: _cxSchema.cx_login.CREATED, title: 'created', width: '200px' },
-
         ];
+
+        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: left;';
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_login.ROLEID, op: '=', value: 9,
+            style: 'background-color: rgb(246,71,146); color: white; ' + applyStyle,
+            columns: [_cxSchema.cx_login.ROLEID]
+        });
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_login.ROLEID, op: '=', value: 8,
+            style: 'background-color: orange; color: white; ' + applyStyle,
+            columns: [_cxSchema.cx_login.ROLEID]
+        });
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_login.ROLEID, op: '=', value: 7,
+            style: 'background-color: rgb(25,130,196); color: white; ' + applyStyle,
+            columns: [_cxSchema.cx_login.ROLEID]
+        });
     }
 }
 

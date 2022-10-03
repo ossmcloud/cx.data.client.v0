@@ -116,9 +116,9 @@ class CRPreferenceRender extends RenderBase {
             controlType = _cxConst.RENDER.CTRL_TYPE.NUMERIC;
         } else if (this.dataSource.type == 'object' || this.dataSource.type == 'json') {
             controlType = _cxConst.RENDER.CTRL_TYPE.TEXT_AREA;
+        } else if (this.dataSource.type == 'date') {
+            controlType = _cxConst.RENDER.CTRL_TYPE.DATE;
         }
-
-
 
         this.options.fields = [
             {
