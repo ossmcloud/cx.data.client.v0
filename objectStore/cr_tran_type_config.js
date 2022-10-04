@@ -12,17 +12,21 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         var query = { sql: '', params: [] };
 
         if (params.s) {
-            query.sql = `select	c.*, ct.code as cbTranType, et.tranName as erpTranType
+            query.sql = `select	c.*, ct.code as cbTranType, 
+                            case when ett.tranName is null then et.tranName else et.tranName + ' / ' + ett.tranName end as erpTranType
                     from	cr_tran_type_config c
                     inner join      cx_shop             s   ON c.mapConfigId = s.tranTypeConfigId
                     left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
                     left outer join sys_erp_tran_type   et  ON c.erpTranTypeId = et.tranTypeId
+                    left outer join sys_erp_tran_type   ett  ON c.erp2ndTranTypeId = ett.tranTypeId
                     where   1 = 1`;
         } else {
-            query.sql = `select	c.*, ct.code as cbTranType, et.tranName as erpTranType
+            query.sql = `select	c.*, ct.code as cbTranType,  
+                            case when ett.tranName is null then et.tranName else et.tranName + ' / ' + ett.tranName end as erpTranType
                     from	cr_tran_type_config c
                     left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
                     left outer join sys_erp_tran_type   et  ON c.erpTranTypeId = et.tranTypeId
+                    left outer join sys_erp_tran_type   ett  ON c.erp2ndTranTypeId = ett.tranTypeId
                     where   1 = 1`;
         }
 

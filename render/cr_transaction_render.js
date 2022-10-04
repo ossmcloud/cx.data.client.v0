@@ -251,12 +251,14 @@ class CRCashBookRender extends RenderBase {
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: #FFCD00; background-color: var(--element-bg-color);' }
         ];
 
-        this.options.actionsShowFirst = true;
-        this.options.actions = [
-            { label: 'delete', funcName: 'deleteManualTransaction' },
-            { label: 'edit', funcName: 'editManualTransaction' },
-            //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
-        ]
+        if (this.options.dialog) {
+            this.options.actionsShowFirst = true;
+            this.options.actions = [
+                { label: 'delete', funcName: 'deleteManualTransaction' },
+                { label: 'edit', funcName: 'editManualTransaction' },
+                //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
+            ]
+        }
 
         // this.options.allowEditCondition = function (object) {
         //     return object.isManual;
