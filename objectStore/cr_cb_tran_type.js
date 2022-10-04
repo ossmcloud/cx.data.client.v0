@@ -14,9 +14,16 @@ class cr_cb_tran_type_Collection extends _persistentTable.Table {
         var lookUpValues = [];
         if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
         super.each(function (rec) {
+
+            var mandatoryFields = [];
+            if (rec.mandatoryFields) {
+                mandatoryFields = rec.mandatoryFields.split(',');
+            }
+
             lookUpValues.push({
                 value: rec.cbTranTypeId,
-                text: `${rec.code} (${rec.tillDiffImpact})`
+                text: `${rec.code} (${rec.tillDiffImpact})`,
+                object: JSON.stringify(mandatoryFields)
             })
         });
 

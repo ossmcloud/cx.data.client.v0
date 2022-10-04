@@ -14,6 +14,7 @@ class CRCashBookRender extends RenderBase {
 
     async _record() {
         this.options.allowEdit = this.dataSource.isManual;
+        this.options.allowDelete = this.dataSource.isManual;
 
         var depLookUp = null; var subDepLookUp = null; var taxCodeLookUp = null;
         var tranTypeLookUp = null; var tranSubTypeLookUp = null;

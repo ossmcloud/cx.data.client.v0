@@ -44,6 +44,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
     EXCONDITION: 'exCondition',
+    ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
 
 }
 //
@@ -75,6 +76,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     exCondition: { name: 'exCondition', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    erp2ndTranTypeId: { name: 'erp2ndTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -242,6 +244,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EXCONDITION);
     } set exCondition(val) {
         super.setValue(_fieldNames.EXCONDITION, val);
+    }
+
+    get erp2ndTranTypeId() {
+        return super.getValue(_fieldNames.ERP2NDTRANTYPEID);
+    } set erp2ndTranTypeId(val) {
+        super.setValue(_fieldNames.ERP2NDTRANTYPEID, val);
     }
 
 

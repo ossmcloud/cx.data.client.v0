@@ -22,7 +22,9 @@ class CrTranTypeConfigRender extends RenderBase {
         duplicateAsLookUps = await duplicateAsLookUps.toLookUpListByCfg(this.dataSource.mapConfigId, true);
 
         var erpTranTypeLookUps = this.dataSource.cx.table(_cxSchema.sys_erp_tran_type);
-        erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('', true);
+
+         // TODO: implement use of erpProvider
+        erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('sage200', true);
 
         var readOnlyIfNotNew = !this.dataSource.isNew();
 
@@ -60,6 +62,8 @@ class CrTranTypeConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp configurations', column: 3, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 1, lookUps: erpTranTypeLookUps },
+                            { name: _cxSchema.cr_tran_type_config.ERP2NDTRANTYPEID, label: 'ERP Type (secondary)', column: 1, lookUps: erpTranTypeLookUps },
+
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                                 id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
                             }),

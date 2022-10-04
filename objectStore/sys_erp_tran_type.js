@@ -8,21 +8,18 @@ class sys_erp_tran_type_Collection extends _persistentTable.Table {
     }
 
     async toLookUpList(erpProvider, addEmpty) {
-        // TODO: implement use of erpProvider
-        await super.select();
+        var query = {
+            sql: `select * from ${this.type} where ${this.FieldNames.ERPPROVIDER} = @${this.FieldNames.ERPPROVIDER}`,
+            params: [{ name: this.FieldNames.ERPPROVIDER, value: erpProvider }]
+        }
+        await super.select(query);
 
         var lookUpValues = [];
         if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
         super.each(function (rec) {
-
-            // TODO: currently not fully supported
-            // if (rec.tranTypeId == 7 || rec.tranTypeId == 8 || rec.tranTypeId == 9 || rec.tranTypeId == 10) {
-            //     return;
-            // }
-
             lookUpValues.push({
                 value: rec.tranTypeId,
-                text: `[${rec.erpProvider} : ${rec.tranCode}] ${rec.tranName}`
+                text: `[${rec.erpProvider} : ${rec.tranCode}] ${rec.tranName}`,
             })
         });
         return lookUpValues;

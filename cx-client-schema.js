@@ -11,6 +11,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        MANDATORYFIELDS: 'mandatoryFields',
     },
 
     cr_cb_transaction: {
@@ -180,6 +181,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
         EXCONDITION: 'exCondition',
+        ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
     },
 
     cr_transaction: {

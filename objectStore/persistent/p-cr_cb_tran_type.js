@@ -27,13 +27,14 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    MANDATORYFIELDS: 'mandatoryFields',
 
 }
 //
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    cbTranTypeId: { name: 'cbTranTypeId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    cbTranTypeId: { name: 'cbTranTypeId', dataType: 'int', pk: true, identity: false, maxLength: 4, null: false },
     code: { name: 'code', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     tillDiffImpact: { name: 'tillDiffImpact', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     cbSection: { name: 'cbSection', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
@@ -41,6 +42,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    mandatoryFields: { name: 'mandatoryFields', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -64,6 +66,8 @@ class Persistent_cr_cb_tran_type extends _cx_data.DBRecord {
     // DEFINE TABLE FIELDS AS PROPERTIES
     get cbTranTypeId() {
         return super.getValue(_fieldNames.CBTRANTYPEID);
+    } set cbTranTypeId(val) {
+        super.setValue(_fieldNames.CBTRANTYPEID, val);
     }
 
     get code() {
@@ -106,6 +110,12 @@ class Persistent_cr_cb_tran_type extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get mandatoryFields() {
+        return super.getValue(_fieldNames.MANDATORYFIELDS);
+    } set mandatoryFields(val) {
+        super.setValue(_fieldNames.MANDATORYFIELDS, val);
     }
 
 
