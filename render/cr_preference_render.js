@@ -44,10 +44,20 @@ class CRPreferenceRender extends RenderBase {
             sql: `  select      pc.preferenceId, pc.preferenceRecordId, pr.levelId, pr.recordType, pc.recordId, ${valueSql},
 
                     case        pr.recordType
-                        when    'cx_login'      then (select l.firstName + ', ' + l.lastName from cx_login l where l.loginId = pc.recordId)
-                        when    'cx_shop_group' then (select '[' + l.groupCode + '] ' + l.groupName from cx_shop_group l where l.shopGroupId = pc.recordId)
-                        when    'erp_dtfs_setting' then (select l.dtfsSettingName from erp_dtfs_setting l where l.dtfsSettingId = pc.recordId)
-                        when    'erp_shop_setting' then (select l.erpCustomerAccount from erp_shop_setting l where l.shopId = pc.recordId)
+                        when    'cx_login'          then (select l.firstName + ', ' + l.lastName from cx_login l where l.loginId = pc.recordId)
+                        when    'cx_shop_group'     then (select '[' + l.groupCode + '] ' + l.groupName from cx_shop_group l where l.shopGroupId = pc.recordId)
+                        when    'erp_dtfs_setting'  then (select l.dtfsSettingName from erp_dtfs_setting l where l.dtfsSettingId = pc.recordId)
+                        when    'erp_shop_setting'  then (select l.erpCustomerAccount from erp_shop_setting l where l.shopId = pc.recordId)
+                        when    'cx_role'           then 
+                                case pc.recordId    when 0 then 'cash-book'
+                                                    when 1 then 'user'
+                                                    when 3 then 'supervisor'
+                                                    when 5 then 'manager'
+                                                    when 7 then 'admin'
+                                                    when 8 then 'cx support'
+                                                    when 9 then 'cx admin'
+                                                    else 'unknown role, id: ' + convert(varchar, pc.recordId)
+                                end 
                         else    ''
                     end as [recordName]
                                 
@@ -92,9 +102,11 @@ class CRPreferenceRender extends RenderBase {
 
         var prefConfigListOptions = null;
         if (this.options.mode == 'view') {
-            // TODO: re-set to true once fixed 
-            var allowEdit = false;
+            var allowEdit = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN;
             prefConfigListOptions = await this._loadPreferenceConfigs(allowEdit);
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                this.options.buttons.push({ id: 'cr_permission_add', text: 'Add Permission', function: 'addPermission' });
+            }
         }
 
         var controlType = '';
@@ -127,7 +139,7 @@ class CRPreferenceRender extends RenderBase {
                         group: 'main', title: 'main info', columnCount: 1, inline: true, fields: [
                             {
                                 group: 'main', columnCount: 2, inline: true, fields: [
-                                    { name: _cxSchema.cr_preference.NAME, label: 'name', column: 1, readOnly: true },
+                                    { name: _cxSchema.cr_preference.NAME, label: 'name', column: 1 },
                                     { name: _cxSchema.cr_preference.TYPE, label: 'type', column: 2, readOnly: true, lookUps: prefValueTypes },
                                 ]
                             },

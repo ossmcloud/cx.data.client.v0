@@ -44,6 +44,13 @@ class CRPreferenceEngine {
                 recordId: this.#cx.userId
             })
         }
+
+        if (!_core.list.findInArray(options.records, 'recordType', 'cx_role')) {
+            options.records.push({
+                recordType: 'cx_role',
+                recordId: this.#cx.roleId
+            })
+        }
         
         var pref = await this.#cx.table(_cxSchema.cr_preference).fetch(options.preference, true);
         if (!pref) { return null; }
