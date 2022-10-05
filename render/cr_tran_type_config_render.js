@@ -23,7 +23,7 @@ class CrTranTypeConfigRender extends RenderBase {
 
         var erpTranTypeLookUps = this.dataSource.cx.table(_cxSchema.sys_erp_tran_type);
 
-         // TODO: implement use of erpProvider
+        // TODO: implement use of erpProvider
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('sage200', true);
 
         var readOnlyIfNotNew = !this.dataSource.isNew();
@@ -54,6 +54,7 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 3 },
                                 ]
                             },
+                            { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 2, width: '100px' },
 
 
                         ]
@@ -99,7 +100,7 @@ class CrTranTypeConfigRender extends RenderBase {
     async _list() {
 
         this.options.filters = [
-            { label: 'map type', fieldName: 'type', name: 'type', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true},
+            { label: 'map type', fieldName: 'type', name: 'type', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true },
             { label: 'map id', fieldName: 'mid', name: _cxSchema.cr_tran_type_config.MAPCONFIGID, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, readOnly: true },
             { label: 'tran type', fieldName: 'e_tt', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'tran sub-type', fieldName: 'e_st', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
@@ -112,14 +113,16 @@ class CrTranTypeConfigRender extends RenderBase {
             //{ title: 'r', name: 's', unbound: true, align: 'center', width: '15px' },
             { title: 'epos tran. type', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
             { title: 'epos tran. sub-type', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE },
-            { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
             { title: ' ', name: 'exConditionIcon', unbound: true },
-            { title: 'c/b tran. type', name: 'cbTranType' },
+            { title: 'c/b tran. type', name: 'cbTranType', align: 'center' },
+            { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), align: 'center' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING },
-            { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList() },
-            { title: 'allow edit', name: _cxSchema.cr_tran_type_config.ALLOWEDIT },
-            { title: 'invert sign', name: _cxSchema.cr_tran_type_config.INVERTSIGN },
-            { title: 'ignore', name: _cxSchema.cr_tran_type_config.IGNORE },
+            { title: 'c/b description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
+            { title: 'sort', name: _cxSchema.cr_tran_type_config.SORTINDEX, width: '35px' },
+
+            { title: 'allow edit', name: _cxSchema.cr_tran_type_config.ALLOWEDIT, align: 'center' },
+            { title: 'invert sign', name: _cxSchema.cr_tran_type_config.INVERTSIGN, align: 'center' },
+            { title: 'ignore', name: _cxSchema.cr_tran_type_config.IGNORE, align: 'center' },
             // 
 
             { title: 'erp tran. type', name: 'erpTranType' },
@@ -150,6 +153,28 @@ class CrTranTypeConfigRender extends RenderBase {
         });
 
         this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.IGNORE],
+            style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyle,
+        })
+
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.INVERTSIGN, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.INVERTSIGN],
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.ALLOWEDIT, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.ALLOWEDIT],
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.ALLOWNEW, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.ALLOWNEW],
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyle,
+        })
+
+        this.options.cellHighlights.push({
             column: 'cbTranTypeId',
             columns: ['cbTranType'],
             customStyle: function (object, value, highlight) {
@@ -172,24 +197,18 @@ class CrTranTypeConfigRender extends RenderBase {
         })
 
         this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION,
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, op: '=', value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.FORCE,
             columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
-            op: '=',
-            value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.FORCE,
             style: 'background-color: indianred; color: whitesmoke; font-weight: bold; ' + appendStyle,
         })
         this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION,
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, op: '=', value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.YES,
             columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
-            op: '=',
-            value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.YES,
             style: 'background-color: #FFCD00; color: black; ' + appendStyle,
         })
         this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION,
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, op: '=', value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.NO,
             columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
-            op: '=',
-            value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.NO,
             style: 'border: 1px dotted gray; color: silver; ' + appendStyle,
         })
 

@@ -182,6 +182,7 @@ module.exports = {
         ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
         EXCONDITION: 'exCondition',
         ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
+        SORTINDEX: 'sortIndex',
     },
 
     cr_transaction: {

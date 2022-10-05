@@ -45,6 +45,7 @@ const _fieldNames = {
     ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
     EXCONDITION: 'exCondition',
     ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
+    SORTINDEX: 'sortIndex',
 
 }
 //
@@ -77,6 +78,7 @@ const _fields = {
     erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     exCondition: { name: 'exCondition', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     erp2ndTranTypeId: { name: 'erp2ndTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    sortIndex: { name: 'sortIndex', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -250,6 +252,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERP2NDTRANTYPEID);
     } set erp2ndTranTypeId(val) {
         super.setValue(_fieldNames.ERP2NDTRANTYPEID, val);
+    }
+
+    get sortIndex() {
+        return super.getValue(_fieldNames.SORTINDEX);
+    } set sortIndex(val) {
+        super.setValue(_fieldNames.SORTINDEX, val);
     }
 
 
