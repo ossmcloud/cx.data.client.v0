@@ -32,10 +32,10 @@ class CRPreferenceRender extends RenderBase {
             ],
             highlights: [{
                 column: _cxSchema.cr_preference_record.DISABLED, op: '=', value: true,
-             //   columns: [_cxSchema.cr_preference_record.RECORDTYPE, _cxSchema.cr_preference_record.LEVELID],
-                style: 'color: var(--element-color-disabled); font-style: italic;' 
+                //   columns: [_cxSchema.cr_preference_record.RECORDTYPE, _cxSchema.cr_preference_record.LEVELID],
+                style: 'color: var(--element-color-disabled); font-style: italic;'
             }],
-            
+
         }
 
         if (allowEdit) {
@@ -43,13 +43,13 @@ class CRPreferenceRender extends RenderBase {
                 { label: 'disable', funcName: 'disablePrefRecord' },
                 { label: 'enable', funcName: 'enablePrefRecord' }
             ];
-            listOptions.allowActionCondition= function (action, object) {
+            listOptions.allowActionCondition = function (action, object) {
                 if (action.label == 'disable') {
                     if (!object.disabled) { return true }
-                    
+
                 } else if (action.label == 'enable') {
                     if (object.disabled) { return true }
-                    
+
                 }
             }
         }
@@ -60,7 +60,7 @@ class CRPreferenceRender extends RenderBase {
 
         var valueSql = 'pc.value';
         if (this.dataSource.type == 'value') {
-            valueSql ='(select pv.label from cr_preference_value pv where pv.preferenceValueId = pc.value) as [value]'
+            valueSql = '(select pv.label from cr_preference_value pv where pv.preferenceValueId = pc.value) as [value]'
         }
 
         var query = {
@@ -110,7 +110,7 @@ class CRPreferenceRender extends RenderBase {
                 { name: 'recordId', dataHidden: 'record-id' },
             ],
             highlights: [{
-                column:'disabled', op: '=', value: true,
+                column: 'disabled', op: '=', value: true,
                 style: 'color: var(--element-color-disabled); font-style: italic;'
             }],
         }
@@ -135,9 +135,10 @@ class CRPreferenceRender extends RenderBase {
 
         var prefConfigListOptions = null;
         if (this.options.mode == 'view') {
-            
+            // load config records only in view mode
             prefConfigListOptions = await this._loadPreferenceConfigs(allowEdit);
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+            // only allow admins to add permissions and only if we have associated records (which we have unless this is a global only preference)
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN && prefRecordListOptions.records.length > 0) {
                 this.options.buttons.push({ id: 'cr_permission_add', text: 'Add Permission', function: 'addPermission' });
             }
         }
@@ -182,7 +183,7 @@ class CRPreferenceRender extends RenderBase {
                         ]
                     },
                     {
-                        group: 'audit', title: 'apply to records', width: '100%', column: 2, fields: [prefRecordListOptions]        
+                        group: 'audit', title: 'apply to records', width: '100%', column: 2, fields: [prefRecordListOptions]
                     }
                 ]
             }

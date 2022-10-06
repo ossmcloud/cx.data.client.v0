@@ -13,6 +13,11 @@ class CxLoginRole extends RenderBase {
     async _record() {
         var preferenceLookUp = await this.dataSource.cx.table(_cxSchema.cr_preference).toLookUpList();
         var preferenceRecLookUp = await this.dataSource.cx.table(_cxSchema.cr_preference_record).toLookUpList(this.dataSource.preferenceId, true);
+        if (preferenceRecLookUp.length == 1) {
+            if (this.dataSource.isNew) {
+                throw new Error('this preference does not apply to any, no permission can be added.')
+            }
+        }
 
 
         this.options.fields = [

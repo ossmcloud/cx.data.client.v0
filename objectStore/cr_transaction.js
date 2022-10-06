@@ -62,6 +62,11 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.params.push({ name: this.FieldNames.TRANSACTIONSUBTYPE, value: params.e_ts + '%' });
         }
 
+        if (params.cust) {
+            query.sql += ` and t.${this.FieldNames.CUSTOMERACCOUNT} = @${this.FieldNames.CUSTOMERACCOUNT}`;
+            query.params.push({ name: this.FieldNames.CUSTOMERACCOUNT, value: params.cust });
+        }
+
         if (params.manual) {
             query.sql += ` and t.${this.FieldNames.ISMANUAL} = @${this.FieldNames.ISMANUAL}`;
             query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T') ? 1 : 0 });
@@ -93,6 +98,30 @@ class cr_transaction_Collection extends _persistentTable.Table {
         if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist or was deleted!`); }
 
         return super.populate(rawRecord);
+    }
+
+    async selectGroup(params) {
+        var query = { sql: '', params: [] };
+        query.sql = ` select  MIN(t.transactionDateTime) as transactionDateTime, cust.traderCode, cust.traderName, t.eposTransactionNo, SUM(t.valueGross) as valueGross, SUM(t.valueTax) as valueTax, SUM(t.valueNet) as valueNet
+                      from    ${this.type} t
+                      inner join cx_shop s ON s.shopId = t.shopId
+                      left outer join cr_tran_type_config tranType ON tranType.tranTypeConfigId = t.tranTypeConfigId
+                      left outer join cx_traderAccount cust ON t.shopId = cust.shopId and t.customerAccount = cust.traderCode and cust.traderType = 'C'
+                      where   t.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+
+        query.sql += ' and t.cbTranId = @cbTranId';
+        query.params.push({ name: 'cbTranId', value: params.cb });
+
+        query.sql += ` and t.${this.FieldNames.CUSTOMERACCOUNT} = @${this.FieldNames.CUSTOMERACCOUNT}`;
+        query.params.push({ name: this.FieldNames.CUSTOMERACCOUNT, value: params.cust });
+
+        query.sql += ' and tranType.tranTypeConfigId = @tranTypeConfigId';
+        query.params.push({ name: 'tranTypeConfigId', value: params.ttt });
+
+
+        query.sql += ' group by cust.traderCode, cust.traderName, t.eposTransactionNo';
+        query.sql += ' order by eposTransactionNo'
+        return await this.cx.exec(query);
     }
 }
 //
