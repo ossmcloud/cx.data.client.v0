@@ -134,6 +134,7 @@ module.exports = {
         PREFERENCEID: 'preferenceId',
         LEVELID: 'levelId',
         RECORDTYPE: 'recordType',
+        DISABLED: 'disabled',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',

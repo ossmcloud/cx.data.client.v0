@@ -23,11 +23,11 @@ const _fieldNames = {
     PREFERENCEID: 'preferenceId',
     LEVELID: 'levelId',
     RECORDTYPE: 'recordType',
+    DISABLED: 'disabled',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-
 }
 //
 // FIELD SPECIFICATIONS
@@ -37,11 +37,11 @@ const _fields = {
     preferenceId: { name: 'preferenceId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     levelId: { name: 'levelId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     recordType: { name: 'recordType', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
+    disabled: { name: 'disabled', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
@@ -84,6 +84,12 @@ class Persistent_cr_preference_record extends _cx_data.DBRecord {
         super.setValue(_fieldNames.RECORDTYPE, val);
     }
 
+    get disabled() {
+        return super.getValue(_fieldNames.DISABLED);
+    } set disabled(val) {
+        super.setValue(_fieldNames.DISABLED, val);
+    }
+
     get created() {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
@@ -107,6 +113,8 @@ class Persistent_cr_preference_record extends _cx_data.DBRecord {
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
+
+   
 
 
 }

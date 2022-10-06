@@ -13,6 +13,7 @@ async function getPrefConfigs(cx, prefId) {
                 inner join      cr_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
 
                 where	        p.preferenceId = @preferenceId
+                and             isnull(pr.disabled, 0) = 0
                 
                 order by pr.levelId desc
         `,

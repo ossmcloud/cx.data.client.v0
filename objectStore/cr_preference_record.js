@@ -19,6 +19,21 @@ class cr_preference_record_Collection extends _persistentTable.Table {
 
         return await super.select(query);
     }
+
+
+    async toLookUpList(prefId, addEmpty) {
+        await this.select({ pref: prefId });
+
+        var lookUpValues = [];
+        if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.preferenceRecordId,
+                text: rec.recordType
+            })
+        });
+        return lookUpValues;
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

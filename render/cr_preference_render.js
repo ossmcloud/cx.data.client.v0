@@ -27,9 +27,32 @@ class CRPreferenceRender extends RenderBase {
             columns: [
                 { name: 'levelId', title: 'level', width: '50px' },
                 { name: 'recordType', title: 'type' },
+                { name: 'preferenceRecordId', dataHidden: 'preference-record-id' },
+
             ],
+            highlights: [{
+                column: _cxSchema.cr_preference_record.DISABLED, op: '=', value: true,
+             //   columns: [_cxSchema.cr_preference_record.RECORDTYPE, _cxSchema.cr_preference_record.LEVELID],
+                style: 'color: var(--element-color-disabled); font-style: italic;' 
+            }],
+            
         }
-        if (allowEdit) { listOptions.actions = [{ label: 'disable', funcName: 'disablePrefRecord' }]; }
+
+        if (allowEdit) {
+            listOptions.actions = [
+                { label: 'disable', funcName: 'disablePrefRecord' },
+                { label: 'enable', funcName: 'enablePrefRecord' }
+            ];
+            listOptions.allowActionCondition= function (action, object) {
+                if (action.label == 'disable') {
+                    if (!object.disabled) { return true }
+                    
+                } else if (action.label == 'enable') {
+                    if (object.disabled) { return true }
+                    
+                }
+            }
+        }
         return listOptions;
     }
 
@@ -41,7 +64,7 @@ class CRPreferenceRender extends RenderBase {
         }
 
         var query = {
-            sql: `  select      pc.preferenceId, pc.preferenceRecordId, pr.levelId, pr.recordType, pc.recordId, ${valueSql},
+            sql: `  select      pc.preferenceId, pc.preferenceRecordId, pr.levelId, pr.disabled, pr.recordType, pc.recordId, ${valueSql},
 
                     case        pr.recordType
                         when    'cx_login'          then (select l.firstName + ', ' + l.lastName from cx_login l where l.loginId = pc.recordId)
@@ -86,8 +109,17 @@ class CRPreferenceRender extends RenderBase {
                 { name: 'preferenceRecordId', dataHidden: 'preference-record-id' },
                 { name: 'recordId', dataHidden: 'record-id' },
             ],
+            highlights: [{
+                column:'disabled', op: '=', value: true,
+                style: 'color: var(--element-color-disabled); font-style: italic;'
+            }],
         }
-        if (allowEdit) { listOptions.actions = [{ label: 'edit', funcName: 'editPreference' }]; }
+        if (allowEdit) {
+            listOptions.actions = [
+                { label: 'edit', funcName: 'editPreference' },
+                { label: 'delete', funcName: 'deletePreference' }
+            ];
+        }
         return listOptions;
     }
 
@@ -98,11 +130,12 @@ class CRPreferenceRender extends RenderBase {
 
         this.options.allowNew = false;
 
-        var prefRecordListOptions = await this._loadPreferenceRecords(this.options.mode == 'edit');
+        var allowEdit = ((this.options.mode == 'view') && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN);
+        var prefRecordListOptions = await this._loadPreferenceRecords(allowEdit);
 
         var prefConfigListOptions = null;
         if (this.options.mode == 'view') {
-            var allowEdit = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN;
+            
             prefConfigListOptions = await this._loadPreferenceConfigs(allowEdit);
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
                 this.options.buttons.push({ id: 'cr_permission_add', text: 'Add Permission', function: 'addPermission' });

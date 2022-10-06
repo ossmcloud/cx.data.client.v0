@@ -29,6 +29,20 @@ class cr_preference_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
+    async toLookUpList(addEmpty) {
+        await this.select();
+
+        var lookUpValues = [];
+        if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.preferenceId,
+                text: rec.name
+            })
+        });
+        return lookUpValues;
+    }
+
     async getPreferenceListOptions(recordType, recordId, allowEdit) {
         var query = {
             sql: `select	p.preferenceId, pr.preferenceRecordId, pr.recordType, p.name, p.type, pr.levelId,
@@ -47,6 +61,7 @@ class cr_preference_Collection extends _persistentTable.Table {
                 inner join cr_preference_record pr ON pr.preferenceId = p.preferenceId
                 --left outer join cr_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
                 where	pr.recordType = @recordType
+                and     isnull(pr.disabled, 0) = 0
                 order by p.name desc`,
             params: [
                 { name: 'recordId', value: recordId },
@@ -74,7 +89,10 @@ class cr_preference_Collection extends _persistentTable.Table {
         }
 
         if (allowEdit) {
-            listOptions.actions = [{ label: 'edit', funcName: 'editPreference' }];
+            listOptions.actions = [
+                { label: 'edit', funcName: 'editPreference' },
+                { label: 'delete', funcName: 'deletePreference' }
+            ];
         }
 
         return listOptions;
