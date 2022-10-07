@@ -252,12 +252,12 @@ class CRCashBookRender extends RenderBase {
         ];
 
         if (this.options.dialog) {
-            this.options.actionsShowFirst = true;
-            this.options.actions = [
-                { label: 'delete', funcName: 'deleteManualTransaction' },
-                { label: 'edit', funcName: 'editManualTransaction' },
-                //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
-            ]
+            // this.options.actionsShowFirst = true;
+            // this.options.actions = [
+            //     { label: 'delete', funcName: 'deleteManualTransaction' },
+            //     { label: 'edit', funcName: 'editManualTransaction' },
+            //     //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
+            // ]
         }
 
         // this.options.allowEditCondition = function (object) {

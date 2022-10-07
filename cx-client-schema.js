@@ -243,6 +243,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISEDITED: 'isEdited',
     },
 
     cx_login: {

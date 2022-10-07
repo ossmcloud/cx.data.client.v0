@@ -26,6 +26,7 @@ const _fieldNames = {
     DEPMAPCONFIGID: 'depMapConfigId',
     TAXMAPCONFIGID: 'taxMapConfigId',
     ERPCBACCOUNTID: 'erpCBAccountId',
+    ISEDITED: 'isEdited',
     ISMANUAL: 'isManual',
     ISDUPLICATE: 'isDuplicate',
     VALUEGROSS: 'valueGross',
@@ -74,6 +75,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    
 
 }
 //
@@ -87,6 +89,7 @@ const _fields = {
     depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isEdited: { name: 'isEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isDuplicate: { name: 'isDuplicate', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     valueGross: { name: 'valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -94,7 +97,7 @@ const _fields = {
     valueDiscount: { name: 'valueDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     valueDiscountPromo: { name: 'valueDiscountPromo', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     valueTax: { name: 'valueTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    ignored: { name: 'ignored', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: false },
+    ignored: { name: 'ignored', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     eposTransactionId: { name: 'eposTransactionId', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     eposTransactionNo: { name: 'eposTransactionNo', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     transactionDate: { name: 'transactionDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
@@ -129,12 +132,13 @@ const _fields = {
     cardName: { name: 'cardName', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     paidInOutReasonId: { name: 'paidInOutReasonId', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
     paidInOutReasonDescription: { name: 'paidInOutReasonDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
-    voided: { name: 'voided', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: false },
-    bunkered: { name: 'bunkered', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: false },
+    voided: { name: 'voided', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    bunkered: { name: 'bunkered', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    
 
 }
 //
@@ -194,6 +198,12 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPCBACCOUNTID);
     } set erpCBAccountId(val) {
         super.setValue(_fieldNames.ERPCBACCOUNTID, val);
+    }
+
+    get isEdited() {
+        return super.getValue(_fieldNames.ISEDITED);
+    } set isEdited(val) {
+        super.setValue(_fieldNames.ISEDITED, val);
     }
 
     get isManual() {
@@ -483,6 +493,8 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
+
+    
 
 
 }

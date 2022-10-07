@@ -178,7 +178,7 @@ class CRPreferenceRender extends RenderBase {
                                 ]
                             },
                             { name: _cxSchema.cr_preference.DESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, label: 'description', validation: '{ "mandatory": true, "max": 255  }' },
-                            { name: _cxSchema.cr_preference.DEFAULTVALUE, label: 'global default', validation: '{ "mandatory": true, "max": 255  }', type: controlType, lookUps: valuesLookUp },
+                            { name: _cxSchema.cr_preference.DEFAULTVALUE, label: 'global default', type: controlType, lookUps: valuesLookUp },
 
                         ]
                     },

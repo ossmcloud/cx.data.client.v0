@@ -61,6 +61,11 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.sql += ` and t.${this.FieldNames.TRANSACTIONSUBTYPE} like @${this.FieldNames.TRANSACTIONSUBTYPE}`;
             query.params.push({ name: this.FieldNames.TRANSACTIONSUBTYPE, value: params.e_ts + '%' });
         }
+        if (params.e_tid) {
+            //eposTransactionId
+            query.sql += ` and t.${this.FieldNames.EPOSTRANSACTIONID} = @${this.FieldNames.EPOSTRANSACTIONID}`;
+            query.params.push({ name: this.FieldNames.EPOSTRANSACTIONID, value: params.e_tid });
+        }
 
         if (params.cust) {
             query.sql += ` and t.${this.FieldNames.CUSTOMERACCOUNT} = @${this.FieldNames.CUSTOMERACCOUNT}`;
@@ -102,7 +107,10 @@ class cr_transaction_Collection extends _persistentTable.Table {
 
     async selectGroup(params) {
         var query = { sql: '', params: [] };
-        query.sql = ` select  MIN(t.transactionDateTime) as transactionDateTime, cust.traderCode, cust.traderName, t.eposTransactionNo, SUM(t.valueGross) as valueGross, SUM(t.valueTax) as valueTax, SUM(t.valueNet) as valueNet
+        query.sql = ` select  MIN(t.transactionDateTime) as transactionDateTime, cust.traderCode, cust.traderName, t.eposTransactionNo, t.eposTransactionId, 
+                        SUM(case t.voided when 1 then 0 else t.valueGross end) as valueGross, 
+                        SUM(case t.voided when 1 then 0 else t.valueTax end) as valueTax, 
+                        SUM(case t.voided when 1 then 0 else t.valueNet end) as valueNet
                       from    ${this.type} t
                       inner join cx_shop s ON s.shopId = t.shopId
                       left outer join cr_tran_type_config tranType ON tranType.tranTypeConfigId = t.tranTypeConfigId
@@ -119,7 +127,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
         query.params.push({ name: 'tranTypeConfigId', value: params.ttt });
 
 
-        query.sql += ' group by cust.traderCode, cust.traderName, t.eposTransactionNo';
+        query.sql += ' group by cust.traderCode, cust.traderName, t.eposTransactionNo, t.eposTransactionId';
         query.sql += ' order by eposTransactionNo'
         return await this.cx.exec(query);
     }

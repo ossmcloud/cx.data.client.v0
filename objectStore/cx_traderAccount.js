@@ -81,6 +81,21 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+    async toLookUpList(params) {
+        await this.select(params);
+
+        var _this = this;
+        var lookUpValues = [];
+        super.each(function (record) {
+            lookUpValues.push({
+                value: record.traderAccountId,
+                text: '[' + record.traderCode + '] ' + record.traderName,
+            })
+        });
+
+        return lookUpValues;
+    }
+
 }
 //
 // ----------------------------------------------------------------------------------------
