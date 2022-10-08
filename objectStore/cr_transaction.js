@@ -13,7 +13,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  ${(params.cb) ? 'top 2000' : 'top 1000'} t.*, s.shopCode, s.shopName
+        query.sql = ` select  t.*, s.shopCode, s.shopName
                       from    ${this.type} t
                       inner join cx_shop s ON s.shopId = t.shopId
                       left outer join cr_tran_type_config tranType ON tranType.tranTypeConfigId = t.tranTypeConfigId
@@ -84,6 +84,13 @@ class cr_transaction_Collection extends _persistentTable.Table {
         }
 
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
+
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
+
+
         return await super.select(query);
     }
 

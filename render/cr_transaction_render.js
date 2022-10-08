@@ -204,8 +204,6 @@ class CRCashBookRender extends RenderBase {
 
 
         this.options.filters = [
-            //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),
-            { label: 'cb', fieldName: 'cb', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, width: '30px', readOnly: true },
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
@@ -217,6 +215,7 @@ class CRCashBookRender extends RenderBase {
             { label: 'epos tran. sub-type', fieldName: 'e_ts', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'epos tran. no', fieldName: 'e_tn', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'cashbook heading', fieldName: 'cb_h', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'cb', fieldName: 'cb', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, width: '30px', readOnly: true },
         ];
         this.options.columns = [
             { name: 'tranId', title: ' ', align: 'center' },
@@ -251,7 +250,10 @@ class CRCashBookRender extends RenderBase {
             // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: #FFCD00; background-color: var(--element-bg-color);' }
         ];
 
-        if (this.options.dialog) {
+        if (!this.options.dialog) {
+            this.options.paging = true;
+            this.options.pageNo = (this.options.query.page || 1);
+            
             // this.options.actionsShowFirst = true;
             // this.options.actions = [
             //     { label: 'delete', funcName: 'deleteManualTransaction' },

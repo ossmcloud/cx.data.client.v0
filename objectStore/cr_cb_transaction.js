@@ -21,7 +21,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         } else {
 
             var query = { sql: '', params: [] };
-            query.sql = ` select  top ${_declarations.SQL.MAX_ROWS} l.*, s.shopCode, s.shopName
+            query.sql = ` select  l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
                       and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
@@ -66,6 +66,12 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                 }
             }
             query.sql += ' order by l.date desc';
+
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
+
             return await super.select(query);
         }
     }

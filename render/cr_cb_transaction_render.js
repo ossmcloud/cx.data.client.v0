@@ -32,6 +32,9 @@ class CRCashBookRender extends RenderBase {
 
         var isBatchProcessing = (this.options.query && this.options.query.batch == 'T');
 
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query.page || 1);
+
         this.options.filters = [
             //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),

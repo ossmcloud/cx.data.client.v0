@@ -409,6 +409,7 @@ const RENDER = {
 const SQL = {
     MAX_ROWS: 1000,
     MAX_QUERY_RESULTS: 4000,
+    PAGE_SIZE: 200,
 }
 
 
