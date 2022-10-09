@@ -33,7 +33,7 @@ class CRCashBookRender extends RenderBase {
         var isBatchProcessing = (this.options.query && this.options.query.batch == 'T');
 
         this.options.paging = true;
-        this.options.pageNo = (this.options.query.page || 1);
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
 
         this.options.filters = [
             //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),
@@ -119,10 +119,10 @@ class CRCashBookRender extends RenderBase {
             customStyle: function (object, value, highlight) {
                 //if (value == 0) { return; }
                 //if (object.status == _cxConst.CR_CASH_BOOK.STATUS.New || object.status == _cxConst.CR_CASH_BOOK.STATUS.Pending || object.status == _cxConst.CR_CASH_BOOK.STATUS.PostingReady) {
-                    //return 'background-color: rgba(255,0,0,0.10);'
-                    if (value < 0) { return 'font-weight: bold; color: red;'; }
-                    if (value > 0) { return 'color: #34ad68;'; }
-                    return 'color: var(--element-bd-color);';
+                //return 'background-color: rgba(255,0,0,0.10);'
+                if (value < 0) { return 'font-weight: bold; color: red;'; }
+                if (value > 0) { return 'color: #34ad68;'; }
+                return 'color: var(--element-bd-color);';
                 //}
             }
         })
