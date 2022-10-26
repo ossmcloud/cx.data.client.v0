@@ -77,6 +77,7 @@ class erp_shop_setting extends _persistentTable.Record {
     #shopCode = '';
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
     };
