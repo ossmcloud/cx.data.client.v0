@@ -54,8 +54,12 @@ class CxMapConfigRender extends RenderBase {
 
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
 
         this.options.filters = [
+            { label: 'mid', fieldName: 'mid', hidden: true },
+            { label: 'type', fieldName: 'type', hidden: true },
             { label: 'tax code', fieldName: 'tt', name: _cxSchema.cx_map_config_tax.EPOSTAXCODE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'description', fieldName: 'ts', name: _cxSchema.cx_map_config_tax.EPOSDESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             

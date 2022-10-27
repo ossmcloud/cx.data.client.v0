@@ -1,6 +1,7 @@
 'use strict'
 //
 const _persistentTable = require('./persistent/p-cr_preference_config');
+const _declarations = require('../cx-client-declarations');
 //
 class cr_preference_config_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -17,6 +18,10 @@ class cr_preference_config_Collection extends _persistentTable.Table {
                 { name: this.FieldNames.PREFERENCEID, value: params.pref }
             ]
         };
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
 
         return await super.select(query);
     }

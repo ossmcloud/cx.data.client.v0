@@ -46,6 +46,9 @@ class RawGetRequest extends RenderBase {
     }
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
+
         this.options.recordTitle = 'get request';
         //var users = await this.dataSource.cx.table(_cxSchema.cx_login).selectList();
         this.options.filters = [

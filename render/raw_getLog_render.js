@@ -36,6 +36,9 @@ class RawGetLog extends RenderBase {
     }
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
+
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { id: 'cx_transmission', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tr', label: 'transmission' },

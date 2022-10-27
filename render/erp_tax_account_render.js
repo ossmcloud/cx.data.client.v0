@@ -49,6 +49,9 @@ class ErpTaxAccount extends RenderBase {
     }
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
+
         this.options.recordTitle = 'tax account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),

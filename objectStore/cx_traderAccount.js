@@ -1,6 +1,7 @@
 'use strict'
 //
 const _persistentTable = require('./persistent/p-cx_traderAccount');
+const _declarations = require('../cx-client-declarations');
 //
 class cx_traderAccount_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -19,7 +20,7 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
 
-        query.sql = `select	top 1000 t.*, s.shopCode, s.shopName, erp.traderCode as erpTraderCode, erp.traderName as erpTraderName
+        query.sql = `select	t.*, s.shopCode, s.shopName, erp.traderCode as erpTraderCode, erp.traderName as erpTraderName
                     from	cx_traderAccount t
                     inner join cx_shop s on s.shopId = t.shopId
                     left outer join erp_traderAccount erp on erp.traderAccountId = t.erpTraderAccountId
@@ -41,21 +42,10 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
 
         query.sql += ' order by s.shopCode, t.traderCode';
 
-        // query.sql = `select  top 1000 p.*, s.shopCode, s.shopName
-        //              from    epos_dtfs_ping p, cx_shop s
-        //              where   p.shopId = s.shopId
-        //              and     p.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
-
-        // if (params.s) {
-        //     query.sql += ' and p.shopId = @shopId';
-        //     query.params.push({ name: 'shopId', value: params.s });
-        // }
-        // if (params.df) {
-        //     query.sql += ' and p.created >= @dateFrom';
-        //     query.params.push({ name: 'dateFrom', value: params.df });
-        // }
-
-        //query.sql += ' order by p.created desc, p.pingId desc';
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
 
         await super.select(query);
     }

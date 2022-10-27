@@ -3,6 +3,8 @@
 // REQUIRE PERSISTENT TABLE
 //
 const _persistentTable = require('./persistent/p-raw_getLog');
+const _declarations = require('../cx-client-declarations');
+
 //
 // NOTE: BUSINESS LOGIC RELATED TO THE RECORD COLLECTION SHOULD BE BUILT HERE
 //
@@ -32,6 +34,13 @@ class raw_getLog_Collection extends _persistentTable.Table {
             { name: 'year', value: params.y }
         ];
 
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
+
+
+
         var dates = [];
         var rawResults = await this.db.exec(query);
         rawResults.each(function (res, idx) {
@@ -53,7 +62,7 @@ class raw_getLog_Collection extends _persistentTable.Table {
         } else {
             var query = { sql: '', params: [] };
             query.sql = `
-                    select  top 1000 l.*, s.shopCode, s.shopName
+                    select  l.*, s.shopCode, s.shopName
                     from    raw_getLog l, cx_shop s
                     where   l.shopId = s.shopId
                     and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
@@ -81,6 +90,11 @@ class raw_getLog_Collection extends _persistentTable.Table {
             if (params.svc) {
                 query.sql += ' and l.svcName = @svcName';
                 query.params.push({ name: 'svcName', value: params.svc });
+            }
+
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
             }
 
             query.sql += ' order by l.created desc';
