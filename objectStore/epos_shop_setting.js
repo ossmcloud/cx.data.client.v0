@@ -53,6 +53,8 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
                 query.params.push({ name: 'dtfsSettingId', value: params.dtfs })
             }
         }
+
+        query.sql += ' order by sx.shopCode';
         return await super.select(query);
     }
 
@@ -108,6 +110,16 @@ class epos_shop_setting extends _persistentTable.Record {
     get groupCode() { return this.#groupCode; }
     get groupInfo() { return `[${this.#groupCode}] ${this.#groupName}`; }
     get dtfsInfo() { return this.#dtfsInfo; }
+
+    isSet() {
+        if (!this.eposProvider) { return false; }
+        if (!this.dtfsSettingId) { return false; }
+        if (!this.eposShopCode) { return false; }
+        if (!this.startDate) { return false; }
+        if (this.getDelayCR == null) { return false; }
+        if (this.getDelayCP == null) { return false; }
+        return true;
+    }
 
     async save() {
         var newSettings = this.isNew();

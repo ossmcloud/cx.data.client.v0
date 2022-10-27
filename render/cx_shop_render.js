@@ -17,13 +17,27 @@ class CxShopRender extends RenderBase {
         var configLookUp_depMap = await this.dataSource.cx.table(_cxSchema.cx_map_config).toLookUpList(_cxConst.CX_MAP_CONFIG_TYPE.GL_MAP, true);
         var configLookUp_taxMap = await this.dataSource.cx.table(_cxSchema.cx_map_config).toLookUpList(_cxConst.CX_MAP_CONFIG_TYPE.TAX_MAP, true);
 
+        if (this.options.mode == 'view') {
+            var shop = this.dataSource;
+            if (shop.status == 0) {
+                var shopEpos = await this.dataSource.cx.table(_cxSchema.epos_shop_setting).fetch(shop.id);
+                var shopErp = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shop.id);
+                if (shopEpos.isSet() && shopErp.isSet()) {
+                    this.options.buttons.push({ id: 'cr_shop_activate', text: 'Activate Store', function: 'activateShop' });
+                } else {
+                    if (!shopEpos.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_epos', text: 'Configure EPoS (DTSF)', link: '/epos/shopSetting?e=T&id=' + shopEpos.id }); }
+                    if (!shopErp.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_erp', text: 'Configure ERP (DTSF)', link: '/erp/shopSetting?e=T&id=' + shopErp.id }); }
+                }
+            }
+        }
+
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 3, fields: [
                     {
                         group: 'main1', title: '', column: 1, columnCount: 3, inline: true, fields: [
                             { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
-                            { name: 'currencyCode', label: 'currency', column: 2, validation: '{ "mandatory": true, "max": 3  }', readOnly: (this.dataSource.id > 0) },
+                            { name: 'currencyCode', label: 'currency', column: 2, width: '100px', validation: '{ "mandatory": true  }', readOnly: (this.dataSource.id > 0), lookUps: _cxConst.CX_CURRENCY.toList() },
                             await this.fieldDropDownOptions(_cxSchema.cx_shop_group, { id: 'shopGroupId', name: 'shopGroupId', column: 3, }),
                         ]
                     },
@@ -40,8 +54,8 @@ class CxShopRender extends RenderBase {
 
                     { name: 'shopLatitude', label: 'latitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
                     { name: 'shopLongitude', label: 'longitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
-                    
-                    
+
+
                 ],
             },
             {
@@ -72,7 +86,7 @@ class CxShopRender extends RenderBase {
     }
 
     async _list() {
-        
+
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),
             { label: 'code', fieldName: 'sc', name: _cxSchema.cx_shop.SHOPCODE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },

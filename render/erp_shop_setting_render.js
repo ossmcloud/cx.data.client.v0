@@ -20,13 +20,13 @@ class ErpTraderAccount extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
-                            { name: 'erpProvider', label: 'erp provider', column: 1, readOnly: true },
-                            { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 1 },
-                            { name: 'erpCustomerAccountName', label: 'erp EPoS Account name', column: 1 },
-                            { name: 'erpCompanyName', label: 'erp company name', column: 2 },
+                            { name: 'erpProvider', label: 'erp provider', column: 1, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), validation: '{ "mandatory": true }' },
+                            { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 1, validation: '{ "mandatory": true }' },
+                            { name: 'erpCustomerAccountName', label: 'erp EPoS Account name', column: 1, validation: '{ "mandatory": true }' },
+                            { name: 'erpCompanyName', label: 'erp company name', column: 2, validation: '{ "mandatory": true }' },
                             { name: 'erpCostCentre', label: 'force gl segment 2', column: 2 },
                             { name: 'erpDepartment', label: 'force gl segment 3', column: 2 },
-                            { name: 'dtfsSettingId', label: 'ERPS Settings', column: 2, lookUps: dtfsSettingsLookUps },
+                            { name: 'dtfsSettingId', label: 'ERPS Settings', column: 2, lookUps: dtfsSettingsLookUps, validation: '{ "mandatory": true }' },
                             
                         ]
                     },
@@ -84,7 +84,9 @@ class ErpTraderAccount extends RenderBase {
             { name: 'modified', title: 'modified', align: 'center', width: '130px' },
             { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
         ];
-        
+        this.options.highlights = [
+            { column: _cxSchema.erp_shop_setting.DTFSSETTINGID, op: '=', value: null, style: 'color: red;' },
+        ];
     }
 
     

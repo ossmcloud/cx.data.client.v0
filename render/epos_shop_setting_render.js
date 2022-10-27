@@ -18,7 +18,7 @@ class EposShopSettingRender extends RenderBase {
         var configListOptions = await this.listOptions(configs, { listView: true });
         configListOptions.quickSearch = true;
         configListOptions.columns.shift();
-        
+
         if (this.options.mode == 'view') {
             if (this.options.allowEdit) {
                 configListOptions.actions = [];
@@ -43,11 +43,13 @@ class EposShopSettingRender extends RenderBase {
             configListOptions = await this.getConfigListOptions();
         }
 
+        var mandatoryValidation = (this.options.mode == 'view') ? null : '{ "mandatory": true }';
 
         var dtfsSettingDropDown = await this.fieldDropDownOptions(_cxSchema.epos_dtfs_setting, {
+            id: _cxSchema.epos_dtfs_setting.DTFSSETTINGID,
             name: _cxSchema.epos_dtfs_setting.DTFSSETTINGID,
-            validation: '{ "mandatory": true }',
-            readOnly: !newRecord,
+            validation: mandatoryValidation,
+            //readOnly: !newRecord,
             column: 2,
         });
 
@@ -62,15 +64,19 @@ class EposShopSettingRender extends RenderBase {
                     },
                     {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
-                            { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
-                            { name: 'eposShopCode', label: 'epos code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                            { name: 'eposProvider', label: 'epos provider', column: 1, lookUps: _cxConst.CX_EPOS_PROVIDER.toList(true), validation: '{ "mandatory": true }' },
+                            { name: 'eposShopCode', label: 'epos code', column: 1, validation: '{ "mandatory": true }' },
                             { name: 'eposShopName', label: 'epos name', column: 1, validation: '{ "mandatory": true }' },
-                            
+
                             dtfsSettingDropDown,
-                            
+
+                            { name: 'startDate', label: 'start date', column: 2, validation: '{ "mandatory": true }' },
+                            { name: 'getDelayCR', label: 'get data delay (retail)', column: 2, validation: '{ "mandatory": true }' },
+                            { name: 'getDelayCP', label: 'get data delay (purchase)', column: 2, validation: '{ "mandatory": true }' },
+
                         ],
                     },
-                   
+
                 ]
             },
         ]
@@ -97,7 +103,7 @@ class EposShopSettingRender extends RenderBase {
                 group: 'config', title: 'configurations', column: 2, fields: [configListOptions]
             });
 
-          
+
         }
 
         if (this.options.mode == 'view') {
@@ -132,22 +138,25 @@ class EposShopSettingRender extends RenderBase {
             { title: 'epos code', name: _cxSchema.epos_shop_setting.EPOSSHOPCODE },
             { title: 'epos name', name: _cxSchema.epos_shop_setting.EPOSSHOPNAME },
             { title: 'dtfs settings', name: 'dtfsInfo' },
+            { title: 'start date', name: 'startDate' },
+            { title: 'get data delay (retail)', name: 'getDelayCR' },
+            { title: 'get data delay (purchase)', name: 'getDelayCP' },
 
         ];
         this.options.highlights = [
-            { column: _cxSchema.epos_shop_setting.DTFSSETTINGID, op: '=', value: '[NULL]', style: 'color: red;' },
+            { column: _cxSchema.epos_shop_setting.DTFSSETTINGID, op: '=', value: null, style: 'color: red;' },
         ];
 
         this.options.actionsTitle = '';
         this.options.actions = [
-            { label: 'epos', link: '/epos/dtfsSetting?id=', linkParamField: _cxSchema.epos_shop_setting.DTFSSETTINGID , target: '_blank' },
+            { label: 'epos', link: '/epos/dtfsSetting?id=', linkParamField: _cxSchema.epos_shop_setting.DTFSSETTINGID, target: '_blank' },
             { label: 'pings', link: '/epos/pings?s=', target: '_blank' },
             { label: 'transmission', link: '/epos/transmissions?s=', target: '_blank' },
         ]
 
     }
 
-  
+
 
 }
 
