@@ -98,14 +98,25 @@ class CrTranTypeConfigRender extends RenderBase {
     }
 
     async _list() {
+        var cbTranTypeLookUps = this.dataSource.cx.table(_cxSchema.cr_cb_tran_type);
+        cbTranTypeLookUps = await cbTranTypeLookUps.toLookUpList(true);
+
+        var erpTranTypeLookUps = this.dataSource.cx.table(_cxSchema.sys_erp_tran_type);
+        // TODO: implement use of erpProvider
+        erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('sage200', true);
+
 
         this.options.filters = [
+            
             { label: 'map type', fieldName: 'type', name: 'type', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true },
-            { label: 'map id', fieldName: 'mid', name: _cxSchema.cr_tran_type_config.MAPCONFIGID, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, readOnly: true },
+            { label: 'map id', fieldName: 'mid', name: _cxSchema.cr_tran_type_config.MAPCONFIGID, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true },
             { label: 'tran type', fieldName: 'e_tt', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'tran sub-type', fieldName: 'e_st', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'description', fieldName: 'desc', name: _cxSchema.cr_tran_type_config.DESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-
+            { label: 'cb heading', fieldName: 'e_cbh', name: _cxSchema.cr_tran_type_config.CBHEADING, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+            { label: 'cb tran. type', fieldName: 'e_cbt', name: _cxSchema.cr_tran_type_config.CBTRANTYPEID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, lookUps: cbTranTypeLookUps },
+            { label: 'Declarations', fieldName: 'e_decla', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(true) },
+            { label: 'erp tran. type', fieldName: 'e_erpt', name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, lookUps: erpTranTypeLookUps },
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cr_tran_type_config.TRANTYPECONFIGID },

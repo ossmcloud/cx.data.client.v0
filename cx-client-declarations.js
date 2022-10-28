@@ -193,8 +193,8 @@ const CR_CASH_BOOK = {
         NO: 0,
         YES: 1,
         FORCE: 2,
-        toList: function () {
-            return enumToList(this);
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
         }
     },
     STATE: {

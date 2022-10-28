@@ -41,20 +41,44 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         }
 
         if (params.e_tt) {
-            query.sql += ' and c.eposTranType = @eposTranType';
-            query.params.push({ name: 'eposTranType', value: params.e_tt });
+            query.sql += ' and c.eposTranType like @eposTranType';
+            query.params.push({ name: 'eposTranType', value: params.e_tt + '%' });
         }
 
         if (params.e_st) {
-            query.sql += ' and c.eposTranSubType = @eposTranSubType';
-            query.params.push({ name: 'eposTranSubType', value: params.e_st });
+            query.sql += ' and c.eposTranSubType like @eposTranSubType';
+            query.params.push({ name: 'eposTranSubType', value: params.e_st + '%' });
         }
 
-        if (params.manual == 'T') {
-            query.sql += ' and c.allowEdit = 1';
+        if (params.desc) {
+            query.sql += ' and c.description like @description';
+            query.params.push({ name: 'description', value: params.desc + '%' });
         }
 
+        if (params.e_cbt) {
+            query.sql += ' and c.cbTranTypeId = @cbTranTypeId';
+            query.params.push({ name: 'cbTranTypeId', value: params.e_cbt });
+        }
 
+        if (params.e_decla) {
+            query.sql += ' and c.requiresDeclaration = @requiresDeclaration';
+            query.params.push({ name: 'requiresDeclaration', value: params.e_decla });
+        }
+
+        if (params.e_erpt) {
+            query.sql += ' and c.erpTranTypeId = @erpTranTypeId';
+            query.params.push({ name: 'erpTranTypeId', value: params.e_erpt });
+        }
+
+        if (params.e_cbh) {
+            query.sql += ' and c.cbHeading like @cbHeading';
+            query.params.push({ name: 'cbHeading', value: params.e_cbh + '%' });
+        }
+        
+
+
+        // NOTE: these are parameters set by  cashbook-svc processes
+        if (params.manual == 'T') {            query.sql += ' and c.allowEdit = 1';        }
         if (params.decla) {
             if (params.decla == 'T') {
                 query.sql += ' and c.requiresDeclaration > 0';
