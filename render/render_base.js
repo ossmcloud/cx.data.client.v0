@@ -67,6 +67,8 @@ class RenderBase {
             }
             this.options.mode = 'view';
         }
+
+        this.options.pageSize = _cxConst.SQL.PAGE_SIZE;
     }
 
     async get(renderType, options) {
