@@ -16,6 +16,7 @@ class CxMapConfigRender extends RenderBase {
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
 
+        
         this.options.fields = [
             {
                 group: 'mainOuter', title: '', columnCount: 4, fields: [
@@ -67,8 +68,14 @@ class CxMapConfigRender extends RenderBase {
 
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
+
+
         this.options.filters = [
             //await this.filterDropDownOptions(_cxSchema.cx_map_config, { fieldName: 'map' }),
+            { label: 'mid', fieldName: 'mid', hidden: true },
+            { label: 'type', fieldName: 'type', hidden: true },
             { label: 'department', fieldName: 'dep', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'sub-department', fieldName: 'sub', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'description', fieldName: 'desc', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },

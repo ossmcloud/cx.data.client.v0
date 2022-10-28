@@ -1,6 +1,8 @@
 'use strict'
 //
 const _persistentTable = require('./persistent/p-erp_dtfs_ping');
+const _declarations = require('../cx-client-declarations');
+
 //
 class erp_dtfs_ping_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -21,7 +23,7 @@ class erp_dtfs_ping_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
 
-        query.sql = `select	top 1000 p.*, s.dtfsSettingName, s.dtfsPairedMachineName
+        query.sql = `select	p.*, s.dtfsSettingName, s.dtfsPairedMachineName
                     from	erp_dtfs_ping p
                     inner join erp_dtfs_setting s on s.dtfsSettingId = p.dtfsSettingId
                     where	p.dtfsSettingId in (
@@ -45,6 +47,11 @@ class erp_dtfs_ping_Collection extends _persistentTable.Table {
         }
 
         query.sql += ' order by p.created desc, p.pingId desc';
+
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
 
         await super.select(query);
     }

@@ -44,7 +44,7 @@ const _fields = {
     erpCustomerAccountName: { name: 'erpCustomerAccountName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     erpCostCentre: { name: 'erpCostCentre', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     erpDepartment: { name: 'erpDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },

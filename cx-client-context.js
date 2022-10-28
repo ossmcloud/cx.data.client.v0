@@ -20,6 +20,7 @@ class CXClientContext extends _cx_data.DBContext {
     #cxSvcInfo = null;
     #accountId = null;
     #crPrefEngine = null;
+    #dbInfo = null;
     constructor(pool, credentials) {
         super(pool, _path.join(__dirname, 'objectStore'), credentials);
     }
@@ -28,6 +29,7 @@ class CXClientContext extends _cx_data.DBContext {
     get theme() { return this.#theme; }
     get shops() { return this.#shops };
     get shopList() { return this.#shopList; }
+    get dbInfo() { return this.#dbInfo; }
 
     get user() {
         return this.#user;
@@ -69,6 +71,14 @@ class CXClientContext extends _cx_data.DBContext {
             //
             if (!options.accountId) { throw new Error('No Account ID provided!'); }
             this.#accountId = options.accountId;
+
+            var queryDbInfo = { sql: 'select * from sys_dbInfo', returnFirst: true };
+            var dbInfo = await this.exec(queryDbInfo);
+            this.#dbInfo = {
+                modules: dbInfo.modules.split(','),
+                shopCount: dbInfo.shopCount,
+                version: dbInfo.dbVersion
+            }
             
             // NOTE: IMPORTANT: check if this is called by cx.svc (we have no user info here)
             if (options.cxSvc) {

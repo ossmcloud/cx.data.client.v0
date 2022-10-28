@@ -1,6 +1,7 @@
 'use strict'
 //
 const _persistentTable = require('./persistent/p-raw_getRequest');
+const _declarations = require('../cx-client-declarations');
 //
 class raw_getRequest_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -15,7 +16,7 @@ class raw_getRequest_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
         query.sql = `
-                    select  top 1000 l.*, s.shopCode, s.shopName
+                    select  l.*, s.shopCode, s.shopName
                     from    raw_getRequest l, cx_shop s
                     where   l.shopId = s.shopId
                     and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
@@ -51,6 +52,12 @@ class raw_getRequest_Collection extends _persistentTable.Table {
         }
 
         query.sql += ' order by l.created desc';
+
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
+
         await super.select(query);
     }
 

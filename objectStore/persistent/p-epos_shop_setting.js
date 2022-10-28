@@ -28,6 +28,9 @@ const _fieldNames = {
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     DTFSSETTINGID: 'dtfsSettingId',
+    STARTDATE: 'startDate',
+    GETDELAYCR: 'getDelayCR',
+    GETDELAYCP: 'getDelayCP',
 
 }
 //
@@ -42,7 +45,10 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    startDate: { name: 'startDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
+    getDelayCR: { name: 'getDelayCR', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    getDelayCP: { name: 'getDelayCP', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -116,6 +122,24 @@ class Persistent_epos_shop_setting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DTFSSETTINGID);
     } set dtfsSettingId(val) {
         super.setValue(_fieldNames.DTFSSETTINGID, val);
+    }
+
+    get startDate() {
+        return super.getValue(_fieldNames.STARTDATE);
+    } set startDate(val) {
+        super.setValue(_fieldNames.STARTDATE, val);
+    }
+
+    get getDelayCR() {
+        return super.getValue(_fieldNames.GETDELAYCR);
+    } set getDelayCR(val) {
+        super.setValue(_fieldNames.GETDELAYCR, val);
+    }
+
+    get getDelayCP() {
+        return super.getValue(_fieldNames.GETDELAYCP);
+    } set getDelayCP(val) {
+        super.setValue(_fieldNames.GETDELAYCP, val);
     }
 
 

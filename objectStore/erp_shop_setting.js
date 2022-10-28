@@ -53,6 +53,8 @@ class erp_shop_setting_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+    
+
 
     async getErpName(shopId) {
         var query = {
@@ -77,6 +79,7 @@ class erp_shop_setting extends _persistentTable.Record {
     #shopCode = '';
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
     };
@@ -85,6 +88,13 @@ class erp_shop_setting extends _persistentTable.Record {
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
+    isSet() {
+        if (!this.erpProvider) { return false; }
+        if (!this.erpCompanyName) { return false; }
+        if (!this.erpCustomerAccount) { return false; }
+        if (!this.dtfsSettingId) { return false; }
+        return true;
+    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

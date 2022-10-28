@@ -29,6 +29,8 @@ class ErpTransmissionRender extends RenderBase {
     }
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
 
         this.options.filters = [
             //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),

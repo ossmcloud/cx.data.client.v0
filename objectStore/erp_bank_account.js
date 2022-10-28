@@ -1,6 +1,7 @@
 'use strict'
 //
 const _persistentTable = require('./persistent/p-erp_bank_account');
+const _declarations = require('../cx-client-declarations');
 //
 class erp_bank_account_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -19,7 +20,7 @@ class erp_bank_account_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
 
-        query.sql = `select	top 1000 t.*, s.shopCode, s.shopName
+        query.sql = `select	t.*, s.shopCode, s.shopName
                     from	erp_bank_account t
                     inner join cx_shop s on s.shopId = t.shopId
                     where	s.shopId ${shopFilter} ${shopFilterValue}`;
@@ -40,6 +41,10 @@ class erp_bank_account_Collection extends _persistentTable.Table {
 
         query.sql += ' order by s.shopCode, t.code';
 
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
 
         await super.select(query);
     }

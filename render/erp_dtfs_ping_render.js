@@ -36,6 +36,9 @@ class ErpDtfsPing extends RenderBase {
     }
 
     async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
+
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.erp_dtfs_setting, { fieldName: 'ss' }),
             { id: 'cx_ping_ip', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ip', label: 'ping IP', width: '70px' },

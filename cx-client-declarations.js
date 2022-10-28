@@ -122,6 +122,11 @@ const EPOS_DTFS_CONFIGS = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
+const CX_ERP_PROVIDER = {
+    SG200: 'sage200',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200' }); }
+}
+
 const CX_EPOS_PROVIDER = {
     CBE: 'CBE',
     //RS: 'RetailSolution',
@@ -188,8 +193,8 @@ const CR_CASH_BOOK = {
         NO: 0,
         YES: 1,
         FORCE: 2,
-        toList: function () {
-            return enumToList(this);
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
         }
     },
     STATE: {
@@ -421,7 +426,7 @@ const CR_PREFERENCE = {
     CB_SHOW_DELETE: 111,
     CB_SHOW_REFRESH: 112,
     CB_SHOW_ADD: 113,
-    
+
 }
 
 
@@ -429,16 +434,23 @@ const CR_PREFERENCE = {
 
 
 
-
+const CX_CURRENCY = {
+    EUR: 'EUR',
+    GBP: 'GBP',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { EUR: 'EUR', GBP: 'GBP' }); }
+}
 
 
 
 module.exports = {
+    CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
     CX_LOGIN_STATUS: CX_LOGIN_STATUS,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
     CX_SERVICES: CX_SERVICES,
+    CX_ERP_PROVIDER: CX_ERP_PROVIDER,
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
     CX_SHOP: CX_SHOP,

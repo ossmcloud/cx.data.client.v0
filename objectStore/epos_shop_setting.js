@@ -53,6 +53,8 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
                 query.params.push({ name: 'dtfsSettingId', value: params.dtfs })
             }
         }
+
+        query.sql += ' order by sx.shopCode';
         return await super.select(query);
     }
 
@@ -109,6 +111,16 @@ class epos_shop_setting extends _persistentTable.Record {
     get groupInfo() { return `[${this.#groupCode}] ${this.#groupName}`; }
     get dtfsInfo() { return this.#dtfsInfo; }
 
+    isSet() {
+        if (!this.eposProvider) { return false; }
+        if (!this.dtfsSettingId) { return false; }
+        if (!this.eposShopCode) { return false; }
+        if (!this.startDate) { return false; }
+        if (this.getDelayCR == null) { return false; }
+        if (this.getDelayCP == null) { return false; }
+        return true;
+    }
+
     async save() {
         var newSettings = this.isNew();
 
@@ -116,13 +128,15 @@ class epos_shop_setting extends _persistentTable.Record {
 
         if (newSettings) {
             //
-            var query = { sql: '', params: [] };
-            var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
-            for (var ex = 0; ex < epos.length; ex++) {
-                query.sql += `insert into ${_cxSchema.epos_shop_configs.TBL_NAME} (${_cxSchema.epos_shop_configs.SHOPID}, ${_cxSchema.epos_shop_configs.CONFIGNAME}, ${_cxSchema.epos_shop_configs.CONFIGVALUE}, ${_cxSchema.epos_shop_configs.CREATEDBY})`;
-                query.sql += `values (${this.shopId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;
+            if (this.eposProvider) {
+                var query = { sql: '', params: [] };
+                var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
+                for (var ex = 0; ex < epos.length; ex++) {
+                    query.sql += `insert into ${_cxSchema.epos_shop_configs.TBL_NAME} (${_cxSchema.epos_shop_configs.SHOPID}, ${_cxSchema.epos_shop_configs.CONFIGNAME}, ${_cxSchema.epos_shop_configs.CONFIGVALUE}, ${_cxSchema.epos_shop_configs.CREATEDBY})`;
+                    query.sql += `values (${this.shopId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;
+                }
+                await this.cx.exec(query);
             }
-            await this.cx.exec(query);
         }
     }
 }

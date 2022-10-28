@@ -16,7 +16,7 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  top ${_declarations.SQL.MAX_ROWS} l.*, s.shopCode, s.shopName
+        query.sql = ` select  l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
                       and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
@@ -42,6 +42,13 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
             query.params.push({ name: 'status', value: params.st });
         }
         query.sql += ' order by l.created desc';
+
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
+
+
         return await super.select(query);
     }
 
