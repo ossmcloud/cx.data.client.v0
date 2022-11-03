@@ -20,6 +20,19 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             query.params.push({ name: 'mapConfigId', value: params.mid });
         }
       
+        if (params.dep) {
+            query.sql += ' and eposDepartment like @eposDepartment';
+            query.params.push({ name: 'eposDepartment', value: params.dep + '%' });
+        }
+        if (params.sub) {
+            query.sql += ' and eposSubDepartment like @eposSubDepartment';
+            query.params.push({ name: 'eposSubDepartment', value: params.sub + '%' });
+        }
+        if (params.desc) {
+            query.sql += ' and eposDescription like @eposDescription';
+            query.params.push({ name: 'eposDescription', value: params.desc + '%' });
+        }
+
         query.sql += ' order by eposDepartment, eposSubDepartment';
 
         query.paging = {
