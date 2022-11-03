@@ -23,6 +23,14 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
             query.sql += ' and mapConfigId = @mapConfigId';
             query.params.push({ name: 'mapConfigId', value: params.mid });
         }
+        if (params.tt) {
+            query.sql += ' and eposTaxCode like @eposTaxCode';
+            query.params.push({ name: 'eposTaxCode', value: params.tt + '%' });
+        }
+        if (params.ts) {
+            query.sql += ' and eposDescription like @eposDescription';
+            query.params.push({ name: 'eposDescription', value: params.ts + '%' });
+        }
 
         query.sql += ' order by eposTaxCode';
 
