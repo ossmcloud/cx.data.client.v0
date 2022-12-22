@@ -74,6 +74,7 @@ class CXClientContext extends _cx_data.DBContext {
 
             var queryDbInfo = { sql: 'select * from sys_dbInfo', returnFirst: true };
             var dbInfo = await this.exec(queryDbInfo);
+            if (!dbInfo.modules) { dbInfo.modules = ''; }
             this.#dbInfo = {
                 modules: dbInfo.modules.split(','),
                 shopCount: dbInfo.shopCount,
