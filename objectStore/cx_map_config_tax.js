@@ -34,33 +34,35 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
 
         query.sql += ' order by eposTaxCode';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
 
-        
+
         await super.select(query);
     }
 
 
     async toLookUpList(shopId) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
-           query.sql = `
+        query.sql = `
             select	eposTaxCode, eposTaxRate, eposDescription
                 
             from	cx_map_config_tax tax
             inner join cx_shop s on tax.mapConfigId = s.depMapConfigId
             where	s.shopId = @shopId
             order by eposTaxCode`;
-       
+
         var lookUpValues = [{ value: '', text: '' }];
         var result = await this.db.exec(query);
         for (var rx = 0; rx < result.rows.length; rx++) {
             var row = result.rows[rx];
             lookUpValues.push({
                 value: row.eposTaxCode,
-                text:  row.eposDescription,
+                text: row.eposDescription,
                 object: JSON.stringify(row),
             })
         }

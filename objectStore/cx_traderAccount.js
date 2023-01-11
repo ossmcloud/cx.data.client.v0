@@ -25,7 +25,7 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
                     inner join cx_shop s on s.shopId = t.shopId
                     left outer join erp_traderAccount erp on erp.traderAccountId = t.erpTraderAccountId
                     where	s.shopId ${shopFilter} ${shopFilterValue}`;
-        
+
         if (params.tt) {
             query.sql += ' and t.traderType = @traderType';
             query.params.push({ name: 'traderType', value: params.tt });
@@ -42,9 +42,11 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
 
         query.sql += ' order by s.shopCode, t.traderCode';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
 
         await super.select(query);

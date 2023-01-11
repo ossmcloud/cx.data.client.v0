@@ -87,7 +87,7 @@ class CxMapConfig extends RenderBase {
             },
 
             //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
-            
+
         ]
 
 
@@ -96,6 +96,7 @@ class CxMapConfig extends RenderBase {
     async dropDown(options) {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a map config'; }
         if (this.options.label == undefined) { this.options.label = 'cr map config'; }
+        options.noPaging = true;
 
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }

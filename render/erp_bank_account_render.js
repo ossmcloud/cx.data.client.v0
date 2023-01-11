@@ -73,6 +73,7 @@ class ErpBankAccount extends RenderBase {
     async dropDown(options) {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp bank account'; }
         if (this.options.label == undefined) { this.options.label = 'erp bank account'; }
+        options.noPaging = true;
 
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
