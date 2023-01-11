@@ -41,11 +41,13 @@ class erp_bank_account_Collection extends _persistentTable.Table {
 
         query.sql += ' order by s.shopCode, t.code';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
-
+        
         await super.select(query);
     }
 

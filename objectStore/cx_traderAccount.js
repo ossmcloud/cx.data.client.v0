@@ -42,9 +42,11 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
 
         query.sql += ' order by s.shopCode, t.traderCode';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
 
         await super.select(query);

@@ -34,9 +34,11 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
 
         query.sql += ' order by eposTaxCode';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
 
         

@@ -60,7 +60,7 @@ class ErpTraderAccount extends RenderBase {
     async _list() {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
-
+        
         this.options.recordTitle = 'trader account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
@@ -89,6 +89,7 @@ class ErpTraderAccount extends RenderBase {
     async dropDown(options) {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp account'; }
         if (this.options.label == undefined) { this.options.label = 'erp account'; }
+        options.noPaging = true;
 
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }

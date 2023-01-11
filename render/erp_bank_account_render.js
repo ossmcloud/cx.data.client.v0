@@ -49,7 +49,7 @@ class ErpBankAccount extends RenderBase {
     async _list() {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
-
+        
         this.options.recordTitle = 'bank account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
@@ -73,6 +73,7 @@ class ErpBankAccount extends RenderBase {
     async dropDown(options) {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp bank account'; }
         if (this.options.label == undefined) { this.options.label = 'erp bank account'; }
+        options.noPaging = true;
 
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
