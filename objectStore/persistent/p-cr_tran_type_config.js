@@ -46,6 +46,8 @@ const _fieldNames = {
     EXCONDITION: 'exCondition',
     ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
     SORTINDEX: 'sortIndex',
+    ERPSPLITBYREFERENCE: 'erpSplitByReference',
+    ERPIGNORESTOREGLSEGMENTS: 'erpIgnoreStoreGLSegments',
 
 }
 //
@@ -79,6 +81,8 @@ const _fields = {
     exCondition: { name: 'exCondition', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     erp2ndTranTypeId: { name: 'erp2ndTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     sortIndex: { name: 'sortIndex', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    erpSplitByReference: { name: 'erpSplitByReference', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    erpIgnoreStoreGLSegments: { name: 'erpIgnoreStoreGLSegments', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -258,6 +262,18 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SORTINDEX);
     } set sortIndex(val) {
         super.setValue(_fieldNames.SORTINDEX, val);
+    }
+
+    get erpSplitByReference() {
+        return super.getValue(_fieldNames.ERPSPLITBYREFERENCE);
+    } set erpSplitByReference(val) {
+        super.setValue(_fieldNames.ERPSPLITBYREFERENCE, val);
+    }
+
+    get erpIgnoreStoreGLSegments() {
+        return super.getValue(_fieldNames.ERPIGNORESTOREGLSEGMENTS);
+    } set erpIgnoreStoreGLSegments(val) {
+        super.setValue(_fieldNames.ERPIGNORESTOREGLSEGMENTS, val);
     }
 
 
