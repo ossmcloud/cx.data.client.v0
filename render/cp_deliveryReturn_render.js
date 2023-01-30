@@ -1,0 +1,170 @@
+'use script';
+//
+const _cxSchema = require('../cx-client-schema');
+const _cxConst = require('../cx-client-declarations');
+const RenderBase = require('./render_base');
+
+class CPDeliveryReturnRender extends RenderBase {
+    constructor(dataSource, options) {
+        super(dataSource, options);
+    }
+
+    async getDocumentLineListOptions() {
+        var transactionLines = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLine);
+        await transactionLines.select({ pid: this.options.query.id });
+
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        transactionLinesOptions.quickSearch = true;
+        return transactionLinesOptions;
+    }
+
+    async getDocumentLogListOptions() {
+        var transactionLogs = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLog);
+        await transactionLogs.select({ pid: this.options.query.id });
+
+        var transactionLogsOptions = await this.listOptions(transactionLogs, { listView: true });
+        transactionLogsOptions.quickSearch = true;
+        return transactionLogsOptions;
+    }
+
+
+    async _record() {
+        this.options.fields = [
+            {
+                group: 'main', title: '', columnCount: 4, fields: [
+                    {
+                        group: 'main1', title: 'main info', column: 1, columnCount: 3, fields: [
+                            {
+                                group: 'main1.col1', column: 1, columnCount: 1, fields: [
+                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
+                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, label: 'document type' },
+                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTID, label: 'document epos id' },
+                                ]
+                            },
+                            {
+                                group: 'main1.col2', column: 2, columnCount: 1, fields: [
+                                    { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, label: 'supplier' },
+                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, label: 'date' },
+                                    { name: _cxSchema.cp_deliveryReturn.UPLOADDATE, label: 'upload date' },
+                                ]
+                            },
+                            {
+                                group: 'main1.col3', column: 3, columnCount: 1, fields: [
+                                    { name: _cxSchema.cp_deliveryReturn.CURRENCY, label: 'currency' },
+                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, label: 'document number' },
+                                ]
+                            },
+                        ]
+                    },
+
+                    {
+                        group: 'main_ref', title: 'document references', column: 2, columnCount: 1, fields: [
+                            { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, label: 'reference 1' },
+                            { name: _cxSchema.cp_deliveryReturn.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
+                            { name: _cxSchema.cp_deliveryReturn.DOCUMENTMEMO, label: 'memo' },
+                            
+                        ]
+                    },
+                   
+                    {
+                        group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, width: '300px', fields: [
+                            { name: _cxSchema.cp_deliveryReturn.TOTALNET, label: 'total net', formatMoney: 'N2' },
+                            { name: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
+                            { name: _cxSchema.cp_deliveryReturn.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
+                            { name: _cxSchema.cp_deliveryReturn.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
+                        ]
+                    },
+                    {
+                        group: 'audit', title: 'audit info', column: 4, columnCount: 1, fields: [
+                            {
+                                group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUS, label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT_STATUS.toList() },
+                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUSMESSAGE, label: 'status message', column: 2, readOnly: true },
+                                ]
+                            },
+                            {
+                                group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                    { name: 'created', label: 'created', column: 1, readOnly: true },
+                                    { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                                ]
+                            },
+                            {
+                                group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                    { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                                    { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                                ]
+                            }
+                        ]
+                    }
+                ],
+            },
+
+        ]
+
+        var transactionLineOptions = await this.getDocumentLineListOptions();
+        var transactionLogOptions = await this.getDocumentLogListOptions();
+        this.options.fields.push({
+            group: 'sublists', columnCount: 2, fields: [
+                { group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] },
+                { group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true },
+
+                
+            ]
+        });
+    }
+
+    async _list() {
+        if (this.options.query) {
+            this.options.paging = true;
+            this.options.pageNo = (this.options.query.page || 1);
+        }
+
+        this.options.filters = [
+            await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+            { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
+            { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
+            { label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT_STATUS.toList('- all -') },
+        ];
+        this.options.columns = [
+            { name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' },
+
+            { name: 'shopInfo', title: 'store', width: '200px' },
+            { name: 'status', title: 'status' },
+            { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '130px' },
+            { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' },
+            { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' },
+            { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' },
+
+            { name: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
+            { name: _cxSchema.cp_deliveryReturn.TOTALNET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2' },
+            { name: _cxSchema.cp_deliveryReturn.TOTALVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2' },
+            { name: _cxSchema.cp_deliveryReturn.TOTALGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2' },
+
+            { name: 'created', title: 'created', align: 'center', width: '130px' },
+        ];
+
+        this.options.cellHighlights = [];
+
+        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        var statuses = _cxConst.CP_DOCUMENT_STATUS.toList();
+        for (let sx = 0; sx < statuses.length; sx++) {
+            const s = statuses[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUS,
+                op: '=',
+                value: s.value,
+                style: _cxConst.CP_DOCUMENT_STATUS.getStyleInverted(s.value) + applyStyle,
+                columns: ['status']
+            })
+        }
+
+        this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturn.TOTALDISCOUNT] });
+        this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturn.TOTALVAT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturn.TOTALVAT] });
+
+    }
+
+
+}
+
+module.exports = CPDeliveryReturnRender;
