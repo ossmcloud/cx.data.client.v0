@@ -42,6 +42,7 @@ const _fieldNames = {
     LINENET: 'lineNet',
     LINEVAT: 'lineVat',
     LINEGROSS: 'lineGross',
+    SYSINFO: 'sysInfo',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -75,6 +76,7 @@ const _fields = {
     lineNet: { name: 'lineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineVat: { name: 'lineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineGross: { name: 'lineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    sysInfo: { name: 'sysInfo', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -234,6 +236,12 @@ class Persistent_cp_deliveryReturnLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.LINEGROSS);
     } set lineGross(val) {
         super.setValue(_fieldNames.LINEGROSS, val);
+    }
+
+    get sysInfo() {
+        return super.getValue(_fieldNames.SYSINFO);
+    } set sysInfo(val) {
+        super.setValue(_fieldNames.SYSINFO, val);
     }
 
     get created() {

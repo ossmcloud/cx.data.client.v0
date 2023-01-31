@@ -430,58 +430,102 @@ const CR_PREFERENCE = {
 }
 
 
-const CP_DOCUMENT_STATUS = {
-    New: 0,
-    Ready: 1,
-    Reconciled_None: 2,
-    Reconciled_Part: 3,
-    Reconciled_Full: 4,
-    REFRESH: 8,
-    ERROR: 9,
+const CP_DOCUMENT = {
+    TYPE: {
+        Delivery: 0,
+        Return: 1,
+        Invoice: 2,
+        CreditNote: 3,
 
-    toList: function (addEmpty) {
-        return enumToList(this, addEmpty);
-    },
-    getName: function (value) {
-        return enumGetName(this, value);
-    },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
 
-    getStyleInverted: function (status, returnObject) {
-        var color = 'var(--main-color)'; var bkgColor = '';
+        getStyleInverted: function (type, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
 
-        if (status == this.New) {
-            color = '0,0,0';
-            bkgColor = '255,202,58';
-        } else if (status == this.Ready) {
-            color = '255,255,255';
-            bkgColor = '25,130,196';
-        } else if (status == this.Reconciled_None) {
-            color = '0,100,0';
-            bkgColor = '138,201,38';
-        } else if (status == this.Reconciled_Part) {
-            color = '0,100,0';
-            bkgColor = '138,201,38';
-        } else if (status == this.Reconciled_Full) {
-            color = '0,100,0';
-            bkgColor = '138,201,38';
-        } else if (status == this.REFRESH) {
-            color = '255,255,255';
-            bkgColor = '128,128,128';
-        } else if (status == this.ERROR) {
-            color = '255,255,255';
-            bkgColor = '234,30,37';
-        } else {
-            color = '255,255,255';
-            bkgColor = '128,128,128';
+            if (type == this.Delivery) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (type == this.Return) {
+                color = '0,0,0';
+                bkgColor = '255,202,58';
+            } else if (type == this.Invoice) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (type == this.CreditNote) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
 
-        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
-        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
-        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
-        if (returnObject) { return styles; }
+    },
+
+    STATUS: {
+        New: 0,
+        Ready: 1,
+        Reconciled_None: 2,
+        Reconciled_Part: 3,
+        Reconciled_Full: 4,
+        REFRESH: 8,
+        ERROR: 9,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.New) {
+                color = '0,0,0';
+                bkgColor = '255,202,58';
+            } else if (status == this.Ready) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Reconciled_None) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.Reconciled_Part) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.Reconciled_Full) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.REFRESH) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
 
 
-        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
     }
 }
 
@@ -511,7 +555,7 @@ module.exports = {
     CX_TRADER_TYPE: CX_TRADER_TYPE,
     CR_CASH_BOOK: CR_CASH_BOOK,
     CR_PREFERENCE: CR_PREFERENCE,
-    CP_DOCUMENT_STATUS: CP_DOCUMENT_STATUS,
+    CP_DOCUMENT: CP_DOCUMENT,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

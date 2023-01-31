@@ -36,6 +36,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.documentDate <= @to';
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
+        if (params.udf) {
+            query.sql += ' and d.uploadDate >= @uFrom';
+            query.params.push({ name: 'uFrom', value: params.udf + ' 00:00:00' });
+        }
+        if (params.udt) {
+            query.sql += ' and d.uploadDate <= @uTo';
+            query.params.push({ name: 'uTo', value: params.udt + ' 23:59:59' });
+        }
         if (params.st) {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: params.st });
@@ -43,6 +51,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (params.su) {
             query.sql += ' and d.supplierCode like @supplierCode';
             query.params.push({ name: 'supplierCode', value: '%' + params.su });
+        }
+        if (params.tno) {
+            query.sql += ' and d.documentNumber like @documentNumber';
+            query.params.push({ name: 'documentNumber', value: '%' + params.tno });
+        }
+        if (params.tt) {
+            query.sql += ' and d.documentType = @documentType';
+            query.params.push({ name: 'documentType', value: params.tt });
         }
         if (params.id) {
             query.sql += ' and d.delRetId = @delRetId';
@@ -78,7 +94,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
     //get dateStr() { return _core.date.format({ date: this.date }) }
 
     get status() {
-        return _declarations.CP_DOCUMENT_STATUS.getName(this.documentStatus);
+        return _declarations.CP_DOCUMENT.STATUS.getName(this.documentStatus);
+    }
+    get documentTypeName() {
+        return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
 
     async save() {

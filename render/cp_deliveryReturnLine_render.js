@@ -23,7 +23,7 @@ class CPDeliveryReturnLineRender extends RenderBase {
             //{ name: _cxSchema.cp_deliveryReturnLine.DELRETID, title: ' ', align: 'center', hidden: true },
 
             { name: _cxSchema.cp_deliveryReturnLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
-            { name: _cxSchema.cp_deliveryReturnLine.LINESTATUS, title: 'status', lookUps: _cxConst.CP_DOCUMENT_STATUS.toList(), width: '70px' },
+            { name: _cxSchema.cp_deliveryReturnLine.LINESTATUS, title: 'status', lookUps: _cxConst.CP_DOCUMENT.STATUS.toList(), width: '70px' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSCODE, title: 'item code' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSDESCRIPTION, title: 'item description' },
@@ -40,18 +40,18 @@ class CPDeliveryReturnLineRender extends RenderBase {
         ];
 
         this.options.cellHighlights = [];
-        this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturnLine.VATRATE, op: '!=', value: '', style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturnLine.VATRATE] });
+        this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturnLine.VATRATE, op: '!=', value: '-', style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturnLine.VATRATE] });
         this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturnLine.EPOSLINEDISCOUNT, op: '=', value: 0, style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturnLine.EPOSLINEDISCOUNT] });
 
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
-        var statuses = _cxConst.CP_DOCUMENT_STATUS.toList();
+        var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
         for (let sx = 0; sx < statuses.length; sx++) {
             const s = statuses[sx];
             this.options.cellHighlights.push({
                 column: _cxSchema.cp_deliveryReturnLine.LINESTATUS,
                 op: '=',
                 value: s.value,
-                style: _cxConst.CP_DOCUMENT_STATUS.getStyleInverted(s.value) + applyStyle,
+                style: _cxConst.CP_DOCUMENT.STATUS.getStyleInverted(s.value) + applyStyle,
                 columns: [_cxSchema.cp_deliveryReturnLine.LINESTATUS]
             })
         }
