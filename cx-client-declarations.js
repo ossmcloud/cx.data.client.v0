@@ -431,6 +431,29 @@ const CR_PREFERENCE = {
 
 
 const CP_DOCUMENT = {
+
+    TYPE_DR: {
+        Delivery: 0,
+        Return: 1,
+        
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
+    },
+    TYPE_IC: {
+        Invoice: 2,
+        Credit: 3,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
+    },
     TYPE: {
         Delivery: 0,
         Return: 1,
@@ -476,11 +499,11 @@ const CP_DOCUMENT = {
     STATUS: {
         New: 0,
         Ready: 1,
-        Reconciled_None: 2,
-        Reconciled_Part: 3,
-        Reconciled_Full: 4,
         REFRESH: 8,
         ERROR: 9,
+        Reconciled_None: 10,
+        Reconciled_Part: 11,
+        Reconciled_Full: 12,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty);
@@ -505,6 +528,68 @@ const CP_DOCUMENT = {
                 color = '0,100,0';
                 bkgColor = '138,201,38';
             } else if (status == this.Reconciled_Full) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.REFRESH) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+    }
+}
+
+const CP_DOCUMENT_LINE = {
+    STATUS: {
+        New: 0,
+        Ready: 1,
+        NotDelivered: 2,
+        FreeStock: 3,
+        REFRESH: 8,
+        ERROR: 9,
+        Reconciled_None: 10,
+        Reconciled_Part: 11,
+        Reconciled_Full: 12,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                NotDelivered: 'not delivered',
+                FreeStock: 'free stock',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                NotDelivered: 'not delivered',
+                FreeStock: 'free stock',
+            });
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.New) {
+                color = '0,0,0';
+                bkgColor = '255,202,58';
+            } else if (status == this.Ready) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.NotDelivered) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            } else if (status == this.FreeStock) {
                 color = '0,100,0';
                 bkgColor = '138,201,38';
             } else if (status == this.REFRESH) {
@@ -556,6 +641,7 @@ module.exports = {
     CR_CASH_BOOK: CR_CASH_BOOK,
     CR_PREFERENCE: CR_PREFERENCE,
     CP_DOCUMENT: CP_DOCUMENT,
+    CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,
