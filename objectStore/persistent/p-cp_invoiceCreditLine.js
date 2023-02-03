@@ -25,13 +25,14 @@ const _fieldNames = {
     LINESTATUS: 'lineStatus',
     LINESTATUSMESSAGE: 'lineStatusMessage',
     LINENUMBER: 'lineNumber',
-    EPOSCODE: 'eposCode',
-    EPOSBARCODE: 'eposBarcode',
-    EPOSDESCRIPTION: 'eposDescription',
+    ITEMCODE: 'itemCode',
+    ITEMBARCODE: 'itemBarcode',
+    ITEMBARCODEOUTER: 'itemBarcodeOuter',
+    ITEMDESCRIPTION: 'itemDescription',
     EPOSDEPARTMENT: 'eposDepartment',
     EPOSSUBDEPARTMENT: 'eposSubDepartment',
     LINEQUANTITY: 'lineQuantity',
-    UNITCOST: 'unitCost',
+    UNITPRICE: 'unitPrice',
     PACKSIZE: 'packSize',
     VATRATE: 'vatRate',
     VATCODE: 'vatCode',
@@ -39,6 +40,7 @@ const _fieldNames = {
     EPOSLINENET: 'eposLineNet',
     EPOSLINEVAT: 'eposLineVat',
     EPOSLINEGROSS: 'eposLineGross',
+    LINEDISCOUNT: 'lineDiscount',
     LINENET: 'lineNet',
     LINEVAT: 'lineVat',
     LINEGROSS: 'lineGross',
@@ -59,13 +61,14 @@ const _fields = {
     lineStatus: { name: 'lineStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     lineStatusMessage: { name: 'lineStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     lineNumber: { name: 'lineNumber', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    eposCode: { name: 'eposCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    eposBarcode: { name: 'eposBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
-    eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    itemCode: { name: 'itemCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    itemBarcode: { name: 'itemBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    itemBarcodeOuter: { name: 'itemBarcodeOuter', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    itemDescription: { name: 'itemDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     lineQuantity: { name: 'lineQuantity', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
-    unitCost: { name: 'unitCost', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     packSize: { name: 'packSize', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
     vatRate: { name: 'vatRate', dataType: 'decimal', pk: false, identity: false, maxLength: 5, null: true },
     vatCode: { name: 'vatCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
@@ -73,6 +76,7 @@ const _fields = {
     eposLineNet: { name: 'eposLineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposLineVat: { name: 'eposLineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposLineGross: { name: 'eposLineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    lineDiscount: { name: 'lineDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineNet: { name: 'lineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineVat: { name: 'lineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineGross: { name: 'lineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -136,22 +140,28 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.LINENUMBER, val);
     }
 
-    get eposCode() {
-        return super.getValue(_fieldNames.EPOSCODE);
-    } set eposCode(val) {
-        super.setValue(_fieldNames.EPOSCODE, val);
+    get itemCode() {
+        return super.getValue(_fieldNames.ITEMCODE);
+    } set itemCode(val) {
+        super.setValue(_fieldNames.ITEMCODE, val);
     }
 
-    get eposBarcode() {
-        return super.getValue(_fieldNames.EPOSBARCODE);
-    } set eposBarcode(val) {
-        super.setValue(_fieldNames.EPOSBARCODE, val);
+    get itemBarcode() {
+        return super.getValue(_fieldNames.ITEMBARCODE);
+    } set itemBarcode(val) {
+        super.setValue(_fieldNames.ITEMBARCODE, val);
     }
 
-    get eposDescription() {
-        return super.getValue(_fieldNames.EPOSDESCRIPTION);
-    } set eposDescription(val) {
-        super.setValue(_fieldNames.EPOSDESCRIPTION, val);
+    get itemBarcodeOuter() {
+        return super.getValue(_fieldNames.ITEMBARCODEOUTER);
+    } set itemBarcodeOuter(val) {
+        super.setValue(_fieldNames.ITEMBARCODEOUTER, val);
+    }
+
+    get itemDescription() {
+        return super.getValue(_fieldNames.ITEMDESCRIPTION);
+    } set itemDescription(val) {
+        super.setValue(_fieldNames.ITEMDESCRIPTION, val);
     }
 
     get eposDepartment() {
@@ -172,10 +182,10 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.LINEQUANTITY, val);
     }
 
-    get unitCost() {
-        return super.getValue(_fieldNames.UNITCOST);
-    } set unitCost(val) {
-        super.setValue(_fieldNames.UNITCOST, val);
+    get unitPrice() {
+        return super.getValue(_fieldNames.UNITPRICE);
+    } set unitPrice(val) {
+        super.setValue(_fieldNames.UNITPRICE, val);
     }
 
     get packSize() {
@@ -218,6 +228,12 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EPOSLINEGROSS);
     } set eposLineGross(val) {
         super.setValue(_fieldNames.EPOSLINEGROSS, val);
+    }
+
+    get lineDiscount() {
+        return super.getValue(_fieldNames.LINEDISCOUNT);
+    } set lineDiscount(val) {
+        super.setValue(_fieldNames.LINEDISCOUNT, val);
     }
 
     get lineNet() {

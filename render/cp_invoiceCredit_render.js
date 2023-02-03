@@ -4,7 +4,7 @@ const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
-class CPDeliveryReturnRender extends RenderBase {
+class CPInvoiceReturnRender extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
     }
@@ -40,7 +40,7 @@ class CPDeliveryReturnRender extends RenderBase {
                                 group: 'main1.col1', column: 1, columnCount: 1, fields: [
                                     await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
                                     { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type' },
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document epos id' },
+                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id' },
                                 ]
                             },
                             {
@@ -139,7 +139,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 { label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             ];
             this.options.columns = [
-                { name: _cxSchema.cp_invoiceCredit.DELRETID, title: ' ', align: 'center' },
+                { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
 
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: 'status', title: 'status', align: 'center', width: '70px' },
@@ -199,4 +199,4 @@ class CPDeliveryReturnRender extends RenderBase {
 
 }
 
-module.exports = CPDeliveryReturnRender;
+module.exports = CPInvoiceReturnRender;

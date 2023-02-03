@@ -21,6 +21,7 @@ const _tableName = 'cp_invoiceCredit';
 const _fieldNames = {
     INVCREID: 'invCreId',
     TRANSMISSIONID: 'transmissionID',
+    SOURCEID: 'sourceID',
     SHOPID: 'shopId',
     SUPPLIERCODE: 'supplierCode',
     DOCUMENTTYPE: 'documentType',
@@ -32,11 +33,14 @@ const _fieldNames = {
     DOCUMENTREFERENCE: 'documentReference',
     DOCUMENTSECONDREFERENCE: 'documentSecondReference',
     DOCUMENTMEMO: 'documentMemo',
+    DOCKETNUMBER: 'docketNumber',
+    DOCKETDATE: 'docketDate',
     CURRENCY: 'currency',
     EPOSTOTALDISCOUNT: 'eposTotalDiscount',
     EPOSTOTALNET: 'eposTotalNet',
     EPOSTOTALVAT: 'eposTotalVat',
     EPOSTOTALGROSS: 'eposTotalGross',
+    SURCHARGEVALUE: 'surchargeValue',
     TOTALDISCOUNT: 'totalDiscount',
     TOTALNET: 'totalNet',
     TOTALVAT: 'totalVat',
@@ -54,6 +58,7 @@ const _fieldNames = {
 const _fields = {
     invCreId: { name: 'invCreId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    sourceID: { name: 'sourceID', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     supplierCode: { name: 'supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     documentType: { name: 'documentType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
@@ -65,11 +70,14 @@ const _fields = {
     documentReference: { name: 'documentReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentSecondReference: { name: 'documentSecondReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentMemo: { name: 'documentMemo', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
+    docketNumber: { name: 'docketNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    docketDate: { name: 'docketDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     currency: { name: 'currency', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
     eposTotalDiscount: { name: 'eposTotalDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposTotalNet: { name: 'eposTotalNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposTotalVat: { name: 'eposTotalVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposTotalGross: { name: 'eposTotalGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    surchargeValue: { name: 'surchargeValue', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalDiscount: { name: 'totalDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalNet: { name: 'totalNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalVat: { name: 'totalVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -108,6 +116,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TRANSMISSIONID);
     } set transmissionID(val) {
         super.setValue(_fieldNames.TRANSMISSIONID, val);
+    }
+
+    get sourceID() {
+        return super.getValue(_fieldNames.SOURCEID);
+    } set sourceID(val) {
+        super.setValue(_fieldNames.SOURCEID, val);
     }
 
     get shopId() {
@@ -176,6 +190,18 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         super.setValue(_fieldNames.DOCUMENTMEMO, val);
     }
 
+    get docketNumber() {
+        return super.getValue(_fieldNames.DOCKETNUMBER);
+    } set docketNumber(val) {
+        super.setValue(_fieldNames.DOCKETNUMBER, val);
+    }
+
+    get docketDate() {
+        return super.getValue(_fieldNames.DOCKETDATE);
+    } set docketDate(val) {
+        super.setValue(_fieldNames.DOCKETDATE, val);
+    }
+
     get currency() {
         return super.getValue(_fieldNames.CURRENCY);
     } set currency(val) {
@@ -204,6 +230,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EPOSTOTALGROSS);
     } set eposTotalGross(val) {
         super.setValue(_fieldNames.EPOSTOTALGROSS, val);
+    }
+
+    get surchargeValue() {
+        return super.getValue(_fieldNames.SURCHARGEVALUE);
+    } set surchargeValue(val) {
+        super.setValue(_fieldNames.SURCHARGEVALUE, val);
     }
 
     get totalDiscount() {
