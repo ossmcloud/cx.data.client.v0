@@ -21,6 +21,7 @@ const _tableName = 'cp_deliveryReturn';
 const _fieldNames = {
     DELRETID: 'delRetId',
     TRANSMISSIONID: 'transmissionID',
+    SOURCEID: 'sourceID',
     SHOPID: 'shopId',
     SUPPLIERCODE: 'supplierCode',
     DOCUMENTTYPE: 'documentType',
@@ -54,6 +55,7 @@ const _fieldNames = {
 const _fields = {
     delRetId: { name: 'delRetId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    sourceID: { name: 'sourceID', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true, default: '0' },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     supplierCode: { name: 'supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     documentType: { name: 'documentType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
@@ -108,6 +110,12 @@ class Persistent_cp_deliveryReturn extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TRANSMISSIONID);
     } set transmissionID(val) {
         super.setValue(_fieldNames.TRANSMISSIONID, val);
+    }
+
+    get sourceID() {
+        return super.getValue(_fieldNames.SOURCEID);
+    } set sourceID(val) {
+        super.setValue(_fieldNames.SOURCEID, val);
     }
 
     get shopId() {

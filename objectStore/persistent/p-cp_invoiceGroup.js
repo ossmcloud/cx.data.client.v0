@@ -14,39 +14,30 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cp_invoiceCredit';
+const _tableName = 'cp_invoiceGroup';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    INVCREID: 'invCreId',
     INVGRPID: 'invGrpId',
-    TRANSMISSIONID: 'transmissionID',
     SOURCEID: 'sourceID',
     SHOPID: 'shopId',
-    SUPPLIERCODE: 'supplierCode',
+    WHOLESALERID: 'wholesalerId',
     DOCUMENTTYPE: 'documentType',
     DOCUMENTSTATUS: 'documentStatus',
     DOCUMENTSTATUSMESSAGE: 'documentStatusMessage',
-    DOCUMENTID: 'documentId',
     DOCUMENTNUMBER: 'documentNumber',
     DOCUMENTDATE: 'documentDate',
     DOCUMENTREFERENCE: 'documentReference',
     DOCUMENTSECONDREFERENCE: 'documentSecondReference',
     DOCUMENTMEMO: 'documentMemo',
-    DOCKETNUMBER: 'docketNumber',
-    DOCKETDATE: 'docketDate',
     CURRENCY: 'currency',
-    EPOSTOTALDISCOUNT: 'eposTotalDiscount',
-    EPOSTOTALNET: 'eposTotalNet',
-    EPOSTOTALVAT: 'eposTotalVat',
-    EPOSTOTALGROSS: 'eposTotalGross',
-    SURCHARGEVALUE: 'surchargeValue',
+    TOTALSURCHARGE: 'totalSurcharge',
     TOTALDISCOUNT: 'totalDiscount',
     TOTALNET: 'totalNet',
     TOTALVAT: 'totalVat',
     TOTALGROSS: 'totalGross',
-    UPLOADDATE: 'uploadDate',
+    SYSINFO: 'sysInfo',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -57,34 +48,25 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    invCreId: { name: 'invCreId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    invGrpId: { name: 'invGrpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    invGrpId: { name: 'invGrpId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     sourceID: { name: 'sourceID', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    supplierCode: { name: 'supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
+    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     documentType: { name: 'documentType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     documentStatus: { name: 'documentStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     documentStatusMessage: { name: 'documentStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    documentId: { name: 'documentId', dataType: 'varchar', pk: false, identity: false, maxLength: 200, null: false },
     documentNumber: { name: 'documentNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     documentDate: { name: 'documentDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
     documentReference: { name: 'documentReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentSecondReference: { name: 'documentSecondReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentMemo: { name: 'documentMemo', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
-    docketNumber: { name: 'docketNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    docketDate: { name: 'docketDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     currency: { name: 'currency', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
-    eposTotalDiscount: { name: 'eposTotalDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    eposTotalNet: { name: 'eposTotalNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    eposTotalVat: { name: 'eposTotalVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    eposTotalGross: { name: 'eposTotalGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    surchargeValue: { name: 'surchargeValue', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    totalSurcharge: { name: 'totalSurcharge', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalDiscount: { name: 'totalDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalNet: { name: 'totalNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalVat: { name: 'totalVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalGross: { name: 'totalGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    uploadDate: { name: 'uploadDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
+    sysInfo: { name: 'sysInfo', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -94,7 +76,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cp_invoiceCredit_Collection extends _cx_data.DBTable {
+class Persistent_cp_invoiceGroup_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -103,27 +85,15 @@ class Persistent_cp_invoiceCredit_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
+class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
 
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get invCreId() {
-        return super.getValue(_fieldNames.INVCREID);
-    }
-
     get invGrpId() {
         return super.getValue(_fieldNames.INVGRPID);
-    } set invGrpId(val) {
-        super.setValue(_fieldNames.INVGRPID, val);
-    }
-
-    get transmissionID() {
-        return super.getValue(_fieldNames.TRANSMISSIONID);
-    } set transmissionID(val) {
-        super.setValue(_fieldNames.TRANSMISSIONID, val);
     }
 
     get sourceID() {
@@ -138,10 +108,10 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         super.setValue(_fieldNames.SHOPID, val);
     }
 
-    get supplierCode() {
-        return super.getValue(_fieldNames.SUPPLIERCODE);
-    } set supplierCode(val) {
-        super.setValue(_fieldNames.SUPPLIERCODE, val);
+    get wholesalerId() {
+        return super.getValue(_fieldNames.WHOLESALERID);
+    } set wholesalerId(val) {
+        super.setValue(_fieldNames.WHOLESALERID, val);
     }
 
     get documentType() {
@@ -160,12 +130,6 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DOCUMENTSTATUSMESSAGE);
     } set documentStatusMessage(val) {
         super.setValue(_fieldNames.DOCUMENTSTATUSMESSAGE, val);
-    }
-
-    get documentId() {
-        return super.getValue(_fieldNames.DOCUMENTID);
-    } set documentId(val) {
-        super.setValue(_fieldNames.DOCUMENTID, val);
     }
 
     get documentNumber() {
@@ -198,52 +162,16 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         super.setValue(_fieldNames.DOCUMENTMEMO, val);
     }
 
-    get docketNumber() {
-        return super.getValue(_fieldNames.DOCKETNUMBER);
-    } set docketNumber(val) {
-        super.setValue(_fieldNames.DOCKETNUMBER, val);
-    }
-
-    get docketDate() {
-        return super.getValue(_fieldNames.DOCKETDATE);
-    } set docketDate(val) {
-        super.setValue(_fieldNames.DOCKETDATE, val);
-    }
-
     get currency() {
         return super.getValue(_fieldNames.CURRENCY);
     } set currency(val) {
         super.setValue(_fieldNames.CURRENCY, val);
     }
 
-    get eposTotalDiscount() {
-        return super.getValue(_fieldNames.EPOSTOTALDISCOUNT);
-    } set eposTotalDiscount(val) {
-        super.setValue(_fieldNames.EPOSTOTALDISCOUNT, val);
-    }
-
-    get eposTotalNet() {
-        return super.getValue(_fieldNames.EPOSTOTALNET);
-    } set eposTotalNet(val) {
-        super.setValue(_fieldNames.EPOSTOTALNET, val);
-    }
-
-    get eposTotalVat() {
-        return super.getValue(_fieldNames.EPOSTOTALVAT);
-    } set eposTotalVat(val) {
-        super.setValue(_fieldNames.EPOSTOTALVAT, val);
-    }
-
-    get eposTotalGross() {
-        return super.getValue(_fieldNames.EPOSTOTALGROSS);
-    } set eposTotalGross(val) {
-        super.setValue(_fieldNames.EPOSTOTALGROSS, val);
-    }
-
-    get surchargeValue() {
-        return super.getValue(_fieldNames.SURCHARGEVALUE);
-    } set surchargeValue(val) {
-        super.setValue(_fieldNames.SURCHARGEVALUE, val);
+    get totalSurcharge() {
+        return super.getValue(_fieldNames.TOTALSURCHARGE);
+    } set totalSurcharge(val) {
+        super.setValue(_fieldNames.TOTALSURCHARGE, val);
     }
 
     get totalDiscount() {
@@ -270,10 +198,10 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         super.setValue(_fieldNames.TOTALGROSS, val);
     }
 
-    get uploadDate() {
-        return super.getValue(_fieldNames.UPLOADDATE);
-    } set uploadDate(val) {
-        super.setValue(_fieldNames.UPLOADDATE, val);
+    get sysInfo() {
+        return super.getValue(_fieldNames.SYSINFO);
+    } set sysInfo(val) {
+        super.setValue(_fieldNames.SYSINFO, val);
     }
 
     get created() {
@@ -306,6 +234,6 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cp_invoiceCredit_Collection,
-    Record: Persistent_cp_invoiceCredit,
+    Table: Persistent_cp_invoiceGroup_Collection,
+    Record: Persistent_cp_invoiceGroup,
 }

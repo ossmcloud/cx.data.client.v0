@@ -21,6 +21,7 @@ const _tableName = 'cp_documentImport';
 const _fieldNames = {
     DOCUMENTIMPORTID: 'documentImportId',
     SHOPID: 'shopId',
+    WHOLESALERID: 'wholesalerId',
     PROVIDERID: 'providerId',
     PROVIDERNAME: 'providerName',
     IMPORTSTATUS: 'importStatus',
@@ -42,6 +43,7 @@ const _fieldNames = {
 const _fields = {
     documentImportId: { name: 'documentImportId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     providerId: { name: 'providerId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     providerName: { name: 'providerName', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
     importStatus: { name: 'importStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
@@ -84,6 +86,12 @@ class Persistent_cp_documentImport extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SHOPID);
     } set shopId(val) {
         super.setValue(_fieldNames.SHOPID, val);
+    }
+
+    get wholesalerId() {
+        return super.getValue(_fieldNames.WHOLESALERID);
+    } set wholesalerId(val) {
+        super.setValue(_fieldNames.WHOLESALERID, val);
     }
 
     get providerId() {
