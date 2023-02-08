@@ -60,7 +60,7 @@ class Persistent_cp_wholesaler extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get wholesalerId() {
         return super.getValue(_fieldNames.WHOLESALERID);
