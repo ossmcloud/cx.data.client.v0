@@ -109,6 +109,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get totalNetSign() { return this.totalNet * this.#documentSign; }
     get totalVatSign() { return this.totalVat * this.#documentSign; }
     get totalGrossSign() { return this.totalGross * this.#documentSign; }
+    get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
 
 
     async save() {

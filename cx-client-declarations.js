@@ -546,6 +546,8 @@ const CP_DOCUMENT = {
     IMPORT_STATUS: {
         Pending: 0,
         Running: 1,
+        Cancel: 6,
+        Cancelled: 7,
         Completed: 8,
         ERROR: 9,
 
@@ -568,6 +570,12 @@ const CP_DOCUMENT = {
             } else if (status == this.Completed) {
                 color = '0,100,0';
                 bkgColor = '138,201,38';
+            } else if (status == this.Cancel) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            } else if (status == this.Cancelled) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
             } else if (status == this.ERROR) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';

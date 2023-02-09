@@ -142,6 +142,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 Net: _cxSchema.cp_deliveryReturn.TOTALNET + 'Sign',
                 Vat: _cxSchema.cp_deliveryReturn.TOTALVAT + 'Sign',
                 Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS + 'Sign',
+                Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT + 'Sign',
             }
             this.options.columns = [
                 { name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' },
@@ -154,21 +155,22 @@ class CPDeliveryReturnRender extends RenderBase {
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' },
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' },
 
-                { name: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
 
                 { name: _cxSchema.cp_deliveryReturn.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_deliveryReturn.CREATED, title: 'created', align: 'center', width: '130px' },
             ];
 
             this.options.cellHighlights = [];
-            this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturn.TOTALDISCOUNT] });
+            this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Net, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Net] });
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
+            this.options.cellHighlights.push({ column: signedCols.Discount, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Discount] });
 
             
             var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';

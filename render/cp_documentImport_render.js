@@ -3,7 +3,7 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
-const _cx_ui = require('cx-core')
+const _core = require('cx-core')
 
 class CPDocumentImportRender extends RenderBase {
     constructor(dataSource, options) {
@@ -109,6 +109,15 @@ class CPDocumentImportRender extends RenderBase {
                     }
                 ]
             })
+
+            if (this.dataSource.importStatus == _cxConst.CP_DOCUMENT.IMPORT_STATUS.Pending) {
+                this.options.buttons.push({ id: 'cp_documentImport_cancel', text: 'Cancel Import', function: 'cancelImport' });
+            } else if (this.dataSource.importStatus == _cxConst.CP_DOCUMENT.IMPORT_STATUS.Running) {
+                var elapsedMinutes = _core.date.toNow(this.dataSource.modified).minutes;
+                if (elapsedMinutes > process.env.CP_ALLOW_ABORT_AFTER_MINS && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                    this.options.buttons.push({ id: 'cp_documentImport_cancel', text: 'Abort Import', function: 'abortImport' });
+                }
+            }
             
         } 
     }
@@ -159,6 +168,10 @@ class CPDocumentImportRender extends RenderBase {
                     columns: [_cxSchema.cp_documentImport.IMPORTSTATUS]
                 })
             }
+
+            this.options.highlights = [
+                { column: _cxSchema.cp_documentImport.IMPORTSTATUS, op: '=', value: _cxConst.CP_DOCUMENT.IMPORT_STATUS.Cancelled, style: 'color: gray; font-style: italic;' },
+            ]
 
         } catch (error) {
             throw error;

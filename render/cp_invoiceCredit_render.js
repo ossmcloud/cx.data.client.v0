@@ -7,6 +7,8 @@ const RenderBase = require('./render_base');
 class CPInvoiceReturnRender extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
+        if (!options.path) { options.path = '../cp/invoice'; }
+        if (!options.listPath) { options.listPath = '../cp/invoices'; }
     }
 
     async getDocumentLineListOptions() {
@@ -127,6 +129,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.pageNo = (this.options.query.page || 1);
             }
 
+            
+
             this.options.filters = [
                 await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
                 { label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') },
@@ -142,6 +146,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
                 Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
                 Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
+                Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
             }
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
@@ -154,22 +159,22 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'document reference' },
 
-                { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
 
                 { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' },
             ];
 
             this.options.cellHighlights = [];
-            this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_invoiceCredit.TOTALDISCOUNT] });
+            this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Net, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Net] });
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
-
+            this.options.cellHighlights.push({ column: signedCols.Discount, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Discount] });
 
             var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();

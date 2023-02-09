@@ -13,7 +13,7 @@ class CPInvoiceGroupRender extends RenderBase {
         var transactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
         await transactions.select({ gid: this.options.query.id });
 
-        var transactionsOptions = await this.listOptions(transactions, { listView: true });
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank' });
         transactionsOptions.quickSearch = true;
         return transactionsOptions;
     }
@@ -152,10 +152,10 @@ class CPInvoiceGroupRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTNUMBER, title: 'document number' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTREFERENCE, title: 'document reference' },
 
-                { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceGroup.TOTALNET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceGroup.TOTALVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: _cxSchema.cp_invoiceGroup.TOTALNET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: _cxSchema.cp_invoiceGroup.TOTALVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+                { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
 
                 { name: _cxSchema.cp_invoiceGroup.CREATED, title: 'created', align: 'center', width: '130px' },
                 { name: 'importedFile', title: 'from file' },
