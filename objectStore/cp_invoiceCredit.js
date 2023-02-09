@@ -22,6 +22,10 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
+        if (params.gid) {
+            query.sql += ' and d.invGrpId = @invGrpId';
+            query.params.push({ name: 'invGrpId', value: params.gid });
+        }
         if (params.tr) {
             query.sql += ' and d.transmissionId like @transmissionId';
             query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
@@ -78,11 +82,15 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 class cp_invoiceCredit extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
+    #documentSign = 1;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) {
+            this.#documentSign = -1;
+        }
     };
 
     get shopName() { return this.#shopName; }
@@ -97,6 +105,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get documentTypeName() {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
+
+    get totalNetSign() { return this.totalNet * this.#documentSign; }
+    get totalVatSign() { return this.totalVat * this.#documentSign; }
+    get totalGrossSign() { return this.totalGross * this.#documentSign; }
 
 
     async save() {

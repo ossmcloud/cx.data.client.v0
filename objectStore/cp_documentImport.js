@@ -22,6 +22,10 @@ class cp_documentImport_Collection extends _persistentTable.Table {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
+        if (params.ff) {
+            query.sql += ' and d.fileName = @fileName';
+            query.params.push({ name: 'fileName', value: params.ff });
+        }
         if (params.df) {
             query.sql += ' and d.created >= @from';
             query.params.push({ name: 'from', value: params.df + ' 00:00:00' });

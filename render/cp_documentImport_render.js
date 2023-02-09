@@ -11,36 +11,109 @@ class CPDocumentImportRender extends RenderBase {
     }
 
     async _record() {
+
+        var wholesalers = this.dataSource.cx.table(_cxSchema.cp_wholesaler);
+        var wholesalerLookUps = await wholesalers.toLookUpList(this.dataSource.shopId, true);
+
+        var providers = this.dataSource.cx.table(_cxSchema.cp_wholesalerProvider);
+        var providerLookUps = await providers.toLookUpList(this.dataSource.wholesalerId, true);
+
         // this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
-        if (this.options.mode == 'new') {
-            this.options.buttons.push({ id: 'cp_documentImport_pick_file', text: 'Pick File', function: 'pickFile' });
-        }
+
+        var mainGroupColumnCount = (this.options.mode == 'view') ? 2 : 1;
+
+
+
         this.options.fields = [
+            //
             {
-                group: 'main', title: 'document import info', columnCount: 1, fields: [
+                group: 'main', title: '', columnCount: mainGroupColumnCount, fields: [
                     {
-                        group: 'main1', title: '', columnCount: 2, fields: [
-                            await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', width: '250px' }),
-                            { name: _cxSchema.cp_documentImport.PROVIDERID, label: 'provider', width: '167px', column: 2, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.PROVIDER.toList() },
+                        group: 'main1', title: 'document import info', columnCount: 1, fields: [
+                            {
+                                group: 'main1_1', title: '', columnCount: 2, fields: [
+                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', width: '250px', validation: (this.options.mode == 'new') ? '{ "mandatory": true }' : '' }),
+                                ]
+                            },
+                            {
+                                group: 'main1_2', title: '', columnCount: 2, fields: [
+                                    { name: _cxSchema.cp_documentImport.WHOLESALERID, label: 'wholesaler', width: '250px', column: 1, lookUps: wholesalerLookUps, validation: '{ "mandatory": true }' },
+                                    { name: _cxSchema.cp_documentImport.PROVIDERID, label: 'provider', width: '168px', column: 2, lookUps: providerLookUps, validation: '{ "mandatory": true }' },
+                                ]
+                            },
+                            {
+                                group: 'main1_3', title: '', columnCount: 1, fields: [
+                                    { name: _cxSchema.cp_documentImport.FILENAME, label: 'file name', width: '425px', column: 1, placeHolder: 'click here tol pick a file from your computer', validation: '{ "mandatory": true }' },
+                                ]
+                            },
+
                         ]
-                    },
-                    {
-                        group: 'main3', title: '', columnCount: 1, fields: [
-                            { name: _cxSchema.cp_documentImport.FILENAME, label: 'file name', width: '425px', column: 1 },
-                        ]
-                    },
-                    {
-                        group: 'main2', title: '', columnCount: 2, fields: [
-                            { name: _cxSchema.cp_documentImport.FILETYPE + 'View', label: 'file type', column: 1, width: '70px', disabled: true },
-                            { name: _cxSchema.cp_documentImport.OPTIONS, label: 'options', column: 2, width: '350px', disabled: true },
-                        ]
-                    },
-                    { name: 'fileContent', hidden: true },
-                    { name: _cxSchema.cp_documentImport.FILETYPE, hidden: true },
+                    }
                 ]
-            }
+            },
+
         ];
+
+        if (this.options.mode == 'new') {
+            this.options.fields[0].fields[0].fields.push({
+                group: 'main1_5', title: '', columnCount: 2, fields: [
+                    { name: 'documentNumber', label: 'document number', column: 1, width: '282px', validation: '{ "mandatory": true, "max": 60  }' },
+                    { name: 'documentDate', label: 'document date', column: 2, validation: '{ "mandatory": true }' },
+                ]
+            })
+
+            this.options.fields[0].fields[0].fields.push({
+                group: 'main1_6', title: '', columnCount: 1, fields: [
+                    { name: 'documentReference', label: 'document reference', column: 1, width: '425px', validation: '{ "max": 255  }' },
+                    { name: 'documentMemo', label: 'document memo', column: 1, width: '425px', validation: '{ "max": 500  }' },
+                ]
+            })
+            
+            this.options.fields[0].fields[0].fields.push({
+                group: 'main1_4', title: '', columnCount: 2, fields: [
+                    { name: _cxSchema.cp_documentImport.FILETYPE + 'View', label: 'file type', column: 1, width: '69px', disabled: true },
+                    { name: _cxSchema.cp_documentImport.OPTIONS + 'View', label: 'options', column: 2, width: '350px', disabled: true },
+                ]
+            })
+
+            this.options.fields.unshift({ name: 'fileContent', hidden: true });
+            this.options.fields.unshift({ name: _cxSchema.cp_documentImport.OPTIONS, hidden: true })
+            this.options.fields.unshift({ name: _cxSchema.cp_documentImport.PROVIDERNAME, hidden: true });
+            this.options.fields.unshift({ name: _cxSchema.cp_documentImport.FILETYPE, hidden: true });
+
+            this.options.buttons.push({ id: 'cp_documentImport_pick_file', text: 'Pick File', function: 'pickFile' });
+        
+        } else if (this.options.mode == 'view') {
+            this.options.fields[0].fields[0].fields.push({
+                group: 'main1_4', title: '', columnCount: 2, fields: [
+                    { name: _cxSchema.cp_documentImport.FILETYPE, label: 'file type', column: 1, width: '69px', disabled: true },
+                    { name: _cxSchema.cp_documentImport.OPTIONS, label: 'options', column: 2, width: '350px', disabled: true },
+                ]
+            })
+
+            this.options.fields[0].fields.push({
+                group: 'audit', title: 'audit info', column: 2, columnCount: 2, fields: [
+                    { name: _cxSchema.cp_documentImport.IMPORTSTATUS, label: 'status', column: 1, width: '70px', lookUps: _cxConst.CP_DOCUMENT.IMPORT_STATUS.toList() },
+                    { name: _cxSchema.cp_documentImport.IMPORTSTATUSMESSAGE, label: 'status message', column: 1, width: '350px' },
+                    {
+                        group: 'audit1', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                            { name: 'created', label: 'created', column: 1, readOnly: true },
+                            { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'audit2', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                            { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                            { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                        ]
+                    }
+                ]
+            })
+            
+        } 
     }
+
+
 
 
     async _list() {
@@ -73,7 +146,7 @@ class CPDocumentImportRender extends RenderBase {
 
             ];
 
-            
+
             var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.IMPORT_STATUS.toList();
             for (let sx = 0; sx < statuses.length; sx++) {

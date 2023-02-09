@@ -80,11 +80,15 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
 class cp_deliveryReturn extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
+    #documentSign = 1;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
+            this.#documentSign = -1;
+        }
     };
 
     get shopName() { return this.#shopName; }
@@ -99,6 +103,13 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get documentTypeName() {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
+    
+
+    get totalNetSign() { return this.totalNet * this.#documentSign; }
+    get totalVatSign() { return this.totalVat * this.#documentSign; }
+    get totalGrossSign() { return this.totalGross * this.#documentSign; }
+
+
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

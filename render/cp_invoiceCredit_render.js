@@ -138,6 +138,11 @@ class CPInvoiceReturnRender extends RenderBase {
                 { label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE },
                 { label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             ];
+            var signedCols = {
+                Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
+                Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
+                Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
+            }
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
 
@@ -150,9 +155,9 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'document reference' },
 
                 { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceCredit.TOTALNET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceCredit.TOTALVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceCredit.TOTALGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2' },
 
                 { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' },
@@ -160,7 +165,11 @@ class CPInvoiceReturnRender extends RenderBase {
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_invoiceCredit.TOTALDISCOUNT] });
-            this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceCredit.TOTALVAT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_invoiceCredit.TOTALVAT] });
+            this.options.cellHighlights.push({ column: signedCols.Vat, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Vat] });
+            this.options.cellHighlights.push({ column: signedCols.Net, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Net] });
+            this.options.cellHighlights.push({ column: signedCols.Vat, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Vat] });
+            this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
+
 
             var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();

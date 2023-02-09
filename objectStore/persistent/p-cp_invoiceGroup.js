@@ -37,6 +37,7 @@ const _fieldNames = {
     TOTALNET: 'totalNet',
     TOTALVAT: 'totalVat',
     TOTALGROSS: 'totalGross',
+    DOCUMENTIMPORTID: 'documentImportId',
     SYSINFO: 'sysInfo',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
@@ -66,6 +67,7 @@ const _fields = {
     totalNet: { name: 'totalNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalVat: { name: 'totalVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalGross: { name: 'totalGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    documentImportId: { name: 'documentImportId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     sysInfo: { name: 'sysInfo', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
@@ -90,7 +92,7 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get invGrpId() {
         return super.getValue(_fieldNames.INVGRPID);
@@ -196,6 +198,12 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TOTALGROSS);
     } set totalGross(val) {
         super.setValue(_fieldNames.TOTALGROSS, val);
+    }
+
+    get documentImportId() {
+        return super.getValue(_fieldNames.DOCUMENTIMPORTID);
+    } set documentImportId(val) {
+        super.setValue(_fieldNames.DOCUMENTIMPORTID, val);
     }
 
     get sysInfo() {
