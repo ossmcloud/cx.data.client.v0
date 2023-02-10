@@ -97,7 +97,7 @@ const CX_SERVICES = {
     DTFS: 'dtfs',
     ERPS: 'erps',
     ERP: 'erp',
-
+    MMS: 'mms',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
