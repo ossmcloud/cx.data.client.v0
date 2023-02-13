@@ -42,7 +42,7 @@ const _fieldNames = {
 const _fields = {
     dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
     dtfsSettingName: { name: 'dtfsSettingName', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
-    dtfsPairingStatus: { name: 'dtfsPairingStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '((0))' },
+    dtfsPairingStatus: { name: 'dtfsPairingStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     dtfsPairingCode: { name: 'dtfsPairingCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     dtfsPairedMachineName: { name: 'dtfsPairedMachineName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     dtfsPairedMachineOS: { name: 'dtfsPairedMachineOS', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
@@ -74,7 +74,7 @@ class Persistent_epos_dtfs_setting extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get dtfsSettingId() {
         return super.getValue(_fieldNames.DTFSSETTINGID);
