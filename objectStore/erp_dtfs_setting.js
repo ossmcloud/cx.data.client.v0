@@ -43,8 +43,8 @@ class erp_dtfs_setting_Collection extends _persistentTable.Table {
         var shopFilterValue = this.cx.shopList;
         query.sql = `select	t.*
                     from	erp_dtfs_setting t
-                    inner join erp_shop_setting s on s.dtfsSettingId = t.dtfsSettingId
-                    where	s.shopId ${shopFilter} ${shopFilterValue}
+                    left outer join erp_shop_setting s on s.dtfsSettingId = t.dtfsSettingId
+                    where	(s.shopId ${shopFilter} ${shopFilterValue} or s.shopId is null)
                     and     t.dtfsSettingId = @dtfsSettingId`;
 
         query.noResult = 'null';
