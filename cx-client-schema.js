@@ -201,6 +201,7 @@ module.exports = {
         TOTALNET: 'totalNet',
         TOTALVAT: 'totalVat',
         TOTALGROSS: 'totalGross',
+        DOCUMENTIMPORTID: 'documentImportId',
         SYSINFO: 'sysInfo',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
@@ -290,6 +291,16 @@ module.exports = {
         ERPTRANSMISSIONID: 'erpTransmissionId',
     },
 
+    cr_cb_transactionAudit: {
+        TBL_NAME: 'cr_cb_transactionAudit',
+        CBTRANAUDITID: 'cbTranAuditId',
+        CBTRANID: 'cbTranId',
+        LOGTYPE: 'logType',
+        LOGMESSAGE: 'logMessage',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+    },
+
     cr_erp_transaction: {
         TBL_NAME: 'cr_erp_transaction',
         TRANID: 'tranId',
@@ -325,6 +336,7 @@ module.exports = {
         GLACCOUNTSEG2: 'glAccountSeg2',
         GLACCOUNTSEG3: 'glAccountSeg3',
         GLACCOUNTDESCRIPTION: 'glAccountDescription',
+        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         NARRATIVE: 'narrative',
         VALUENET: 'valueNet',
         TAXACCOUNT: 'taxAccount',
@@ -819,6 +831,18 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+    },
+
+    erp_shop_configs: {
+        TBL_NAME: 'erp_shop_configs',
+        CONFIGID: 'configId',
+        SHOPID: 'shopId',
+        CONFIGNAME: 'configName',
+        CONFIGVALUE: 'configValue',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
     },
 
     erp_shop_setting: {

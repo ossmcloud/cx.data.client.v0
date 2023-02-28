@@ -102,6 +102,13 @@ const CX_SERVICES = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
+const CX_LOG_TYPE = {
+    INFO: 'info',
+    WARN: 'warning',
+    ERROR: 'ERROR',
+    CRITICAL: 'ERROR-CRITICAL'
+}
+
 
 const EPOS_DTFS_SETTING = {
     PAIRING_STATUS: {
@@ -676,6 +683,7 @@ module.exports = {
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
     CX_SERVICES: CX_SERVICES,
+    CX_LOG_TYPE: CX_LOG_TYPE,
     CX_ERP_PROVIDER: CX_ERP_PROVIDER,
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
