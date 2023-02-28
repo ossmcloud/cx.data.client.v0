@@ -19,7 +19,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             query.sql += ' and mapConfigId = @mapConfigId';
             query.params.push({ name: 'mapConfigId', value: params.mid });
         }
-      
+
         if (params.dep) {
             query.sql += ' and eposDepartment like @eposDepartment';
             query.params.push({ name: 'eposDepartment', value: params.dep + '%' });
@@ -101,7 +101,7 @@ class cx_map_config_dep extends _persistentTable.Record {
     };
 
     async save() {
-        
+
         await super.save()
     }
 }

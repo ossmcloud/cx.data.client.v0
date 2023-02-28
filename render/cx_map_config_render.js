@@ -89,7 +89,7 @@ class CxMapConfig extends RenderBase {
             },
 
             //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
-            
+
         ]
 
 

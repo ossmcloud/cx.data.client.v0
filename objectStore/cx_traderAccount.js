@@ -25,7 +25,7 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
                     inner join cx_shop s on s.shopId = t.shopId
                     left outer join erp_traderAccount erp on erp.traderAccountId = t.erpTraderAccountId
                     where	s.shopId ${shopFilter} ${shopFilterValue}`;
-        
+
         if (params.tt) {
             query.sql += ' and t.traderType = @traderType';
             query.params.push({ name: 'traderType', value: params.tt });

@@ -29,8 +29,8 @@ class CXTraderAccount extends RenderBase {
                             { name: 'address4', label: 'address line 4', column: 2, readOnly: true },
                             { name: 'postCode', label: 'post code', column: 1, readOnly: true },
                             { name: 'countryCode', label: 'Country', column: 2, readOnly: true },
-                            
-                            
+
+
                         ]
                     },
                     {
@@ -74,7 +74,7 @@ class CXTraderAccount extends RenderBase {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
 
-        
+
         this.options.recordTitle = 'trader account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),

@@ -78,7 +78,6 @@ class ErpTaxAccount extends RenderBase {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp Tax account'; }
         if (this.options.label == undefined) { this.options.label = 'erp Tax account'; }
         options.noPaging = true;
-        
         // load collection if required
         if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
         // populate drop down items
