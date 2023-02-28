@@ -47,7 +47,7 @@ class erp_bank_account_Collection extends _persistentTable.Table {
                 pageSize: _declarations.SQL.PAGE_SIZE
             }
         }
-
+        
         await super.select(query);
     }
 

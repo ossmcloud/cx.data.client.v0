@@ -78,11 +78,11 @@ class CRCashBookRender extends RenderBase {
         if (isBatchProcessing) { this.options.columns.push({ name: 'statusX', title: ' ', unbound: true }); }
         this.options.columns.push({ name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
         this.options.columns.push({ name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
-        this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', });
-        this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', });
-        this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', });
-        this.options.columns.push({ name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', });
-        this.options.columns.push({ name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', });
+        this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', addTotals: true });
+        this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', addTotals: true });
+        this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', addTotals: true });
+        this.options.columns.push({ name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', addTotals: true });
+        this.options.columns.push({ name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', addTotals: true });
         this.options.columns.push({ name: 'modified', title: 'modified on', align: 'center', width: '130px' });
         this.options.columns.push({ name: 'modifiedBy', title: 'by' });
         this.options.columns.push({ name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' });

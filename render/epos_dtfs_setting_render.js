@@ -98,12 +98,15 @@ class EposDtfsSettingRender extends RenderBase {
         }
         this.options.fields.push(mainGroup);
 
-        var listsGroup = {
-            group: 'listsOuter', title: '', columnCount: 2, fields: [
-                { group: 'config', title: 'configurations', column: 1, fields: [configListOptions]}
-            ]
+        var listsGroup = null;
+        if (configListOptions) {
+            listsGroup = {
+                group: 'listsOuter', title: '', columnCount: 2, fields: [
+                    { group: 'config', title: 'configurations', column: 1, fields: [configListOptions] }
+                ]
+            }
+            this.options.fields.push(listsGroup);
         }
-        this.options.fields.push(listsGroup);
 
         if (!newRecord) {
             mainGroup.fields.push({
@@ -122,9 +125,11 @@ class EposDtfsSettingRender extends RenderBase {
                     }
                 ]
             });
-            listsGroup.fields.push({
-                group: 'shops', title: 'epos stores', column: 2, fields: [shopListOptions]
-            })
+            if (listsGroup) {
+                listsGroup.fields.push({
+                    group: 'shops', title: 'epos stores', column: 2, fields: [shopListOptions]
+                })
+            }
         }
 
 
@@ -140,7 +145,7 @@ class EposDtfsSettingRender extends RenderBase {
     async _list() {
        
         // NOTE: we overwrite permissions because we only want to create this record from a store and only if not there already
-        this.options.allowNew = false;
+        //this.options.allowNew = false;
 
         // this.options.filters = [
         //     await this.filterDropDownOptions(_cxSchema.cx_shop_group, { fieldName: 'sg' }),

@@ -3,6 +3,7 @@
 const _core = require('cx-core');
 const _persistentTable = require('./persistent/p-cr_cb_transaction');
 const _declarations = require('../cx-client-declarations');
+const _schema = require('../cx-client-schema');
 const _cx_render = require('../cx-client-render');
 //
 class cr_cb_transaction_Collection extends _persistentTable.Table {
@@ -185,32 +186,38 @@ class cr_cb_transaction extends _persistentTable.Record {
                 select  @sales as totalSales, @sales_acc as totalAccountSales, @lodg as totalLodgement, @lodg_acc as totalAccountLodgement, (@lodg - @sales) as tillDifference
             `
         }
-
         query.params = [{ name: 'cbTranId', value: this.id }];
-
         query.returnFirst = true;
 
         var result = await this.cx.exec(query);
-        //console.log(result);
-
         this.totalSales = result.totalSales;
         this.totalAccountSales = result.totalAccountSales;
         this.totalLodgement = result.totalLodgement;
         this.totalAccountLodgement = result.totalAccountLodgement;
         this.tillDifference = result.tillDifference;
-
-        // @WORKING: move
-        // if (this.tillDifference != 0) {
-        //     if (this.status == _declarations.CR_CASH_BOOK.STATUS.New) {
-        //         //this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
-        //         this.statusMessage = 'calculated till difference is not zero!';
-        //     }
-        // } else {
-        //     this.status = _declarations.CR_CASH_BOOK.STATUS.Pending;
-        //     this.statusMessage = 'Pending posting...';
-        // }
-
         if (save) { await this.save(); }
+    }
+
+    async logInfo(message) {
+        await this.log(_declarations.CX_LOG_TYPE.INFO, message);
+    }
+    async logWarning(message) {
+        await this.log(_declarations.CX_LOG_TYPE.WARN, message);
+    }
+    async logError(error) {
+        await this.log(_declarations.CX_LOG_TYPE.ERROR, error.message || error);
+    }
+    async log(type, message) {
+        try {
+            var newLog = await this.cx.table(_schema.cr_cb_transactionAudit).createNew();
+            newLog.cbTranId = this.cbTranId;
+            newLog.logType = type || _declarations.CX_LOG_TYPE.INFO;
+            newLog.logMessage = message || 'no message provided';
+            newLog.save();
+        } catch (error) {
+            // ignore we could not log
+            if (process.env.DEV) { console.log(error.message); }
+        }
     }
 
 

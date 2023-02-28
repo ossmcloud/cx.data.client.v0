@@ -232,13 +232,13 @@ class CRCashBookRender extends RenderBase {
             { name: _cxSchema.cr_transaction.ITEMBARCODE, title: 'barcode' },
             { name: _cxSchema.cr_transaction.ITEMDESCRIPTION, title: 'item description' },
 
-            { name: _cxSchema.cr_transaction.VALUEGROSS, title: 'gross', align: 'right', width: '90px', },
-            { name: _cxSchema.cr_transaction.VALUENET, title: 'net', align: 'right', width: '90px', },
-            { name: _cxSchema.cr_transaction.VALUENET, title: 'tax', align: 'right', width: '90px', },
-            { name: _cxSchema.cr_transaction.VALUEDISCOUNT, title: 'discount', align: 'right', width: '90px', },
-            { name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, title: 'promo', align: 'right', width: '90px', },
+            { name: _cxSchema.cr_transaction.VALUEGROSS, title: 'gross', align: 'right', width: '90px', addTotals: true, },
+            { name: _cxSchema.cr_transaction.VALUENET, title: 'net', align: 'right', width: '90px', addTotals: true, },
+            { name: _cxSchema.cr_transaction.VALUETAX, title: 'tax', align: 'right', width: '90px', addTotals: true, },
+            { name: _cxSchema.cr_transaction.VALUEDISCOUNT, title: 'discount', align: 'right', width: '90px', addTotals: true, },
+            { name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, title: 'promo', align: 'right', width: '90px', addTotals: true, },
 
-            { name: _cxSchema.cr_transaction.CHANGE, title: 'change', align: 'right', width: '90px', },
+            { name: _cxSchema.cr_transaction.CHANGE, title: 'change', align: 'right', width: '90px', addTotals: true, },
 
             { name: 'created', title: 'created', align: 'center', width: '130px' },
         ];

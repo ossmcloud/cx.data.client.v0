@@ -27,6 +27,7 @@ class CrTranTypeConfigRender extends RenderBase {
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('sage200', true);
 
         var readOnlyIfNotNew = !this.dataSource.isNew();
+        
 
         this.options.fields = [
             {
@@ -52,6 +53,13 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.IGNORE, label: 'Ignore', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.INVERTSIGN, label: 'Invert Sign', column: 2 },
                                     { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 3 },
+                                ]
+                            },
+                            {
+                                group: 'cb2', column: 1, columnCount: 3, inline: true, fields: [
+                                    { name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, label: 'Ignore store gl segments', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, label: 'Split posting by reference', column: 2, noRender: (!this.dataSource.requiresDeclaration) },
+                                    
                                 ]
                             },
                             { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 2, width: '100px' },
@@ -134,6 +142,9 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'allow edit', name: _cxSchema.cr_tran_type_config.ALLOWEDIT, align: 'center' },
             { title: 'invert sign', name: _cxSchema.cr_tran_type_config.INVERTSIGN, align: 'center' },
             { title: 'ignore', name: _cxSchema.cr_tran_type_config.IGNORE, align: 'center' },
+
+            { title: 'erp split by ref', name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, align: 'center' },
+            { title: 'erp ignore store gl', name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, align: 'center' },
             // 
 
             { title: 'erp tran. type', name: 'erpTranType' },

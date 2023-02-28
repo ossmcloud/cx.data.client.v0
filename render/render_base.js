@@ -69,6 +69,10 @@ class RenderBase {
         }
 
         this.options.pageSize = _cxConst.SQL.PAGE_SIZE;
+
+        if (!this.options.cellHighlights) {
+            this.options.cellHighlights = [];
+        }
     }
 
     async get(renderType, options) {
