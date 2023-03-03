@@ -20,13 +20,18 @@ class CxShopRender extends RenderBase {
         if (this.options.mode == 'view') {
             var shop = this.dataSource;
             if (shop.status == 0) {
-                var shopEpos = await this.dataSource.cx.table(_cxSchema.epos_shop_setting).fetch(shop.id);
-                var shopErp = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shop.id);
-                if (shopEpos.isSet() && shopErp.isSet()) {
-                    this.options.buttons.push({ id: 'cr_shop_activate', text: 'Activate Store', function: 'activateShop' });
-                } else {
-                    if (!shopEpos.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_epos', text: 'Configure EPoS (DTSF)', link: '/epos/shopSetting?e=T&id=' + shopEpos.id }); }
-                    if (!shopErp.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_erp', text: 'Configure ERP (DTSF)', link: '/erp/shopSetting?e=T&id=' + shopErp.id }); }
+                // TODO: @@NEW_STORE: 
+                var shopEpos = await this.dataSource.cx.table(_cxSchema.epos_shop_setting).fetch(shop.id, true);
+                var shopErp = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shop.id, true);
+
+                if (shopEpos != null && shopErp != null) {
+
+                    if (shopEpos.isSet() && shopErp.isSet()) {
+                        this.options.buttons.push({ id: 'cr_shop_activate', text: 'Activate Store', function: 'activateShop' });
+                    } else {
+                        if (!shopEpos.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_epos', text: 'Configure EPoS (DTFS)', link: '/epos/shopSetting?e=T&id=' + shopEpos.id }); }
+                        if (!shopErp.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_erp', text: 'Configure ERP (DTFS)', link: '/erp/shopSetting?e=T&id=' + shopErp.id }); }
+                    }
                 }
             }
         }

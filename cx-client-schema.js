@@ -350,6 +350,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        GLCONTRAENTRY: 'glContraEntry',
     },
 
     cr_erp_transaction_tax: {

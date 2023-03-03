@@ -129,6 +129,13 @@ const EPOS_DTFS_CONFIGS = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
+const ERP_DTFS_CONFIGS = {
+    API_CONFIG: 'ERPApiConfig',
+    API_TOKEN: 'ERPApiToken',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+
 const CX_ERP_PROVIDER = {
     SG200: 'sage200',
     toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200' }); }
@@ -698,6 +705,7 @@ module.exports = {
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,
     EPOS_DTFS_UPGRADE_AUDIT: EPOS_DTFS_UPGRADE_AUDIT,
+    ERP_DTFS_CONFIGS: ERP_DTFS_CONFIGS,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     RENDER: RENDER,
     SQL: SQL,

@@ -10,8 +10,31 @@ class ErpTraderAccount extends RenderBase {
         this.title = 'erp store setting';
     }
 
-    async _record() {
+    async getConfigListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.erp_shop_configs);
+        await configs.select(this.dataSource.id);
+        if (configs.count() > 0) { this.options.allowDelete = false; }
 
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            if (this.options.allowEdit) {
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: 'edit', funcName: 'editShopConfig' });
+                configListOptions.actions.push({ label: 'delete', funcName: 'deleteShopConfig' });
+                configListOptions.showButtons = [{ id: 'erp_shop_configs_add', text: 'Add Configuration', function: 'addShopConfig' }];
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewShopConfig' }];
+            }
+        }
+        return configListOptions;
+    }
+
+
+    async _record() {
+        var newRecord = (this.options.mode == 'new');
         var dtfsSettingsLookUps = await this.dataSource.cx.table(_cxSchema.erp_dtfs_setting).toLookUpList(true);
 
         this.options.fields = [
@@ -50,16 +73,20 @@ class ErpTraderAccount extends RenderBase {
             }
         ];
 
-        var prefListOptions = await this.getPreferenceListOptions();
-        this.options.fields[0].fields.push({
-            group: 'sublists', columnCount: 1, column: 3, fields: [
-                { group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] }
-            ]
-        });
+        if (!newRecord) {
+            var sublists = { group: 'sublists', columnCount: 1, column: 3, fields: [] };
+            this.options.fields[0].fields.push(sublists);
+            
+            var configListOptions = await this.getConfigListOptions();
+            sublists.fields.push({ group: 'config', title: 'configurations', column: 1, fields: [configListOptions] });
 
-        // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
-        //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
-        // }
+            var prefListOptions = await this.getPreferenceListOptions();
+            sublists.fields.push({ group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] });
+
+            // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
+            //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
+            // }
+        }
     }
 
     async _list() {
