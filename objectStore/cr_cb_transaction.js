@@ -85,12 +85,13 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         query.sql = ` select  l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
+                      and     l.${this.FieldNames.SHOPID}  in ${this.cx.shopList}
                       and     l.${this.FieldNames.CBTRANID} = @cbTranId`;
         query.noResult = 'null';
         query.returnFirst = true;
 
         var rawRecord = await this.db.exec(query);
-        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist or was deleted!`); }
+        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
 
         return super.populate(rawRecord);
     }
@@ -103,6 +104,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         query.sql = ` select  top 1 l.*, s.shopCode, s.shopName
                       from    ${this.type} l, cx_shop s
                       where   l.${this.FieldNames.SHOPID} = s.shopId
+                      and     l.${this.FieldNames.SHOPID}  in ${this.cx.shopList}
                       and     l.${this.FieldNames.SHOPID} = @shopId`;
 
         if (date) {
