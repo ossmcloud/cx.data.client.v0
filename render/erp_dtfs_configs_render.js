@@ -20,7 +20,7 @@ class ErpDtfsConfig extends RenderBase {
             this.options.fields[0].fields.push(await this.fieldDropDownOptions(_cxSchema.erp_dtfs_setting, { id: 'erp_settings_id', name: _cxSchema.erp_dtfs_setting.DTFSSETTINGID, column: 1 }));
         }
         this.options.fields[0].fields.push({ name: 'configName', label: 'config name', width: '250px', readOnly: !this.dataSource.isNew(), lookUps: _cxConst.ERP_DTFS_CONFIGS.toList(true), validation: '{ "mandatory": true }' });
-        this.options.fields[0].fields.push({ name: 'configValue', label: 'config value', validation: '{ "mandatory": true, "max": 500 }' });
+        this.options.fields[0].fields.push({ name: 'configValue', label: 'config value', validation: '{ "mandatory": true, "max": 2000 }' });
     }
 
     async _list() {
