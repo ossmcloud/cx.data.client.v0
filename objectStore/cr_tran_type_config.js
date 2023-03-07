@@ -87,7 +87,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             }
         }
 
-        query.sql += ' order by cbHeading, description';
+        query.sql += ' order by sortIndex, cbHeading, description';
         await super.select(query);
     }
 

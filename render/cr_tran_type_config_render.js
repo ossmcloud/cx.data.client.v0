@@ -24,7 +24,8 @@ class CrTranTypeConfigRender extends RenderBase {
         var erpTranTypeLookUps = this.dataSource.cx.table(_cxSchema.sys_erp_tran_type);
 
         // TODO: implement use of erpProvider
-        erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList('sage200', true);
+        var erpCode = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).getErpCode(shopId);
+        erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList(erpCode, true);
 
         var readOnlyIfNotNew = !this.dataSource.isNew();
         
