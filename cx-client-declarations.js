@@ -136,9 +136,11 @@ const ERP_DTFS_CONFIGS = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
+// TODO: this should come from sys_provider table
 const CX_ERP_PROVIDER = {
     SG200: 'sage200',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200' }); }
+    SG200STD: 'sage200std',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200', SG200STD: 'Sage 200 Standard Online' }); }
 }
 
 const CX_EPOS_PROVIDER = {
