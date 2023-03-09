@@ -32,7 +32,7 @@ class CrTranTypeConfigRender extends RenderBase {
 
         this.options.fields = [
             {
-                group: 'mainOuter', title: '', columnCount: 4, fields: [
+                group: 'mainOuter', title: '', columnCount: 5, fields: [
                     {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, label: 'Type', readOnly: readOnlyIfNotNew, column: 1 },
@@ -72,8 +72,6 @@ class CrTranTypeConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp configurations', column: 3, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 1, lookUps: erpTranTypeLookUps },
-                            { name: _cxSchema.cr_tran_type_config.ERP2NDTRANTYPEID, label: 'ERP Type (secondary)', column: 1, lookUps: erpTranTypeLookUps },
-
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                                 id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
                             }),
@@ -93,7 +91,28 @@ class CrTranTypeConfigRender extends RenderBase {
                     },
 
                     {
-                        group: 'audit', title: 'audit info', column: 4, columnCount: 1, fields: [
+                        group: 'erp', title: 'erp configurations (secondary)', column: 4, columnCount: 1, inline: true, fields: [
+                            { name: _cxSchema.cr_tran_type_config.ERP2NDTRANTYPEID, label: 'ERP Type (secondary)', column: 1, lookUps: erpTranTypeLookUps },
+                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                                id: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, name: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                id: _cxSchema.cr_tran_type_config.ERP2NDGLACCOUNTID, name: _cxSchema.cr_tran_type_config.ERP2NDGLACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'erp CONTRA GL account', id: _cxSchema.cr_tran_type_config.ERP2NDGLCONTRAACCOUNTID, name: _cxSchema.cr_tran_type_config.ERP2NDGLCONTRAACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_bank_account, {
+                                id: _cxSchema.cr_tran_type_config.ERP2NDCBACCOUNTID, name: _cxSchema.cr_tran_type_config.ERP2NDCBACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_tax_account, {
+                                id: _cxSchema.cr_tran_type_config.ERP2NDTAXACCOUNTID, name: _cxSchema.cr_tran_type_config.ERP2NDTAXACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                        ]
+                    },
+
+                    {
+                        group: 'audit', title: 'audit info', column: 5, columnCount: 1, fields: [
                             { name: _cxSchema.cr_tran_type_config.CREATEDBY, label: 'created by', column: 1, readOnly: true },
                             { name: _cxSchema.cr_tran_type_config.CREATED, label: 'created on', column: 1, readOnly: true },
                             { name: _cxSchema.cr_tran_type_config.MODIFIEDBY, label: 'modified by', column: 1, readOnly: true },

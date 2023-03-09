@@ -25,6 +25,7 @@ const _fieldNames = {
     TRANNAME: 'tranName',
     TRANLEDGER: 'tranLedger',
     OPPOSITETRANID: 'oppositeTranId',
+    CSSSTYLE: 'cssStyle',
 
 }
 //
@@ -37,6 +38,7 @@ const _fields = {
     tranName: { name: 'tranName', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     tranLedger: { name: 'tranLedger', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     oppositeTranId: { name: 'oppositeTranId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    cssStyle: { name: 'cssStyle', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -56,7 +58,7 @@ class Persistent_sys_erp_tran_type extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get tranTypeId() {
         return super.getValue(_fieldNames.TRANTYPEID);
@@ -90,6 +92,12 @@ class Persistent_sys_erp_tran_type extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.OPPOSITETRANID);
     } set oppositeTranId(val) {
         super.setValue(_fieldNames.OPPOSITETRANID, val);
+    }
+
+    get cssStyle() {
+        return super.getValue(_fieldNames.CSSSTYLE);
+    } set cssStyle(val) {
+        super.setValue(_fieldNames.CSSSTYLE, val);
     }
 
 

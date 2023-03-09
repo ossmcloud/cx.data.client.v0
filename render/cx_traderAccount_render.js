@@ -120,8 +120,8 @@ class CXTraderAccount extends RenderBase {
     }
 
     async dropDown(options) {
-        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp account'; }
-        if (this.options.label == undefined) { this.options.label = 'erp account'; }
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a trader account'; }
+        if (this.options.label == undefined) { this.options.label = 'trader account'; }
         options.noPaging = true;
 
         // load collection if required

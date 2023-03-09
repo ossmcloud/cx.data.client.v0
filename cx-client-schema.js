@@ -455,6 +455,11 @@ module.exports = {
         SORTINDEX: 'sortIndex',
         ERPSPLITBYREFERENCE: 'erpSplitByReference',
         ERPIGNORESTOREGLSEGMENTS: 'erpIgnoreStoreGLSegments',
+        ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
+        ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
+        ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
+        ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
+        ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
     },
 
     cr_transaction: {
@@ -515,6 +520,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ISEDITED: 'isEdited',
+        RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
     },
 
     cx_login: {
@@ -1215,6 +1221,7 @@ module.exports = {
         TRANNAME: 'tranName',
         TRANLEDGER: 'tranLedger',
         OPPOSITETRANID: 'oppositeTranId',
+        CSSSTYLE: 'cssStyle',
     },
 
     sys_provider: {
@@ -1222,6 +1229,7 @@ module.exports = {
         TYPE: 'type',
         CODE: 'code',
         NAME: 'name',
+        ISCLOUD: 'isCloud',
     }
 
 }
