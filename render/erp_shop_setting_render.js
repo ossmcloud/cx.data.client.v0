@@ -38,18 +38,21 @@ class ErpTraderAccount extends RenderBase {
         var dtfsSettingsLookUps = await this.dataSource.cx.table(_cxSchema.erp_dtfs_setting).toLookUpList(true);
 
         this.options.fields = [
+            //{ name: 'shopId', hidden: true },
             {
                 group: 'settingOuter', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
+                            { name: 'dtfsSettingId', label: 'ERPS Settings', column: 1, lookUps: dtfsSettingsLookUps, validation: '{ "mandatory": true }' },
                             { name: 'erpProvider', label: 'erp provider', column: 1, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), validation: '{ "mandatory": true }' },
-                            { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 1, validation: '{ "mandatory": true }' },
-                            { name: 'erpCustomerAccountName', label: 'erp EPoS Account name', column: 1, validation: '{ "mandatory": true }' },
-                            { name: 'erpCompanyName', label: 'erp company name', column: 2, validation: '{ "mandatory": true }' },
+                            { name: 'erpCompanyName', label: 'erp company name', column: 1, validation: '{ "mandatory": true }' },
+                            { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 2, validation: '{ "mandatory": true }' },
+                            { name: 'erpCustomerAccountName', label: 'erp EPoS Account name', column: 2, validation: '{ "mandatory": true }' },
+                            
                             { name: 'erpCostCentre', label: 'force gl segment 2', column: 2 },
                             { name: 'erpDepartment', label: 'force gl segment 3', column: 2 },
-                            { name: 'dtfsSettingId', label: 'ERPS Settings', column: 2, lookUps: dtfsSettingsLookUps, validation: '{ "mandatory": true }' },
+                            
                             
                         ]
                     },
@@ -70,7 +73,8 @@ class ErpTraderAccount extends RenderBase {
                         ]
                     }
                 ]
-            }
+            },
+            { name: 'shopId', hidden: true },
         ];
 
         if (!newRecord) {
