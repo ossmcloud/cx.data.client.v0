@@ -257,7 +257,7 @@ const CR_CASH_BOOK = {
             });
         },
         getName: function (value) {
-            return enumGetName(this, value, {
+            return enumGetName(this, value, {   
                 PostingPrep: 'preparing for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
