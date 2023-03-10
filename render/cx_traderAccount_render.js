@@ -12,23 +12,31 @@ class CXTraderAccount extends RenderBase {
     }
 
     async _record() {
+        var readOnly = !this.dataSource.isNew();
+        var validationMandatory = null;
+        var shopField = { name: 'shopInfo', label: 'store', column: 1, readOnly: readOnly };
+        if (!readOnly) {
+            validationMandatory = '{ "mandatory": true }';
+            shopField = await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'mapMasterShop', column: 1, validation: '{ "mandatory": true }', label: 'store' });
+        }
+        
         this.options.fields = [
             {
                 group: 'traderOuter', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
-                            { name: 'traderType', label: 'type', column: 2, readOnly: true },
-                            { name: 'traderCode', label: 'Code', column: 1, readOnly: true },
-                            { name: 'traderName', label: 'Name', column: 2, readOnly: true },
-                            { name: 'contact', label: 'contact', column: 1, readOnly: true },
-                            { name: 'phone', label: 'phone', column: 2, readOnly: true },
-                            { name: 'address1', label: 'address line 1', column: 1, readOnly: true },
-                            { name: 'address2', label: 'address line 2', column: 2, readOnly: true },
-                            { name: 'address3', label: 'address line 3', column: 1, readOnly: true },
-                            { name: 'address4', label: 'address line 4', column: 2, readOnly: true },
-                            { name: 'postCode', label: 'post code', column: 1, readOnly: true },
-                            { name: 'countryCode', label: 'Country', column: 2, readOnly: true },
+                            shopField,
+                            { name: 'traderType', label: 'type', column: 2, readOnly: readOnly, items: [{ value: '', text: '' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }], validation: validationMandatory },
+                            { name: 'traderCode', label: 'Code', column: 1, readOnly: readOnly, validation: validationMandatory },
+                            { name: 'traderName', label: 'Name', column: 2, readOnly: readOnly },
+                            { name: 'contact', label: 'contact', column: 1, readOnly: readOnly },
+                            { name: 'phone', label: 'phone', column: 2, readOnly: readOnly },
+                            { name: 'address1', label: 'address line 1', column: 1, readOnly: readOnly },
+                            { name: 'address2', label: 'address line 2', column: 2, readOnly: readOnly },
+                            { name: 'address3', label: 'address line 3', column: 1, readOnly: readOnly },
+                            { name: 'address4', label: 'address line 4', column: 2, readOnly: readOnly },
+                            { name: 'postCode', label: 'post code', column: 1, readOnly: readOnly },
+                            { name: 'countryCode', label: 'Country', column: 2, readOnly: readOnly },
 
 
                         ]

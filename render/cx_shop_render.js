@@ -20,7 +20,6 @@ class CxShopRender extends RenderBase {
         if (this.options.mode == 'view') {
             var shop = this.dataSource;
             if (shop.status == 0) {
-                // TODO: @@NEW_STORE: 
                 var shopEpos = await this.dataSource.cx.table(_cxSchema.epos_shop_setting).fetch(shop.id, true);
                 var shopErp = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shop.id, true);
 
