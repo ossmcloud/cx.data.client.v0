@@ -41,10 +41,11 @@ class RawGetLog extends RenderBase {
 
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            { id: 'cx_module', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'm', label: 'module', items: _cxConst.CX_MODULE.toList('- all -') },
             { id: 'cx_transmission', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tr', label: 'transmission' },
             { id: 'cx_date_from', inputType: _cxConst.RENDER.CTRL_TYPE.DATE, fieldName: 'df', label: 'from' },
             { id: 'cx_date_to', inputType: _cxConst.RENDER.CTRL_TYPE.DATE, fieldName: 'dt', label: 'to' },
-            { id: 'cx_success', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'suc', label: 'success', width: '50px', placeHolder: 'either', items: [{ value: '', text: 'either' }, { value: 'true', text: 'true' }, { value: 'false', text: 'false' }] },
+            { id: 'cx_success', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'suc', label: 'success', width: '75px', placeHolder: 'either', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
         ];
         this.options.columns = [
             { name: 'getLogId', title: ' ', align: 'center' },

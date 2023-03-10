@@ -71,6 +71,10 @@ class raw_getLog_Collection extends _persistentTable.Table {
                 query.sql += ' and l.shopId = @shopId';
                 query.params.push({ name: 'shopId', value: params.s });
             }
+            if (params.m) {
+                query.sql += ' and l.getModule = @getModule';
+                query.params.push({ name: 'getModule', value: params.m });
+            }
             if (params.tr) {
                 query.sql += ' and l.transmissionId like @transmissionId';
                 query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
