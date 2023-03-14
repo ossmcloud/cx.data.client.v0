@@ -120,6 +120,15 @@ class CxShopRender extends RenderBase {
         this.options.highlights = [
             { column: _cxSchema.cx_shop.STATUS, op: '=', value: _cxConst.CX_SHOP.STATUS.INACTIVE, style: 'color: orange;' },
         ];
+        var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
+        for (var cx = 0; cx < shopColors.length; cx++) {
+            if (!shopColors[cx].shopColor) { continue; }
+            this.options.cellHighlights.push({
+                column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopCode']
+            })
+        }
+
     }
 
     async dropDown() {
