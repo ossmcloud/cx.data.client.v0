@@ -74,11 +74,15 @@ class CRCashBookRender extends RenderBase {
         this.options.columns = [];
         if (isBatchProcessing) { this.options.columns.push({ name: 'check', title: 'post', width: '30px', type: 'check' }); }
         this.options.columns.push({ name: 'cbTranId', title: ' ', align: 'center' });
-        this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
+        this.options.columns.push({ name: 'shopInfo', title: 'store', width: 'auto' });
         this.options.columns.push({ name: 'date', title: 'date', align: 'center', width: '130px' });
         if (isBatchProcessing) { this.options.columns.push({ name: 'statusX', title: ' ', unbound: true }); }
-        this.options.columns.push({ name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
-        this.options.columns.push({ name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
+        if (this.options.query.expanded == 'true') {
+            this.options.columns.push({ name: 'statusX', title: ' ', unbound: true });
+        } else {
+            this.options.columns.push({ name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
+            this.options.columns.push({ name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
+        }
         this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
@@ -101,7 +105,7 @@ class CRCashBookRender extends RenderBase {
         this.options.cellHighlights = [];
         var applyToColumn = 'status';
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
-        if (isBatchProcessing) {
+        if (isBatchProcessing || this.options.query.expanded == 'true') {
             applyToColumn = 'statusX';
             applyStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
         }
@@ -134,6 +138,18 @@ class CRCashBookRender extends RenderBase {
                 //}
             }
         })
+
+        applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
+        for (var cx = 0; cx < shopColors.length; cx++) {
+            this.options.cellHighlights.push({
+                column: 'shopId',
+                op: '=',
+                value: shopColors[cx].shopId,
+                style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStyle,
+                columns: ['shopInfo']
+            })
+        }
 
 
     }
