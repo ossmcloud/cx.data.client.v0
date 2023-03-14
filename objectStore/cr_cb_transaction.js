@@ -43,7 +43,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                 query.sql += `, ('[' + s.shopCode + '] ' + s.shopName) as shopInfo `;
                 var cols = await this.getTranTypeConfigCols();
                 cols.each(function (c, idx) {
-                    query.sql += `, (select sum(cbt.valueGross) from cr_transaction cbt where cbt.cbTranId = l.cbTranId and cbt.tranTypeConfigId = ${c.tranTypeConfigId}) as [AC_${c.tranTypeConfigId}] `;
+                    query.sql += `, (select sum(cbt.valueGross) from cr_transaction cbt where cbt.cbTranId = l.cbTranId and voided = 0 and cbt.tranTypeConfigId = ${c.tranTypeConfigId}) as [AC_${c.tranTypeConfigId}] `;
                     additionalColumns.push({
                         id: c.tranTypeConfigId,
                         title: c.title,
