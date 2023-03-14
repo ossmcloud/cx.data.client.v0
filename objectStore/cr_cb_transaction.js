@@ -11,6 +11,20 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         return new cr_cb_transaction(this, defaults);
     }
 
+    async getTranTypeConfigCols() {
+        var query = { sql: '', params: [] };
+        query.sql = `
+            select	        tt.tranTypeConfigId, ('<span class="label_smaller">' + tt.cbHeading + '</span><span class="label_small">' + tt.description + '</span>') as title, tt.sortIndex
+            from	        cr_tran_type_config tt
+            inner   join    cx_shop s ON s.tranTypeConfigId = tt.mapConfigId	
+            where	s.shopId in ${this.cx.shopList}
+            and		tt.showInCashBookList = 1
+            group by tt.tranTypeConfigId, tt.cbHeading, tt.description, tt.sortIndex
+            order by tt.sortIndex
+        `;
+        return await this.db.exec(query);
+    }
+
 
     async select(params) {
 
@@ -22,10 +36,26 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
         } else {
 
             var query = { sql: '', params: [] };
-            query.sql = ` select  l.*, s.shopCode, s.shopName
-                      from    ${this.type} l, cx_shop s
-                      where   l.${this.FieldNames.SHOPID} = s.shopId
-                      and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+
+            query.sql = ` select  l.*, s.shopCode, s.shopName  `;
+            if (params.expanded == 'true') {
+                var additionalColumns = [];
+                query.sql += `, ('[' + s.shopCode + '] ' + s.shopName) as shopInfo `;
+                var cols = await this.getTranTypeConfigCols();
+                cols.each(function (c, idx) {
+                    query.sql += `, (select sum(cbt.valueGross) from cr_transaction cbt where cbt.cbTranId = l.cbTranId and cbt.tranTypeConfigId = ${c.tranTypeConfigId}) as [AC_${c.tranTypeConfigId}] `;
+                    additionalColumns.push({
+                        id: c.tranTypeConfigId,
+                        title: c.title,
+                    });
+                });
+                this.additionalColumns = additionalColumns;
+            }
+            query.sql += `
+                from ${this.type} l, cx_shop s
+                where   l.${this.FieldNames.SHOPID} = s.shopId
+                and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+            `;
 
             if (params.s) {
                 query.sql += ' and l.shopId = @shopId';
@@ -66,6 +96,10 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                     //query.params.push({ name: 'statuses', value: [1,2] });
                 }
             }
+            if (params.expanded == 'true') {
+                query.sql += `group by  l.cbTranId, l.shopId, l.date, l.status, l.statusMessage, l.totalSales, l.totalLodgement, l.tillDifference, l.totalAccountSales, l.totalAccountLodgement,
+                                        l.erpTransmissionId, l.transmissionId, l.created, l.createdBy, l.modified, l.modifiedBy, l.rowver, s.shopCode, s.shopName`;
+            }
             query.sql += ' order by l.date desc';
 
             query.paging = {
@@ -73,7 +107,13 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                 pageSize: _declarations.SQL.PAGE_SIZE
             }
 
-            return await super.select(query);
+            if (params.expanded == 'true') {
+                var resp = await this.db.exec(query);
+                this.setRecords(resp.rows);
+                return resp.count > 0;
+            } else {
+                return await super.select(query);
+            }
         }
     }
 

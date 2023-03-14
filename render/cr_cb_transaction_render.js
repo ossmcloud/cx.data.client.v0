@@ -67,8 +67,9 @@ class CRCashBookRender extends RenderBase {
                 label: 'status', fieldName: 'st', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
                 items: _cxConst.CR_CASH_BOOK.STATUS.toList('- all -'),
             });
+            this.options.filters.push({ label: 'expanded', fieldName: 'expanded', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
         }
-
+        
 
         this.options.columns = [];
         if (isBatchProcessing) { this.options.columns.push({ name: 'check', title: 'post', width: '30px', type: 'check' }); }
@@ -81,6 +82,13 @@ class CRCashBookRender extends RenderBase {
         this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        if (this.options.query.expanded == 'true') {
+            for (var ax = 0; ax < this.dataSource.additionalColumns.length; ax++) {
+                var ac = this.dataSource.additionalColumns[ax];
+                this.options.columns.push({ name: 'AC_' + ac.id, title: ac.title, align: 'right', width: '90px', formatMoney: 'N2', addTotals: true, nullText: '' });
+            }
+
+        }
         this.options.columns.push({ name: 'totalAccountSales', title: 'a/c sales', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'totalAccountLodgement', title: 'a/c lodgements', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'modified', title: 'modified on', align: 'center', width: '130px' });

@@ -53,6 +53,7 @@ const _fieldNames = {
     ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
     ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
     ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+    SHOWINCASHBOOKLIST: 'showInCashBookList',
 
 }
 //
@@ -93,6 +94,7 @@ const _fields = {
     erp2ndCBAccountId: { name: 'erp2ndCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erp2ndTaxAccountId: { name: 'erp2ndTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    showInCashBookList: { name: 'showInCashBookList', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -314,6 +316,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERP2NDGLCONTRAACCOUNTID);
     } set erp2ndGLContraAccountId(val) {
         super.setValue(_fieldNames.ERP2NDGLCONTRAACCOUNTID, val);
+    }
+
+    get showInCashBookList() {
+        return super.getValue(_fieldNames.SHOWINCASHBOOKLIST);
+    } set showInCashBookList(val) {
+        super.setValue(_fieldNames.SHOWINCASHBOOKLIST, val);
     }
 
 

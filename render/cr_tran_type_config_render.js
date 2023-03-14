@@ -64,6 +64,7 @@ class CrTranTypeConfigRender extends RenderBase {
                                 ]
                             },
                             { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 2, width: '100px' },
+                            { name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, label: 'Show In Cashbook Expanded List', column: 2, width: '100px' },
 
 
                         ]
@@ -157,14 +158,15 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), align: 'center' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING },
             { title: 'c/b description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
-            { title: 'sort', name: _cxSchema.cr_tran_type_config.SORTINDEX, width: '35px' },
+            { title: 'sort', name: _cxSchema.cr_tran_type_config.SORTINDEX, width: '35px', nullText: '' },
 
-            { title: 'allow edit', name: _cxSchema.cr_tran_type_config.ALLOWEDIT, align: 'center' },
-            { title: 'invert sign', name: _cxSchema.cr_tran_type_config.INVERTSIGN, align: 'center' },
-            { title: 'ignore', name: _cxSchema.cr_tran_type_config.IGNORE, align: 'center' },
+            { title: 'allow<br />edit', name: _cxSchema.cr_tran_type_config.ALLOWEDIT, align: 'center', nullText: '' },
+            { title: 'invert<br />sign', name: _cxSchema.cr_tran_type_config.INVERTSIGN, align: 'center', nullText: '' },
+            { title: 'ignore', name: _cxSchema.cr_tran_type_config.IGNORE, align: 'center', nullText: '' },
 
-            { title: 'erp split by ref', name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, align: 'center' },
-            { title: 'erp ignore store gl', name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, align: 'center' },
+            { title: 'erp split<br />by ref', name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, align: 'center', nullText: '' },
+            { title: 'erp ignore<br />store gl', name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, align: 'center', nullText: '' },
+            { title: 'cashbook<br />column', name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, align: 'center', nullText: '' },
             // 
 
             { title: 'erp tran. type', name: 'erpTranType' },
@@ -194,26 +196,41 @@ class CrTranTypeConfigRender extends RenderBase {
             }
         });
 
+        var appendStyleNoWidth = 'padding: 1px 7px 1px 7px; border-radius: 5px; overflow: hidden; text-align: center; display: inline-block;';
         this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true,
             columns: [_cxSchema.cr_tran_type_config.IGNORE],
-            style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyle,
+            style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
         })
-
         this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.INVERTSIGN, op: '=', value: true,
             columns: [_cxSchema.cr_tran_type_config.INVERTSIGN],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyle,
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
         })
         this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.ALLOWEDIT, op: '=', value: true,
             columns: [_cxSchema.cr_tran_type_config.ALLOWEDIT],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyle,
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
         })
         this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.ALLOWNEW, op: '=', value: true,
             columns: [_cxSchema.cr_tran_type_config.ALLOWNEW],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyle,
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE],
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS],
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, op: '=', value: true,
+            columns: [_cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST],
+            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
         })
 
         this.options.cellHighlights.push({

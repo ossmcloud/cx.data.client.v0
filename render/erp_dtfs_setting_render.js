@@ -40,7 +40,7 @@ class ErpTraderAccount extends RenderBase {
                 group: 'settingOuter', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'erpProvider', label: 'erp provider', column: 2, readOnly: true },
+                            { name: 'erpProvider', label: 'erp provider', column: 2, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), validation: '{ "mandatory": true }', readOnly: !newRecord },
                             { name: 'dtfsSettingName', label: 'settings name', column: 1 },
                             { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
                             { name: 'dtfsPairingCode', label: 'pairing code', column: 2 },

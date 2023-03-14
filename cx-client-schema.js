@@ -460,6 +460,7 @@ module.exports = {
         ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
         ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
         ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+        SHOWINCASHBOOKLIST: 'showInCashBookList',
     },
 
     cr_transaction: {
