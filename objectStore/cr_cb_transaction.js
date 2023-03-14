@@ -98,7 +98,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                 }
             }
             if (params.expanded == 'true') {
-                query.sql += `group by  l.cbTranId, l.shopId, l.date, l.status, l.statusMessage, l.totalSales, l.totalLodgement, l.tillDifference, l.totalAccountSales, l.totalAccountLodgement,
+                query.sql += ` group by  l.cbTranId, l.shopId, l.date, l.status, l.statusMessage, l.totalSales, l.totalLodgement, l.tillDifference, l.totalAccountSales, l.totalAccountLodgement,
                                         l.erpTransmissionId, l.transmissionId, l.created, l.createdBy, l.modified, l.modifiedBy, l.rowver, s.shopCode, s.shopName`;
             }
             query.sql += ' order by l.date desc';
