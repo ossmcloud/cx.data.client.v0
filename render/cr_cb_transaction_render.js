@@ -31,6 +31,7 @@ class CRCashBookRender extends RenderBase {
     async _list() {
 
         var isBatchProcessing = (this.options.query && this.options.query.batch == 'T');
+        var isExpanded = (this.options.query && this.options.query.expanded == 'true');
 
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
@@ -77,7 +78,7 @@ class CRCashBookRender extends RenderBase {
         this.options.columns.push({ name: 'shopInfo', title: 'store', width: 'auto' });
         this.options.columns.push({ name: 'date', title: 'date', align: 'center', width: '130px' });
         if (isBatchProcessing) { this.options.columns.push({ name: 'statusX', title: ' ', unbound: true }); }
-        if (this.options.query.expanded == 'true') {
+        if (isExpanded) {
             this.options.columns.push({ name: 'statusX', title: ' ', unbound: true });
         } else {
             this.options.columns.push({ name: 'status', title: 'status', align: 'left', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
@@ -86,7 +87,7 @@ class CRCashBookRender extends RenderBase {
         this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
-        if (this.options.query.expanded == 'true') {
+        if (isExpanded) {
             for (var ax = 0; ax < this.dataSource.additionalColumns.length; ax++) {
                 var ac = this.dataSource.additionalColumns[ax];
                 this.options.columns.push({ name: 'AC_' + ac.id, title: ac.title, align: 'right', width: '90px', formatMoney: 'N2', addTotals: true, nullText: '' });
@@ -105,7 +106,7 @@ class CRCashBookRender extends RenderBase {
         this.options.cellHighlights = [];
         var applyToColumn = 'status';
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
-        if (isBatchProcessing || this.options.query.expanded == 'true') {
+        if (isBatchProcessing || isExpanded) {
             applyToColumn = 'statusX';
             applyStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
         }
