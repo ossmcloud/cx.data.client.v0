@@ -21,7 +21,7 @@ class erp_dtfs_configs_Collection extends _persistentTable.Table {
         this.query.addFilter({ name: _cxSchema.erp_dtfs_configs.SETTINGID, value: settingId });
         this.query.addFilter({ name: _cxSchema.erp_dtfs_configs.CONFIGNAME, value: configName });
         var value = null;
-        if (await this.select()) {
+        if (await super.select()) {
             value = this.first().configValue;
             if (parseJason) {
                 if (!value) { return null; }

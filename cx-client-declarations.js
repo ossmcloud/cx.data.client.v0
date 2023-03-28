@@ -130,8 +130,9 @@ const EPOS_DTFS_CONFIGS = {
 }
 
 const ERP_DTFS_CONFIGS = {
+    API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',
-    API_TOKEN: 'ERPApiToken',
+    //API_TOKEN: 'ERPApiToken',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }

@@ -554,6 +554,21 @@ module.exports = {
         SHOPID: 'shopId',
     },
 
+    cx_login_token: {
+        TBL_NAME: 'cx_login_token',
+        TYPE: 'type',
+        LOGINID: 'loginId',
+        DTFSSETTINGID: 'dtfsSettingId',
+        STATEKEY: 'stateKey',
+        STATUS: 'status',
+        TOKEN: 'token',
+        EXPIRYDATE: 'expiryDate',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+    },
+
     cx_map_config: {
         TBL_NAME: 'cx_map_config',
         MAPCONFIGID: 'mapConfigId',
