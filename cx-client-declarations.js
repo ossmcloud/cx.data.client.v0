@@ -134,7 +134,11 @@ const ERP_DTFS_CONFIGS = {
     API_CONFIG: 'ERPApiConfig',
     //API_TOKEN: 'ERPApiToken',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        if (configName == this.API_AUTH_CONFIG) { return true; }
+        return false;
+    }
 }
 
 // TODO: this should come from sys_provider table

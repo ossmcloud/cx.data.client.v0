@@ -790,6 +790,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        VALUEENCRYPTED: 'valueEncrypted',
     },
 
     erp_dtfs_ping: {

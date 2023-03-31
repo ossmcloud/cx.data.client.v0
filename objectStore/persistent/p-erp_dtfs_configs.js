@@ -27,6 +27,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
+    VALUEENCRYPTED: 'valueEncrypted',
 
 }
 //
@@ -41,6 +42,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    valueEncrypted: { name: 'valueEncrypted', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -106,6 +108,12 @@ class Persistent_erp_dtfs_configs extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDBY);
     } set createdBy(val) {
         super.setValue(_fieldNames.CREATEDBY, val);
+    }
+
+    get valueEncrypted() {
+        return super.getValue(_fieldNames.VALUEENCRYPTED);
+    } set valueEncrypted(val) {
+        super.setValue(_fieldNames.VALUEENCRYPTED, val);
     }
 
 

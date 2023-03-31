@@ -1,5 +1,6 @@
 'use strict'
 //
+const _cx_crypto = require('cx-core/core/cx-crypto');   
 const _cxSchema = require('../cx-client-schema');
 const _persistentTable = require('./persistent/p-erp_dtfs_configs');
 //
@@ -22,7 +23,11 @@ class erp_dtfs_configs_Collection extends _persistentTable.Table {
         this.query.addFilter({ name: _cxSchema.erp_dtfs_configs.CONFIGNAME, value: configName });
         var value = null;
         if (await super.select()) {
-            value = this.first().configValue;
+            var config = this.first();
+            value = config.configValue;
+            if (config.valueEncrypted == true) {
+                value = _cx_crypto.Aes.decrypt(value, config.configName + '_' + config.id);
+            }
             if (parseJason) {
                 if (!value) { return null; }
                 return JSON.parse(value);
