@@ -17,7 +17,7 @@ class erp_dtfs_configs_Collection extends _persistentTable.Table {
         return await super.select();
     }
 
-    async getConfigValue(settingId, configName, parseJason) {
+    async getConfigValue(settingId, configName, parseJason, parseJasonReturnNullOnError) {
         this.query.clear();
         this.query.addFilter({ name: _cxSchema.erp_dtfs_configs.SETTINGID, value: settingId });
         this.query.addFilter({ name: _cxSchema.erp_dtfs_configs.CONFIGNAME, value: configName });
@@ -30,7 +30,12 @@ class erp_dtfs_configs_Collection extends _persistentTable.Table {
             }
             if (parseJason) {
                 if (!value) { return null; }
-                return JSON.parse(value);
+                try {
+                    return JSON.parse(value);    
+                } catch (error) {
+                    if (parseJasonReturnNullOnError === true) { return null; }
+                    throw error;
+                }
             }
             return value;
         }
