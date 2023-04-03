@@ -8,11 +8,7 @@ class cx_login_token_Collection extends _persistentTable.Table {
         return new cx_login_token(this, defaults);
     }
 
-    get isExpired() {
-        return (token.expiryDate.toNow().hours > -1);
-    }
-
-
+   
     async fetchByStateKey(stateKey) {
         this.query.clear();
         this.query.addFilter({ name: _cxSchema.cx_login_token.STATEKEY, value: stateKey });
@@ -27,6 +23,11 @@ class cx_login_token extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
     };
+
+    get isExpired() {
+        return (token.expiryDate.toNow().hours > -1);
+    }
+
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
