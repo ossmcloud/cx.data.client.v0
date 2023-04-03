@@ -25,7 +25,7 @@ class cx_login_token extends _persistentTable.Record {
     };
 
     get isExpired() {
-        return (token.expiryDate.toNow().hours > -1);
+        return (this.expiryDate.toNow().hours > -1);
     }
 
 
