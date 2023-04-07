@@ -10,7 +10,40 @@ class CrTranTypeConfigRender extends RenderBase {
         super(dataSource, options);
     }
 
+    async getShopConfigListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.cr_tran_type_config_shop);
+        await configs.select(this.dataSource.id);
+        if (configs.count() > 0) { this.options.allowDelete = false; }
+
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        //configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            configListOptions.actionsShowFirst = true;
+            if (this.options.allowEdit) {
+                
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: '&#x270E;', toolTip: 'edit...', funcName: 'editTranTypeConfig' });
+                configListOptions.actions.push({ label: '&#x29C9;', toolTip: 'clone...', funcName: 'copyTranTypeConfig' });
+                configListOptions.actions.push({ label: '&#128465;', toolTip: 'delete', funcName: 'deleteTranTypeConfig' });
+                configListOptions.showButtons = [{ id: 'cr_tran_type_config_shop_add', text: 'Add Configuration', function: 'addTranTypeConfig' }];
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewTranTypeConfig' }];
+            }
+        }
+        return configListOptions;
+    }
+
     async _record() {
+        var configListOptions = null; 
+        if (this.options.mode == 'new') {
+            this.options.allowDelete = false;
+        } else {
+            configListOptions = await this.getShopConfigListOptions();
+        }
+
+
         var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
@@ -28,7 +61,8 @@ class CrTranTypeConfigRender extends RenderBase {
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList(erpCode, true);
 
         var readOnlyIfNotNew = !this.dataSource.isNew();
-        
+
+       
 
         this.options.fields = [
             {
@@ -123,6 +157,16 @@ class CrTranTypeConfigRender extends RenderBase {
                 ]
             }
         ]
+
+        var listsGroup = null;
+        if (configListOptions) {
+            listsGroup = {
+                group: 'listsOuter', title: '', columnCount: 1, fields: [
+                    { group: 'config', title: 'store specific configurations', column: 1, fields: [configListOptions] }
+                ]
+            }
+            this.options.fields.push(listsGroup);
+        }
 
     }
 

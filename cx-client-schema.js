@@ -326,6 +326,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        TRANTYPECONFIGID: 'tranTypeConfigId',
     },
 
     cr_erp_transaction_gl: {
@@ -461,6 +462,28 @@ module.exports = {
         ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
         ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
         SHOWINCASHBOOKLIST: 'showInCashBookList',
+    },
+
+    cr_tran_type_config_shop: {
+        TBL_NAME: 'cr_tran_type_config_shop',
+        TRANTYPECONFIGID: 'tranTypeConfigId',
+        SHOPID: 'shopId',
+        ERPTRANTYPEID: 'erpTranTypeId',
+        TRADERACCOUNT: 'traderAccount',
+        ERPGLACCOUNTID: 'erpGLAccountId',
+        ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
+        ERPCBACCOUNTID: 'erpCBAccountId',
+        ERPTAXACCOUNTID: 'erpTaxAccountId',
+        ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
+        ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
+        ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
+        ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+        ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
+        ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cr_transaction: {

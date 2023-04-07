@@ -169,6 +169,10 @@ class cx_shop extends _persistentTable.Record {
     } set check(value) {
         this.#check = value
     }
+
+    get shopInfo() {
+        return `[${this.shopCode}]${this.shopName}`;
+    }
    
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
