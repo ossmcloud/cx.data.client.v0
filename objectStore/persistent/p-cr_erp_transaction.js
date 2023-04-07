@@ -42,7 +42,6 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    TRANTYPECONFIGID: 'tranTypeConfigId',
 
 }
 //
@@ -72,7 +71,6 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    tranTypeConfigId: { name: 'tranTypeConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -228,12 +226,6 @@ class Persistent_cr_erp_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
-    }
-
-    get tranTypeConfigId() {
-        return super.getValue(_fieldNames.TRANTYPECONFIGID);
-    } set tranTypeConfigId(val) {
-        super.setValue(_fieldNames.TRANTYPECONFIGID, val);
     }
 
 

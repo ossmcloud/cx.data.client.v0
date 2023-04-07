@@ -326,7 +326,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        TRANTYPECONFIGID: 'tranTypeConfigId',
     },
 
     cr_erp_transaction_gl: {
