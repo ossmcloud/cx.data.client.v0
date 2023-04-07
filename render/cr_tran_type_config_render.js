@@ -40,7 +40,9 @@ class CrTranTypeConfigRender extends RenderBase {
         if (this.options.mode == 'new') {
             this.options.allowDelete = false;
         } else {
-            configListOptions = await this.getShopConfigListOptions();
+            if (this.dataSource.cbTranTypeId > 1) {
+                configListOptions = await this.getShopConfigListOptions();
+            }
         }
 
 
