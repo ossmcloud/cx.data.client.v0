@@ -78,9 +78,9 @@ class EposDtfsSettingRender extends RenderBase {
             group: 'eposOuter', title: '', columnCount: 3, fields: [
                 {
                     group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
-                        { name: 'dtfsSettingName', label: 'name', column: 1 },
-                        { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList() },
-                        { name: 'startDate', label: 'start date', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
+                        { name: 'dtfsSettingName', label: 'name', column: 1, validation: '{ "mandatory": true }' },
+                        { name: 'eposProvider', label: 'epos provider', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList(true) },
+                        { name: 'startDate', label: 'start date', column: 1, validation: '{ "mandatory": true }' },
                     ],
                 },
                 {

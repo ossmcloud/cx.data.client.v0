@@ -150,9 +150,9 @@ const CX_ERP_PROVIDER = {
 
 const CX_EPOS_PROVIDER = {
     CBE: 'CBE',
-    //RS: 'RetailSolution',
+    RS: 'RS',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution' }); }
 }
 const CX_EPOS_PROVIDERS = {
     supported: [
@@ -162,6 +162,13 @@ const CX_EPOS_PROVIDERS = {
                 { name: EPOS_DTFS_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.RS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "OLEDB",   "connString": ""  }' },
             ]
         }
     ],
