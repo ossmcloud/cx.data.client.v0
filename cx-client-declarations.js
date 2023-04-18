@@ -221,6 +221,7 @@ const CR_CASH_BOOK = {
         NO: 0,
         YES: 1,
         FORCE: 2,
+        EPOS: 3,
         toList: function (addEmpty) {
             return enumToList(this, addEmpty);
         }

@@ -302,6 +302,11 @@ class CrTranTypeConfigRender extends RenderBase {
         })
 
         this.options.cellHighlights.push({
+            column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, op: '=', value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.EPOS,
+            columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
+            style: 'background-color: #ad5ac4; color: whitesmoke; font-weight: bold; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, op: '=', value: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.FORCE,
             columns: [_cxSchema.cr_tran_type_config.REQUIRESDECLARATION],
             style: 'background-color: indianred; color: whitesmoke; font-weight: bold; ' + appendStyle,
