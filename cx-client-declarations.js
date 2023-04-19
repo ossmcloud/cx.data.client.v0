@@ -520,17 +520,43 @@ const CP_DOCUMENT = {
     STATUS: {
         New: 0,
         Ready: 1,
-        REFRESH: 8,
-        ERROR: 9,
-        Reconciled_None: 10,
-        Reconciled_Part: 11,
-        Reconciled_Full: 12,
+        //ReadyForPosting: 2,    
+        REFRESH: 3,
+
+        //PostingPrep: 4,            // user sent this for poosting
+        PostingReady: 5,           //
+        Posting: 6,                // erps.exe is to pick up the stuff to post
+        PostingRunning: 7,         // erps.exe has picked up the stuff to post
+        Posted: 8,                 // posted successfully
+
+        ERROR: 97,
+        PostingError: 98,
+        DeleteAndPull: 99,
+        Delete: 100,
+        // ERROR: 9,
+        // Reconciled_None: 10,
+        // Reconciled_Part: 11,
+        // Reconciled_Full: 12,
 
         toList: function (addEmpty) {
-            return enumToList(this, addEmpty);
+            return enumToList(this, addEmpty, {
+                REFRESH: 'refreshing erp info',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+                //PostingUndo: 'reset posting running',
+            });
         },
         getName: function (value) {
-            return enumGetName(this, value);
+            return enumGetName(this, value, {
+                REFRESH: 'refreshing erp info',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+                //PostingUndo: 'reset posting running',
+            });
         },
 
         getStyleInverted: function (status, returnObject) {
@@ -700,7 +726,33 @@ const CX_CURRENCY = {
 const ERP_TRAN_STATUS = {
     Ready: 0,
     Posted: 1,
-    Error: 9
+    Error: 9,
+
+
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+
+        if (status == this.Ready) {
+            color = '255,255,255';
+            bkgColor = '25,130,196';
+        } else if (status == this.Posted) {
+            color = '0,100,0';
+            bkgColor = '138,201,38';
+        } else if (status == this.Error) {
+            color = '255,255,255';
+            bkgColor = '234,30,37';
+        } else {
+            color = '255,255,255';
+            bkgColor = '128,128,128';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
 }
 
 

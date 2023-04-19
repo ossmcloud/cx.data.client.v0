@@ -17,6 +17,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
         transactionLinesOptions.quickSearch = true;
+        transactionLinesOptions.title = '<span>document lines</span>';
         return transactionLinesOptions;
     }
 
@@ -26,8 +27,29 @@ class CPInvoiceReturnRender extends RenderBase {
 
         var transactionLogsOptions = await this.listOptions(transactionLogs, { listView: true });
         transactionLogsOptions.quickSearch = true;
+        transactionLogsOptions.title = '<span>system logs</span>';
         return transactionLogsOptions;
     }
+
+    async getErpGLListOptions() {
+        var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
+        await transactionLines.select({ id: this.options.query.id });
+
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        transactionLinesOptions.quickSearch = true;
+        transactionLinesOptions.title = '<span>erp gl transactions</span>';
+        return transactionLinesOptions;
+    }
+    async getErpTaxListOptions() {
+        var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_tax);
+        await transactionLines.select({ id: this.options.query.id });
+
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        transactionLinesOptions.quickSearch = true;
+        transactionLinesOptions.title = '<span>erp tax transactions</span>';
+        return transactionLinesOptions;
+    }
+
 
 
     async _record() {
@@ -105,18 +127,35 @@ class CPInvoiceReturnRender extends RenderBase {
 
         ]
 
+
+        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, fields: [] };
+        this.options.fields.push(erpSubListsGroup);
+
+        var erpGlLineOptions = await this.getErpGLListOptions();
+        var erpTaxLineOptions = await this.getErpTaxListOptions();
+        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, width: '1000px', fields: [erpGlLineOptions] })
+        erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
+
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
 
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
-
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
         }
 
+
+
+
         if (this.options.mode == 'view') {
+            //refreshData
+            var s = this.dataSource.documentStatus;
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+            }
+
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
         }
@@ -129,7 +168,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.pageNo = (this.options.query.page || 1);
             }
 
-            
+
 
             this.options.filters = [
                 await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),

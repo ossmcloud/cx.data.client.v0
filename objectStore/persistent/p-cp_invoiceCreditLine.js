@@ -49,6 +49,8 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    DEPMAPCONFIGID: 'depMapConfigId',
+    TAXMAPCONFIGID: 'taxMapConfigId',
 
 }
 //
@@ -67,10 +69,10 @@ const _fields = {
     itemDescription: { name: 'itemDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    lineQuantity: { name: 'lineQuantity', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
+    lineQuantity: { name: 'lineQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    packSize: { name: 'packSize', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
-    vatRate: { name: 'vatRate', dataType: 'decimal', pk: false, identity: false, maxLength: 5, null: true },
+    packSize: { name: 'packSize', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
+    vatRate: { name: 'vatRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     vatCode: { name: 'vatCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
     eposLineDiscount: { name: 'eposLineDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposLineNet: { name: 'eposLineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -85,6 +87,8 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -104,7 +108,7 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get invCreLineId() {
         return super.getValue(_fieldNames.INVCRELINEID);
@@ -282,6 +286,18 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get depMapConfigId() {
+        return super.getValue(_fieldNames.DEPMAPCONFIGID);
+    } set depMapConfigId(val) {
+        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
+    }
+
+    get taxMapConfigId() {
+        return super.getValue(_fieldNames.TAXMAPCONFIGID);
+    } set taxMapConfigId(val) {
+        super.setValue(_fieldNames.TAXMAPCONFIGID, val);
     }
 
 
