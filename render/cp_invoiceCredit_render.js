@@ -135,7 +135,8 @@ class CPInvoiceReturnRender extends RenderBase {
         }
 
         var fieldGroup_erp = null;
-        if (this.dataSource.status == 'posted') {
+        var s = this.dataSource.documentStatus;
+        if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
             fieldGroup_erp = {
                 group: 'erp', title: 'erp info', column: fieldGroupIdx++, columnCount: 1, fields: [
                     {
