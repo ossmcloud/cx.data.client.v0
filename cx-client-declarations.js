@@ -270,7 +270,7 @@ const CR_CASH_BOOK = {
             });
         },
         getName: function (value) {
-            return enumGetName(this, value, {   
+            return enumGetName(this, value, {
                 PostingPrep: 'preparing for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
@@ -486,7 +486,11 @@ const CP_DOCUMENT = {
         CreditNote: 3,
 
         toList: function (addEmpty) { return enumToList(this, addEmpty); },
-        getName: function (value) { return enumGetName(this, value); },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                CreditNote: 'Credit Note',
+            });
+        },
 
         getStyleInverted: function (type, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
@@ -567,7 +571,8 @@ const CP_DOCUMENT = {
                 bkgColor = '128,128,128';
             } else if (status == this.Ready) {
                 color = '255,255,255';
-                bkgColor = '246,71,146';
+                // bkgColor = '246,71,146';
+                bkgColor = '25,130,196';
             } else if (status == this.PostingReady) {
                 color = '255,255,255';
                 bkgColor = '25,130,196';

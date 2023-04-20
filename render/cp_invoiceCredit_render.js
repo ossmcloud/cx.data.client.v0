@@ -11,6 +11,41 @@ class CPInvoiceReturnRender extends RenderBase {
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
     }
 
+    async validateErpToken() {
+        var warningMessage = '';
+
+        var erpSettingsInfo = await this.dataSource.cx.exec({
+            sql: `
+                select	    erpSett.dtfsSettingId, prv.isCloud
+                from	    erp_shop_setting erpSett
+                inner join  sys_provider prv ON prv.code = erpSett.erpProvider
+                where	    erpSett.shopId = @shopId
+            `,
+            params: [{ name: 'shopId', value: this.dataSource.shopId }],
+            returnFirst: true,
+        });
+        if (erpSettingsInfo && erpSettingsInfo.isCloud) {
+            var erpToken = await this.dataSource.cx.table(_cxSchema.cx_login_token).fetch(['erp', this.dataSource.cx.tUserId, erpSettingsInfo.dtfsSettingId], true);
+            if (erpToken) {
+                if (erpToken.status != 1) {
+                    warningMessage = '&#9888; your oauth-token is not valid';
+                } else if (erpToken.isExpired) {
+                    warningMessage = '&#9888; your oauth-token is expired';
+                }
+            } else {
+                warningMessage = '&#9888; there is no oauth-token for this store';
+            }
+            if (warningMessage) {
+                warningMessage += ' <a href="#" onclick="window.open(\'../oauth?type=erp&s=' + this.dataSource.shopId + '\'); return false;" >click here to get a token</a>';
+                warningMessage = `<div style="color: var(--warn-color);">${warningMessage}</div>`;
+            }
+
+        }
+
+        return warningMessage;
+    }
+
+
     async getDocumentLineListOptions() {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
@@ -53,15 +88,31 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async _record() {
+
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
-        this.options.title = `<div style="display: table;"><div style="display: table-cell; padding-right: 17px; ">${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]</div>`;
 
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
-        applyStoreColorStyle += _cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus);
+        // start with doc type and number
+        this.options.title = `<div style="display: table;">`;
+        // document number 
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentId}</div>`;
+        // document type
         this.options.title += `
-            <div style="${applyStoreColorStyle}">${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}</div>
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
+                ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase() }
+            </div>
+        `;
+        // document status
+        this.options.title += `
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
+                ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
+            </div>
         `;
         this.options.title += '</div>';
+
+
+
+        this.options.formBanner = await this.validateErpToken();
 
 
         var fieldGroupIdx = 1;
