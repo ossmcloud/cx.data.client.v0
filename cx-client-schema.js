@@ -373,6 +373,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         MODIFIEDBY: 'modifiedBy',
+        ERPTRANSMISSIONID: 'erpTransmissionId',
+        ERPTRANSMISSIONID: 'erpTransmissionId',
     },
 
     cp_invoiceCreditLine: {

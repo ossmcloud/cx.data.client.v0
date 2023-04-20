@@ -53,79 +53,121 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async _record() {
-        this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
+        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
+        this.options.title = `<div style="display: table;"><div style="display: table-cell; padding-right: 17px; ">${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]</div>`;
 
-        this.options.fields = [
-            {
-                group: 'main', title: '', columnCount: 4, fields: [
+        var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
+        applyStoreColorStyle += _cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus);
+        this.options.title += `
+            <div style="${applyStoreColorStyle}">${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}</div>
+        `;
+        this.options.title += '</div>';
+
+
+        var fieldGroupIdx = 1;
+        var fieldGroup_main = {
+            group: 'main1', title: 'main info', column: fieldGroupIdx++, columnCount: 3, fields: [
+                {
+                    group: 'main1.col1', column: 1, columnCount: 1, fields: [
+                        await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id' },
+                    ]
+                },
+                {
+                    group: 'main1.col2', column: 2, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, label: 'date' },
+                        { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date' },
+                    ]
+                },
+                {
+                    group: 'main1.col3', column: 3, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number' },
+                    ]
+                },
+            ]
+        };
+
+        var fieldGroup_docReferences = {
+            group: 'main_ref', title: 'document references', column: fieldGroupIdx++, columnCount: 1, width: '200px', fields: [
+                { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, label: 'reference 1' },
+                { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
+                { name: _cxSchema.cp_invoiceCredit.DOCUMENTMEMO, label: 'memo' },
+
+            ]
+        }
+
+
+        
+
+        var fieldGroup_totals = {
+            group: 'totals', title: 'totals', column: fieldGroupIdx++, columnCount: 2, inline: true, width: '300px', fields: [
+                { name: _cxSchema.cp_invoiceCredit.TOTALNET, label: 'total net', formatMoney: 'N2' },
+                { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
+                { name: _cxSchema.cp_invoiceCredit.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
+                { name: _cxSchema.cp_invoiceCredit.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
+            ]
+        }
+
+        var fieldGroup_audit = {
+            group: 'audit', title: 'audit info', column: fieldGroupIdx++, columnCount: 1, width: '350px', fields: [
+                {
+                    group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTSTATUS, label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTSTATUSMESSAGE, label: 'status message', column: 2, readOnly: true },
+                    ]
+                },
+                {
+                    group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'created', label: 'created', column: 1, readOnly: true },
+                        { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                    ]
+                },
+                {
+                    group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                        { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                    ]
+                }
+            ]
+        }
+
+        var fieldGroup_erp = null;
+        if (this.dataSource.status == 'posted') {
+            fieldGroup_erp = {
+                group: 'erp', title: 'erp info', column: fieldGroupIdx++, columnCount: 1, fields: [
                     {
-                        group: 'main1', title: 'main info', column: 1, columnCount: 3, fields: [
-                            {
-                                group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type' },
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id' },
-                                ]
-                            },
-                            {
-                                group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier' },
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, label: 'date' },
-                                    { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date' },
-                                ]
-                            },
-                            {
-                                group: 'main1.col3', column: 3, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency' },
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number' },
-                                ]
-                            },
+                        group: 'erp0', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: 'accountErpInfo', label: 'erp supplier', column: 1, readOnly: true },
+                            { name: 'transactionErpInfo', label: 'erp reference', column: 2, readOnly: true },
+                            { name: 'postedOn', label: 'posted on', column: 1, readOnly: true },
+                            { name: 'postingURN', label: 'posted URN', column: 2, readOnly: true },
                         ]
                     },
-
                     {
-                        group: 'main_ref', title: 'document references', column: 2, columnCount: 1, fields: [
-                            { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, label: 'reference 1' },
-                            { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
-                            { name: _cxSchema.cp_invoiceCredit.DOCUMENTMEMO, label: 'memo' },
+                        group: 'erp1', title: '', column: 1, columnCount: 1, inline: true, fields: [
+                            { name: 'postingStatusMessage', label: 'posting message', column: 1, readOnly: true },
 
                         ]
                     },
+                ]
+            }
+        }
 
-                    {
-                        group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, width: '300px', fields: [
-                            { name: _cxSchema.cp_invoiceCredit.TOTALNET, label: 'total net', formatMoney: 'N2' },
-                            { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
-                            { name: _cxSchema.cp_invoiceCredit.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
-                            { name: _cxSchema.cp_invoiceCredit.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
-                        ]
-                    },
-                    {
-                        group: 'audit', title: 'audit info', column: 4, columnCount: 1, fields: [
-                            {
-                                group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTSTATUS, label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
-                                    { name: _cxSchema.cp_invoiceCredit.DOCUMENTSTATUSMESSAGE, label: 'status message', column: 2, readOnly: true },
-                                ]
-                            },
-                            {
-                                group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: 'created', label: 'created', column: 1, readOnly: true },
-                                    { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
-                                ]
-                            },
-                            {
-                                group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: 'modified', label: 'modified', column: 1, readOnly: true },
-                                    { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
-                                ]
-                            }
-                        ]
-                    }
-                ],
-            },
+        var fieldGroup = { group: 'main', title: '', columnCount: (fieldGroupIdx-1), fields: [] }
+        fieldGroup.fields.push(fieldGroup_main);
+        fieldGroup.fields.push(fieldGroup_docReferences);
+        fieldGroup.fields.push(fieldGroup_totals);
+        fieldGroup.fields.push(fieldGroup_audit);
+        if (fieldGroup_erp != null) { fieldGroup.fields.push(fieldGroup_erp); }
 
-        ]
+        this.options.fields = [];
+        this.options.fields.push(fieldGroup);
+
+
+
 
 
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, fields: [] };
@@ -150,10 +192,30 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
         if (this.options.mode == 'view') {
-            //refreshData
             var s = this.dataSource.documentStatus;
+            
+            // allow to refresh only under certain statuses
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+            }
+            // allow to post based on role only under certain statuses
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
+                    var erpName = 'ERP';
+                    var btnPostToErp = {
+                        id: 'cp_post_data', 
+                        text: 'Post to ' + erpName,
+                        function:  'postData',
+                        style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);',
+                    };
+                    this.options.buttons.push(btnPostToErp);
+                }
+            }
+            // allow to un-post based on role only under certain statuses
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
+                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                }
             }
 
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';

@@ -75,6 +75,33 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         return await super.select(query);
     }
+
+    async fetch(id, returnNull) {
+        //return super.fetch(id, returnNull);##
+        if (this.cx.cxSvc == true) { return await super.fetch(id); }
+
+        var query = { sql: '', params: [{ name: 'invCreId', value: id }] };
+        query.sql = ` select  l.*, s.shopCode, s.shopName, 
+                                erp.postingURN, erp.postingReference, erp.status as postingStatus, erp.statusMessage as postingStatusMessage, 
+                                erp.transactionReference, erp.transactionSecondReference, erp.accountReference, erp.accountName,
+                                erp.modified as postedOn, erp.modifiedBy as postedBy
+
+                      from    ${this.type} l
+                      inner join   cx_shop s ON s.shopId = l.shopId
+                      left outer join cp_erp_transaction erp ON erp.invCreId = l.invCreId
+                      
+                      where     l.${this.FieldNames.SHOPID}  in ${this.cx.shopList}
+                      and     l.${this.FieldNames.INVCREID} = @invCreId`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
+
+        return super.populate(rawRecord);
+    }
+
+
 }
 //
 // ----------------------------------------------------------------------------------------
@@ -83,11 +110,31 @@ class cp_invoiceCredit extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     #documentSign = 1;
+    #postingStatus = '';
+    #postingStatusMessage = '';
+    #postingURN = '';
+    #postingReference = '';
+    #transactionReference = '';
+    #transactionSecondReference = '';
+    #accountReference = '';
+    #accountName = '';
+    #postedOn = '';
+    #postedBy = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        this.#postingStatus = defaults['postingStatus'] || '';
+        this.#postingStatusMessage = defaults['postingStatusMessage'] || '';
+        this.#postingURN = defaults['postingURN'] || '';
+        this.#postingReference = defaults['postingReference'] || '';
+        this.#transactionReference = defaults['transactionReference'] || '';
+        this.#transactionSecondReference = defaults['transactionSecondReference'] || '';
+        this.#accountReference = defaults['accountReference'] || '';
+        this.#accountName = defaults['accountName'] || '';
+        this.#postedOn = defaults['postedOn'] || '';
+        this.#postedBy = defaults['postedBy'] || '';
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) {
             this.#documentSign = -1;
         }
@@ -98,6 +145,24 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
     get transmissionIdText() { return this.transmissionId.toString(); }
     //get dateStr() { return _core.date.format({ date: this.date }) }
+
+    get postingStatus() { return this.#postingStatus; }
+    get postingStatusMessage() { return this.#postingStatusMessage; }
+    get postingURN() { return this.#postingURN; }
+    get postingReference() { return this.#postingReference; }
+    get transactionReference() { return this.#transactionReference; }
+    get transactionSecondReference() { return this.#transactionSecondReference; }
+    get transactionErpInfo() {
+        return this.transactionReference + ' / ' + this.transactionSecondReference;
+    }
+    get accountReference() { return this.#accountReference; }
+    get accountName() { return this.#accountName; }
+    get accountErpInfo() {
+        return `[${this.accountReference}] ${this.accountName}`;
+    }
+    get postedOn() { return this.#postedOn; }
+    get postedBy() { return this.#postedBy; }
+
 
     get status() {
         return _declarations.CP_DOCUMENT.STATUS.getName(this.documentStatus);

@@ -562,31 +562,62 @@ const CP_DOCUMENT = {
         getStyleInverted: function (status, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.New) {
-                color = '0,0,0';
-                bkgColor = '255,202,58';
-            } else if (status == this.Ready) {
-                color = '255,255,255';
-                bkgColor = '25,130,196';
-            } else if (status == this.Reconciled_None) {
-                color = '0,100,0';
-                bkgColor = '138,201,38';
-            } else if (status == this.Reconciled_Part) {
-                color = '0,100,0';
-                bkgColor = '138,201,38';
-            } else if (status == this.Reconciled_Full) {
-                color = '0,100,0';
-                bkgColor = '138,201,38';
-            } else if (status == this.REFRESH) {
+            if (status == this.REFRESH || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning) {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
+            } else if (status == this.Ready) {
+                color = '255,255,255';
+                bkgColor = '246,71,146';
+            } else if (status == this.PostingReady) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Posted) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.PostingError) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
             } else if (status == this.ERROR) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
+            } else if (status == this.Delete) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            } else if (status == this.DeleteAndPull) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
             } else {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
             }
+
+
+
+            // if (status == this.New) {
+            //     color = '0,0,0';
+            //     bkgColor = '255,202,58';
+            // } else if (status == this.Ready) {
+            //     color = '255,255,255';
+            //     bkgColor = '25,130,196';
+            // } else if (status == this.Reconciled_None) {
+            //     color = '0,100,0';
+            //     bkgColor = '138,201,38';
+            // } else if (status == this.Reconciled_Part) {
+            //     color = '0,100,0';
+            //     bkgColor = '138,201,38';
+            // } else if (status == this.Reconciled_Full) {
+            //     color = '0,100,0';
+            //     bkgColor = '138,201,38';
+            // } else if (status == this.REFRESH) {
+            //     color = '255,255,255';
+            //     bkgColor = '128,128,128';
+            // } else if (status == this.ERROR) {
+            //     color = '255,255,255';
+            //     bkgColor = '234,30,37';
+            // } else {
+            //     color = '255,255,255';
+            //     bkgColor = '128,128,128';
+            // }
 
             var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
             if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
