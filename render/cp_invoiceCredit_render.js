@@ -99,7 +99,7 @@ class CPInvoiceReturnRender extends RenderBase {
         // document type
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
-                ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase() }
+                ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
             </div>
         `;
         // document status
@@ -151,7 +151,7 @@ class CPInvoiceReturnRender extends RenderBase {
         }
 
 
-        
+
 
         var fieldGroup_totals = {
             group: 'totals', title: 'totals', column: fieldGroupIdx++, columnCount: 2, inline: true, width: '300px', fields: [
@@ -208,7 +208,7 @@ class CPInvoiceReturnRender extends RenderBase {
             }
         }
 
-        var fieldGroup = { group: 'main', title: '', columnCount: (fieldGroupIdx-1), fields: [] }
+        var fieldGroup = { group: 'main', title: '', columnCount: (fieldGroupIdx - 1), fields: [] }
         fieldGroup.fields.push(fieldGroup_main);
         fieldGroup.fields.push(fieldGroup_docReferences);
         fieldGroup.fields.push(fieldGroup_totals);
@@ -245,7 +245,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
-            
+
             // allow to refresh only under certain statuses
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
@@ -255,9 +255,9 @@ class CPInvoiceReturnRender extends RenderBase {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
                     var erpName = 'ERP';
                     var btnPostToErp = {
-                        id: 'cp_post_data', 
+                        id: 'cp_post_data',
                         text: 'Post to ' + erpName,
-                        function:  'postData',
+                        function: 'postData',
                         style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);',
                     };
                     this.options.buttons.push(btnPostToErp);
@@ -277,6 +277,9 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
+            var isBatchProcessing = (this.options.query && (this.options.query.batch == 'T' || this.options.query.batch == 'true'));
+
+
             if (this.options.query) {
                 this.options.paging = true;
                 this.options.pageNo = (this.options.query.page || 1);
@@ -301,6 +304,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
             }
+
+
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
 
@@ -320,6 +325,9 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' },
             ];
+
+            if (isBatchProcessing) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
+            
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
