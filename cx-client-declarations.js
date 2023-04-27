@@ -9,6 +9,7 @@ function enumToList(obj, addEmpty, aliases) {
     for (var key in obj) {
         // @CLEAN-UP: use a better way to do this, the 1st three below are functions
         if (key == 'toList') { continue; }
+        if (key == 'toEncrypt') { continue; }
         if (key == 'getName') { continue; }
         if (key == 'getStyle') { continue; }
         if (key == 'getStyleInverted') { continue; }
@@ -130,8 +131,11 @@ const EPOS_DTFS_CONFIGS = {
 }
 
 const ERP_DTFS_CONFIGS = {
+    ERP_DATASOURCE_CONFIG: 'ERPDataSourceConfig',
     API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',
+    DTFS_PING_FREQ: 'DTFSPingFrequency',
+
     //API_TOKEN: 'ERPApiToken',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -145,9 +149,10 @@ const ERP_DTFS_CONFIGS = {
 const CX_ERP_PROVIDER = {
     SG200: 'sage200',
     SG200STD: 'sage200std',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200', SG200STD: 'Sage 200 Standard Online' }); }
+    SAGE50: 'sage50',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts' }); }
 }
-
+// TODO: this should come from sys_provider table
 const CX_EPOS_PROVIDER = {
     CBE: 'CBE',
     RS: 'RS',

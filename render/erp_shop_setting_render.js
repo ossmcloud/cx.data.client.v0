@@ -103,7 +103,7 @@ class ErpTraderAccount extends RenderBase {
         this.options.columns = [
             { name: 'shopId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
-            { name: 'erpProvider', title: 'erp provider' },
+            { name: 'erpProvider', title: 'erp provider', lookUps: _cxConst.CX_ERP_PROVIDER.toList() },
             { name: 'erpCompanyName', title: 'erp company name' },
             { name: 'erpCustomerAccount', title: 'erp EPoS account code' },
             { name: 'erpCustomerAccountName', title: 'erp EPoS account name' },
