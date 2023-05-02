@@ -108,6 +108,8 @@ class erp_shop_setting extends _persistentTable.Record {
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
+    get mergeGLAndTax() { return this.erpProvider.toLowerCase() == "sage50"; }
+
     isSet() {
         if (!this.erpProvider) { return false; }
         if (!this.erpCompanyName) { return false; }
