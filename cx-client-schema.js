@@ -119,6 +119,10 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         MODIFIEDBY: 'modifiedBy',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
     },
 
     cp_deliveryReturnLog: {
@@ -766,6 +770,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         MODIFIEDBY: 'modifiedBy',
+        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
+        GLCONTRAENTRY: 'glContraEntry',
         GLCONTRAENTRY: 'glContraEntry',
     },
 
@@ -2379,6 +2385,7 @@ module.exports = {
         NAME: 'name',
         ISCLOUD: 'isCloud',
         ISCLOUD: 'isCloud',
+        LOGOURL: 'logoUrl',
     }
 
 }
