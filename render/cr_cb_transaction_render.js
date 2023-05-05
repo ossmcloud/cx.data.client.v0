@@ -57,8 +57,8 @@ class CRCashBookRender extends RenderBase {
             this.options.title = 'cash-book batch processing';
             this.options.showButtons = [];
             this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'check all', function: 'checkAll' });
-            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'uncheck all', function: 'uncheckAll' });
-            this.options.showButtons.push({ id: 'cb_batch_mark_all', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
+            this.options.showButtons.push({ id: 'cb_batch_unmark_all', text: 'uncheck all', function: 'uncheckAll' });
+            this.options.showButtons.push({ id: 'cb_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
         } else {
             this.options.filters.push({
                 label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,

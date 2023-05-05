@@ -472,6 +472,15 @@ const CP_DOCUMENT = {
         getName: function (value) { return enumGetName(this, value); },
     },
 
+    BATCH_ACTIONS: {
+        REFRESH: 1,
+        POST: 2,
+        RESET: 3,
+        UNPOST: 9,
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) { return enumGetName(this, value); },
+    },
+
     TYPE_DR: {
         Delivery: 0,
         Return: 1,

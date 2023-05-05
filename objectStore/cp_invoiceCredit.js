@@ -12,6 +12,9 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         if (!params) { params = {}; }
 
+        var isBatchProcessing = (params.batch == 'T' || params.batch == 'true');
+        
+
         var query = { sql: '', params: [] };
         query.sql = ` select  d.*, s.shopCode, s.shopName
                       from    ${this.type} d, cx_shop s
@@ -46,10 +49,31 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.uploadDate <= @uTo';
             query.params.push({ name: 'uTo', value: params.udt + ' 23:59:59' });
         }
+
+        if (isBatchProcessing) {
+            var validStatuses = [];
+            if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.REFRESH) {
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.New);
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.Ready);
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingReady);
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.ERROR);
+            } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.POST) {
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingReady);
+            } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.UNPOST) {
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.Posted);
+            } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.RESET) {
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingError);
+            }
+            if (validStatuses.length > 0) {
+                query.sql += ' and d.documentStatus in (' + validStatuses.join(',') + ')';
+            }
+        }
+        
         if (params.st) {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: params.st });
         }
+        
         if (params.su) {
             query.sql += ' and d.supplierCode like @supplierCode';
             query.params.push({ name: 'supplierCode', value: '%' + params.su });

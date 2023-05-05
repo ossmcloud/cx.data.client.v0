@@ -277,35 +277,55 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-            var isBatchProcessing = (this.options.query && (this.options.query.batch == 'T' || this.options.query.batch == 'true'));
-
-
             if (this.options.query) {
                 this.options.paging = true;
                 this.options.pageNo = (this.options.query.page || 1);
             }
 
 
+            var isBatchProcessing = (this.options.query && (this.options.query.batch == 'T' || this.options.query.batch == 'true'));
+            var batchActionSelected = (isBatchProcessing && this.options.query.action);
 
-            this.options.filters = [
-                await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
-                { label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') },
-                { label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') },
-                { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-                { label: 'document no.', fieldName: 'tno', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-                { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-                { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-                { label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-                { label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-            ];
+            this.options.filters = [];
+
+            if (isBatchProcessing) {
+                this.options.title = 'invoice / credits batch processing';
+                if (batchActionSelected) {
+                    this.options.showButtons = [];
+                    this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'check all', function: 'checkAll' });
+                    this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'uncheck all', function: 'uncheckAll' });
+                    this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
+                }
+                this.options.filters.push({ fieldName: 'batch', type: _cxConst.RENDER.CTRL_TYPE.HIDDEN });
+            }
+            
+
+            if (isBatchProcessing && !batchActionSelected) {
+                this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList('- all -') });
+            } else {
+                if (isBatchProcessing) { this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList(), disabled: true }); }
+                this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }));
+                //if (!isBatchProcessing) {
+                    this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
+                //}
+
+                this.options.filters.push({ label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') });
+                this.options.filters.push({ label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+                this.options.filters.push({ label: 'document no.', fieldName: 'tno', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+                this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE });
+                this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
+                this.options.filters.push({ label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
+                this.options.filters.push({ label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
+            }
+            //isBatchProcessing
+
+
             var signedCols = {
                 Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
                 Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
                 Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
             }
-
-
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
 
@@ -327,7 +347,7 @@ class CPInvoiceReturnRender extends RenderBase {
             ];
 
             if (isBatchProcessing) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
-            
+
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
