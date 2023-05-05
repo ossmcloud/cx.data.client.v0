@@ -346,7 +346,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' },
             ];
 
-            if (isBatchProcessing) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
+            if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
 
 
             this.options.cellHighlights = [];
