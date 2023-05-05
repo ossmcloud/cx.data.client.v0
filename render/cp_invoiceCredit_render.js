@@ -70,7 +70,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ id: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
         return transactionLinesOptions;
@@ -79,7 +79,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_tax);
         await transactionLines.select({ id: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp tax transactions</span>';
         return transactionLinesOptions;
@@ -88,6 +88,8 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async _record() {
+
+        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
 
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
 
@@ -120,21 +122,22 @@ class CPInvoiceReturnRender extends RenderBase {
             group: 'main1', title: 'main info', column: fieldGroupIdx++, columnCount: 3, fields: [
                 {
                     group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                        await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
-                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type' },
-                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id' },
+                        await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id', readOnly: true },
                     ]
                 },
                 {
                     group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier' },
+                        //await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, { id: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE }),
+                        { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, label: 'date' },
-                        { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date' },
+                        { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
                     ]
                 },
                 {
                     group: 'main1.col3', column: 3, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency' },
+                        { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number' },
                     ]
                 },
@@ -155,10 +158,10 @@ class CPInvoiceReturnRender extends RenderBase {
 
         var fieldGroup_totals = {
             group: 'totals', title: 'totals', column: fieldGroupIdx++, columnCount: 2, inline: true, width: '300px', fields: [
-                { name: _cxSchema.cp_invoiceCredit.TOTALNET, label: 'total net', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceCredit.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
-                { name: _cxSchema.cp_invoiceCredit.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
+                { name: _cxSchema.cp_invoiceCredit.TOTALNET, label: 'total net', formatMoney: 'N2', readOnly: true },
+                { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2', readOnly: true },
+                { name: _cxSchema.cp_invoiceCredit.TOTALVAT, label: 'total vat', formatMoney: 'N2', readOnly: true },
+                { name: _cxSchema.cp_invoiceCredit.TOTALGROSS, label: 'total gross', formatMoney: 'N2', readOnly: true },
             ]
         }
 
@@ -249,6 +252,11 @@ class CPInvoiceReturnRender extends RenderBase {
             // allow to refresh only under certain statuses
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+
+                // if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                //     this.options.buttons.push({ id: 'cp_edit_erp_data', text: 'Edit Posting Details', function: 'editErpPostingData' });
+                // }
+
             }
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {

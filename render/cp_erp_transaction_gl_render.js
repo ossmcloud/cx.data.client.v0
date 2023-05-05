@@ -10,18 +10,27 @@ class CPErpTransactionGLRender extends RenderBase {
     }
 
     async _list() {
-        this.options.columns = [
+        var textInput = null;
+        var numberInput = null;
+        if (this.options.mode == 'edit') {
+            textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT };
+            numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC };
+            this.options.actionsTitle = '<span style="display: none; cursor: pointer;" title="show deleted lines" id="' + this.options.id +'_undo_delete_line">&#8634;</span>';
+            this.options.actions = [{ label: '&#128465;', toolTip: 'delete', funcName: 'deleteLine' }];
+        }
 
+        this.options.columns = [
+            //{ name: 'deleted', input: { type: _cxConst.RENDER.CTRL_TYPE.HIDDEN } },
             { name: _cxSchema.cp_erp_transaction_gl.STATUSMESSAGE, title: 'status', align: 'center', width: '90px', style: 'white-space: normal;' },
-            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1, title: 'GL Code', width: '70px', },
-            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2, title: 'GL Seg 2', width: '70px', },
-            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG3, title: 'GL Seg 3', width: '70px', },
+            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1, title: 'GL Code', width: '70px', input: textInput },
+            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2, title: 'GL Seg 2', width: '70px' },
+            //{ name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG3, title: 'GL Seg 3', width: '70px', input: textInput },
             { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTDESCRIPTION, title: 'GL Description', },
-            { name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '' },
-            { name: _cxSchema.cp_erp_transaction_gl.VALUENET, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true },
-            { name: _cxSchema.cp_erp_transaction_gl.VALUETAX, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true },
+            { name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput },
+            { name: _cxSchema.cp_erp_transaction_gl.VALUENET, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
+            { name: _cxSchema.cp_erp_transaction_gl.VALUETAX, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
             { name: _cxSchema.cp_erp_transaction_gl.VALUEGROSS, title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true },
-            
+
         ];
 
         this.options.cellHighlights = [];
@@ -33,12 +42,12 @@ class CPErpTransactionGLRender extends RenderBase {
                 value: status,
                 style: _cxConst.ERP_TRAN_STATUS.getStyleInverted(status) + applyStyle,
                 columns: [_cxSchema.cp_erp_transaction_gl.STATUSMESSAGE]
-            }     
+            }
         }
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Ready));
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Posted));
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Error));
-        
+
 
     }
 
