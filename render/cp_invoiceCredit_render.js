@@ -244,6 +244,7 @@ class CPInvoiceReturnRender extends RenderBase {
         }
 
 
+        this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' });
 
 
         if (this.options.mode == 'view') {

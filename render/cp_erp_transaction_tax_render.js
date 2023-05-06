@@ -15,8 +15,9 @@ class CPErpTransactionTaxRender extends RenderBase {
         if (this.options.mode == 'edit') {
             textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT };
             numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC };
-            this.options.actionsTitle = '<span style="display: none; cursor: pointer;" title="show deleted lines" id="' + this.options.id + '_undo_delete_line">&#8634;</span>';
-            this.options.actions = [{ label: '&#128465;', toolTip: 'delete', funcName: 'deleteLine' }];
+            // this.options.actionsTitle = '<span style="display: none; cursor: pointer;" title="show deleted lines" id="' + this.options.id + '_undo_delete_line">&#8634;</span>';
+            // this.options.actions = [{ label: '&#128465;', toolTip: 'delete', funcName: 'deleteLine' }];
+            this.options.listActions = true;
         }
 
         this.options.columns = [
