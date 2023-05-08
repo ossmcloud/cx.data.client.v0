@@ -47,6 +47,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    TRADERACCOUNTID: 'traderAccountId',
 
 }
 //
@@ -81,6 +82,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    traderAccountId: { name: 'traderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -266,6 +268,12 @@ class Persistent_cp_deliveryReturn extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get traderAccountId() {
+        return super.getValue(_fieldNames.TRADERACCOUNTID);
+    } set traderAccountId(val) {
+        super.setValue(_fieldNames.TRADERACCOUNTID, val);
     }
 
 

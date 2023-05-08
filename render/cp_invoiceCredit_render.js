@@ -88,9 +88,10 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async _record() {
-
-        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
-
+        if (route.options.appContext == 'LOCAL') {
+            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        }
+        
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
 
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
@@ -129,8 +130,11 @@ class CPInvoiceReturnRender extends RenderBase {
                 },
                 {
                     group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                        //await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, { id: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE }),
-                        { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier', readOnly: true },
+                        await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                            id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
+                            dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId }
+                        }),
+                        //{ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier' },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, label: 'date' },
                         { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
                     ]
