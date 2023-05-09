@@ -88,10 +88,10 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async _record() {
-        if (route.options.appContext == 'LOCAL') {
+        if (process.env.APP_CONTEXT == 'LOCAL') {
             this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
         }
-        
+
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
 
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
