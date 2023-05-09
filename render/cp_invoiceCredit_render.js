@@ -66,13 +66,21 @@ class CPInvoiceReturnRender extends RenderBase {
         return transactionLogsOptions;
     }
 
-    async getErpGLListOptions() {
+    async getErpGLListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ id: this.options.query.id });
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
+        
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLinesOptions.lookupLists = {};
+
+            var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+            
+        }
         return transactionLinesOptions;
     }
     async getErpTaxListOptions() {
@@ -88,6 +96,9 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async _record() {
+
+        
+
         if (process.env.APP_CONTEXT == 'LOCAL') {
             this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
         }
@@ -232,8 +243,10 @@ class CPInvoiceReturnRender extends RenderBase {
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, fields: [] };
         this.options.fields.push(erpSubListsGroup);
 
-        var erpGlLineOptions = await this.getErpGLListOptions();
-        var erpTaxLineOptions = await this.getErpTaxListOptions();
+        var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(this.dataSource.shopId);
+
+        var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
+        var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
         erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, width: '1000px', fields: [erpGlLineOptions] })
         erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
 

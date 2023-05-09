@@ -43,6 +43,9 @@ class cp_erp_transaction_gl extends _persistentTable.Record {
     };
 
     async save() {
+        if (this.valueTax == null) { this.valueTax = 0; }
+        if (this.valueNet == null) { this.valueNet = 0; }
+        this.valueGross = this.valueNet + this.valueTax;
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
