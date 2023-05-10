@@ -31,6 +31,8 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
+        TRADERACCOUNTID: 'traderAccountId',
     },
 
     cp_deliveryReturnLine: {
@@ -65,6 +67,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         DEPMAPCONFIGID: 'depMapConfigId',
         TAXMAPCONFIGID: 'taxMapConfigId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_deliveryReturnLog: {

@@ -132,6 +132,9 @@ const EPOS_DTFS_CONFIGS = {
 
 const ERP_DTFS_CONFIGS = {
     ERP_DATASOURCE_CONFIG: 'ERPDataSourceConfig',
+    ERP_CP_POST_PREFIX: "ERPCpPostPrefix",
+    ERP_CP_POST_POSTFIX: "ERPCpPostPostfix",
+
     API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
@@ -763,7 +766,14 @@ const CP_DOCUMENT_LINE = {
     }
 }
 
-
+const CP_DOCUMENT_LOG = {
+    STATUS: {
+        INFO: 'INFO',
+        WARNING: 'WARNING',
+        ERROR: 'ERROR',
+        toList: function (addEmpty) { return enumToList(this); }
+    }
+}
 
 const CX_CURRENCY = {
     EUR: 'EUR',
@@ -824,6 +834,7 @@ module.exports = {
     CR_PREFERENCE: CR_PREFERENCE,
     CP_DOCUMENT: CP_DOCUMENT,
     CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
+    CP_DOCUMENT_LOG: CP_DOCUMENT_LOG,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

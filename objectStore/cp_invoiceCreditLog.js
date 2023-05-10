@@ -30,6 +30,22 @@ class cp_invoiceCreditLog_Collection extends _persistentTable.Table {
 
         return await super.select(query);
     }
+
+    async log(invCreId, type, message, info) {
+        try {
+            var log = this.createNew();
+            log.invCreId = invCreId;
+            log.logType = type || 'NONE';
+            log.logMessage = message || 'no log message';
+            log.logInfo = info || '';
+            //log.Fields.TruncateValues();
+            await log.save();
+
+        } catch (error) {
+            // TODO: @EX: what to do here ??
+            console.log("cp_invoiceCreditLogCollection.Log", error);
+        }
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

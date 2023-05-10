@@ -136,6 +136,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async buildFormBody() {
         var fieldGroupIdx = 1; var fieldGroupStyles = [];
+        
 
         fieldGroupStyles.push('min-width: 500px;');
         var fieldGroup_main = {
@@ -151,27 +152,28 @@ class CPInvoiceReturnRender extends RenderBase {
                     group: 'main1.col2', column: 2, columnCount: 1, fields: [
                         await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                             id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
-                            dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId }
+                            dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId },
+                            width: '100%'
                         }),
-                        //{ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier' },
-                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, label: 'date' },
-                        { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
+                        { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier (epos)', readOnly: true },
+                        { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
                     ]
                 },
                 {
                     group: 'main1.col3', column: 3, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
-                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number', validation: '{ "mandatory": true, "max": 20  }' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, column: 1, label: 'date' },
+                        { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
                     ]
                 },
             ]
         };
 
-        fieldGroupStyles.push('width: 250px; min-width: 150px;');
+        fieldGroupStyles.push('width: 200px; min-width: 150px;');
         var fieldGroup_docReferences = {
             group: 'main_ref', title: 'references', column: fieldGroupIdx++, columnCount: 1, fields: [
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, label: 'reference 1' },
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
+                { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, label: 'reference (erp)' },
+                { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, label: 'reference (cx)' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTMEMO, label: 'memo' },
 
             ]
@@ -213,7 +215,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
         var fieldGroup_erp = null;
         var s = this.dataSource.documentStatus;
-        if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
+        if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
             fieldGroupStyles.push('width: 350px; min-width: 200px;');
             fieldGroup_erp = {
                 group: 'erp', title: 'erp info', column: fieldGroupIdx++, columnCount: 1, fields: [
@@ -282,6 +284,7 @@ class CPInvoiceReturnRender extends RenderBase {
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
+                //if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
                     var erpName = 'ERP';
                     var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                     this.options.buttons.push(btnPostToErp);
@@ -353,7 +356,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
-                this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
+                //this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
+                this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
             }
 
             var signedCols = {

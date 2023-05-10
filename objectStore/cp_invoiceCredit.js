@@ -2,6 +2,7 @@
 //
 const _persistentTable = require('./persistent/p-cp_invoiceCredit');
 const _declarations = require('../cx-client-declarations');
+const _schema = require('../cx-client-schema');
 //
 class cp_invoiceCredit_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -91,7 +92,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.invCreId = @invCreId';
             query.params.push({ name: 'invCreId', value: params.id });
         }
-        if (params.ued=='true') {
+        if (params.ued) {
             query.sql += ' and isnull(d.isUserEdited, 0) = @isUserEdited';
             query.params.push({ name: 'isUserEdited', value: (params.ued=='true') });
         }
@@ -149,6 +150,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
     #accountName = '';
     #postedOn = '';
     #postedBy = '';
+    #logs = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -164,9 +166,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#accountName = defaults['accountName'] || '';
         this.#postedOn = defaults['postedOn'] || '';
         this.#postedBy = defaults['postedBy'] || '';
-        if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) {
-            this.#documentSign = -1;
-        }
+        if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) { this.#documentSign = -1; }
+        
     };
 
     get shopName() { return this.#shopName; }
@@ -182,7 +183,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get transactionReference() { return this.#transactionReference; }
     get transactionSecondReference() { return this.#transactionSecondReference; }
     get transactionErpInfo() {
-        return this.transactionReference + ' / ' + this.transactionSecondReference;
+        if (this.transactionSecondReference) { return this.transactionReference + ' / ' + this.transactionSecondReference; }
+        return this.transactionReference;
     }
     get accountReference() { return this.#accountReference; }
     get accountName() { return this.#accountName; }
@@ -210,10 +212,37 @@ class cp_invoiceCredit extends _persistentTable.Record {
         return '';
     }
 
+    get logs() {
+        return this.#logs;
+    } set logs(logs) {
+        this.#logs = logs;
+    }
+
     async save() {
         this.totalGross = this.totalNet + this.totalVat;
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
+    }
+
+    async log(message, info) {
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.INFO, message, info);
+    }
+    async logWarning(message, info) {
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.WARNING, message, info);
+    }
+    async logError(error, info) {
+        if (!info && error.stack) { info = error.stack; }
+        if (error && error.message) { error = error.message; }
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.ERROR, error, info);
+
+    }
+    async logBase(type, message, info) {
+        if (!this.#logs) {
+            this.#logs = this.cx.table(_schema.cp_invoiceCreditLog);
+        }
+        var log = await this.#logs.log(this.invCreId, type, message, info);
+        this.#logs.records.push(log);
+        return log;
     }
 }
 //

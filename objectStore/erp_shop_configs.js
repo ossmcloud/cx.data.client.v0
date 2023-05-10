@@ -21,7 +21,7 @@ class erp_shop_configs_Collection extends _persistentTable.Table {
         this.query.addFilter({ name: _cx_schema.erp_shop_configs.SHOPID, value: shopId });
         this.query.addFilter({ name: _cx_schema.erp_shop_configs.CONFIGNAME, value: configName });
         var value = null;
-        if (await this.select()) {
+        if (await super.select()) {
             value = this.first().configValue;
             if (parseJason) {
                 if (!value) { return null; }
