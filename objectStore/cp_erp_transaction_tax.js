@@ -42,6 +42,11 @@ class cp_erp_transaction_tax extends _persistentTable.Record {
         super(table, defaults);
     };
 
+    get editedIcon() {
+        if (this.isUserEdited) { return '&#x270E;'; }
+        return '';
+    }
+
     async save() {
         if (this.valueTax == null) { this.valueTax = 0; }
         if (this.valueNet == null) { this.valueNet = 0; }

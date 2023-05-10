@@ -53,6 +53,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     ERPTRANSMISSIONID: 'erpTransmissionId',
     TRADERACCOUNTID: 'traderAccountId',
+    ISUSEREDITED: 'isUserEdited',
 
 }
 //
@@ -93,6 +94,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     traderAccountId: { name: 'traderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -314,6 +316,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TRADERACCOUNTID);
     } set traderAccountId(val) {
         super.setValue(_fieldNames.TRADERACCOUNTID, val);
+    }
+
+    get isUserEdited() {
+        return super.getValue(_fieldNames.ISUSEREDITED);
+    } set isUserEdited(val) {
+        super.setValue(_fieldNames.ISUSEREDITED, val);
     }
 
 

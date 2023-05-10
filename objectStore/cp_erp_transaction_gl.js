@@ -49,6 +49,11 @@ class cp_erp_transaction_gl extends _persistentTable.Record {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
+
+    get editedIcon() {
+        if (this.isUserEdited) { return '&#x270E;'; }
+        return '';
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

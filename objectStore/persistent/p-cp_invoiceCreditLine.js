@@ -51,6 +51,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     DEPMAPCONFIGID: 'depMapConfigId',
     TAXMAPCONFIGID: 'taxMapConfigId',
+    ISUSEREDITED: 'isUserEdited',
 
 }
 //
@@ -89,6 +90,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -298,6 +300,12 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TAXMAPCONFIGID);
     } set taxMapConfigId(val) {
         super.setValue(_fieldNames.TAXMAPCONFIGID, val);
+    }
+
+    get isUserEdited() {
+        return super.getValue(_fieldNames.ISUSEREDITED);
+    } set isUserEdited(val) {
+        super.setValue(_fieldNames.ISUSEREDITED, val);
     }
 
 

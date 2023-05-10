@@ -70,6 +70,29 @@ class erp_tax_account_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+
+    async toErpLookUpList(shopId) {
+        await super.select({
+            sql: 'select code, rate, description from erp_tax_account where shopId = @shopId order by code',
+            params: [{ name: 'shopId', value: shopId }],
+            noPaging: true,
+        });
+
+        var lookUpValues = [];
+        //if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.code,
+                text: rec.code,
+                others: {
+                    taxRate: rec.rate,
+                    taxDescription: rec.description
+                }
+            })
+        });
+        return lookUpValues;
+    }
+
 }
 //
 // ----------------------------------------------------------------------------------------

@@ -73,16 +73,18 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
-        
+
         if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
             var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
             transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
-            
+
         }
         return transactionLinesOptions;
     }
+
     async getErpTaxListOptions() {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_tax);
         await transactionLines.select({ id: this.options.query.id });
@@ -90,46 +92,52 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp tax transactions</span>';
+
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
+
+            var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+
+        }
         return transactionLinesOptions;
     }
 
-
-
-    async _record() {
-
-        
-
-        if (process.env.APP_CONTEXT == 'LOCAL') {
-            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
-        }
-
+    async setRecordTitle() {
+        // SET TAB TITLE
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
-
+        // SET DOCUMENT TILE WITH DOC TYPE, STATUS AND EDITED BUBBLES
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
-        // start with doc type and number
         this.options.title = `<div style="display: table;">`;
-        // document number 
         this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentId}</div>`;
-        // document type
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
                 ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
             </div>
         `;
-        // document status
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
+        if (this.dataSource.isUserEdited) {
+            this.options.title += `
+                <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited">
+                    &#x270E;
+                </div>
+            `;
+            this.options.tabTitle = '\u270E ' + this.options.tabTitle;
+        }
         this.options.title += '</div>';
-
-
-
+        // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
+    }
 
+    async buildFormBody() {
+        var fieldGroupIdx = 1; var fieldGroupStyles = [];
 
-        var fieldGroupIdx = 1;
+        fieldGroupStyles.push('min-width: 500px;');
         var fieldGroup_main = {
             group: 'main1', title: 'main info', column: fieldGroupIdx++, columnCount: 3, fields: [
                 {
@@ -159,8 +167,9 @@ class CPInvoiceReturnRender extends RenderBase {
             ]
         };
 
+        fieldGroupStyles.push('width: 250px; min-width: 150px;');
         var fieldGroup_docReferences = {
-            group: 'main_ref', title: 'document references', column: fieldGroupIdx++, columnCount: 1, width: '200px', fields: [
+            group: 'main_ref', title: 'references', column: fieldGroupIdx++, columnCount: 1, fields: [
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, label: 'reference 1' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTMEMO, label: 'memo' },
@@ -168,11 +177,9 @@ class CPInvoiceReturnRender extends RenderBase {
             ]
         }
 
-
-
-
+        fieldGroupStyles.push('width: 300px; min-width: 200px;');
         var fieldGroup_totals = {
-            group: 'totals', title: 'totals', column: fieldGroupIdx++, columnCount: 2, inline: true, width: '300px', fields: [
+            group: 'totals', title: 'totals', column: fieldGroupIdx++, columnCount: 2, inline: true, fields: [
                 { name: _cxSchema.cp_invoiceCredit.TOTALNET, label: 'total net', formatMoney: 'N2', readOnly: true },
                 { name: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2', readOnly: true },
                 { name: _cxSchema.cp_invoiceCredit.TOTALVAT, label: 'total vat', formatMoney: 'N2', readOnly: true },
@@ -180,8 +187,9 @@ class CPInvoiceReturnRender extends RenderBase {
             ]
         }
 
+        fieldGroupStyles.push('width: 350px; min-width: 200px;');
         var fieldGroup_audit = {
-            group: 'audit', title: 'audit info', column: fieldGroupIdx++, columnCount: 1, width: '350px', fields: [
+            group: 'audit', title: 'audit info', column: fieldGroupIdx++, columnCount: 1, fields: [
                 {
                     group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTSTATUS, label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
@@ -206,6 +214,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var fieldGroup_erp = null;
         var s = this.dataSource.documentStatus;
         if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
+            fieldGroupStyles.push('width: 350px; min-width: 200px;');
             fieldGroup_erp = {
                 group: 'erp', title: 'erp info', column: fieldGroupIdx++, columnCount: 1, fields: [
                     {
@@ -226,7 +235,7 @@ class CPInvoiceReturnRender extends RenderBase {
             }
         }
 
-        var fieldGroup = { group: 'main', title: '', columnCount: (fieldGroupIdx - 1), fields: [] }
+        var fieldGroup = { group: 'main', title: '', columnCount: (fieldGroupIdx - 1), styles: fieldGroupStyles, fields: [] }
         fieldGroup.fields.push(fieldGroup_main);
         fieldGroup.fields.push(fieldGroup_docReferences);
         fieldGroup.fields.push(fieldGroup_totals);
@@ -235,19 +244,17 @@ class CPInvoiceReturnRender extends RenderBase {
 
         this.options.fields = [];
         this.options.fields.push(fieldGroup);
+    }
 
-
-
-
-
-        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, fields: [] };
+    async buildFormLists() {
+        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: ['width: 60%; min-width: 500px;', 'min-width: 400px;'], fields: [] };
         this.options.fields.push(erpSubListsGroup);
 
         var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(this.dataSource.shopId);
 
         var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
         var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
-        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, width: '1000px', fields: [erpGlLineOptions] })
+        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] })
         erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
 
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
@@ -260,32 +267,23 @@ class CPInvoiceReturnRender extends RenderBase {
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
         }
 
+    }
 
-        this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' });
-
+    buildFormActions() {
+        // test button
+        if (process.env.APP_CONTEXT == 'LOCAL') { this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' }); }
 
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
-
             // allow to refresh only under certain statuses
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
-
-                // if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
-                //     this.options.buttons.push({ id: 'cp_edit_erp_data', text: 'Edit Posting Details', function: 'editErpPostingData' });
-                // }
-
             }
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
-                if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
                     var erpName = 'ERP';
-                    var btnPostToErp = {
-                        id: 'cp_post_data',
-                        text: 'Post to ' + erpName,
-                        function: 'postData',
-                        style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);',
-                    };
+                    var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                     this.options.buttons.push(btnPostToErp);
                 }
             }
@@ -301,13 +299,29 @@ class CPInvoiceReturnRender extends RenderBase {
         }
     }
 
+    async _record() {
+        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        //
+        await this.setRecordTitle();
+        // 
+        await this.buildFormBody();
+        // 
+        await this.buildFormLists();
+        //
+        this.buildFormActions();
+    }
+
     async _list() {
         try {
+            this.options.allowEdit = true;
+            this.options.allowEditCondition = function (object) {
+                return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+            }
+
             if (this.options.query) {
                 this.options.paging = true;
                 this.options.pageNo = (this.options.query.page || 1);
             }
-
 
             var isBatchProcessing = (this.options.query && (this.options.query.batch == 'T' || this.options.query.batch == 'true'));
             var batchActionSelected = (isBatchProcessing && this.options.query.action);
@@ -324,17 +338,14 @@ class CPInvoiceReturnRender extends RenderBase {
                 }
                 this.options.filters.push({ fieldName: 'batch', type: _cxConst.RENDER.CTRL_TYPE.HIDDEN });
             }
-            
+
 
             if (isBatchProcessing && !batchActionSelected) {
                 this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList('- all -') });
             } else {
                 if (isBatchProcessing) { this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList(), disabled: true }); }
                 this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }));
-                //if (!isBatchProcessing) {
-                    this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
-                //}
-
+                this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                 this.options.filters.push({ label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') });
                 this.options.filters.push({ label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 this.options.filters.push({ label: 'document no.', fieldName: 'tno', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
@@ -342,9 +353,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
+                this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
             }
-            //isBatchProcessing
-
 
             var signedCols = {
                 Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
@@ -356,6 +366,9 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
 
                 { name: 'shopInfo', title: 'store', width: '200px' },
+                //{ name: _cxSchema.cp_invoiceCredit.ISUSEREDITED, title: '&#x270E;', align: 'center', width: '20px', nullText: '' },
+                { name: 'editedIcon', title: ' ', align: 'center', width: '10px' },
+
                 { name: 'status', title: 'status', align: 'center', width: '70px' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },
@@ -382,6 +395,7 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Discount] });
+
 
             var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
@@ -416,6 +430,8 @@ class CPInvoiceReturnRender extends RenderBase {
                     column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopInfo']
                 })
             }
+
+
 
 
 

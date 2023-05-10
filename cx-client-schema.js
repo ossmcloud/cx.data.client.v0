@@ -31,7 +31,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        TRADERACCOUNTID: 'traderAccountId',
     },
 
     cp_deliveryReturnLine: {
@@ -125,6 +124,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_erp_transaction_gl: {
@@ -150,6 +150,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_erp_transaction_tax: {
@@ -169,6 +170,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceCredit: {
@@ -207,6 +209,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         ERPTRANSMISSIONID: 'erpTransmissionId',
         TRADERACCOUNTID: 'traderAccountId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceCreditLine: {
@@ -243,6 +246,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         DEPMAPCONFIGID: 'depMapConfigId',
         TAXMAPCONFIGID: 'taxMapConfigId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceCreditLog: {
@@ -518,25 +522,25 @@ module.exports = {
         INVERTSIGN: 'invertSign',
         IGNORE: 'ignore',
         DUPLICATEAS: 'duplicateAs',
+        EXCONDITION: 'exCondition',
+        ERPSPLITBYREFERENCE: 'erpSplitByReference',
+        ERPIGNORESTOREGLSEGMENTS: 'erpIgnoreStoreGLSegments',
         TRADERACCOUNT: 'traderAccount',
         ERPGLACCOUNTID: 'erpGLAccountId',
+        ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
         ERPCBACCOUNTID: 'erpCBAccountId',
         ERPTAXACCOUNTID: 'erpTaxAccountId',
+        ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
+        ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
+        ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
+        ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+        ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
+        ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
+        SORTINDEX: 'sortIndex',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
-        EXCONDITION: 'exCondition',
-        ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
-        SORTINDEX: 'sortIndex',
-        ERPSPLITBYREFERENCE: 'erpSplitByReference',
-        ERPIGNORESTOREGLSEGMENTS: 'erpIgnoreStoreGLSegments',
-        ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
-        ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
-        ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
-        ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
-        ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
         SHOWINCASHBOOKLIST: 'showInCashBookList',
     },
 
