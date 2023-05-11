@@ -129,6 +129,14 @@ class CPInvoiceReturnRender extends RenderBase {
             `;
             this.options.tabTitle = '\u270E ' + this.options.tabTitle;
         }
+        if (this.dataSource.invGrpId) {
+            this.options.title += `
+            <div style="${applyStoreColorStyle} background-color: var(--element-bg-color); cursor: pointer;" onclick="window.open('&#47;cp&#47;invoice-group?id=${this.dataSource.invGrpId}');">
+                grouped
+            </div>
+        `;
+        }
+
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
@@ -136,7 +144,6 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async buildFormBody() {
         var fieldGroupIdx = 1; var fieldGroupStyles = [];
-        
 
         fieldGroupStyles.push('min-width: 500px;');
         var fieldGroup_main = {
@@ -153,7 +160,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                             id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
                             dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId },
-                            width: '100%'
+                            width: '100%', disabled: (this.dataSource.invGrpId )
                         }),
                         { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier (epos)', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
@@ -284,10 +291,11 @@ class CPInvoiceReturnRender extends RenderBase {
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
-                //if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
-                    var erpName = 'ERP';
-                    var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
-                    this.options.buttons.push(btnPostToErp);
+                    if (!this.dataSource.invGrpId) {
+                        var erpName = 'ERP';
+                        var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                        this.options.buttons.push(btnPostToErp);
+                    }
                 }
             }
             // allow to un-post based on role only under certain statuses

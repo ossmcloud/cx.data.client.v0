@@ -29,29 +29,27 @@ class CPInvoiceGroupRender extends RenderBase {
 
 
     async _record() {
+        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Ready || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+
         this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber}]`;
 
         this.options.fields = [
             {
-                group: 'main', title: '', columnCount: 4, fields: [
+                group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 250px', 'min-width: 350px' ], fields: [
                     {
-                        group: 'main1', title: 'main info', column: 1, columnCount: 3, fields: [
+                        group: 'main1', title: 'main info', column: 1, columnCount: 2, fields: [
                             {
                                 group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
-                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE + 'Name', label: 'document type' },
+                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
+                                    { name: _cxSchema.cp_invoiceGroup.SUPPLIERCODE, label: 'supplier', readOnly: true },
+                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                                 ]
                             },
                             {
                                 group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_invoiceGroup.SUPPLIERCODE, label: 'supplier' },
-                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTDATE, label: 'date' },
-                                ]
-                            },
-                            {
-                                group: 'main1.col3', column: 3, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_invoiceGroup.CURRENCY, label: 'currency' },
-                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTNUMBER, label: 'document number' },
+                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTDATE, label: 'date', width: '100%' },
+                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTNUMBER, label: 'document number', width: '100%', validation: '{ "mandatory": true, "max": 20  }' },
+                                    { name: _cxSchema.cp_invoiceGroup.CURRENCY, label: 'currency', readOnly: true },
                                 ]
                             },
                         ]
@@ -67,11 +65,11 @@ class CPInvoiceGroupRender extends RenderBase {
                     },
 
                     {
-                        group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, width: '300px', fields: [
-                            { name: _cxSchema.cp_invoiceGroup.TOTALNET, label: 'total net', formatMoney: 'N2' },
-                            { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
-                            { name: _cxSchema.cp_invoiceGroup.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
-                            { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
+                        group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, fields: [
+                            { name: _cxSchema.cp_invoiceGroup.TOTALNET, label: 'total net', formatMoney: 'N2', readOnly: true },
+                            { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2', readOnly: true },
+                            { name: _cxSchema.cp_invoiceGroup.TOTALVAT, label: 'total vat', formatMoney: 'N2', readOnly: true },
+                            { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, label: 'total gross', formatMoney: 'N2', readOnly: true },
                         ]
                     },
                     {
