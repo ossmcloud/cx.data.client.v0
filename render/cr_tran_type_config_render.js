@@ -86,7 +86,7 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.CBTRANTYPEID, label: 'CB Type', column: 1, lookUps: cbTranTypeLookUps },
                                     { name: _cxSchema.cr_tran_type_config.CBHEADING, label: 'CB Heading', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.CBREFERENCE, label: 'CB Reference', column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 2, width: '100px' },
+                                    { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 1, width: '100px' },
                                     { name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, label: 'Declarations', lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.DUPLICATEAS, label: 'Duplicate As', column: 1, lookUps: duplicateAsLookUps },
                                 ]
