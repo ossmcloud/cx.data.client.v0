@@ -128,6 +128,15 @@ class cx_shop_Collection extends _persistentTable.Table {
         return rawRecord.status == 1;
     }
 
+    async selectColors() {
+        var query = { sql: '', params: [] };
+        //query.sql = `select * from ${this.type} where shopId in ${this.cx.shopList}`;
+        query.sql = `select  s.shopId, s.shopColor
+                    from    ${this.type} s
+                    where   s.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+        var resp = await this.cx.exec(query);
+        return resp.rows;
+    }
     
 
 }
@@ -159,6 +168,10 @@ class cx_shop extends _persistentTable.Record {
         return this.#check;
     } set check(value) {
         this.#check = value
+    }
+
+    get shopInfo() {
+        return `[${this.shopCode}]${this.shopName}`;
     }
    
     async save() {

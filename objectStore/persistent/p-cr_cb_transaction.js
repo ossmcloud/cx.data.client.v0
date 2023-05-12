@@ -34,6 +34,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    ERPTRANSMISSIONID: 'erpTransmissionId',
 
 }
 //
@@ -43,7 +44,7 @@ const _fields = {
     cbTranId: { name: 'cbTranId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     date: { name: 'date', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
-    status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '((0))' },
+    status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     statusMessage: { name: 'statusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     totalSales: { name: 'totalSales', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     totalLodgement: { name: 'totalLodgement', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -55,6 +56,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -74,7 +76,7 @@ class Persistent_cr_cb_transaction extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get cbTranId() {
         return super.getValue(_fieldNames.CBTRANID);
@@ -162,6 +164,12 @@ class Persistent_cr_cb_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get erpTransmissionId() {
+        return super.getValue(_fieldNames.ERPTRANSMISSIONID);
+    } set erpTransmissionId(val) {
+        super.setValue(_fieldNames.ERPTRANSMISSIONID, val);
     }
 
 

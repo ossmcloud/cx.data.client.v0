@@ -48,6 +48,13 @@ const _fieldNames = {
     SORTINDEX: 'sortIndex',
     ERPSPLITBYREFERENCE: 'erpSplitByReference',
     ERPIGNORESTOREGLSEGMENTS: 'erpIgnoreStoreGLSegments',
+    ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
+    ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
+    ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
+    ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
+    ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+    SHOWINCASHBOOKLIST: 'showInCashBookList',
+    CBREFERENCE: 'cbReference',
 
 }
 //
@@ -83,6 +90,13 @@ const _fields = {
     sortIndex: { name: 'sortIndex', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erpSplitByReference: { name: 'erpSplitByReference', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     erpIgnoreStoreGLSegments: { name: 'erpIgnoreStoreGLSegments', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    erp2ndTraderAccount: { name: 'erp2ndTraderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndGLAccountId: { name: 'erp2ndGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndCBAccountId: { name: 'erp2ndCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndTaxAccountId: { name: 'erp2ndTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    showInCashBookList: { name: 'showInCashBookList', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    cbReference: { name: 'cbReference', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false, default: '' },
 
 }
 //
@@ -102,7 +116,7 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get tranTypeConfigId() {
         return super.getValue(_fieldNames.TRANTYPECONFIGID);
@@ -274,6 +288,48 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPIGNORESTOREGLSEGMENTS);
     } set erpIgnoreStoreGLSegments(val) {
         super.setValue(_fieldNames.ERPIGNORESTOREGLSEGMENTS, val);
+    }
+
+    get erp2ndTraderAccount() {
+        return super.getValue(_fieldNames.ERP2NDTRADERACCOUNT);
+    } set erp2ndTraderAccount(val) {
+        super.setValue(_fieldNames.ERP2NDTRADERACCOUNT, val);
+    }
+
+    get erp2ndGLAccountId() {
+        return super.getValue(_fieldNames.ERP2NDGLACCOUNTID);
+    } set erp2ndGLAccountId(val) {
+        super.setValue(_fieldNames.ERP2NDGLACCOUNTID, val);
+    }
+
+    get erp2ndCBAccountId() {
+        return super.getValue(_fieldNames.ERP2NDCBACCOUNTID);
+    } set erp2ndCBAccountId(val) {
+        super.setValue(_fieldNames.ERP2NDCBACCOUNTID, val);
+    }
+
+    get erp2ndTaxAccountId() {
+        return super.getValue(_fieldNames.ERP2NDTAXACCOUNTID);
+    } set erp2ndTaxAccountId(val) {
+        super.setValue(_fieldNames.ERP2NDTAXACCOUNTID, val);
+    }
+
+    get erp2ndGLContraAccountId() {
+        return super.getValue(_fieldNames.ERP2NDGLCONTRAACCOUNTID);
+    } set erp2ndGLContraAccountId(val) {
+        super.setValue(_fieldNames.ERP2NDGLCONTRAACCOUNTID, val);
+    }
+
+    get showInCashBookList() {
+        return super.getValue(_fieldNames.SHOWINCASHBOOKLIST);
+    } set showInCashBookList(val) {
+        super.setValue(_fieldNames.SHOWINCASHBOOKLIST, val);
+    }
+
+    get cbReference() {
+        return super.getValue(_fieldNames.CBREFERENCE);
+    } set cbReference(val) {
+        super.setValue(_fieldNames.CBREFERENCE, val);
     }
 
 

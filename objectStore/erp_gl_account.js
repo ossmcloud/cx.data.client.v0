@@ -24,8 +24,10 @@ class erp_gl_account_Collection extends _persistentTable.Table {
                     from	erp_gl_account t
                     inner join cx_shop s on s.shopId = t.shopId
                     where	s.shopId ${shopFilter} ${shopFilterValue}
-                    AND     isnull(t.costCentre, '') = ''`;
-
+                    --AND     isnull(t.costCentre, '') = ''
+                    `;
+        
+        
         // if (params.tt) {
         //     query.sql += ' and t.traderType = @traderType';
         //     query.params.push({ name: 'traderType', value: params.tt });
@@ -35,6 +37,8 @@ class erp_gl_account_Collection extends _persistentTable.Table {
             query.sql += ' and (t.code like @code or t.costCentre like @code or department like @code)';
             query.params.push({ name: 'code', value: params.glc + '%' });
         }
+       
+
         if (params.gld) {
             query.sql += ' and t.description like @description';
             query.params.push({ name: 'description', value: params.gld + '%' });
@@ -69,6 +73,31 @@ class erp_gl_account_Collection extends _persistentTable.Table {
         if (!rawRecord) { return null; }
 
         return super.populate(rawRecord);
+    }
+
+    async toErpLookUpList(shopId, fixedGlSeg2) {
+        await super.select({
+            sql: 'select code, description from erp_gl_account where shopId = @shopId and costCentre = @costCentre order by code',
+            params: [
+                { name: 'shopId', value: shopId },
+                { name: 'costCentre', value: fixedGlSeg2 }
+            ],
+            noPaging: true,
+        });
+
+        var lookUpValues = [];
+        //if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.code,
+                text: rec.code,
+                others: {
+                    glAccountDescription: rec.description,
+                    glAccountSeg2: fixedGlSeg2
+                }
+            })
+        });
+        return lookUpValues;
     }
 
 

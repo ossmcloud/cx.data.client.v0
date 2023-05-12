@@ -10,15 +10,37 @@ class ErpTraderAccount extends RenderBase {
         this.title = 'erp dtfs setting';
     }
 
+    async getConfigListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.erp_dtfs_configs);
+        await configs.select(this.dataSource.id);
+        if (configs.count() > 0) { this.options.allowDelete = false; }
+
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            if (this.options.allowEdit) {
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: 'edit', funcName: 'editDtfsConfig' });
+                configListOptions.actions.push({ label: 'delete', funcName: 'deleteDtfsConfig' });
+                configListOptions.showButtons = [{ id: 'erp_dtfs_configs_add', text: 'Add Configuration', function: 'addDtfsConfig' }];
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewDtfsConfig' }];
+            }
+        }
+        return configListOptions;
+    }
     
     async _record() {
-        
+        var newRecord = (this.options.mode == 'new');
+
         this.options.fields = [
             {
                 group: 'settingOuter', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'erpProvider', label: 'erp provider', column: 2, readOnly: true },
+                            { name: 'erpProvider', label: 'erp provider', column: 2, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), validation: '{ "mandatory": true }', readOnly: !newRecord },
                             { name: 'dtfsSettingName', label: 'settings name', column: 1 },
                             { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
                             { name: 'dtfsPairingCode', label: 'pairing code', column: 2 },
@@ -51,16 +73,24 @@ class ErpTraderAccount extends RenderBase {
         ];
 
 
-        var prefListOptions = await this.getPreferenceListOptions();
-        this.options.fields[0].fields.push({
-            group: 'sublists', columnCount: 1, column: 3, fields: [
-                { group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] }
-            ]
-        });
+        // var prefListOptions = await this.getPreferenceListOptions();
+        // this.options.fields[0].fields.push({
+        //     group: 'sublists', columnCount: 1, column: 3, fields: [
+        //         { group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] }
+        //     ]
+        // });
       
-        // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
-        //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
-        // }
+        if (!newRecord) {
+            var sublists = { group: 'sublists', columnCount: 1, column: 3, fields: [] };
+            this.options.fields[0].fields.push(sublists);
+
+            var configListOptions = await this.getConfigListOptions();
+            sublists.fields.push({ group: 'config', title: 'configurations', column: 1, fields: [configListOptions] });
+
+            var prefListOptions = await this.getPreferenceListOptions();
+            sublists.fields.push({ group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] });
+
+        }
     }
 
     async _list() {
@@ -71,7 +101,7 @@ class ErpTraderAccount extends RenderBase {
         this.options.columns = [
             { name: 'dtfsSettingId', title: ' ', align: 'center' },
             { name: 'dtfsSettingName', title: 'settings name' },
-            { name: 'erpProvider', title: 'erp provider' },
+            { name: 'erpProvider', title: 'erp provider', lookUps: _cxConst.CX_ERP_PROVIDER.toList() },
             { name: 'dtfsPairingStatus', title: 'pairing status', lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
             { name: 'dtfsPairedMachineName', title: 'paired machine name' },
             { name: 'dtfsPairedMachineOS', title: 'paired machine OS' },

@@ -9,6 +9,7 @@ function enumToList(obj, addEmpty, aliases) {
     for (var key in obj) {
         // @CLEAN-UP: use a better way to do this, the 1st three below are functions
         if (key == 'toList') { continue; }
+        if (key == 'toEncrypt') { continue; }
         if (key == 'getName') { continue; }
         if (key == 'getStyle') { continue; }
         if (key == 'getStyleInverted') { continue; }
@@ -129,16 +130,37 @@ const EPOS_DTFS_CONFIGS = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 
-const CX_ERP_PROVIDER = {
-    SG200: 'sage200',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200' }); }
+const ERP_DTFS_CONFIGS = {
+    ERP_DATASOURCE_CONFIG: 'ERPDataSourceConfig',
+    ERP_CP_POST_PREFIX: "ERPCpPostPrefix",
+    ERP_CP_POST_POSTFIX: "ERPCpPostPostfix",
+
+    API_AUTH_CONFIG: 'ERPApiAuthConfig',
+    API_CONFIG: 'ERPApiConfig',
+    DTFS_PING_FREQ: 'DTFSPingFrequency',
+
+    //API_TOKEN: 'ERPApiToken',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        if (configName == this.API_AUTH_CONFIG) { return true; }
+        return false;
+    }
 }
 
+// TODO: this should come from sys_provider table
+const CX_ERP_PROVIDER = {
+    SG200: 'sage200',
+    SG200STD: 'sage200std',
+    SAGE50: 'sage50',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts' }); }
+}
+// TODO: this should come from sys_provider table
 const CX_EPOS_PROVIDER = {
     CBE: 'CBE',
-    //RS: 'RetailSolution',
+    RS: 'RS',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution' }); }
 }
 const CX_EPOS_PROVIDERS = {
     supported: [
@@ -148,6 +170,13 @@ const CX_EPOS_PROVIDERS = {
                 { name: EPOS_DTFS_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.RS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "OLEDB",   "connString": ""  }' },
             ]
         }
     ],
@@ -200,6 +229,7 @@ const CR_CASH_BOOK = {
         NO: 0,
         YES: 1,
         FORCE: 2,
+        EPOS: 3,
         toList: function (addEmpty) {
             return enumToList(this, addEmpty);
         }
@@ -445,6 +475,15 @@ const CP_DOCUMENT = {
         getName: function (value) { return enumGetName(this, value); },
     },
 
+    BATCH_ACTIONS: {
+        REFRESH: 1,
+        POST: 2,
+        RESET: 3,
+        UNPOST: 9,
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) { return enumGetName(this, value); },
+    },
+
     TYPE_DR: {
         Delivery: 0,
         Return: 1,
@@ -464,7 +503,11 @@ const CP_DOCUMENT = {
         CreditNote: 3,
 
         toList: function (addEmpty) { return enumToList(this, addEmpty); },
-        getName: function (value) { return enumGetName(this, value); },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                CreditNote: 'Credit Note',
+            });
+        },
 
         getStyleInverted: function (type, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
@@ -498,47 +541,105 @@ const CP_DOCUMENT = {
     STATUS: {
         New: 0,
         Ready: 1,
-        REFRESH: 8,
-        ERROR: 9,
-        Reconciled_None: 10,
-        Reconciled_Part: 11,
-        Reconciled_Full: 12,
+        //ReadyForPosting: 2,    
+        REFRESH: 3,
+
+        //PostingPrep: 4,            // user sent this for poosting
+        PostingReady: 5,           //
+        Posting: 6,                // erps.exe is to pick up the stuff to post
+        PostingRunning: 7,         // erps.exe has picked up the stuff to post
+        Posted: 8,                 // posted successfully
+
+        ERROR: 97,
+        PostingError: 98,
+        DeleteAndPull: 99,
+        Delete: 100,
+        // ERROR: 9,
+        // Reconciled_None: 10,
+        // Reconciled_Part: 11,
+        // Reconciled_Full: 12,
 
         toList: function (addEmpty) {
-            return enumToList(this, addEmpty);
+            return enumToList(this, addEmpty, {
+                REFRESH: 'refreshing erp info',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+                //PostingUndo: 'reset posting running',
+            });
         },
         getName: function (value) {
-            return enumGetName(this, value);
+            return enumGetName(this, value, {
+                REFRESH: 'refreshing erp info',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+                //PostingUndo: 'reset posting running',
+            });
         },
 
         getStyleInverted: function (status, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.New) {
-                color = '0,0,0';
-                bkgColor = '255,202,58';
-            } else if (status == this.Ready) {
-                color = '255,255,255';
-                bkgColor = '25,130,196';
-            } else if (status == this.Reconciled_None) {
-                color = '0,100,0';
-                bkgColor = '138,201,38';
-            } else if (status == this.Reconciled_Part) {
-                color = '0,100,0';
-                bkgColor = '138,201,38';
-            } else if (status == this.Reconciled_Full) {
-                color = '0,100,0';
-                bkgColor = '138,201,38';
-            } else if (status == this.REFRESH) {
+            if (status == this.REFRESH || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning) {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
+            } else if (status == this.Ready) {
+                color = '255,255,255';
+                // bkgColor = '246,71,146';
+                bkgColor = '25,130,196';
+            } else if (status == this.PostingReady) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Posted) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.PostingError) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
             } else if (status == this.ERROR) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
+            } else if (status == this.Delete) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            } else if (status == this.DeleteAndPull) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
             } else {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
             }
+
+
+
+            // if (status == this.New) {
+            //     color = '0,0,0';
+            //     bkgColor = '255,202,58';
+            // } else if (status == this.Ready) {
+            //     color = '255,255,255';
+            //     bkgColor = '25,130,196';
+            // } else if (status == this.Reconciled_None) {
+            //     color = '0,100,0';
+            //     bkgColor = '138,201,38';
+            // } else if (status == this.Reconciled_Part) {
+            //     color = '0,100,0';
+            //     bkgColor = '138,201,38';
+            // } else if (status == this.Reconciled_Full) {
+            //     color = '0,100,0';
+            //     bkgColor = '138,201,38';
+            // } else if (status == this.REFRESH) {
+            //     color = '255,255,255';
+            //     bkgColor = '128,128,128';
+            // } else if (status == this.ERROR) {
+            //     color = '255,255,255';
+            //     bkgColor = '234,30,37';
+            // } else {
+            //     color = '255,255,255';
+            //     bkgColor = '128,128,128';
+            // }
 
             var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
             if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
@@ -665,7 +766,14 @@ const CP_DOCUMENT_LINE = {
     }
 }
 
-
+const CP_DOCUMENT_LOG = {
+    STATUS: {
+        INFO: 'INFO',
+        WARNING: 'WARNING',
+        ERROR: 'ERROR',
+        toList: function (addEmpty) { return enumToList(this); }
+    }
+}
 
 const CX_CURRENCY = {
     EUR: 'EUR',
@@ -674,6 +782,38 @@ const CX_CURRENCY = {
     toList: function (addEmpty) { return enumToList(this, addEmpty, { EUR: 'EUR', GBP: 'GBP' }); }
 }
 
+
+const ERP_TRAN_STATUS = {
+    Ready: 0,
+    Posted: 1,
+    Error: 9,
+
+
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+
+        if (status == this.Ready) {
+            color = '255,255,255';
+            bkgColor = '25,130,196';
+        } else if (status == this.Posted) {
+            color = '0,100,0';
+            bkgColor = '138,201,38';
+        } else if (status == this.Error) {
+            color = '255,255,255';
+            bkgColor = '234,30,37';
+        } else {
+            color = '255,255,255';
+            bkgColor = '128,128,128';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
+}
 
 
 module.exports = {
@@ -694,10 +834,13 @@ module.exports = {
     CR_PREFERENCE: CR_PREFERENCE,
     CP_DOCUMENT: CP_DOCUMENT,
     CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
+    CP_DOCUMENT_LOG: CP_DOCUMENT_LOG,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,
     EPOS_DTFS_UPGRADE_AUDIT: EPOS_DTFS_UPGRADE_AUDIT,
+    ERP_DTFS_CONFIGS: ERP_DTFS_CONFIGS,
+    ERP_TRAN_STATUS, ERP_TRAN_STATUS,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     RENDER: RENDER,
     SQL: SQL,

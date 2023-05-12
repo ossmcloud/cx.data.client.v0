@@ -60,11 +60,12 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
 
     async fetch(id, returnNull) {
         var query = {
-            sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName, ds.dtfsSettingName
+            sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName, ds.dtfsSettingName, prv.logoUrl
                     from    epos_shop_setting sr
                     left    outer join epos_dtfs_setting ds on ds.dtfsSettingId = sr.dtfsSettingId
                     left    outer join cx_shop sx on sx.shopId = sr.shopId
                     left    outer join cx_shop_group sg on sg.shopGroupId = sx.shopGroupId
+                    left    outer join sys_provider prv on prv.code = sr.eposProvider
                     where   sr.shopId in ${this.cx.shopList}
                     and     sr.shopId = @shopId`,
             params: [{ name: 'shopId', value: id }],
@@ -93,6 +94,7 @@ class epos_shop_setting extends _persistentTable.Record {
     #groupName = '';
     #groupCode = '';
     #dtfsInfo = '';
+    #eposLogoUrl = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -101,6 +103,8 @@ class epos_shop_setting extends _persistentTable.Record {
         this.#groupName = defaults['groupName'] || '';
         this.#groupCode = defaults['groupCode'] || '';
         this.#dtfsInfo = defaults['dtfsSettingName'] || defaults['dtfsInfo'] || '';
+        this.#eposLogoUrl = defaults['logoUrl'] || '';
+        
     };
 
     get shopName() { return this.#shopName; }
@@ -110,6 +114,7 @@ class epos_shop_setting extends _persistentTable.Record {
     get groupCode() { return this.#groupCode; }
     get groupInfo() { return `[${this.#groupCode}] ${this.#groupName}`; }
     get dtfsInfo() { return this.#dtfsInfo; }
+    get eposLogoUrl() { return this.#eposLogoUrl; }
 
     isSet() {
         if (!this.eposProvider) { return false; }

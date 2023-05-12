@@ -54,7 +54,27 @@ class erp_shop_setting_Collection extends _persistentTable.Table {
     }
 
     
+    async isCloud(shopId) {
+        var query = {
+            sql: `select p.isCloud from erp_shop_setting s inner join sys_provider p ON p.code = s.erpProvider where  s.shopId = @shopId`,
+            params: [{ name: 'shopId', value: shopId }],
+            returnFirst: true,
+        };
+        var queryRes = await this.cx.exec(query);
+        if (!queryRes) { return false; }
+        return queryRes.isCloud;
+    }
 
+    async getErpCode(shopId) {
+        var query = {
+            sql: `select p.code from erp_shop_setting s inner join sys_provider p ON p.code = s.erpProvider where  s.shopId = @shopId`,
+            params: [{ name: 'shopId', value: shopId }],
+            returnFirst: true,
+        };
+        var queryRes = await this.cx.exec(query);
+        if (!queryRes) { return ''; }
+        return queryRes.code;
+    }
 
     async getErpName(shopId) {
         var query = {
@@ -87,6 +107,8 @@ class erp_shop_setting extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+
+    get mergeGLAndTax() { return this.erpProvider.toLowerCase() == "sage50"; }
 
     isSet() {
         if (!this.erpProvider) { return false; }

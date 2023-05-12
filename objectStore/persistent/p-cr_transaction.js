@@ -26,7 +26,6 @@ const _fieldNames = {
     DEPMAPCONFIGID: 'depMapConfigId',
     TAXMAPCONFIGID: 'taxMapConfigId',
     ERPCBACCOUNTID: 'erpCBAccountId',
-    ISEDITED: 'isEdited',
     ISMANUAL: 'isManual',
     ISDUPLICATE: 'isDuplicate',
     VALUEGROSS: 'valueGross',
@@ -75,7 +74,8 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    
+    ISEDITED: 'isEdited',
+    RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
 
 }
 //
@@ -89,7 +89,6 @@ const _fields = {
     depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    isEdited: { name: 'isEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isDuplicate: { name: 'isDuplicate', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     valueGross: { name: 'valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -114,7 +113,7 @@ const _fields = {
     itemDescription: { name: 'itemDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     subDepartment: { name: 'subDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    quantity: { name: 'quantity', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
+    quantity: { name: 'quantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     unitCost: { name: 'unitCost', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     raw_valueGross: { name: 'raw_valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -123,7 +122,7 @@ const _fields = {
     raw_valueDiscountPromo: { name: 'raw_valueDiscountPromo', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     raw_valueTax: { name: 'raw_valueTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     taxCode: { name: 'taxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
-    taxRate: { name: 'taxRate', dataType: 'decimal', pk: false, identity: false, maxLength: 5, null: true },
+    taxRate: { name: 'taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     change: { name: 'change', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     cashBack: { name: 'cashBack', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     customerAccount: { name: 'customerAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
@@ -138,7 +137,8 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    
+    isEdited: { name: 'isEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    raw_customerAccount: { name: 'raw_customerAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
 
 }
 //
@@ -158,7 +158,7 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get tranId() {
         return super.getValue(_fieldNames.TRANID);
@@ -198,12 +198,6 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPCBACCOUNTID);
     } set erpCBAccountId(val) {
         super.setValue(_fieldNames.ERPCBACCOUNTID, val);
-    }
-
-    get isEdited() {
-        return super.getValue(_fieldNames.ISEDITED);
-    } set isEdited(val) {
-        super.setValue(_fieldNames.ISEDITED, val);
     }
 
     get isManual() {
@@ -494,7 +488,17 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    
+    get isEdited() {
+        return super.getValue(_fieldNames.ISEDITED);
+    } set isEdited(val) {
+        super.setValue(_fieldNames.ISEDITED, val);
+    }
+
+    get raw_customerAccount() {
+        return super.getValue(_fieldNames.RAW_CUSTOMERACCOUNT);
+    } set raw_customerAccount(val) {
+        super.setValue(_fieldNames.RAW_CUSTOMERACCOUNT, val);
+    }
 
 
 }

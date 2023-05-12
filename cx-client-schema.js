@@ -31,6 +31,8 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        TRADERACCOUNTID: 'traderAccountId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_deliveryReturnLine: {
@@ -63,6 +65,9 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_deliveryReturnLog: {
@@ -96,6 +101,79 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_erp_transaction: {
+        TBL_NAME: 'cp_erp_transaction',
+        ERPTRANID: 'erpTranId',
+        INVCREID: 'invCreId',
+        SHOPID: 'shopId',
+        ERPTRANTYPEID: 'erpTranTypeId',
+        TRANSACTIONDATE: 'transactionDate',
+        TRANSACTIONREFERENCE: 'transactionReference',
+        TRANSACTIONSECONDREFERENCE: 'transactionSecondReference',
+        ACCOUNTREFERENCE: 'accountReference',
+        ACCOUNTNAME: 'accountName',
+        BANKREFERENCE: 'bankReference',
+        BANKNAME: 'bankName',
+        VALUENET: 'valueNet',
+        VALUETAX: 'valueTax',
+        VALUEGROSS: 'valueGross',
+        POSTINGREFERENCE: 'postingReference',
+        POSTINGURN: 'postingURN',
+        STATUS: 'status',
+        STATUSMESSAGE: 'statusMessage',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
+    },
+
+    cp_erp_transaction_gl: {
+        TBL_NAME: 'cp_erp_transaction_gl',
+        GLTRANID: 'glTranId',
+        ERPTRANID: 'erpTranId',
+        GLACCOUNTSEG1: 'glAccountSeg1',
+        GLACCOUNTSEG2: 'glAccountSeg2',
+        GLACCOUNTSEG3: 'glAccountSeg3',
+        GLACCOUNTDESCRIPTION: 'glAccountDescription',
+        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
+        GLCONTRAENTRY: 'glContraEntry',
+        NARRATIVE: 'narrative',
+        VALUENET: 'valueNet',
+        TAXACCOUNT: 'taxAccount',
+        TAXRATE: 'taxRate',
+        TAXDESCRIPTION: 'taxDescription',
+        VALUETAX: 'valueTax',
+        VALUEGROSS: 'valueGross',
+        STATUS: 'status',
+        STATUSMESSAGE: 'statusMessage',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
+    },
+
+    cp_erp_transaction_tax: {
+        TBL_NAME: 'cp_erp_transaction_tax',
+        TAXTRANID: 'taxTranId',
+        ERPTRANID: 'erpTranId',
+        TAXACCOUNT: 'taxAccount',
+        TAXRATE: 'taxRate',
+        TAXDESCRIPTION: 'taxDescription',
+        VALUENET: 'valueNet',
+        VALUETAX: 'valueTax',
+        VALUEGROSS: 'valueGross',
+        NARRATIVE: 'narrative',
+        STATUS: 'status',
+        STATUSMESSAGE: 'statusMessage',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceCredit: {
@@ -132,6 +210,9 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ERPTRANSMISSIONID: 'erpTransmissionId',
+        TRADERACCOUNTID: 'traderAccountId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceCreditLine: {
@@ -166,6 +247,9 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceCreditLog: {
@@ -336,7 +420,6 @@ module.exports = {
         GLACCOUNTSEG2: 'glAccountSeg2',
         GLACCOUNTSEG3: 'glAccountSeg3',
         GLACCOUNTDESCRIPTION: 'glAccountDescription',
-        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         NARRATIVE: 'narrative',
         VALUENET: 'valueNet',
         TAXACCOUNT: 'taxAccount',
@@ -350,6 +433,8 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
+        GLCONTRAENTRY: 'glContraEntry',
     },
 
     cr_erp_transaction_tax: {
@@ -402,11 +487,11 @@ module.exports = {
         PREFERENCEID: 'preferenceId',
         LEVELID: 'levelId',
         RECORDTYPE: 'recordType',
+        DISABLED: 'disabled',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        DISABLED: 'disabled',
     },
 
     cr_preference_value: {
@@ -454,6 +539,35 @@ module.exports = {
         SORTINDEX: 'sortIndex',
         ERPSPLITBYREFERENCE: 'erpSplitByReference',
         ERPIGNORESTOREGLSEGMENTS: 'erpIgnoreStoreGLSegments',
+        ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
+        ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
+        ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
+        ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
+        ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+        SHOWINCASHBOOKLIST: 'showInCashBookList',
+        CBREFERENCE: 'cbReference',
+    },
+
+    cr_tran_type_config_shop: {
+        TBL_NAME: 'cr_tran_type_config_shop',
+        TRANTYPECONFIGID: 'tranTypeConfigId',
+        SHOPID: 'shopId',
+        ERPTRANTYPEID: 'erpTranTypeId',
+        TRADERACCOUNT: 'traderAccount',
+        ERPGLACCOUNTID: 'erpGLAccountId',
+        ERPGLCONTRAACCOUNTID: 'erpGLContraAccountId',
+        ERPCBACCOUNTID: 'erpCBAccountId',
+        ERPTAXACCOUNTID: 'erpTaxAccountId',
+        ERP2NDTRANTYPEID: 'erp2ndTranTypeId',
+        ERP2NDTRADERACCOUNT: 'erp2ndTraderAccount',
+        ERP2NDGLACCOUNTID: 'erp2ndGLAccountId',
+        ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
+        ERP2NDCBACCOUNTID: 'erp2ndCBAccountId',
+        ERP2NDTAXACCOUNTID: 'erp2ndTaxAccountId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cr_transaction: {
@@ -514,6 +628,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ISEDITED: 'isEdited',
+        RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
     },
 
     cx_login: {
@@ -544,6 +659,21 @@ module.exports = {
         LOGINSHOPID: 'loginShopId',
         LOGINID: 'loginId',
         SHOPID: 'shopId',
+    },
+
+    cx_login_token: {
+        TBL_NAME: 'cx_login_token',
+        TYPE: 'type',
+        LOGINID: 'loginId',
+        DTFSSETTINGID: 'dtfsSettingId',
+        STATEKEY: 'stateKey',
+        STATUS: 'status',
+        TOKEN: 'token',
+        EXPIRYDATE: 'expiryDate',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
     },
 
     cx_map_config: {
@@ -587,11 +717,11 @@ module.exports = {
         EPOSTAXRATE: 'eposTaxRate',
         EPOSDESCRIPTION: 'eposDescription',
         TAXACCOUNTID: 'taxAccountId',
+        PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
     },
 
     cx_shop: {
@@ -602,10 +732,6 @@ module.exports = {
         SHOPNAME: 'shopName',
         SHOPADDRESS: 'shopAddress',
         STATUS: 'status',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
         SHOPPOSTCODE: 'shopPostCode',
         SHOPLATITUDE: 'shopLatitude',
         SHOPLONGITUDE: 'shopLongitude',
@@ -614,6 +740,10 @@ module.exports = {
         TAXMAPCONFIGID: 'taxMapConfigId',
         CURRENCYCODE: 'currencyCode',
         SHOPCOLOR: 'shopColor',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cx_shop_group: {
@@ -767,6 +897,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        VALUEENCRYPTED: 'valueEncrypted',
     },
 
     erp_dtfs_ping: {
@@ -850,15 +981,15 @@ module.exports = {
         SHOPID: 'shopId',
         ERPPROVIDER: 'erpProvider',
         ERPCOMPANYNAME: 'erpCompanyName',
+        ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
+        ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
+        ERPCOSTCENTRE: 'erpCostCentre',
+        ERPDEPARTMENT: 'erpDepartment',
         DTFSSETTINGID: 'dtfsSettingId',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
-        ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
-        ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
-        ERPCOSTCENTRE: 'erpCostCentre',
-        ERPDEPARTMENT: 'erpDepartment',
     },
 
     erp_tax_account: {
@@ -1214,6 +1345,7 @@ module.exports = {
         TRANNAME: 'tranName',
         TRANLEDGER: 'tranLedger',
         OPPOSITETRANID: 'oppositeTranId',
+        CSSSTYLE: 'cssStyle',
     },
 
     sys_provider: {
@@ -1221,6 +1353,8 @@ module.exports = {
         TYPE: 'type',
         CODE: 'code',
         NAME: 'name',
+        ISCLOUD: 'isCloud',
+        LOGOURL: 'logoUrl',
     }
 
 }

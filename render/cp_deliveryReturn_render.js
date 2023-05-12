@@ -29,7 +29,29 @@ class CPDeliveryReturnRender extends RenderBase {
 
 
     async _record() {
-        this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`; 
+        //this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`; 
+        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
+
+        var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
+        // start with doc type and number
+        this.options.title = `<div style="display: table;">`;
+        // document number 
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentId}</div>`;
+        // document type
+        this.options.title += `
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
+                ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
+            </div>
+        `;
+        // document status
+        this.options.title += `
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
+                ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
+            </div>
+        `;
+        this.options.title += '</div>';
+
+
             
         this.options.fields = [
             {
@@ -198,7 +220,14 @@ class CPDeliveryReturnRender extends RenderBase {
                 })
             }
 
-          
+            var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+            var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
+            for (var cx = 0; cx < shopColors.length; cx++) {
+                if (!shopColors[cx].shopColor) { continue; }
+                this.options.cellHighlights.push({
+                    column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopInfo']
+                })
+            }
 
 
         } catch (error) {

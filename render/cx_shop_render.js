@@ -20,13 +20,21 @@ class CxShopRender extends RenderBase {
         if (this.options.mode == 'view') {
             var shop = this.dataSource;
             if (shop.status == 0) {
-                var shopEpos = await this.dataSource.cx.table(_cxSchema.epos_shop_setting).fetch(shop.id);
-                var shopErp = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shop.id);
-                if (shopEpos.isSet() && shopErp.isSet()) {
+                var shopEpos = await this.dataSource.cx.table(_cxSchema.epos_shop_setting).fetch(shop.id, true);
+                var shopErp = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shop.id, true);
+
+                var shopEposSet = (shopEpos != null && shopEpos.isSet());
+                if (!shopEposSet) {
+                    this.options.buttons.push({ id: 'cr_shop_set_epos', text: 'Configure EPoS (DTFS)', link: '/epos/shopSetting?e=T&id=' + shop.id });
+                }
+
+                var shopErpSet = (shopErp != null && shopErp.isSet());;
+                if (!shopErpSet) {
+                    this.options.buttons.push({ id: 'cr_shop_set_erp', text: 'Configure ERP (DTFS)', link: '/erp/shopSetting?e=T&id=' + shop.id });
+                } 
+
+                if (shopEposSet && shopErpSet) {
                     this.options.buttons.push({ id: 'cr_shop_activate', text: 'Activate Store', function: 'activateShop' });
-                } else {
-                    if (!shopEpos.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_epos', text: 'Configure EPoS (DTSF)', link: '/epos/shopSetting?e=T&id=' + shopEpos.id }); }
-                    if (!shopErp.isSet()) { this.options.buttons.push({ id: 'cr_shop_set_erp', text: 'Configure ERP (DTSF)', link: '/erp/shopSetting?e=T&id=' + shopErp.id }); }
                 }
             }
         }
@@ -112,6 +120,15 @@ class CxShopRender extends RenderBase {
         this.options.highlights = [
             { column: _cxSchema.cx_shop.STATUS, op: '=', value: _cxConst.CX_SHOP.STATUS.INACTIVE, style: 'color: orange;' },
         ];
+        var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
+        for (var cx = 0; cx < shopColors.length; cx++) {
+            if (!shopColors[cx].shopColor) { continue; }
+            this.options.cellHighlights.push({
+                column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopCode']
+            })
+        }
+
     }
 
     async dropDown() {
