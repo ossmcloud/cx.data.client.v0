@@ -81,26 +81,29 @@ class CrTranTypeConfigRender extends RenderBase {
 
                     {
                         group: 'cb', title: 'cash-book configurations', column: 2, columnCount: 2, inline: true, fields: [
-                            { name: _cxSchema.cr_tran_type_config.CBTRANTYPEID, label: 'CB Type', column: 1, lookUps: cbTranTypeLookUps },
-                            { name: _cxSchema.cr_tran_type_config.CBHEADING, label: 'CB Heading', column: 2 },
-                            { name: _cxSchema.cr_tran_type_config.DUPLICATEAS, label: 'Duplicate As', column: 1, lookUps: duplicateAsLookUps },
-                            { name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, label: 'Declarations', lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), column: 2 },
                             {
-                                group: 'cb1', column: 1, columnCount: 3, inline: true, fields: [
-                                    { name: _cxSchema.cr_tran_type_config.IGNORE, label: 'Ignore', column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config.INVERTSIGN, label: 'Invert Sign', column: 2 },
-                                    { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 3 },
+                                group: 'cb0', column: 1, columnCount: 1, inline: true, fields: [
+                                    { name: _cxSchema.cr_tran_type_config.CBTRANTYPEID, label: 'CB Type', column: 1, lookUps: cbTranTypeLookUps },
+                                    { name: _cxSchema.cr_tran_type_config.CBHEADING, label: 'CB Heading', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.CBREFERENCE, label: 'CB Reference', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 2, width: '100px' },
+                                    { name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, label: 'Declarations', lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.DUPLICATEAS, label: 'Duplicate As', column: 1, lookUps: duplicateAsLookUps },
                                 ]
                             },
                             {
-                                group: 'cb2', column: 1, columnCount: 3, inline: true, fields: [
-                                    { name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, label: 'Ignore store gl segments', column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, label: 'Split posting by reference', column: 2, noRender: (!this.dataSource.requiresDeclaration) },
+                                group: 'cb1', column: 2, columnCount: 1, inline: true, fields: [
                                     
+                                    { name: _cxSchema.cr_tran_type_config.IGNORE, label: 'Ignore', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.INVERTSIGN, label: 'Invert Sign', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, label: 'Ignore store gl segments', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, label: 'Split posting by reference', column: 1, noRender: (!this.dataSource.requiresDeclaration) },
+                                    { name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, label: 'Show In Expanded List', column: 1 },
                                 ]
                             },
-                            { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 2, width: '100px' },
-                            { name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, label: 'Show In Cashbook Expanded List', column: 2, width: '100px' },
+                            
+                            
 
 
                         ]
@@ -203,7 +206,8 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'c/b tran. type', name: 'cbTranType', align: 'center' },
             { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), align: 'center' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING },
-            { title: 'c/b description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
+            { title: 'c/b reference', name: _cxSchema.cr_tran_type_config.CBREFERENCE },
+            { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
             { title: 'sort', name: _cxSchema.cr_tran_type_config.SORTINDEX, width: '35px', nullText: '' },
 
             { title: 'allow<br />edit', name: _cxSchema.cr_tran_type_config.ALLOWEDIT, align: 'center', nullText: '' },
