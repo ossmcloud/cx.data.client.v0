@@ -84,6 +84,14 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.documentNumber like @documentNumber';
             query.params.push({ name: 'documentNumber', value: '%' + params.tno });
         }
+        if (params.tref) {
+            query.sql += ' and d.documentReference like @documentReference';
+            query.params.push({ name: 'documentReference', value: '%' + params.tref });
+        }
+        if (params.tref2) {
+            query.sql += ' and d.documentSecondReference like @documentSecondReference';
+            query.params.push({ name: 'documentSecondReference', value: '%' + params.tref2 });
+        }
         if (params.tt) {
             query.sql += ' and d.documentType = @documentType';
             query.params.push({ name: 'documentType', value: params.tt });

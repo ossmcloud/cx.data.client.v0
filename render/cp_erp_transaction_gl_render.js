@@ -10,16 +10,16 @@ class CPErpTransactionGLRender extends RenderBase {
     }
 
     async _list() {
-        
-        var textInput = null; var textInputReadOnly = null; var numberInput = null; 
+
+        var textInput = null; var textInputReadOnly = null; var numberInput = null;
         if (this.options.mode == 'edit') {
             textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT };
             textInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true };
-            numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC };
-            
+            numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: true };
+
             this.options.listActions = true;
             this.options.rowTemplate = this.dataSource.createNew();
-            
+
         }
 
         this.options.columns = [
