@@ -52,15 +52,32 @@ class ErpTraderAccount extends RenderBase {
             }
         ];
 
-        // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
-        //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
-        // }
+
+        var cxTraders = this.dataSource.cx.table(_cxSchema.cx_traderAccount);
+        await cxTraders.select({ erp: this.dataSource.traderAccountId });
+
+        if (cxTraders.records.count > 0) {
+            var link = '/cr/config/trader-account?id=';
+            var html = '';
+            cxTraders.each(function (r, i) {
+                if (i > 0) { html += ', '; }
+                html += `<a href="${link + r.id}" target="_blank">[${r.traderCode}] ${r.traderName}</a>`;
+            })
+
+            this.options.formBanner = `this trader is linked to ${cxTraders.records.count} EPoS trader(s) : ` + html;
+        } else {
+            if (this.options.mode == 'view') {
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                    this.options.buttons.push({ id: 'cx_create_account', text: 'create cx account', function: 'createCxAccount' });
+                }
+            }
+        }
     }
 
     async _list() {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
-        
+
         this.options.recordTitle = 'trader account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
@@ -71,7 +88,7 @@ class ErpTraderAccount extends RenderBase {
         this.options.columns = [
             { name: 'traderAccountId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
-            { name: 'traderType', title: 'type' },
+            { name: 'traderType', title: 'type', width: '50px' },
             { name: 'traderCode', title: 'trader code' },
             { name: 'traderName', title: 'trader name' },
             { name: 'contact', title: 'contact' },
@@ -79,10 +96,23 @@ class ErpTraderAccount extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
-        this.options.highlights = [
-            { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.CUSTOMER, style: 'color: green;' },
-            { column: _cxSchema.cx_traderAccount.TRADERTYPE, op: '=', value: _cxConst.CX_TRADER_TYPE.SUPPLIER, style: 'color: blue;' },
-        ];
+
+        var appendStyle = 'padding: 3px 5px 1px 5px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_traderAccount.TRADERTYPE,
+            columns: [_cxSchema.cx_traderAccount.TRADERTYPE],
+            op: '=',
+            value: _cxConst.CX_TRADER_TYPE.CUSTOMER,
+            style: 'background-color: green; color: white; ' + appendStyle,
+        })
+        this.options.cellHighlights.push({
+            column: _cxSchema.cx_traderAccount.TRADERTYPE,
+            columns: [_cxSchema.cx_traderAccount.TRADERTYPE],
+            op: '=',
+            value: _cxConst.CX_TRADER_TYPE.SUPPLIER,
+            style: 'background-color: #1982c4; color: white; ' + appendStyle,
+        })
 
     }
 
