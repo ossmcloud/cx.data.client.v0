@@ -27,7 +27,7 @@ class CPProductAliasRender extends RenderBase {
         this.options.fields = [mainInfoGroup];
 
         mainInfoGroup.fields.push({
-            group: 'main1', title: 'product info', column: 1, columnCount: 1, fields: [
+            group: 'main1', title: 'alias info', column: 1, columnCount: 1, fields: [
                 {
                     group: 'main1.col1', column: 1, columnCount: 1, style:'width: 100%; display: block;', fields: [
                         { name: _cxSchema.cp_productAlias.ITEMCODE, label: 'code' },
