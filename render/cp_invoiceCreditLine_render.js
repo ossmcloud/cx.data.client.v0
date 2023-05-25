@@ -23,14 +23,15 @@ class CPInvoiceReturnLineRender extends RenderBase {
             //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
 
             { name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
-            { name: _cxSchema.cp_invoiceCreditLine.LINESTATUS, title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
+            { name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
+            { title: ' ', name: 'productIcon', width: '10px', unbound: true },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' },
             { name: _cxSchema.cp_invoiceCreditLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' },
             { name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px' },
             { name: _cxSchema.cp_invoiceCreditLine.UNITPRICE, title: 'unit cost', align: 'right', width: '60px', formatMoney: 'N2' },
-            { name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
+            { name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', nullText: '' },
             { name: _cxSchema.cp_invoiceCreditLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
             { name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'left', width: '50px', formatPercent: true },
             { name: _cxSchema.cp_invoiceCreditLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
@@ -58,9 +59,33 @@ class CPInvoiceReturnLineRender extends RenderBase {
                 op: '=',
                 value: s.value,
                 style: _cxConst.CP_DOCUMENT_LINE.STATUS.getStyleInverted(s.value) + applyStyle,
-                columns: [_cxSchema.cp_invoiceCreditLine.LINESTATUS]
+                columns: [_cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg']
             })
         }
+
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_invoiceCreditLine.DEPMAPCONFIGID,
+            op: '=',
+            value: null,
+            style: 'background-color: rgb(175,0,0); ' + applyStyle,
+            columns: [_cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg']
+        });
+
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_invoiceCreditLine.PRODUCTID,
+            // op: '=',
+            // value: null,
+            // style: 'background-color: rgb(230,0,0); ' + applyStyle,
+            columns: ['productIcon'],
+            customStyle: function (object, value, highlight) {
+                if (value == null || value == '') {
+                    return 'background-color: rgb(175,0,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                } else {
+                    return 'background-color: rgb(0,125,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                }
+            }
+
+        });
 
     }
 

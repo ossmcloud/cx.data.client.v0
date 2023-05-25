@@ -712,9 +712,9 @@ const CP_DOCUMENT_LINE = {
         FreeStock: 3,
         REFRESH: 8,
         ERROR: 9,
-        Reconciled_None: 10,
-        Reconciled_Part: 11,
-        Reconciled_Full: 12,
+        // Reconciled_None: 10,
+        // Reconciled_Part: 11,
+        // Reconciled_Full: 12,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {

@@ -68,6 +68,8 @@ module.exports = {
         DEPMAPCONFIGID: 'depMapConfigId',
         TAXMAPCONFIGID: 'taxMapConfigId',
         ISUSEREDITED: 'isUserEdited',
+        PRODUCTID: 'productId',
+        ALIASID: 'aliasId',
     },
 
     cp_deliveryReturnLog: {
@@ -250,6 +252,8 @@ module.exports = {
         DEPMAPCONFIGID: 'depMapConfigId',
         TAXMAPCONFIGID: 'taxMapConfigId',
         ISUSEREDITED: 'isUserEdited',
+        PRODUCTID: 'productId',
+        ALIASID: 'aliasId',
     },
 
     cp_invoiceCreditLog: {

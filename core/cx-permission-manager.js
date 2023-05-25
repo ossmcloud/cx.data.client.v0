@@ -148,6 +148,14 @@ async function getPermission(recordType, role) {
         //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
+
+
+    if (recordType == _cxSchema.cp_product.TBL_NAME || recordType == _cxSchema.cp_productAlias.TBL_NAME || recordType == _cxSchema.cp_productAliasShop.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
+        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');
         ex.permissionViolation = true;

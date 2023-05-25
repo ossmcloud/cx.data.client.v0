@@ -1,0 +1,190 @@
+'use script';
+
+const _cxSchema = require('../cx-client-schema');
+const _cxConst = require('../cx-client-declarations');
+const RenderBase = require('./render_base');
+
+class CPProductRender extends RenderBase {
+    constructor(dataSource, options) {
+        super(dataSource, options);
+        this.title = 'retail product';
+    }
+
+    async _record() {
+
+        this.options.title = `[${this.dataSource.itemCode}] ${this.dataSource.itemDescription}`;
+
+        var mainInfoGroup = { group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 350px', 'min-width: 250px'], fields: [] };
+        this.options.fields = [mainInfoGroup];
+
+        //
+        //
+        mainInfoGroup.fields.push({
+            group: 'main1', title: 'product info', column: 1, columnCount: 2, fields: [
+                {
+                    group: 'main1.col1', column: 1, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_product.ITEMCODE, label: 'code' },
+                        { name: _cxSchema.cp_product.ITEMDESCRIPTION, label: 'description' },
+                        { name: _cxSchema.cp_product.ITEMBARCODE, label: 'barcode' },
+                        { name: _cxSchema.cp_product.ITEMCOSTPRICE, label: 'cost price' },
+                        { name: _cxSchema.cp_product.ITEMSIZE, label: 'size' },
+                    ]
+                },
+                {
+                    group: 'main1.col2', column: 2, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_product.SUPPLIERCODE, label: 'supplier' },
+                        { name: _cxSchema.cp_product.SUPPLIERITEMCODE, label: 'supplier code' },
+                        { name: _cxSchema.cp_product.SUPPLIERITEMDESCRIPTION, label: 'supplier description' },
+                    ]
+                }
+            ]
+        });
+        //
+        //
+        mainInfoGroup.fields.push({
+            group: 'main2', title: 'mapping info', column: 2, columnCount: 1, fields: [
+                {
+                    group: 'main2.col1', column: 1, columnCount: 1, fields: [
+                        { name: 'aliasInfo', label: 'alias', readOnly: true },
+                        { name: 'depMapInfo', label: 'dep. config', readOnly: true },
+                        { name: 'taxMapInfo', label: 'tax config', readOnly: true },
+                        { name: 'traderInfo', label: 'trader account', readOnly: true },
+                    ]
+                }
+            ]
+        });
+        //
+        //
+        mainInfoGroup.fields.push({
+            group: 'main3', title: 'epos info', column: 3, columnCount: 2, fields: [
+                {
+                    group: 'main3.col1', column: 1, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_product.RAW_EPOSCODE, label: 'code', readOnly: true },
+                        { name: _cxSchema.cp_product.RAW_EPOSDESCRIPTION, label: 'description', readOnly: true },
+                        { name: _cxSchema.cp_product.RAW_EPOSBARCODE, label: 'barcode', readOnly: true },
+                        { name: _cxSchema.cp_product.RAW_COSTPRICE, label: 'cost price', readOnly: true },
+                        { name: _cxSchema.cp_product.RAW_ITEMSIZE, label: 'size', readOnly: true },
+                    ]
+                },
+                {
+                    group: 'main3.col2', column: 2, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_product.RAW_EPOSDEPARTMENT, label: 'department', readOnly: true },
+                        { name: _cxSchema.cp_product.RAW_EPOSSUBDEPARTMENT, label: 'sub-department', readOnly: true },
+
+                    ]
+                }
+            ]
+        });
+        //
+        //
+        mainInfoGroup.fields.push({
+            group: 'audit', title: 'audit info', column: 4, columnCount: 1, fields: [
+                {
+                    group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'created', label: 'created', column: 1, readOnly: true },
+                        { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                    ]
+                },
+                {
+                    group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                        { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                    ]
+                }
+            ]
+        });
+
+
+
+
+    }
+
+    async _list() {
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
+
+        this.options.recordTitle = 'product';
+        this.options.filters = [
+            await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            { id: 'cx_item_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ic', label: 'item code' },
+            { id: 'cx_item_descr', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'id', label: 'item description' },
+            { id: 'cx_item_barcode', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ibc', label: 'item barcode' },
+            { id: 'cx_item_supplier', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'sup', label: 'supplier' },
+            { id: 'cx_item_dep_cfg', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'dep', label: 'dep. config' },
+        ];
+        this.options.columns = [
+            { name: 'productId', title: ' ', align: 'center' },
+            { name: 'shopInfo', title: 'store', width: '200px' },
+            { title: ' ', name: 'depMappedIcon', width: '10px', unbound: true },
+            { title: ' ', name: 'taxMappedIcon', width: '10px', unbound: true },
+            { name: 'itemCode', title: 'item code' },
+            { name: 'itemBarcode', title: 'item bar code' },
+            //{ name: 'raw_eposBarcode', title: 'item bar code (epos)' },
+            { name: 'itemDescription', title: 'description' },
+            { name: 'depMapInfo', title: 'dep. config' },
+            { name: 'supplierCode', title: 'supplier' },
+
+            //{ name: 'supplierItemCode', title: 'supplier code', nullText: '' },
+            //{ name: 'supplierItemDescription', title: 'supplier description', nullText: '' },
+            { name: 'itemCostPrice', title: 'cost price', align: 'right', width: '90px', formatMoney: 'N2' },
+
+            { name: 'aliasInfoNull', title: 'alias' },
+            
+            // { name: 'created', title: 'created', align: 'center', width: '130px' },
+            // { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
+            { name: 'modified', title: 'modified', align: 'center', width: '130px' },
+            { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
+        ];
+
+        this.options.cellHighlights = [];
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_product.DEPMAPCONFIGID,
+            columns: ['depMappedIcon'],
+            customStyle: function (object, value, highlight) {
+                if (value == null || value == '') {
+                    return 'background-color: rgb(175,0,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                } else {
+                    return 'background-color: rgb(0,125,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                }
+            }
+        });
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_product.TAXMAPCONFIGID,
+            columns: ['taxMappedIcon'],
+            customStyle: function (object, value, highlight) {
+                if (value == null || value == '') {
+                    return 'background-color: rgb(175,0,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                } else {
+                    return 'background-color: rgb(0,125,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                }
+            }
+        });
+
+
+    }
+
+    async dropDown(options) {
+        if (!options) { options = {}; }
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a product'; }
+        if (this.options.label == undefined) { this.options.label = 'product'; }
+        this.options.noPaging = true;
+
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record[options.valueField || _cxSchema.cp_product.PRODUCTID],
+                text: '[' + record.itemCode + '] ' + record.itemDescription,
+            });
+        });
+        this.options.items = dropDownItems;
+    }
+
+}
+
+module.exports = CPProductRender;
+
+
+

@@ -52,6 +52,8 @@ const _fieldNames = {
     DEPMAPCONFIGID: 'depMapConfigId',
     TAXMAPCONFIGID: 'taxMapConfigId',
     ISUSEREDITED: 'isUserEdited',
+    PRODUCTID: 'productId',
+    ALIASID: 'aliasId',
 
 }
 //
@@ -91,6 +93,8 @@ const _fields = {
     depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    productId: { name: 'productId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    aliasId: { name: 'aliasId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -306,6 +310,18 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISUSEREDITED);
     } set isUserEdited(val) {
         super.setValue(_fieldNames.ISUSEREDITED, val);
+    }
+
+    get productId() {
+        return super.getValue(_fieldNames.PRODUCTID);
+    } set productId(val) {
+        super.setValue(_fieldNames.PRODUCTID, val);
+    }
+
+    get aliasId() {
+        return super.getValue(_fieldNames.ALIASID);
+    } set aliasId(val) {
+        super.setValue(_fieldNames.ALIASID, val);
     }
 
 
