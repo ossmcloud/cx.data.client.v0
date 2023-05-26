@@ -10,7 +10,7 @@ class cp_productAlias_Collection extends _persistentTable.Table {
         return new cp_productAlias(this, defaults);
     }
 
-    #buildQuery() {
+    buildQuery() {
         return `
             select          prod.*,
                             dep.eposDepartment, dep.eposSubDepartment, dep.eposDescription,
@@ -25,7 +25,7 @@ class cp_productAlias_Collection extends _persistentTable.Table {
     }
 
     async select(params) {
-        var query = { sql: this.#buildQuery(), params: [] };
+        var query = { sql: this.buildQuery(), params: [] };
         if (params.ic) {
             query.sql += ' and prod.itemCode like @itemCode';
             query.params.push({ name: 'itemCode', value: params.ic + '%' });
@@ -51,7 +51,7 @@ class cp_productAlias_Collection extends _persistentTable.Table {
     }
 
     async fetch(id) {
-        var query = { sql: this.#buildQuery(), params: [{ name: 'aliasId', value: id }] };
+        var query = { sql: this.buildQuery(), params: [{ name: 'aliasId', value: id }] };
         query.sql += ` and prod.aliasId = @aliasId`;
         query.noResult = 'null';
         query.returnFirst = true;
@@ -113,7 +113,7 @@ class cp_productAlias extends _persistentTable.Record {
         }
     }  
 
-    
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

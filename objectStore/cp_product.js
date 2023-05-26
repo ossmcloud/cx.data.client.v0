@@ -10,7 +10,7 @@ class cp_product_Collection extends _persistentTable.Table {
         return new cp_product(this, defaults);
     }
 
-    #buildQuery() {
+    buildQuery() {
         return `
             select          prod.*, s.shopCode, s.shopName, 
                             dep.eposDepartment, dep.eposSubDepartment, dep.eposDescription,
@@ -31,7 +31,7 @@ class cp_product_Collection extends _persistentTable.Table {
 
     async select(params) {
 
-        var query = { sql: this.#buildQuery(), params: [] };
+        var query = { sql: this.buildQuery(), params: [] };
         if (params.s) {
             query.sql += ' and prod.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
@@ -69,7 +69,7 @@ class cp_product_Collection extends _persistentTable.Table {
     }
 
     async fetch(id) {
-        var query = { sql: this.#buildQuery(), params: [{ name: 'productId', value: id }] };
+        var query = { sql: this.buildQuery(), params: [{ name: 'productId', value: id }] };
         query.sql += ` and prod.productId = @productId`;
         query.noResult = 'null';
         query.returnFirst = true;
