@@ -11,13 +11,23 @@ class RenderBase {
     #options = null;
     #dataSource = null;
     #dataSourceType = null;
-    constructor(dataSource, options) {
+    #dataSourceColumns = [];
+    #dataSourceFilters = [];
+    #autoLoad = false;
+    constructor(dataSource, options, paging) {
         if (!dataSource) { throw new _ex.CxNullArgError('dataSource'); }
         if (!options) { options = {}; }
         this.#dataSource = dataSource;
         this.#dataSourceType = ((dataSource.table) ? dataSource.table.type : dataSource.type);
         this.#options = options;
         this.formatOptions();
+        if (paging === true) { this.setPaging(); }
+    }
+
+    get autoLoad() {
+        return this.#autoLoad;
+    } set autoLoad(val) {
+        this.#autoLoad = val;
     }
 
     get options() {
@@ -34,6 +44,8 @@ class RenderBase {
     } set title(value) {
         this.#title = value;
     }
+    get dataSourceColumns() { return this.#dataSourceColumns; }
+    get dataSourceFilters() { return this.#dataSourceFilters; }
 
     formatOptions() {
         // get data source title
@@ -73,6 +85,166 @@ class RenderBase {
         if (!this.options.cellHighlights) {
             this.options.cellHighlights = [];
         }
+    }
+
+    async getUserListOptions() {
+        var options = {};
+
+        options.copyColumn = function (fieldName, column) {
+            var option = this[fieldName];
+            if (option === undefined) { return; }
+            if (option.column) {
+                for (var optionProp in option.column) {
+                    column[optionProp] = option.column[optionProp];
+                }
+            }
+        }
+        options.copyFilter = function (fieldName, filter) {
+            var option = this[fieldName];
+            if (option === undefined) { return; }
+            if (option.filter) {
+                for (var optionProp in option.filter) {
+                    filter[optionProp] = option.filter[optionProp];
+                }
+            }
+        }
+
+        return options;
+    }
+
+    async initColumnsAndFilters() {
+        var sortIdx = 0; var sortIdxFilter = 0;
+        var dataSource = this.dataSource;
+        var userListOptions = await this.getUserListOptions();
+        
+
+        for (var f in dataSource.fields) {
+            var field = dataSource.fields[f];
+
+            var column = { name: f, title: f.fromCamelCase() };
+            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: f, inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
+            if (field.pk) {
+                column.align = 'center';
+                column.title = ' ';
+            }
+            if (field.dataType == 'datetime') {
+                column.align = 'center';
+                column.width = '130px';
+                filter.label += ' (from)';
+                filter.inputType = _cxConst.RENDER.CTRL_TYPE.DATE;
+            }
+            if (!field.pk && (field.dataType == 'bigint' || field.dataType == 'int')) {
+                //if (f.substring(f.length - 2).toLowerCase() == 'id') { continue; }
+                column.align = 'right';
+                column.formatNumber = 'N0';
+                column.addTotals = true;
+            }
+            if (field.dataType == 'money') {
+                column.align = 'right';
+                column.formatMoney = 'N0';
+                column.addTotals = true;
+            }
+
+            if (field.name == 'createdBy' || field.name == 'modifiedBy') {
+                column.addTotals = false;
+                column.width = '90px';
+            }
+
+            userListOptions.copyColumn(field.name, column);
+            userListOptions.copyFilter(field.name, filter);
+
+            if (await this.initColumn(field, column) !== false) {
+                if (column.hide !== true) {
+                    if (column.sortIdx) {
+                        sortIdx = column.sortIdx + 1;
+                    } else {
+                        column.sortIdx = (sortIdx * 10);
+                        sortIdx++;
+                    }
+                    this.dataSourceColumns.push(column);
+                }
+            }
+
+            if (!field.pk && field.name != 'createdBy' && field.name != 'modifiedBy') {
+                if (await this.initFilter(field, filter) !== false) {
+                    if (filter.hide !== true) {
+                        if (filter.sortIdx) {
+                            sortIdxFilter = filter.sortIdx + 1;
+                        } else {
+                            filter.sortIdx = (sortIdxFilter * 10);
+                            sortIdxFilter++;
+                        }
+
+                        if (filter.replace) {
+                            filter.replace.sortIdx = filter.sortIdx;
+                            this.#dataSourceFilters.push(filter.replace);
+                        } else {
+                            this.#dataSourceFilters.push(filter);
+                            if (field.dataType == 'datetime') {
+                                var filter2 = {};
+                                for (var fk in filter) { filter2[fk] = filter[fk]; }
+                                filter2.id += '_2';
+                                filter2.fieldName += 'To';
+                                filter2.label = filter.label.replace('from', 'to');
+                                this.#dataSourceFilters.push(filter2);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        _cx.list.sortArray(this.#dataSourceColumns, 'sortIdx');
+        _cx.list.sortArray(this.#dataSourceFilters, 'sortIdx');
+
+        this.options.filters = this.dataSourceFilters;
+        this.options.columns = this.dataSourceColumns;
+
+
+    }
+
+    async initColumn(field, column) { }
+    async initFilter(field, column) { }
+
+
+
+    getColumn(fieldName) {
+        for (var dsx = 0; dsx < this.dataSourceColumns.length; dsx++) {
+            if (this.dataSourceColumns[dsx].name == fieldName) { return this.dataSourceColumns[dsx]; }
+        }
+        return null;
+    }
+    setColumn(fieldName, column) {
+        for (var dsx = 0; dsx < this.dataSourceColumns.length; dsx++) {
+            if (this.dataSourceColumns[dsx].name == fieldName) {
+                this.dataSourceColumns[dsx] = column;
+                break;
+            }
+        }
+        return column;
+    }
+
+    getFilter(fieldName) {
+        for (var dsx = 0; dsx < this.#dataSourceFilters.length; dsx++) {
+            if (this.dataSourceFilters[dsx].fieldName == fieldName) { return this.dataSourceFilters[dsx]; }
+        }
+        return null;
+    }
+    setFilter(fieldName, filter) {
+        for (var dsx = 0; dsx < this.#dataSourceFilters.length; dsx++) {
+            if (this.dataSourceFilters[dsx].fieldName == fieldName) {
+                this.dataSourceFilters[dsx] = filter;
+                break;
+            }
+        }
+        return filter;
+    }
+
+    setPaging() {
+        if (!this.options) { this.options = {}; }
+        this.options.paging = true;
+        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
     }
 
     async get(renderType, options) {
@@ -121,11 +293,12 @@ class RenderBase {
 
     async list(request, h) {
         await this.setPermission();
+        if (this.autoLoad === true) { await this.initColumnsAndFilters(); }
         await this._list(request, h);
 
     }
     async _list(request, h) {
-        throw new Error('RenderBase._list not overwritten')
+        //throw new Error('RenderBase._list not overwritten')
     }
 
 
