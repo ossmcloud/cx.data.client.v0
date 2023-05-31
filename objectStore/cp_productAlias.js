@@ -61,7 +61,26 @@ class cp_productAlias_Collection extends _persistentTable.Table {
     }
 
 
-
+    async toLookUpList(shopId) {
+        var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
+        query.sql = `
+            select	alias.aliasId , ((alias.itemDescription + case when s.shopCode is null then '' else ' [' + s.shopCode + ']' end) + ' [' + alias.itemCode + ']') as text
+            from	cp_productAlias alias
+            left outer join cp_productAliasShop aliasS ON aliasS.aliasId = alias.aliasId
+            left outer join cx_shop s ON s.shopId = aliasS.shopId
+            order by alias.itemCode, s.shopId
+        `;
+        var lookUpValues = [{ value: '', text: '' }];
+        var result = await this.db.exec(query);
+        for (var rx = 0; rx < result.rows.length; rx++) {
+            var row = result.rows[rx];
+            lookUpValues.push({
+                value: row.aliasId,
+                text: row.text,
+            })
+        }
+        return lookUpValues;
+    }
     
 }
 //
@@ -76,6 +95,8 @@ class cp_productAlias extends _persistentTable.Record {
     #eposTaxDescription = '';
     constructor(table, defaults) {
         super(table, defaults);
+
+        if (!defaults) { defaults = {}; }
 
         this.#eposDepartment = defaults['eposDepartment'] || '';
         this.#eposSubDepartment = defaults['eposSubDepartment'] || '';

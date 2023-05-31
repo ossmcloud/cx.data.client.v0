@@ -10,8 +10,8 @@ class CPErpTransactionTaxRender extends RenderBase {
     }
 
     async _list() {
-        var textInput = null; var textInputReadOnly = null; var numberInput = null; 
-        if (this.options.mode == 'edit') {
+        var textInput = null; var textInputReadOnly = null; var numberInput = null;
+        if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT };
             textInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true };
             numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC };
@@ -26,10 +26,10 @@ class CPErpTransactionTaxRender extends RenderBase {
             { name: _cxSchema.cp_erp_transaction_tax.TAXRATE, title: 'Rate', align: 'right', width: '50px', formatMoney: true, input: textInputReadOnly },
             { name: _cxSchema.cp_erp_transaction_tax.TAXDESCRIPTION, title: 'Description', input: textInputReadOnly },
             { name: _cxSchema.cp_erp_transaction_tax.NARRATIVE, title: 'Narrative', nullText: '', input: textInput },
-            { name: _cxSchema.cp_erp_transaction_tax.VALUENET, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
-            { name: _cxSchema.cp_erp_transaction_tax.VALUETAX, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
-            { name: _cxSchema.cp_erp_transaction_tax.VALUEGROSS, title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true },
-            
+            { name: _cxSchema.cp_erp_transaction_tax.VALUENET + 'Signed', title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
+            { name: _cxSchema.cp_erp_transaction_tax.VALUETAX + 'Signed', title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
+            { name: _cxSchema.cp_erp_transaction_tax.VALUEGROSS + 'Signed', title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true },
+
         ];
 
         this.options.cellHighlights = [];
@@ -46,6 +46,18 @@ class CPErpTransactionTaxRender extends RenderBase {
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Ready));
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Posted));
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Error));
+
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_erp_transaction_tax.VALUEGROSS + 'Signed',
+            op: '<',
+            value: 0,
+            style: 'color: rgb(230,0,0);',
+            columns: [
+                _cxSchema.cp_erp_transaction_tax.VALUENET + 'Signed',
+                _cxSchema.cp_erp_transaction_tax.VALUETAX + 'Signed',
+                _cxSchema.cp_erp_transaction_tax.VALUEGROSS + 'Signed'
+            ]
+        });
     }
 
 

@@ -52,7 +52,7 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
             select	eposTaxCode, eposTaxRate, eposDescription
                 
             from	cx_map_config_tax tax
-            inner join cx_shop s on tax.mapConfigId = s.depMapConfigId
+            inner join cx_shop s on tax.mapConfigId = s.taxMapConfigId
             where	s.shopId = @shopId
             order by eposTaxCode`;
 
@@ -63,6 +63,30 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
             lookUpValues.push({
                 value: row.eposTaxCode,
                 text: row.eposDescription,
+                object: JSON.stringify(row),
+            })
+        }
+
+        return lookUpValues;
+    }
+
+    async toLookupFullList(shopId) {
+        var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
+        query.sql = `
+            select	tax.taxMapConfigId, eposTaxCode + ': '+ eposDescription + ' (' + CONVERT(VARCHAR,eposTaxRate) + '%)' as text
+                
+            from	cx_map_config_tax tax
+            inner join cx_shop s on tax.mapConfigId = s.taxMapConfigId
+            where	s.shopId = @shopId
+            order by eposTaxCode`;
+
+        var lookUpValues = [{ value: '', text: '' }];
+        var result = await this.db.exec(query);
+        for (var rx = 0; rx < result.rows.length; rx++) {
+            var row = result.rows[rx];
+            lookUpValues.push({
+                value: row.taxMapConfigId,
+                text: row.text,
                 object: JSON.stringify(row),
             })
         }

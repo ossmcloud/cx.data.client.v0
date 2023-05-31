@@ -130,6 +130,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ISUSEREDITED: 'isUserEdited',
+        INVGRPID: 'invGrpId',
     },
 
     cp_erp_transaction_gl: {
@@ -339,6 +340,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DOCLINEID: 'docLineId',
     },
 
     cp_productAlias: {

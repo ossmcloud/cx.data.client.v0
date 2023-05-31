@@ -42,6 +42,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     ISUSEREDITED: 'isUserEdited',
+    INVGRPID: 'invGrpId',
 
 }
 //
@@ -49,7 +50,7 @@ const _fieldNames = {
 //
 const _fields = {
     erpTranId: { name: 'erpTranId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    invCreId: { name: 'invCreId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    invCreId: { name: 'invCreId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     erpTranTypeId: { name: 'erpTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     transactionDate: { name: 'transactionDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
@@ -71,6 +72,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    invGrpId: { name: 'invGrpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -226,6 +228,12 @@ class Persistent_cp_erp_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISUSEREDITED);
     } set isUserEdited(val) {
         super.setValue(_fieldNames.ISUSEREDITED, val);
+    }
+
+    get invGrpId() {
+        return super.getValue(_fieldNames.INVGRPID);
+    } set invGrpId(val) {
+        super.setValue(_fieldNames.INVGRPID, val);
     }
 
 

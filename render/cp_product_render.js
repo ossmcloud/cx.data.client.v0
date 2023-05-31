@@ -106,36 +106,61 @@ class CPProductRender extends RenderBase {
         this.options.recordTitle = 'product';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            { id: 'cx_item_source', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'src', label: 'source', width: '130px' },
             { id: 'cx_item_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ic', label: 'item code' },
             { id: 'cx_item_descr', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'id', label: 'item description' },
             { id: 'cx_item_barcode', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ibc', label: 'item barcode' },
             { id: 'cx_item_supplier', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'sup', label: 'supplier' },
             { id: 'cx_item_dep_cfg', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'dep', label: 'dep. config' },
+            { id: 'cx_item_map_status', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'map', label: 'map status', lookUps: _cxConst.CP_PRODUCT.MAP_STATUS.toList() },
         ];
-        this.options.columns = [
-            { name: 'productId', title: ' ', align: 'center' },
-            { name: 'shopInfo', title: 'store', width: '200px' },
-            { title: ' ', name: 'depMappedIcon', width: '10px', unbound: true },
-            { title: ' ', name: 'taxMappedIcon', width: '10px', unbound: true },
-            { name: 'itemCode', title: 'item code' },
-            { name: 'itemBarcode', title: 'item bar code' },
-            //{ name: 'raw_eposBarcode', title: 'item bar code (epos)' },
-            { name: 'itemDescription', title: 'description' },
-            { name: 'depMapInfo', title: 'dep. config' },
-            { name: 'supplierCode', title: 'supplier' },
 
-            //{ name: 'supplierItemCode', title: 'supplier code', nullText: '' },
-            //{ name: 'supplierItemDescription', title: 'supplier description', nullText: '' },
-            { name: 'itemCostPrice', title: 'cost price', align: 'right', width: '90px', formatMoney: 'N2' },
+        var map = (this.options.query) ? parseInt(this.options.query.map || 0) : 0;
 
-            { name: 'aliasInfoNull', title: 'alias' },
+        if (map > 1) {
+            this.options.columns = [
+                { name: 'productId', title: ' ', align: 'center' },
+                { name: 'shopInfo', title: 'store', width: '200px' },
+                { name: 'depMappedIcon', title: ' ', width: '10px', unbound: true },
+                { name: 'taxMappedIcon', title: ' ', width: '10px', unbound: true },
+                { name: 'itemCode', title: 'item code' },
+                { name: 'itemBarcode', title: 'item bar code' },
+                { name: 'itemDescription', title: 'description' },
+                { name: 'supplierCode', title: 'supplier' },
+            ];
+
+            this.options.lookupLists = { aliasInfoNull: await this.dataSource.cx.table(_cxSchema.cp_productAlias).toLookUpList(this.options.query.s) };
             
-            // { name: 'created', title: 'created', align: 'center', width: '130px' },
-            // { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
-            { name: 'modified', title: 'modified', align: 'center', width: '130px' },
-            { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
-        ];
+            if (map == _cxConst.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_DEP) {
+                this.options.columns.push({ name: 'depMapConfigId', title: 'department mapping', width: '500px', input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
+                this.options.lookupLists.depMapConfigId = await this.dataSource.cx.table(_cxSchema.cx_map_config_dep).toLookupFullList(this.options.query.s) ;
+            }
+            if (map == _cxConst.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_TAX) {
+                this.options.columns.push({ name: 'taxMapConfigId', title: 'tax mapping', width: '300px', unbound: true, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
+                this.options.lookupLists.taxMapConfigId = await this.dataSource.cx.table(_cxSchema.cx_map_config_tax).toLookupFullList(this.options.query.s) ;
+            }
 
+            this.options.columns.push({ name: 'aliasId', title: 'alias', width: '350px', unbound: true, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
+            this.options.lookupLists.aliasId = await this.dataSource.cx.table(_cxSchema.cp_productAlias).toLookUpList(this.options.query.s);
+
+        } else {
+            this.options.columns = [
+                { name: 'productId', title: ' ', align: 'center' },
+                { name: 'shopInfo', title: 'store', width: '200px' },
+                { name: 'depMappedIcon', title: ' ', width: '10px', unbound: true },
+                { name: 'taxMappedIcon', title: ' ', width: '10px', unbound: true },
+                { name: 'sourceId', title: 'source' },
+                { name: 'itemCode', title: 'item code' },
+                { name: 'itemBarcode', title: 'item bar code' },
+                { name: 'itemDescription', title: 'description' },
+                { name: 'depMapInfo', title: 'dep. config' },
+                { name: 'supplierCode', title: 'supplier' },
+                { name: 'itemCostPrice', title: 'cost price', align: 'right', width: '90px', formatMoney: 'N2' },
+                { name: 'aliasInfoNull', title: 'alias' },
+                { name: 'modified', title: 'modified', align: 'center', width: '130px' },
+                { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
+            ];
+        }
         this.options.cellHighlights = [];
         this.options.cellHighlights.push({
             column: _cxSchema.cp_product.DEPMAPCONFIGID,

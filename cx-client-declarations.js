@@ -466,6 +466,24 @@ const CR_PREFERENCE = {
 
 }
 
+const CP_PRODUCT = {
+    MAP_STATUS: {
+        ANY: 0,
+        MAPPED: 1,
+        //NOT_MAPPED: 2,
+        NOT_MAPPED_DEP: 2,
+        NOT_MAPPED_TAX: 3,
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                ANY: ' - any -',
+                MAPPED: 'Mapped',
+                //NOT_MAPPED: 'Not Mapped',
+                NOT_MAPPED_DEP: 'Not Mapped (dep)',
+                NOT_MAPPED_TAX: 'Not Mapped (tax)',
+            });
+        }
+    },
+}
 
 const CP_DOCUMENT = {
     PROVIDER: {
@@ -658,6 +676,7 @@ const CP_DOCUMENT = {
         Cancelled: 7,
         Completed: 8,
         ERROR: 9,
+        Deleted: 99,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty);
@@ -835,6 +854,7 @@ module.exports = {
     CP_DOCUMENT: CP_DOCUMENT,
     CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
     CP_DOCUMENT_LOG: CP_DOCUMENT_LOG,
+    CP_PRODUCT: CP_PRODUCT,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

@@ -21,7 +21,11 @@ class CPProductAliasRender extends RenderBase {
     }
 
     async _record() {
-        this.options.title = `[${this.dataSource.itemCode}] ${this.dataSource.itemDescription}`;
+        if (this.dataSource.isNew()) {
+            this.options.title = `[NEW] product alias`;
+        } else {
+            this.options.title = `[${this.dataSource.itemCode}] ${this.dataSource.itemDescription}`;
+        }
 
         var mainInfoGroup = { group: 'main', title: '', columnCount: 3, styles: ['min-width: 500px; max-width: 750px', 'min-width: 250px', 'min-width: 250px'], fields: [] };        
         this.options.fields = [mainInfoGroup];
@@ -72,9 +76,10 @@ class CPProductAliasRender extends RenderBase {
 
         //
         //
-        var associatedProducts = await this.getProductListOptions();
-        this.options.fields.push({ group: 'products', title: 'associated products', column: 1, fields: [associatedProducts] });
-
+        if (!this.dataSource.isNew()) {
+            var associatedProducts = await this.getProductListOptions();
+            this.options.fields.push({ group: 'products', title: 'associated products', column: 1, fields: [associatedProducts] });
+        }
     }
 
     async _list() {

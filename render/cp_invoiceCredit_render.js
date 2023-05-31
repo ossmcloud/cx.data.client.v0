@@ -11,40 +11,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
     }
 
-    async validateErpToken() {
-        var warningMessage = '';
-
-        var erpSettingsInfo = await this.dataSource.cx.exec({
-            sql: `
-                select	    erpSett.dtfsSettingId, prv.isCloud
-                from	    erp_shop_setting erpSett
-                inner join  sys_provider prv ON prv.code = erpSett.erpProvider
-                where	    erpSett.shopId = @shopId
-            `,
-            params: [{ name: 'shopId', value: this.dataSource.shopId }],
-            returnFirst: true,
-        });
-        if (erpSettingsInfo && erpSettingsInfo.isCloud) {
-            var erpToken = await this.dataSource.cx.table(_cxSchema.cx_login_token).fetch(['erp', this.dataSource.cx.tUserId, erpSettingsInfo.dtfsSettingId], true);
-            if (erpToken) {
-                if (erpToken.status != 1) {
-                    warningMessage = '&#9888; your oauth-token is not valid';
-                } else if (erpToken.isExpired) {
-                    warningMessage = '&#9888; your oauth-token is expired';
-                }
-            } else {
-                warningMessage = '&#9888; there is no oauth-token for this store';
-            }
-            if (warningMessage) {
-                warningMessage += ' <a href="#" onclick="window.open(\'../oauth?type=erp&s=' + this.dataSource.shopId + '\'); return false;" >click here to get a token</a>';
-                warningMessage = `<div style="color: var(--warn-color);">${warningMessage}</div>`;
-            }
-
-        }
-
-        return warningMessage;
-    }
-
+    
 
     async getDocumentLineListOptions() {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
@@ -70,7 +37,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ id: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
 
@@ -80,6 +47,11 @@ class CPInvoiceReturnRender extends RenderBase {
 
             var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
             transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+
+            if (erpSett.mergeGLAndTax) {
+                var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+                transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            }
 
         }
         return transactionLinesOptions;
@@ -256,15 +228,19 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async buildFormLists() {
-        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: ['width: 60%; min-width: 500px;', 'min-width: 400px;'], fields: [] };
-        this.options.fields.push(erpSubListsGroup);
 
         var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(this.dataSource.shopId);
+        var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
 
+        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
+        this.options.fields.push(erpSubListsGroup);
+        
         var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
-        var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
-        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] })
-        erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
+        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] });
+        if (!erpSett.mergeGLAndTax) {
+            var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
+            erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] });
+        }
 
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
@@ -302,6 +278,15 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
                     this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                }
+            }
+            // allow to delete if not posted
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
+                    && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
+                   if (!this.dataSource.invGrpId) {
+                        this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                   }
                 }
             }
 

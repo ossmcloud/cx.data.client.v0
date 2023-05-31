@@ -38,7 +38,7 @@ class cp_product_Collection extends _persistentTable.Table {
         }
         if (params.ic) {
             query.sql += ' and (prod.itemCode like @itemCode OR prod.supplierItemCode like @itemCode OR prod.raw_eposCode like @itemCode)';
-            query.params.push({ name: 'itemCode', value: params.ic +'%' });
+            query.params.push({ name: 'itemCode', value: params.ic + '%' });
         }
         if (params.id) {
             query.sql += ' and (prod.itemDescription like @itemDescription OR prod.supplierItemDescription like @itemDescription OR prod.raw_eposDescription like @itemDescription)';
@@ -59,6 +59,24 @@ class cp_product_Collection extends _persistentTable.Table {
         if (params.aid) {
             query.sql += ' and prod.aliasId = @aliasId';
             query.params.push({ name: 'aliasId', value: params.aid });
+        }
+        if (params.src) {
+            query.sql += ' and prod.sourceId = @sourceId';
+            query.params.push({ name: 'sourceId', value: params.src });
+        }
+        if (params.map) {
+            // if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.MAPPED) {
+            //     query.sql += ' and (prod.depMapConfigId is not null or prod.taxMapConfigId is not null)';
+            // } else
+            // if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED) {
+            //     query.sql += ' and (prod.depMapConfigId is null or prod.taxMapConfigId is null)';
+            // } else
+            if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_DEP) {
+                query.sql += ' and prod.depMapConfigId is null';
+            } else if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_TAX) {
+                query.sql += ' and prod.taxMapConfigId is null';
+            }
+
         }
         query.sql += ' order by prod.itemDescription';
         query.paging = {
@@ -96,6 +114,7 @@ class cp_product extends _persistentTable.Record {
     #aliasDescription = '';
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
 
@@ -116,12 +135,12 @@ class cp_product extends _persistentTable.Record {
 
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
-    get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }  
+    get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
     get eposDepartment() { return this.#eposDepartment; }
     get eposSubDepartment() { return this.#eposSubDepartment; }
     get eposDescription() { return this.#eposDescription; }
-    get depMapInfo() { 
+    get depMapInfo() {
         if (this.depMapConfigId) {
             if (this.#eposSubDepartment) {
                 return `[${this.eposDepartment}/${this.eposSubDepartment}] ${this.eposDescription}`;
@@ -131,7 +150,7 @@ class cp_product extends _persistentTable.Record {
         } else {
             return 'dep not mapped';
         }
-    }  
+    }
 
     get eposTaxCode() { return this.#eposTaxCode; }
     get eposTaxRate() { return this.#eposTaxRate; }
@@ -142,7 +161,7 @@ class cp_product extends _persistentTable.Record {
         } else {
             return 'tax not mapped';
         }
-    }  
+    }
 
     get traderCode() { return this.#traderCode; }
     get traderName() { return this.#traderName; }
@@ -152,7 +171,7 @@ class cp_product extends _persistentTable.Record {
         } else {
             return 'trader not mapped';
         }
-    }  
+    }
 
     get aliasCode() { return this.#aliasCode; }
     get aliasDescription() { return this.#aliasDescription; }
@@ -162,14 +181,14 @@ class cp_product extends _persistentTable.Record {
         } else {
             return 'no alias';
         }
-    }  
+    }
     get aliasInfoNull() {
         if (this.aliasId) {
             return `[${this.#aliasCode}] ${this.#aliasDescription}`;
         } else {
             return '';
         }
-    }  
+    }
 
 
 

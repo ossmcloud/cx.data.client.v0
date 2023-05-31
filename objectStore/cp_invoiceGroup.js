@@ -1,5 +1,6 @@
 'use strict'
 //
+const _schema = require('../cx-client-schema');
 const _declarations = require('../cx-client-declarations');
 const _persistentTable = require('./persistent/p-cp_invoiceGroup');
 //
@@ -77,6 +78,7 @@ class cp_invoiceGroup extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     #importedFile = '';
+    #logs = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -97,8 +99,34 @@ class cp_invoiceGroup extends _persistentTable.Record {
     get documentTypeName() {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
-    
 
+    get logs() {
+        return this.#logs;
+    } set logs(logs) {
+        this.#logs = logs;
+    }
+
+    
+    async log(message, info) {
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.INFO, message, info);
+    }
+    async logWarning(message, info) {
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.WARNING, message, info);
+    }
+    async logError(error, info) {
+        if (!info && error.stack) { info = error.stack; }
+        if (error && error.message) { error = error.message; }
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.ERROR, error, info);
+
+    }
+    async logBase(type, message, info) {
+        if (!this.#logs) {
+            this.#logs = this.cx.table(_schema.cp_invoiceGroupLog);
+        }
+        var log = await this.#logs.log(this.invGrpId, type, message, info);
+        this.#logs.records.push(log);
+        return log;
+    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

@@ -27,6 +27,7 @@ class CPInvoiceReturnLineRender extends RenderBase {
             { title: ' ', name: 'productIcon', width: '10px', unbound: true },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' },
+            { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' },
             { name: _cxSchema.cp_invoiceCreditLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' },
             { name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px' },

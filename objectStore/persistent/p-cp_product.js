@@ -46,6 +46,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    DOCLINEID: 'docLineId',
 
 }
 //
@@ -64,10 +65,10 @@ const _fields = {
     itemBarcode: { name: 'itemBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     itemCostPrice: { name: 'itemCostPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     itemSize: { name: 'itemSize', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    supplierCode: { name: 'supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
+    supplierCode: { name: 'supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     supplierItemCode: { name: 'supplierItemCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     supplierItemDescription: { name: 'supplierItemDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    raw_supplierCode: { name: 'raw_supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
+    raw_supplierCode: { name: 'raw_supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     raw_eposCode: { name: 'raw_eposCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     raw_eposDescription: { name: 'raw_eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     raw_eposBarcode: { name: 'raw_eposBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
@@ -79,6 +80,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    docLineId: { name: 'docLineId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -258,6 +260,12 @@ class Persistent_cp_product extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get docLineId() {
+        return super.getValue(_fieldNames.DOCLINEID);
+    } set docLineId(val) {
+        super.setValue(_fieldNames.DOCLINEID, val);
     }
 
 

@@ -247,6 +247,41 @@ class RenderBase {
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
     }
 
+    async validateErpToken() {
+        var warningMessage = '';
+
+        var erpSettingsInfo = await this.dataSource.cx.exec({
+            sql: `
+                select	    erpSett.dtfsSettingId, prv.isCloud
+                from	    erp_shop_setting erpSett
+                inner join  sys_provider prv ON prv.code = erpSett.erpProvider
+                where	    erpSett.shopId = @shopId
+            `,
+            params: [{ name: 'shopId', value: this.dataSource.shopId }],
+            returnFirst: true,
+        });
+        if (erpSettingsInfo && erpSettingsInfo.isCloud) {
+            var erpToken = await this.dataSource.cx.table(_cxSchema.cx_login_token).fetch(['erp', this.dataSource.cx.tUserId, erpSettingsInfo.dtfsSettingId], true);
+            if (erpToken) {
+                if (erpToken.status != 1) {
+                    warningMessage = '&#9888; your oauth-token is not valid';
+                } else if (erpToken.isExpired) {
+                    warningMessage = '&#9888; your oauth-token is expired';
+                }
+            } else {
+                warningMessage = '&#9888; there is no oauth-token for this store';
+            }
+            if (warningMessage) {
+                warningMessage += ' <a href="#" onclick="window.open(\'../oauth?type=erp&s=' + this.dataSource.shopId + '\'); return false;" >click here to get a token</a>';
+                warningMessage = `<div style="color: var(--warn-color);">${warningMessage}</div>`;
+            }
+
+        }
+
+        return warningMessage;
+    }
+
+
     async get(renderType, options) {
         if (renderType == _cxConst.RENDER.TYPE.LIST) {
             if (this.options.title == undefined) {
