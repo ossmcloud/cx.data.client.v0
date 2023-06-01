@@ -16,7 +16,10 @@ class CPProductAliasRender extends RenderBase {
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
         transactionLinesOptions.quickSearch = true;
-        transactionLinesOptions.title = '<span>the products below are associated with this alias</span>';
+        transactionLinesOptions.path = '/cp/config/product';
+        transactionLinesOptions.title = ' ';    //'<span style="padding-right: 17px;">the products below are associated with this alias</span>';
+        transactionLinesOptions.actions = [{ label: 'remove', funcName: 'detachProduct' }];
+        transactionLinesOptions.showButtons = [{ id: 'cr_products_add', text: 'Attach Products', function: 'attachProducts' }];
         return transactionLinesOptions;
     }
 
@@ -29,11 +32,12 @@ class CPProductAliasRender extends RenderBase {
 
         var mainInfoGroup = { group: 'main', title: '', columnCount: 3, styles: ['min-width: 500px; max-width: 750px', 'min-width: 250px', 'min-width: 250px'], fields: [] };        
         this.options.fields = [mainInfoGroup];
-
+        //mainInfoGroup.fields.push({ name: 'fromProductId', hidden: true });
         mainInfoGroup.fields.push({
             group: 'main1', title: 'alias info', column: 1, columnCount: 1, fields: [
                 {
-                    group: 'main1.col1', column: 1, columnCount: 1, style:'width: 100%; display: block;', fields: [
+                    group: 'main1.col1', column: 1, columnCount: 1, style: 'width: 100%; display: block;', fields: [
+                        { name: 'fromProductId', hidden: true },
                         { name: _cxSchema.cp_productAlias.ITEMCODE, label: 'code' },
                         { name: _cxSchema.cp_productAlias.ITEMDESCRIPTION, label: 'description' },
                         { name: _cxSchema.cp_productAlias.ITEMBARCODE, label: 'barcode' },
@@ -89,7 +93,7 @@ class CPProductAliasRender extends RenderBase {
         this.options.recordTitle = 'product alias';
         this.options.filters = [
             { id: 'cx_item_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ic', label: 'item code' },
-            { id: 'cx_item_descr', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'id', label: 'item description' },
+            { id: 'cx_item_descr', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'idesc', label: 'item description' },
             { id: 'cx_item_barcode', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'ibc', label: 'item barcode' },
             { id: 'cx_item_dep_cfg', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'dep', label: 'dep. config' },
         ];
@@ -104,6 +108,8 @@ class CPProductAliasRender extends RenderBase {
             { name: 'modified', title: 'modified', align: 'center', width: '130px', nullText: 'never' },
             { name: 'modifiedBy', title: 'by', align: 'left', width: '130px', nullText: '' },
         ];
+
+        
     }
 
 }

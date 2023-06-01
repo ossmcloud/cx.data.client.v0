@@ -94,8 +94,19 @@ class CPProductRender extends RenderBase {
             ]
         });
 
-
-
+        if (this.options.mode == 'view') {
+            if (this.dataSource.aliasId) {
+                this.options.buttons.push({ id: 'cp_view_alias', text: 'View Alias', function: 'viewAlias' });
+            }
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {
+                if (this.dataSource.aliasId) {
+                    this.options.buttons.push({ id: 'cp_detach_to_alias', text: 'Detach from Alias', function: 'detachFromAlias' });
+                } else {
+                    this.options.buttons.push({ id: 'cp_create_alias', text: 'Create Alias', function: 'createAlias' });
+                    this.options.buttons.push({ id: 'cp_attach_to_alias', text: 'Attach to Alias', function: 'attachToAlias' });
+                }
+            }
+        }
 
     }
 
@@ -185,7 +196,7 @@ class CPProductRender extends RenderBase {
             }
         });
 
-
+    
     }
 
     async dropDown(options) {

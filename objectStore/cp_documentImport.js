@@ -34,7 +34,9 @@ class cp_documentImport_Collection extends _persistentTable.Table {
             query.sql += ' and d.created <= @to';
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
-        if (params.st) {
+        if (params.type == 'cpDocImportValidate') {
+            query.sql += ` and d.importStatus not in (${_declarations.CP_DOCUMENT.IMPORT_STATUS.Deleted}, ${_declarations.CP_DOCUMENT.IMPORT_STATUS.Cancelled})`;
+        } else if (params.st) {
             query.sql += ' and d.importStatus = @importStatus';
             query.params.push({ name: 'importStatus', value: params.st });
         }
@@ -67,7 +69,7 @@ class cp_documentImport extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
-  
+
     get status() {
         return _declarations.CP_DOCUMENT.IMPORT_STATUS.getName(this.importStatus);
     }
@@ -75,7 +77,7 @@ class cp_documentImport extends _persistentTable.Record {
     get fileTypeView() {
         return this.fileType;
     }
-   
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

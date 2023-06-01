@@ -30,7 +30,7 @@ class cp_productAlias_Collection extends _persistentTable.Table {
             query.sql += ' and prod.itemCode like @itemCode';
             query.params.push({ name: 'itemCode', value: params.ic + '%' });
         }
-        if (params.id) {
+        if (params.idesc) {
             query.sql += ' and prod.itemDescription like @itemDescription';
             query.params.push({ name: 'itemDescription', value: params.id + '%' });
         }
@@ -51,6 +51,16 @@ class cp_productAlias_Collection extends _persistentTable.Table {
     }
 
     async fetch(id) {
+        var query = { sql: this.buildQuery(), params: [{ name: 'aliasId', value: id }] };
+        query.sql += ` and prod.aliasId = @aliasId`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
+        return super.populate(rawRecord);
+    }
+
+    async fetchByProd(productId, createIfMissing) {
         var query = { sql: this.buildQuery(), params: [{ name: 'aliasId', value: id }] };
         query.sql += ` and prod.aliasId = @aliasId`;
         query.noResult = 'null';
@@ -134,6 +144,7 @@ class cp_productAlias extends _persistentTable.Record {
         }
     }  
 
+    
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
