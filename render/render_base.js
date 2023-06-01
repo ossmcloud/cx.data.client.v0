@@ -2,6 +2,7 @@
 
 const _cx = require('cx-core');
 const _ex = require('cx-core/errors/cx-errors');
+const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const _cx_render = require('../cx-client-render');
 const _permission = require('../core/cx-permission-manager');
