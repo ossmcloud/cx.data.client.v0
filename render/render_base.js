@@ -166,7 +166,8 @@ class RenderBase {
                 }
             }
 
-            if (!field.pk && field.name != 'createdBy' && field.name != 'modifiedBy') {
+            if (field.name != 'createdBy' && field.name != 'modifiedBy') {
+                if (field.pk) { filter.hide = true; }
                 if (await this.initFilter(field, filter) !== false) {
                     if (filter.hide !== true) {
                         if (filter.sortIdx) {

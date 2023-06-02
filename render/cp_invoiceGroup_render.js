@@ -132,8 +132,13 @@ class CPInvoiceGroupRender extends RenderBase {
     buildFormActions() {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
+            // 
+            if (s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+                this.options.buttons.push({ id: 'cp_view_missmapped', text: 'View Mis-mapped Products', function: 'viewMisMappedProds' });
+            }
+
             // allow to refresh only under certain statuses
-            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
             // allow to post based on role only under certain statuses
@@ -167,7 +172,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
     async _record() {
         if (this.options.allowEdit) {
-            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Ready || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Ready || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
         }
 
         await this.setRecordTitle();
@@ -242,17 +247,6 @@ class CPInvoiceGroupRender extends RenderBase {
         await this.buildFormLists();
 
         this.buildFormActions();
-        // if (this.options.mode == 'view') {
-        //     var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
-        //     this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
-
-        //     var s = this.dataSource.documentStatus;
-        //     // allow to refresh only under certain statuses
-        //     if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
-        //         this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
-        //     }
-
-        // }
     }
 
     async _list() {

@@ -157,6 +157,16 @@ async function getPermission(recordType, role) {
         //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
+    if (recordType == _cxSchema.cp_wholesaler.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = (role = _cxConst.CX_ROLE.CX_ADMIN);
+    }
+
+    if (recordType == _cxSchema.cp_wholesalerShop.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role = _cxConst.CX_ROLE.ADMIN);
+    }
+
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');
         ex.permissionViolation = true;

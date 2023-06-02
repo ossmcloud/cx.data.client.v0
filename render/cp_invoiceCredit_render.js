@@ -261,7 +261,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
             // allow to refresh only under certain statuses
-            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
             // allow to post based on role only under certain statuses
@@ -296,7 +296,7 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
-        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
         //
         await this.setRecordTitle();
         // 
@@ -311,7 +311,7 @@ class CPInvoiceReturnRender extends RenderBase {
         try {
             this.options.allowEdit = true;
             this.options.allowEditCondition = function (object) {
-                return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+                return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
             }
 
             if (this.options.query) {
