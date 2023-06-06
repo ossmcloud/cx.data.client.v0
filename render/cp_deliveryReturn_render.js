@@ -29,6 +29,7 @@ class CPDeliveryReturnRender extends RenderBase {
 
 
     async _record() {
+        
         //this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`; 
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
 

@@ -91,10 +91,7 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
     }
-    if (recordType == _cxSchema.cp_documentImport.TBL_NAME) {
-        permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
-    }
-    
+   
     if (recordType == _cxSchema.erp_traderAccount.TBL_NAME) {
         permission.allowEdit = false;
         // @REVIEW: should we let users add accounts here, as long as they provide the right code when the account is received from erps itt'll be updated
@@ -150,6 +147,13 @@ async function getPermission(recordType, role) {
 
 
 
+    if (recordType == _cxSchema.cp_invoiceGroup.TBL_NAME || recordType == _cxSchema.cp_invoiceCredit.TBL_NAME || recordType == _cxSchema.cp_deliveryReturn.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = false;
+        permission.allowDelete = false;
+        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
     if (recordType == _cxSchema.cp_product.TBL_NAME || recordType == _cxSchema.cp_productAlias.TBL_NAME || recordType == _cxSchema.cp_productAliasShop.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
@@ -166,6 +170,11 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
         permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
     }
+
+    if (recordType == _cxSchema.cp_documentImport.TBL_NAME) {
+        permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
+    }
+
 
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');

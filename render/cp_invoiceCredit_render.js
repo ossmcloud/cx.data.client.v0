@@ -296,7 +296,9 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
-        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        if (this.options.allowEdit) {
+            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        }
         //
         await this.setRecordTitle();
         // 
