@@ -1412,6 +1412,7 @@ module.exports = {
         TRANLEDGER: 'tranLedger',
         OPPOSITETRANID: 'oppositeTranId',
         CSSSTYLE: 'cssStyle',
+        TRANSIGN: 'tranSign',
     },
 
     sys_provider: {

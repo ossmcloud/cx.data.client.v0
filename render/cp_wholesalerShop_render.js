@@ -75,15 +75,51 @@ class WholesalerShop extends RenderBase {
 
 
     async _record() {
+        var _this = this;
+        var mainGroupFields = [];  
+
+        var traderLookUp = { name: 'traderInfo', label: 'erp trader', column: 1, readOnly: true };
+        if (this.options.mode != 'view') {
+            traderLookUp = await this.fieldDropDownOptions(_cxSchema.erp_traderAccount, {
+                id: _cxSchema.cp_wholesalerShop.ERPTRADERACCOUNTID, name: _cxSchema.cp_wholesalerShop.ERPTRADERACCOUNTID, column: 1, dropDownSelectOptions: { s: _this.dataSource.shopId, tt: 'S' }
+            });
+        }
+
+        var wholesalerLookUp = { name: 'whsInfo', label: 'wholesaler', column: 1, readOnly: true };
+        var shopLookUp = { name: 'shopInfo', label: 'shop', column: 1, readOnly: true };
+        if (this.dataSource.isNew()) {
+            shopLookUp = await this.fieldDropDownOptions(_cxSchema.cx_shop, {
+                id: _cxSchema.cp_wholesalerShop.SHOPID, name: _cxSchema.cp_wholesalerShop.SHOPID, column: 1
+            });
+            var wholeSalerLookUpList = await _this.dataSource.cx.table(_cxSchema.cp_wholesaler).toLookUpList()
+            wholesalerLookUp.name = 'wholesalerId';
+            wholesalerLookUp.id = 'wholesalerId';
+            wholesalerLookUp.readOnly = false;
+            wholesalerLookUp.items = wholeSalerLookUpList;
+        } else {
+            mainGroupFields.push({ name: _cxSchema.cp_wholesalerShop.WHOLESALERID, hidden: true });
+            mainGroupFields.push({ name: _cxSchema.cp_wholesalerShop.SHOPID, hidden: true });
+        }
+
+        mainGroupFields.push(wholesalerLookUp);
+        mainGroupFields.push(shopLookUp);
+        mainGroupFields.push(traderLookUp);
+        
+
         this.options.fields = [
+            
             {
                 group: 'all', title: '', columnCount: 2, fields: [
                     {
-                        group: 'main', title: 'main info', column: 1, columnCount: 1, fields: [
-                            { name: 'whsInfo', label: 'wholesaler', column: 1, readOnly: true },
-                            { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
-                            { name: 'traderInfo', label: 'erp trader', column: 1, readOnly: true },
-                        ]
+                        group: 'main', title: 'main info', column: 1, columnCount: 1, fields: mainGroupFields
+                        // [
+                        //     { name: _cxSchema.cp_wholesalerShop.WHOLESALERID, hidden: true },
+                        //     { name: _cxSchema.cp_wholesalerShop.SHOPID, hidden: true },
+                        //     //{ name: 'whsInfo', label: 'wholesaler', column: 1, readOnly: true },
+                        //     wholesalerLookUp,
+                        //     shopLookUp,
+                        //     traderLookUp
+                        // ]
                     },
                     {
                         group: 'audit', title: 'audit info', column: 2, columnCount: 1, fields: [
@@ -104,6 +140,12 @@ class WholesalerShop extends RenderBase {
                 ]
             }
         ];
+
+        if (this.options.mode == 'view') {
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {
+                this.options.buttons.push({ id: 'cp_wholesalerShop_edit', text: 'Edit', self: true, link: 'wholesaler-store?e=T&whsShopId=' + this.dataSource.wholesalerId + '-' + this.dataSource.shopId });
+            }
+        }
     }
 
 

@@ -35,7 +35,7 @@ const _fieldNames = {
 const _fields = {
     wholesalerProviderId: { name: 'wholesalerProviderId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    dataProviderId: { name: 'dataProviderId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    dataProviderId: { name: 'dataProviderId', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     dataProviderName: { name: 'dataProviderName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
@@ -60,7 +60,7 @@ class Persistent_cp_wholesalerProvider extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get wholesalerProviderId() {
         return super.getValue(_fieldNames.WHOLESALERPROVIDERID);

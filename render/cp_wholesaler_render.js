@@ -94,6 +94,27 @@ class Wholesaler extends RenderBase {
     }
 
 
+    // async dropDown(options) {
+    //     if (!options) { options = {}; }
+    //     if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a wholesaler'; }
+    //     if (this.options.label == undefined) { this.options.label = 'wholesaler'; }
+    //     options.noPaging = true;
+
+    //     // load collection if required
+    //     if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
+    //     // populate drop down items
+    //     var dropDownItems = [];
+    //     this.dataSource.each(function (record) {
+    //         dropDownItems.push({
+    //             value: record.wholesalerId,
+    //             text: '[' + record.code + '] ' + record.name,
+    //         });
+    //     });
+    //     this.options.items = dropDownItems;
+    // }
+
+
+
 }
 
 module.exports = Wholesaler;

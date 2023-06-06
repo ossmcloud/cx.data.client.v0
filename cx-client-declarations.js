@@ -486,12 +486,12 @@ const CP_PRODUCT = {
 }
 
 const CP_DOCUMENT = {
-    PROVIDER: {
-        BWG: 1,
+    // PROVIDER: {
+    //     BWG: 1,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
-        getName: function (value) { return enumGetName(this, value); },
-    },
+    //     toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    //     getName: function (value) { return enumGetName(this, value); },
+    // },
 
     BATCH_ACTIONS: {
         REFRESH: 1,

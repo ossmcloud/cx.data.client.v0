@@ -164,7 +164,7 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.cp_wholesalerShop.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
-        permission.allowNew = (role = _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
     }
 
     if (!permission.allowView) {

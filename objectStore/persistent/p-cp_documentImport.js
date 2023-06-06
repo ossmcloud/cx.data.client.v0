@@ -44,7 +44,7 @@ const _fields = {
     documentImportId: { name: 'documentImportId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    providerId: { name: 'providerId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    providerId: { name: 'providerId', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     providerName: { name: 'providerName', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
     importStatus: { name: 'importStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     importStatusMessage: { name: 'importStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
@@ -76,7 +76,7 @@ class Persistent_cp_documentImport extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get documentImportId() {
         return super.getValue(_fieldNames.DOCUMENTIMPORTID);
