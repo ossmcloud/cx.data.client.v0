@@ -27,6 +27,18 @@ class CPDeliveryReturnRender extends RenderBase {
         return transactionLogsOptions;
     }
 
+    async getRelatedDocumentListOptions() {
+        var relatedTransactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
+        await relatedTransactions.select({ from: this.options.query.id });
+        if (relatedTransactions.count() == 0) { return null; }
+
+        var relatedTransactionsOptions = await this.listOptions(relatedTransactions, { listView: true });
+        relatedTransactionsOptions.columns.splice(1, 1);
+        //relatedTransactionsOptions.quickSearch = true;
+        return relatedTransactionsOptions;
+    }
+
+
 
     async _record() {
         
@@ -132,11 +144,18 @@ class CPDeliveryReturnRender extends RenderBase {
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
         
+        var relatedTransactionsOptions = await this.getRelatedDocumentListOptions();
+        if (relatedTransactionsOptions) {
+            subListsGroup.fields.push({ group: 'logs', title: 'related documents', column: 1, fields: [relatedTransactionsOptions], collapsed: true });
+        }
+
+
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
         }
 
+        
         if (this.options.mode == 'view') {
 
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {

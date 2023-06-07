@@ -105,6 +105,10 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and isnull(d.isUserEdited, 0) = @isUserEdited';
             query.params.push({ name: 'isUserEdited', value: (params.ued=='true') });
         }
+        if (params.from) {
+            query.sql += ' and d.createdFrom = @createdFrom';
+            query.params.push({ name: 'createdFrom', value: params.from });
+        }
         query.sql += ' order by d.documentDate desc';
 
         query.paging = {
@@ -218,7 +222,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
 
     get editedIcon() {
         if (this.createdFrom) { return '&#x2699;'; }
-        
+
         if (this.isUserEdited) { return '&#x270E;'; }
         
         return '';
