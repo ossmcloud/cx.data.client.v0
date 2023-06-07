@@ -253,6 +253,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#logs.records.push(log);
         return log;
     }
+
+    async generate() {
+        throw new Error('Generating delivery/return from invoice/credit is not yet supported');
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

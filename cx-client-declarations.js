@@ -559,7 +559,7 @@ const CP_DOCUMENT = {
     STATUS: {
         New: 0,
         Ready: 1,
-        //ReadyForPosting: 2,    
+        Generating: 2,
         REFRESH: 3,
 
         NEED_ATTENTION: 4,         // can't post to ERP

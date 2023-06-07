@@ -33,6 +33,8 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         TRADERACCOUNTID: 'traderAccountId',
         ISUSEREDITED: 'isUserEdited',
+        CREATEDFROM: 'createdFrom',
+        CREATEDFROMTYPE: 'createdFromType',
     },
 
     cp_deliveryReturnLine: {
@@ -216,6 +218,8 @@ module.exports = {
         ERPTRANSMISSIONID: 'erpTransmissionId',
         TRADERACCOUNTID: 'traderAccountId',
         ISUSEREDITED: 'isUserEdited',
+        CREATEDFROM: 'createdFrom',
+        CREATEDFROMTYPE: 'createdFromType',
     },
 
     cp_invoiceCreditLine: {

@@ -11,7 +11,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
     }
 
-    
+
 
     async getDocumentLineListOptions() {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
@@ -109,6 +109,15 @@ class CPInvoiceReturnRender extends RenderBase {
         `;
         }
 
+        if (this.dataSource.createdFrom) {
+            var createdFromText = await this.dataSource.cx.table(_cxSchema.cp_deliveryReturn).lookUp(this.dataSource.createdFrom, _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER);
+            this.options.title += `
+                <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.createdFromType)}; cursor: pointer;" onclick="window.open('&#47;cp&#47;delivery?id=${this.dataSource.createdFrom}');">
+                    from ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.createdFromType).toLowerCase()} ${createdFromText}
+                </div>
+            `;
+        }
+
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
@@ -132,7 +141,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                             id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
                             dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId },
-                            width: '100%', disabled: (this.dataSource.invGrpId )
+                            width: '100%', disabled: (this.dataSource.invGrpId)
                         }),
                         { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier (epos)', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
@@ -234,7 +243,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
         this.options.fields.push(erpSubListsGroup);
-        
+
         var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
         erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] });
         if (!erpSett.mergeGLAndTax) {
@@ -283,10 +292,10 @@ class CPInvoiceReturnRender extends RenderBase {
             // allow to delete if not posted
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
-                    && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
-                   if (!this.dataSource.invGrpId) {
+                    && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH && s != _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                    if (!this.dataSource.invGrpId) {
                         this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
-                   }
+                    }
                 }
             }
 

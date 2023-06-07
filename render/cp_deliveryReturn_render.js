@@ -138,6 +138,13 @@ class CPDeliveryReturnRender extends RenderBase {
         }
 
         if (this.options.mode == 'view') {
+
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                // @@TODO: check if we already have a doc for this
+                var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
+                this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
+            }
+
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
         }
