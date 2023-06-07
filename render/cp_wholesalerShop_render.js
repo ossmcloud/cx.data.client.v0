@@ -104,6 +104,7 @@ class WholesalerShop extends RenderBase {
         mainGroupFields.push(wholesalerLookUp);
         mainGroupFields.push(shopLookUp);
         mainGroupFields.push(traderLookUp);
+        mainGroupFields.push({ name: _cxSchema.cp_wholesalerShop.DEFAULTOPTIONS, label: 'default options', validation: '{ "mandatory": true, "max": 4000  }' })
         
 
         this.options.fields = [

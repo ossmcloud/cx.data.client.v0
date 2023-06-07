@@ -29,7 +29,17 @@ class cp_wholesalerShop_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
-    async fetch(id) {
+    async fetchOrNew(id) {
+        if (id) {
+            var rec = await this.fetch(id, true);
+            if (rec) { return rec; }
+            return this.createNew();
+        } else {
+            return this.createNew();
+        }
+    }
+
+    async fetch(id, returnNull) {
         var query = {
             sql: `
                 select	    w.code as whsCode, w.name as whsName, s.shopCode, s.shopName, trader.traderCode, trader.traderName, ws.*
@@ -50,7 +60,10 @@ class cp_wholesalerShop_Collection extends _persistentTable.Table {
         query.noResult = 'null';
         query.returnFirst = true;
         var rawRecord = await this.db.exec(query);
-        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
+        if (!rawRecord) {
+            if (returnNull) { return null; }
+            throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`);
+        }
         return super.populate(rawRecord);
     }
 

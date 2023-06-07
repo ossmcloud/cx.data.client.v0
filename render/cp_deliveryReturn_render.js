@@ -41,15 +41,14 @@ class CPDeliveryReturnRender extends RenderBase {
 
 
     async _record() {
-        
-        //this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`; 
-        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
+        var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
+        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
 
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
         // start with doc type and number
         this.options.title = `<div style="display: table;">`;
         // document number 
-        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentId}</div>`;
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
         // document type
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
@@ -157,6 +156,12 @@ class CPDeliveryReturnRender extends RenderBase {
 
         
         if (this.options.mode == 'view') {
+
+            var s = this.dataSource.documentStatus;
+            // allow to refresh only under certain statuses
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+            }
 
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 // @@TODO: check if we already have a doc for this
