@@ -16,15 +16,18 @@ class CxMapConfigRender extends RenderBase {
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
 
+        var readOnly = !this.dataSource.isNew();
+        
         
         this.options.fields = [
             {
                 group: 'mainOuter', title: '', columnCount: 4, fields: [
                     {
                         group: 'main', title: 'main info', columnCount: 1, column: 1, inLine: true, fields: [
-                            { name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, label: 'epos department', column: 1, readOnly: true },
-                            { name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, label: 'epos sub department', column: 1, readOnly: true },
-                            { name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_dep.MAPCONFIGID, hidden: true },
+                            { name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, label: 'epos department', column: 1, readOnly: readOnly },
+                            { name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, label: 'epos sub department', column: 1, readOnly: readOnly },
+                            { name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: readOnly },
                         ]
                     },
                     {
