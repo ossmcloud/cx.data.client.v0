@@ -27,6 +27,26 @@ class CPInvoiceGroupRender extends RenderBase {
         return transactionLogsOptions;
     }
 
+    async getErpDocListOptions(erpSett) {
+        var transactions = this.dataSource.cx.table(_cxSchema.cp_erp_transaction);
+        await transactions.select({ invGrpId: this.options.query.id });
+
+        transactions.forceReadOnly = true;
+
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, mode: 'view', id: 'erpTransaction', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
+        transactionsOptions.title = '<span>erp transactions</span>';
+
+        // if (this.options.allowEdit && this.options.mode == 'edit') {
+        //     transactionLinesOptions.hideTitlePanel = true;
+        //     transactionLinesOptions.lookupLists = {};
+
+        //     var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
+        //     transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+
+        // }
+        return transactionsOptions;
+    }
+
     async getErpGLListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ invGrpId: this.options.query.id });
@@ -107,6 +127,9 @@ class CPInvoiceGroupRender extends RenderBase {
 
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
         this.options.fields.push(erpSubListsGroup);
+
+        // var erpDocOptions = await this.getErpDocListOptions(erpSett);
+        // erpSubListsGroup.fields.push({ group: 'erp_transactions', title: 'erp transactions', column: 1, fields: [erpDocOptions] })
 
         var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
         erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] })

@@ -11,9 +11,15 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
     async select(params) {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
-        query.sql = `select	*
-                    from	cx_map_config_dep
+        query.sql = `select	dep.*
+                    from	cx_map_config_dep dep
+                    inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId
                     where   1 = 1`;
+
+        if (params.s) {
+            query.sql += ' and s.shopId = @shopId';
+            query.params.push({ name: 'shopId', value: params.s });
+        }
 
         if (params.mid) {
             query.sql += ' and mapConfigId = @mapConfigId';

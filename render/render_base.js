@@ -307,6 +307,7 @@ class RenderBase {
             }
         }
         if (renderType == _cxConst.RENDER.TYPE.DROP_DOWN) {
+            if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
             await this.dropDown(options);
         }
         return this.#options;

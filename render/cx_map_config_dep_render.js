@@ -130,22 +130,22 @@ class CxMapConfigRender extends RenderBase {
         
     }
 
-    // async dropDown() {
-    //     if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a dep/sub-dep'; }
-    //     if (this.options.label == undefined) { this.options.label = 'epos dep/sub-dep'; }
+    async dropDown(dropDownSelectionOptions) {
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a dep/sub-dep'; }
+        if (this.options.label == undefined) { this.options.label = 'epos dep/sub-dep'; }
 
-    //     // load collection if required
-    //     if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(); }
-    //     // populate drop down items
-    //     var dropDownItems = [];
-    //     this.dataSource.each(function (record) {
-    //         dropDownItems.push({
-    //             value: record.shopId,
-    //             text: record.shopName + ' [' + record.shopCode + ']',
-    //         });
-    //     });
-    //     this.options.items = dropDownItems;
-    // }
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(dropDownSelectionOptions); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record.depMapConfigId,
+                text: record.eposDepartment + '/' + record.eposSubDepartment + ' - ' + record.eposDescription,
+            });
+        });
+        this.options.items = dropDownItems;
+    }
 
 }
 

@@ -112,6 +112,24 @@ class CPProductAliasRender extends RenderBase {
         
     }
 
+    async dropDown(dropDownSelectionOptions) {
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an alias'; }
+        if (this.options.label == undefined) { this.options.label = 'product alias'; }
+
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(dropDownSelectionOptions); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record.aliasId,
+                text: record.itemCode + ' - ' + record.itemDescription,
+            });
+        });
+        this.options.items = dropDownItems;
+    }
+
+
 }
 
 

@@ -14,6 +14,28 @@ class CPProductRender extends RenderBase {
 
         this.options.title = `[${this.dataSource.itemCode}] ${this.dataSource.itemDescription}`;
 
+        var aliasField = { name: 'aliasInfo', label: 'alias', readOnly: true };
+        var depMapConfigField = { name: 'depMapInfo', label: 'dep. config', readOnly: true };
+        var taxMapConfigField = { name: 'taxMapInfo', label: 'tax config', readOnly: true };
+        var traderAccountField = { name: 'traderInfo', label: 'trader account', readOnly: true };
+        if (this.options.mode != 'view') {
+            depMapConfigField = await this.fieldDropDownOptions(_cxSchema.cx_map_config_dep, {
+                id: _cxSchema.cp_product.DEPMAPCONFIGID, name: _cxSchema.cp_product.DEPMAPCONFIGID, column: 1, width: '100%', dropDownSelectOptions: { s: this.dataSource.shopId }
+            });
+
+            taxMapConfigField = await this.fieldDropDownOptions(_cxSchema.cx_map_config_tax, {
+                id: _cxSchema.cp_product.TAXMAPCONFIGID, name: _cxSchema.cp_product.TAXMAPCONFIGID, column: 1, width: '100%', dropDownSelectOptions: { s: this.dataSource.shopId }
+            });
+
+            traderAccountField = await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                id: _cxSchema.cp_product.TRADERACCOUNTID, name: _cxSchema.cp_product.TRADERACCOUNTID, column: 1, width: '100%', dropDownSelectOptions: { s: this.dataSource.shopId }
+            });
+
+            aliasField = await this.fieldDropDownOptions(_cxSchema.cp_productAlias, {
+                id: _cxSchema.cp_product.ALIASID, name: _cxSchema.cp_product.ALIASID, column: 1, width: '100%', dropDownSelectOptions: { s: this.dataSource.shopId }
+            });
+        }
+
         var mainInfoGroup = { group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 350px', 'min-width: 250px'], fields: [] };
         this.options.fields = [mainInfoGroup];
 
@@ -45,10 +67,10 @@ class CPProductRender extends RenderBase {
             group: 'main2', title: 'mapping info', column: 2, columnCount: 1, fields: [
                 {
                     group: 'main2.col1', column: 1, columnCount: 1, fields: [
-                        { name: 'aliasInfo', label: 'alias', readOnly: true },
-                        { name: 'depMapInfo', label: 'dep. config', readOnly: true },
-                        { name: 'taxMapInfo', label: 'tax config', readOnly: true },
-                        { name: 'traderInfo', label: 'trader account', readOnly: true },
+                        aliasField,
+                        depMapConfigField,
+                        taxMapConfigField,
+                        traderAccountField,
                     ]
                 }
             ]

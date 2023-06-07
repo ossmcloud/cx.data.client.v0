@@ -1,10 +1,36 @@
 'use strict'
 //
+const _declarations = require('../cx-client-declarations');
 const _persistentTable = require('./persistent/p-cp_erp_transaction');
 //
 class cp_erp_transaction_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cp_erp_transaction(this, defaults);
+    }
+
+    async select(params) {
+
+        if (!params) { params = {}; }
+
+        var query = { sql: '', params: [] };
+        query.sql = `select  * from    ${this.type}`;
+
+        if (params.invCreId) {
+            query.sql += ' where   invCreId = @invCreId';
+            query.params.push({ name: 'invCreId', value: params.invCreId });
+        }
+        if (params.invGrpId) {
+            query.sql += ' where   invGrpId = @invGrpId';
+            query.params.push({ name: 'invGrpId', value: params.invGrpId });
+        }
+
+        query.sql += ' order by created';
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
+
+        return await super.select(query);
     }
 
     async fetchByDocId(invCreId) {

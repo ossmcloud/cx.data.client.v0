@@ -116,6 +116,25 @@ class CxMapConfigRender extends RenderBase {
     }
 
 
+    async dropDown(dropDownSelectionOptions) {
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a tax'; }
+        if (this.options.label == undefined) { this.options.label = 'epos tax'; }
+
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(dropDownSelectionOptions); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record.taxMapConfigId,
+                text: record.eposTaxCode + ' [' + record.eposTaxRate + '%] ' + record.eposDescription,
+            });
+        });
+        this.options.items = dropDownItems;
+    }
+
+
+
 }
 
 module.exports = CxMapConfigRender;
