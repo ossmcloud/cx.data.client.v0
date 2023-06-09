@@ -160,6 +160,7 @@ class CPProductRender extends RenderBase {
                 { name: 'itemBarcode', title: 'item bar code' },
                 { name: 'itemDescription', title: 'description' },
                 { name: 'supplierCode', title: 'supplier' },
+                { name: 'traderName', title: 'supplier name', nullText: '[supplier does not exist]' },
             ];
 
             this.options.lookupLists = { aliasInfoNull: await this.dataSource.cx.table(_cxSchema.cp_productAlias).toLookUpList(this.options.query.s) };
@@ -188,9 +189,9 @@ class CPProductRender extends RenderBase {
                 { name: 'itemDescription', title: 'description' },
                 { name: 'depMapInfo', title: 'dep. config' },
                 { name: 'supplierCode', title: 'supplier' },
-                { name: 'traderName', title: 'supplier name' },
+                { name: 'traderName', title: 'supplier name', nullText: '[supplier does not exist]' },
                 { name: 'itemCostPrice', title: 'cost price', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: 'aliasInfoNull', title: 'alias' },
+                { name: 'aliasInfo', title: 'alias', nullText: '[not set]' },
                 { name: 'modified', title: 'modified', align: 'center', width: '130px' },
                 { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
             ];

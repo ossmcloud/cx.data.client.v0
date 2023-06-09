@@ -126,11 +126,11 @@ class cp_product extends _persistentTable.Record {
         this.#eposTaxRate = defaults['eposTaxRate'] || null;
         this.#eposTaxDescription = defaults['eposTaxDescription'] || '';
 
-        this.#traderCode = defaults['traderCode'] || '';
-        this.#traderName = defaults['traderName'] || '';
+        this.#traderCode = defaults['traderCode'];
+        this.#traderName = defaults['traderName'];
 
-        this.#aliasCode = defaults['aliasCode'] || '';
-        this.#aliasDescription = defaults['aliasDescription'] || '';
+        this.#aliasCode = defaults['aliasCode'];
+        this.#aliasDescription = defaults['aliasDescription'];
     };
 
     get shopName() { return this.#shopName; }
@@ -179,16 +179,16 @@ class cp_product extends _persistentTable.Record {
         if (this.aliasId) {
             return `[${this.#aliasCode}] ${this.#aliasDescription}`;
         } else {
-            return 'no alias';
+            return null;
         }
     }
-    get aliasInfoNull() {
-        if (this.aliasId) {
-            return `[${this.#aliasCode}] ${this.#aliasDescription}`;
-        } else {
-            return '';
-        }
-    }
+    // get aliasInfoNull() {
+    //     if (this.aliasId) {
+    //         return `[${this.#aliasCode}] ${this.#aliasDescription}`;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
 
 
