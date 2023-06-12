@@ -59,7 +59,7 @@ class ErpTraderAccount extends RenderBase {
         if (cxTraders.records.count > 0) {
             var link = '/cr/config/trader-account?id=';
             var html = '';
-            cxTraders.each(function (r,i) {
+            cxTraders.each(function (r, i) {
                 if (i > 0) { html += ', '; }
                 html += `<a href="${link + r.id}" target="_blank">[${r.traderCode}] ${r.traderName}</a>`;
             })
@@ -77,7 +77,7 @@ class ErpTraderAccount extends RenderBase {
     async _list() {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
-        
+
         this.options.recordTitle = 'trader account';
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
@@ -96,7 +96,7 @@ class ErpTraderAccount extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
-        
+
         var appendStyle = 'padding: 3px 5px 1px 5px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         this.options.cellHighlights = [];
         this.options.cellHighlights.push({
