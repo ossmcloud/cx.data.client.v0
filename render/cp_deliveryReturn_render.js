@@ -27,16 +27,28 @@ class CPDeliveryReturnRender extends RenderBase {
         return transactionLogsOptions;
     }
 
+    async getRelatedDocumentListOptions() {
+        var relatedTransactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
+        await relatedTransactions.select({ from: this.options.query.id });
+        if (relatedTransactions.count() == 0) { return null; }
+
+        var relatedTransactionsOptions = await this.listOptions(relatedTransactions, { listView: true });
+        relatedTransactionsOptions.columns.splice(1, 1);
+        //relatedTransactionsOptions.quickSearch = true;
+        return relatedTransactionsOptions;
+    }
+
+
 
     async _record() {
-        //this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`; 
-        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
+        var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
+        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
 
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
         // start with doc type and number
         this.options.title = `<div style="display: table;">`;
         // document number 
-        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentId}</div>`;
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
         // document type
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
@@ -131,12 +143,32 @@ class CPDeliveryReturnRender extends RenderBase {
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
         
+        var relatedTransactionsOptions = await this.getRelatedDocumentListOptions();
+        if (relatedTransactionsOptions) {
+            subListsGroup.fields.push({ group: 'logs', title: 'related documents', column: 1, fields: [relatedTransactionsOptions], collapsed: true });
+        }
+
+
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
         }
 
+        
         if (this.options.mode == 'view') {
+
+            var s = this.dataSource.documentStatus;
+            // allow to refresh only under certain statuses
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+            }
+
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                // @@TODO: check if we already have a doc for this
+                var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
+                this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
+            }
+
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
         }

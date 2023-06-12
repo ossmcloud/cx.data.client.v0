@@ -27,22 +27,23 @@ class erp_gl_account_Collection extends _persistentTable.Table {
                     --AND     isnull(t.costCentre, '') = ''
                     `;
         
+        this.queryFromParams(query, params, 't');
         
         // if (params.tt) {
         //     query.sql += ' and t.traderType = @traderType';
         //     query.params.push({ name: 'traderType', value: params.tt });
         // }
 
-        if (params.glc) {
-            query.sql += ' and (t.code like @code or t.costCentre like @code or department like @code)';
-            query.params.push({ name: 'code', value: params.glc + '%' });
-        }
+        // if (params.glc) {
+        //     query.sql += ' and (t.code like @code or t.costCentre like @code or department like @code)';
+        //     query.params.push({ name: 'code', value: params.glc + '%' });
+        // }
        
 
-        if (params.gld) {
-            query.sql += ' and t.description like @description';
-            query.params.push({ name: 'description', value: params.gld + '%' });
-        }
+        // if (params.gld) {
+        //     query.sql += ' and t.description like @description';
+        //     query.params.push({ name: 'description', value: params.gld + '%' });
+        // }
 
         query.sql += ' order by s.shopCode, t.code';
         if (!params.noPaging) {

@@ -10,9 +10,11 @@ class CPErpTransactionGLRender extends RenderBase {
     }
 
     async _list() {
+        // var shopId = await this.dataSource.cx.table(_cxSchema.cp_erp_transaction).lookUp(this.dataSource.erpTranId, _cxSchema.cp_erp_transaction.SHOPID);
+        // var erpShopSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shopId);
 
         var textInput = null; var textInputReadOnly = null; var numberInput = null;
-        if (this.options.mode == 'edit') {
+        if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT };
             textInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true };
             numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: true };
@@ -29,12 +31,18 @@ class CPErpTransactionGLRender extends RenderBase {
             { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2, title: 'GL Seg 2', width: '70px', input: textInputReadOnly },
             //{ name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG3, title: 'GL Seg 3', width: '70px', input: textInput },
             { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTDESCRIPTION, title: 'GL Description', input: textInputReadOnly },
-            { name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput },
-            { name: _cxSchema.cp_erp_transaction_gl.VALUENET, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
-            { name: _cxSchema.cp_erp_transaction_gl.VALUETAX, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
-            { name: _cxSchema.cp_erp_transaction_gl.VALUEGROSS, title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true },
-
         ];
+
+        if (this.options.mergeGLAndTax) {
+            this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXACCOUNT, title: 'Tax', width: '50px', input: textInput });
+            this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXRATE, title: 'Rate', align: 'right', width: '50px', formatMoney: true, input: textInputReadOnly });
+            this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXDESCRIPTION, title: 'Description', input: textInputReadOnly });
+        }
+
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput });
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUENET + 'Signed', title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUETAX + 'Signed', title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + 'Signed', title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true });
 
         this.options.cellHighlights = [];
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
@@ -51,10 +59,18 @@ class CPErpTransactionGLRender extends RenderBase {
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Posted));
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Error));
 
-
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + 'Signed',
+            op: '<',
+            value: 0,
+            style: 'color: rgb(230,0,0);',
+            columns: [
+                _cxSchema.cp_erp_transaction_gl.VALUENET + 'Signed',
+                _cxSchema.cp_erp_transaction_gl.VALUETAX + 'Signed',
+                _cxSchema.cp_erp_transaction_gl.VALUEGROSS + 'Signed'
+            ]
+        });
     }
-
-
 }
 
 module.exports = CPErpTransactionGLRender;

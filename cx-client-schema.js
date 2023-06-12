@@ -33,6 +33,8 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         TRADERACCOUNTID: 'traderAccountId',
         ISUSEREDITED: 'isUserEdited',
+        CREATEDFROM: 'createdFrom',
+        CREATEDFROMTYPE: 'createdFromType',
     },
 
     cp_deliveryReturnLine: {
@@ -68,6 +70,8 @@ module.exports = {
         DEPMAPCONFIGID: 'depMapConfigId',
         TAXMAPCONFIGID: 'taxMapConfigId',
         ISUSEREDITED: 'isUserEdited',
+        PRODUCTID: 'productId',
+        ALIASID: 'aliasId',
     },
 
     cp_deliveryReturnLog: {
@@ -128,6 +132,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ISUSEREDITED: 'isUserEdited',
+        INVGRPID: 'invGrpId',
     },
 
     cp_erp_transaction_gl: {
@@ -213,6 +218,8 @@ module.exports = {
         ERPTRANSMISSIONID: 'erpTransmissionId',
         TRADERACCOUNTID: 'traderAccountId',
         ISUSEREDITED: 'isUserEdited',
+        CREATEDFROM: 'createdFrom',
+        CREATEDFROMTYPE: 'createdFromType',
     },
 
     cp_invoiceCreditLine: {
@@ -250,6 +257,8 @@ module.exports = {
         DEPMAPCONFIGID: 'depMapConfigId',
         TAXMAPCONFIGID: 'taxMapConfigId',
         ISUSEREDITED: 'isUserEdited',
+        PRODUCTID: 'productId',
+        ALIASID: 'aliasId',
     },
 
     cp_invoiceCreditLog: {
@@ -300,6 +309,67 @@ module.exports = {
         LOGTYPE: 'logType',
         LOGMESSAGE: 'logMessage',
         LOGINFO: 'logInfo',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_product: {
+        TBL_NAME: 'cp_product',
+        PRODUCTID: 'productId',
+        SHOPID: 'shopId',
+        SOURCEID: 'sourceId',
+        ALIASID: 'aliasId',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
+        TRADERACCOUNTID: 'traderAccountId',
+        ITEMCODE: 'itemCode',
+        ITEMDESCRIPTION: 'itemDescription',
+        ITEMBARCODE: 'itemBarcode',
+        ITEMCOSTPRICE: 'itemCostPrice',
+        ITEMSIZE: 'itemSize',
+        SUPPLIERCODE: 'supplierCode',
+        SUPPLIERITEMCODE: 'supplierItemCode',
+        SUPPLIERITEMDESCRIPTION: 'supplierItemDescription',
+        RAW_SUPPLIERCODE: 'raw_supplierCode',
+        RAW_EPOSCODE: 'raw_eposCode',
+        RAW_EPOSDESCRIPTION: 'raw_eposDescription',
+        RAW_EPOSBARCODE: 'raw_eposBarcode',
+        RAW_EPOSDEPARTMENT: 'raw_eposDepartment',
+        RAW_EPOSSUBDEPARTMENT: 'raw_eposSubDepartment',
+        RAW_COSTPRICE: 'raw_costPrice',
+        RAW_ITEMSIZE: 'raw_itemSize',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        DOCLINEID: 'docLineId',
+    },
+
+    cp_productAlias: {
+        TBL_NAME: 'cp_productAlias',
+        ALIASID: 'aliasId',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
+        ITEMCODE: 'itemCode',
+        ITEMDESCRIPTION: 'itemDescription',
+        ITEMBARCODE: 'itemBarcode',
+        ITEMCOSTPRICE: 'itemCostPrice',
+        ITEMSIZE: 'itemSize',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_productAliasShop: {
+        TBL_NAME: 'cp_productAliasShop',
+        ALIASID: 'aliasId',
+        SHOPID: 'shopId',
+        DEPMAPCONFIGID: 'depMapConfigId',
+        TAXMAPCONFIGID: 'taxMapConfigId',
+        TRADERACCOUNTID: 'traderAccountId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
@@ -1346,6 +1416,7 @@ module.exports = {
         TRANLEDGER: 'tranLedger',
         OPPOSITETRANID: 'oppositeTranId',
         CSSSTYLE: 'cssStyle',
+        TRANSIGN: 'tranSign',
     },
 
     sys_provider: {

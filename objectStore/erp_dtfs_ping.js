@@ -33,18 +33,7 @@ class erp_dtfs_ping_Collection extends _persistentTable.Table {
                         and		ss.shopId ${shopFilter} ${shopFilterValue}
                     )`;
 
-        if (params.ss) {
-            query.sql += ' and p.dtfsSettingId = @dtfsSettingId';
-            query.params.push({ name: 'dtfsSettingId', value: params.ss });
-        }
-        if (params.df) {
-            query.sql += ' and p.created >= @dateFrom';
-            query.params.push({ name: 'dateFrom', value: params.df });
-        }
-        if (params.dt) {
-            query.sql += ' and p.created <= @dateTo';
-            query.params.push({ name: 'dateTo', value: params.dt });
-        }
+        this.queryFromParams(query, params, 'p');
 
         query.sql += ' order by p.created desc, p.pingId desc';
 

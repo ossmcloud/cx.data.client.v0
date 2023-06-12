@@ -54,6 +54,8 @@ const _fieldNames = {
     ERPTRANSMISSIONID: 'erpTransmissionId',
     TRADERACCOUNTID: 'traderAccountId',
     ISUSEREDITED: 'isUserEdited',
+    CREATEDFROM: 'createdFrom',
+    CREATEDFROMTYPE: 'createdFromType',
 
 }
 //
@@ -95,6 +97,8 @@ const _fields = {
     erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     traderAccountId: { name: 'traderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    createdFrom: { name: 'createdFrom', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -322,6 +326,18 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISUSEREDITED);
     } set isUserEdited(val) {
         super.setValue(_fieldNames.ISUSEREDITED, val);
+    }
+
+    get createdFrom() {
+        return super.getValue(_fieldNames.CREATEDFROM);
+    } set createdFrom(val) {
+        super.setValue(_fieldNames.CREATEDFROM, val);
+    }
+
+    get createdFromType() {
+        return super.getValue(_fieldNames.CREATEDFROMTYPE);
+    } set createdFromType(val) {
+        super.setValue(_fieldNames.CREATEDFROMTYPE, val);
     }
 
 

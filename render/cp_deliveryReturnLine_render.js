@@ -24,6 +24,7 @@ class CPDeliveryReturnLineRender extends RenderBase {
 
             { name: _cxSchema.cp_deliveryReturnLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
             { name: _cxSchema.cp_deliveryReturnLine.LINESTATUS, title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
+            { title: ' ', name: 'productIcon', width: '10px', unbound: true },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSCODE, title: 'item code' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSDESCRIPTION, title: 'item description' },
@@ -61,6 +62,20 @@ class CPDeliveryReturnLineRender extends RenderBase {
                 columns: [_cxSchema.cp_deliveryReturnLine.LINESTATUS]
             })
         }
+
+        this.options.cellHighlights.push({
+            column: _cxSchema.cp_deliveryReturnLine.PRODUCTID,
+            columns: ['productIcon'],
+            customStyle: function (object, value, highlight) {
+                if (value == null || value == '') {
+                    return 'background-color: rgb(175,0,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                } else {
+                    return 'background-color: rgb(0,125,0); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+                }
+            }
+
+        });
+
 
     }
 

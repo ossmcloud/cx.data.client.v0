@@ -11,39 +11,6 @@ class CPInvoiceReturnRender extends RenderBase {
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
     }
 
-    async validateErpToken() {
-        var warningMessage = '';
-
-        var erpSettingsInfo = await this.dataSource.cx.exec({
-            sql: `
-                select	    erpSett.dtfsSettingId, prv.isCloud
-                from	    erp_shop_setting erpSett
-                inner join  sys_provider prv ON prv.code = erpSett.erpProvider
-                where	    erpSett.shopId = @shopId
-            `,
-            params: [{ name: 'shopId', value: this.dataSource.shopId }],
-            returnFirst: true,
-        });
-        if (erpSettingsInfo && erpSettingsInfo.isCloud) {
-            var erpToken = await this.dataSource.cx.table(_cxSchema.cx_login_token).fetch(['erp', this.dataSource.cx.tUserId, erpSettingsInfo.dtfsSettingId], true);
-            if (erpToken) {
-                if (erpToken.status != 1) {
-                    warningMessage = '&#9888; your oauth-token is not valid';
-                } else if (erpToken.isExpired) {
-                    warningMessage = '&#9888; your oauth-token is expired';
-                }
-            } else {
-                warningMessage = '&#9888; there is no oauth-token for this store';
-            }
-            if (warningMessage) {
-                warningMessage += ' <a href="#" onclick="window.open(\'../oauth?type=erp&s=' + this.dataSource.shopId + '\'); return false;" >click here to get a token</a>';
-                warningMessage = `<div style="color: var(--warn-color);">${warningMessage}</div>`;
-            }
-
-        }
-
-        return warningMessage;
-    }
 
 
     async getDocumentLineListOptions() {
@@ -70,7 +37,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ id: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
 
@@ -80,6 +47,11 @@ class CPInvoiceReturnRender extends RenderBase {
 
             var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
             transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+
+            if (erpSett.mergeGLAndTax) {
+                var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+                transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            }
 
         }
         return transactionLinesOptions;
@@ -106,11 +78,12 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async setRecordTitle() {
         // SET TAB TITLE
-        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${this.dataSource.documentId}]`;
+        var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
+        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
         // SET DOCUMENT TILE WITH DOC TYPE, STATUS AND EDITED BUBBLES
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
         this.options.title = `<div style="display: table;">`;
-        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentId}</div>`;
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
                 ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
@@ -137,6 +110,15 @@ class CPInvoiceReturnRender extends RenderBase {
         `;
         }
 
+        if (this.dataSource.createdFrom) {
+            var createdFromText = await this.dataSource.cx.table(_cxSchema.cp_deliveryReturn).lookUp(this.dataSource.createdFrom, _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER);
+            this.options.title += `
+                <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.createdFromType)}; cursor: pointer;" onclick="window.open('&#47;cp&#47;delivery?id=${this.dataSource.createdFrom}');">
+                    from ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.createdFromType).toLowerCase()} ${createdFromText}
+                </div>
+            `;
+        }
+
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
@@ -160,7 +142,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                             id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
                             dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId },
-                            width: '100%', disabled: (this.dataSource.invGrpId )
+                            width: '100%', disabled: (this.dataSource.invGrpId)
                         }),
                         { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier (epos)', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
@@ -256,15 +238,19 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async buildFormLists() {
-        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: ['width: 60%; min-width: 500px;', 'min-width: 400px;'], fields: [] };
-        this.options.fields.push(erpSubListsGroup);
 
         var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(this.dataSource.shopId);
+        var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
+
+        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
+        this.options.fields.push(erpSubListsGroup);
 
         var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
-        var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
-        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] })
-        erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
+        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] });
+        if (!erpSett.mergeGLAndTax) {
+            var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
+            erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] });
+        }
 
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
@@ -285,7 +271,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
             // allow to refresh only under certain statuses
-            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
             // allow to post based on role only under certain statuses
@@ -304,6 +290,15 @@ class CPInvoiceReturnRender extends RenderBase {
                     this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
                 }
             }
+            // allow to delete if not posted
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
+                    && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH && s != _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                    if (!this.dataSource.invGrpId) {
+                        this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                    }
+                }
+            }
 
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
@@ -311,7 +306,9 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
-        this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        if (this.options.allowEdit) {
+            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+        }
         //
         await this.setRecordTitle();
         // 
@@ -326,7 +323,7 @@ class CPInvoiceReturnRender extends RenderBase {
         try {
             this.options.allowEdit = true;
             this.options.allowEditCondition = function (object) {
-                return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+                return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
             }
 
             if (this.options.query) {

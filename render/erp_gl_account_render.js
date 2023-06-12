@@ -6,9 +6,44 @@ const RenderBase = require('./render_base');
 
 class ErpGLAccount extends RenderBase {
     constructor(dataSource, options) {
-        super(dataSource, options);
-        this.title = 'erp gl account';
+        super(dataSource, options, true);
+        options.title = 'erp gl account list';
+        this.autoLoad = true;
     }
+
+    async initColumn(field, column) {
+        if (field.name == _cxSchema.erp_gl_account.SHOPID) {
+            column.name = 'shopInfo';
+            column.title = 'store';
+            column.addTotals = false;
+            column.align = 'left';
+            column.width = '200px';
+        }
+        if (field.name == _cxSchema.erp_gl_account.CODE) { column.title = 'gl code'; }
+        if (field.name == _cxSchema.erp_gl_account.COSTCENTRE) { column.title = 'gl sub code (1)'; }
+        if (field.name == _cxSchema.erp_gl_account.DEPARTMENT) { column.title = 'gl sub code (2)'; }
+    }
+    async initFilter(field, filter) {
+        if (field.name == _cxSchema.erp_gl_account.SHOPID) {
+            filter.replace = await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 'shopId' });
+        }
+        if (field.name == _cxSchema.erp_gl_account.DESCRIPTION) { filter.width = '250px'; }
+        if (field.name == _cxSchema.erp_gl_account.CODE) { filter.label = 'gl code'; }
+        if (field.name == _cxSchema.erp_gl_account.COSTCENTRE) { filter.label = 'gl sub code (1)'; }
+        if (field.name == _cxSchema.erp_gl_account.DEPARTMENT) { filter.label = 'gl sub code (2)'; }
+    }
+
+    async getUserListOptions() {
+        // TODO:
+        var testOptions = await super.getUserListOptions();
+        // testOptions[_cxSchema.erp_gl_account.CREATED] = { column: { hide: true }, filter: { hide: true } };
+        // testOptions[_cxSchema.erp_gl_account.CREATEDBY] = { column: { hide: true }, filter: { hide: true } };
+        return testOptions;
+    }
+
+
+    
+
 
     async _record() {
         this.options.fields = [
@@ -49,30 +84,7 @@ class ErpGLAccount extends RenderBase {
 
     }
 
-    async _list() {
-        this.options.paging = true;
-        this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
-
-        this.options.recordTitle = 'bank account';
-        this.options.filters = [
-            await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
-            { id: 'cx_gl_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'glc', label: 'GL code' },
-            { id: 'cx_gl_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'gld', label: 'GL description' },
-        ];
-        this.options.columns = [
-            { name: 'erpGLAccountId', title: ' ', align: 'center' },
-            { name: 'shopInfo', title: 'store', width: '200px' },
-            { name: 'code', title: 'GL code' },
-            { name: 'costCentre', title: 'GL Sub Code 1' },
-            { name: 'department', title: 'GL Sub Code 2' },
-            { name: 'description', title: 'GL Description' },
-            { name: 'created', title: 'created', align: 'center', width: '130px' },
-            { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
-        ];
-
-
-    }
-
+  
     async dropDown(options) {
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select an erp GL account'; }
         if (this.options.label == undefined) { this.options.label = 'erp GL account'; }

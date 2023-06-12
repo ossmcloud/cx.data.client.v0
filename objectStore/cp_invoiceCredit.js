@@ -57,6 +57,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.New);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.Ready);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingReady);
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.NEED_ATTENTION);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.ERROR);
                 query.sql += ' and isnull(d.isUserEdited, 0) = 0';
             } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.POST) {
@@ -103,6 +104,10 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         if (params.ued) {
             query.sql += ' and isnull(d.isUserEdited, 0) = @isUserEdited';
             query.params.push({ name: 'isUserEdited', value: (params.ued=='true') });
+        }
+        if (params.from) {
+            query.sql += ' and d.createdFrom = @createdFrom';
+            query.params.push({ name: 'createdFrom', value: params.from });
         }
         query.sql += ' order by d.documentDate desc';
 
@@ -216,7 +221,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
 
     get editedIcon() {
+        if (this.createdFrom) { return '&#x2699;'; }
+
         if (this.isUserEdited) { return '&#x270E;'; }
+        
         return '';
     }
 
@@ -251,6 +259,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
         var log = await this.#logs.log(this.invCreId, type, message, info);
         this.#logs.records.push(log);
         return log;
+    }
+
+    async generate() {
+        throw new Error('Generating delivery/return from invoice/credit is not yet supported');
     }
 }
 //

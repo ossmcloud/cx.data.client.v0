@@ -13,18 +13,21 @@ class cp_erp_transaction_gl_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  gl.*
+        query.sql = ` select  tt.tranSign, gl.*
                       from    ${this.type} gl
                       inner join cp_erp_transaction t ON t.erpTranId = gl.erpTranId
-                      where   t.invCreId = @invCreId`;
-        query.params.push({ name: 'invCreId', value: params.id });
-
-        // if (params.id) {
-        //     query.sql += ' and invCreLineId = @invCreLineId';
-        //     query.params.push({ name: 'invCreLineId', value: params.id });
-        // }
-        // query.sql += ' order by lineNumber';
-
+                      inner join sys_erp_tran_type tt ON tt.tranTypeId = t.erpTranTypeId`;
+                      
+        
+        if (params.id) {
+            query.sql += ' where   t.invCreId = @invCreId';
+            query.params.push({ name: 'invCreId', value: params.id });
+        }
+        if (params.invGrpId) {
+            query.sql += ' where   t.invGrpId = @invGrpId';
+            query.params.push({ name: 'invGrpId', value: params.invGrpId });
+        }
+      
         query.sql += ' order by gl.glTranId';
         query.paging = {
             page: params.page || 1,
@@ -38,9 +41,26 @@ class cp_erp_transaction_gl_Collection extends _persistentTable.Table {
 // ----------------------------------------------------------------------------------------
 //
 class cp_erp_transaction_gl extends _persistentTable.Record {
+    #tranSign = 1;
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
+        this.#tranSign = defaults['tranSign'] || 1;
     };
+
+    get tranSign() {
+        return this.#tranSign;   
+    }
+
+    get valueNetSigned() {
+        return this.valueNet * this.tranSign;
+    }
+    get valueTaxSigned() {
+        return this.valueTax * this.tranSign;
+    }
+    get valueGrossSigned() {
+        return this.valueGross * this.tranSign;
+    }
 
     async save() {
         if (this.valueTax == null) { this.valueTax = 0; }

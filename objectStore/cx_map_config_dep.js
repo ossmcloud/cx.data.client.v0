@@ -11,9 +11,15 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
     async select(params) {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };
-        query.sql = `select	*
-                    from	cx_map_config_dep
+        query.sql = `select	dep.*
+                    from	cx_map_config_dep dep
+                    inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId
                     where   1 = 1`;
+
+        if (params.s) {
+            query.sql += ' and s.shopId = @shopId';
+            query.params.push({ name: 'shopId', value: params.s });
+        }
 
         if (params.mid) {
             query.sql += ' and mapConfigId = @mapConfigId';
@@ -43,6 +49,27 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         }
 
         await super.select(query);
+    }
+
+    async toLookupFullList(shopId) {
+        var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
+        query.sql = `
+            select	    dep.depMapConfigId as value, eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']' as text
+            from	    cx_map_config_dep dep
+            inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId
+            where	    s.shopId = @shopId
+            order by    eposDepartment, eposSubDepartment
+        `;
+        var lookUpValues = [{ value: '', text: '' }];
+        var result = await this.db.exec(query);
+        for (var rx = 0; rx < result.rows.length; rx++) {
+            var row = result.rows[rx];
+            lookUpValues.push({
+                value: row.value,
+                text: row.text,
+            })
+        }
+        return lookUpValues;
     }
 
     async toLookUpList(shopId, department) {

@@ -466,14 +466,32 @@ const CR_PREFERENCE = {
 
 }
 
+const CP_PRODUCT = {
+    MAP_STATUS: {
+        ANY: 0,
+        MAPPED: 1,
+        //NOT_MAPPED: 2,
+        NOT_MAPPED_DEP: 2,
+        NOT_MAPPED_TAX: 3,
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                ANY: ' - any -',
+                MAPPED: 'Mapped',
+                //NOT_MAPPED: 'Not Mapped',
+                NOT_MAPPED_DEP: 'Not Mapped (dep)',
+                NOT_MAPPED_TAX: 'Not Mapped (tax)',
+            });
+        }
+    },
+}
 
 const CP_DOCUMENT = {
-    PROVIDER: {
-        BWG: 1,
+    // PROVIDER: {
+    //     BWG: 1,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
-        getName: function (value) { return enumGetName(this, value); },
-    },
+    //     toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    //     getName: function (value) { return enumGetName(this, value); },
+    // },
 
     BATCH_ACTIONS: {
         REFRESH: 1,
@@ -541,10 +559,11 @@ const CP_DOCUMENT = {
     STATUS: {
         New: 0,
         Ready: 1,
-        //ReadyForPosting: 2,    
+        Generating: 2,
         REFRESH: 3,
 
-        //PostingPrep: 4,            // user sent this for poosting
+        NEED_ATTENTION: 4,         // can't post to ERP
+
         PostingReady: 5,           //
         Posting: 6,                // erps.exe is to pick up the stuff to post
         PostingRunning: 7,         // erps.exe has picked up the stuff to post
@@ -562,6 +581,7 @@ const CP_DOCUMENT = {
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 REFRESH: 'refreshing erp info',
+                NEED_ATTENTION: 'need attention',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -572,6 +592,7 @@ const CP_DOCUMENT = {
         getName: function (value) {
             return enumGetName(this, value, {
                 REFRESH: 'refreshing erp info',
+                NEED_ATTENTION: 'need attention',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -599,6 +620,9 @@ const CP_DOCUMENT = {
             } else if (status == this.PostingError) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
+            } else if (status == this.NEED_ATTENTION) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
             } else if (status == this.ERROR) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
@@ -613,39 +637,10 @@ const CP_DOCUMENT = {
                 bkgColor = '128,128,128';
             }
 
-
-
-            // if (status == this.New) {
-            //     color = '0,0,0';
-            //     bkgColor = '255,202,58';
-            // } else if (status == this.Ready) {
-            //     color = '255,255,255';
-            //     bkgColor = '25,130,196';
-            // } else if (status == this.Reconciled_None) {
-            //     color = '0,100,0';
-            //     bkgColor = '138,201,38';
-            // } else if (status == this.Reconciled_Part) {
-            //     color = '0,100,0';
-            //     bkgColor = '138,201,38';
-            // } else if (status == this.Reconciled_Full) {
-            //     color = '0,100,0';
-            //     bkgColor = '138,201,38';
-            // } else if (status == this.REFRESH) {
-            //     color = '255,255,255';
-            //     bkgColor = '128,128,128';
-            // } else if (status == this.ERROR) {
-            //     color = '255,255,255';
-            //     bkgColor = '234,30,37';
-            // } else {
-            //     color = '255,255,255';
-            //     bkgColor = '128,128,128';
-            // }
-
             var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
             if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
             if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
             if (returnObject) { return styles; }
-
 
             return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
@@ -658,6 +653,7 @@ const CP_DOCUMENT = {
         Cancelled: 7,
         Completed: 8,
         ERROR: 9,
+        Deleted: 99,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty);
@@ -712,9 +708,9 @@ const CP_DOCUMENT_LINE = {
         FreeStock: 3,
         REFRESH: 8,
         ERROR: 9,
-        Reconciled_None: 10,
-        Reconciled_Part: 11,
-        Reconciled_Full: 12,
+        // Reconciled_None: 10,
+        // Reconciled_Part: 11,
+        // Reconciled_Full: 12,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
@@ -835,6 +831,7 @@ module.exports = {
     CP_DOCUMENT: CP_DOCUMENT,
     CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
     CP_DOCUMENT_LOG: CP_DOCUMENT_LOG,
+    CP_PRODUCT: CP_PRODUCT,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

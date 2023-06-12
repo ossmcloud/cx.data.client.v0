@@ -1,6 +1,8 @@
 'use strict'
 //
 const _persistentTable = require('./persistent/p-cp_invoiceCreditLine');
+const _declarations = require('../cx-client-declarations');
+const _schema = require('../cx-client-schema');
 //
 class cp_invoiceCreditLine_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -38,6 +40,15 @@ class cp_invoiceCreditLine extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
     };
+
+    get lineStatusMsg() {
+        if (this.lineStatus == _declarations.CP_DOCUMENT_LINE.STATUS.Ready) {
+            if (!this.depMapConfigId || !this.taxMapConfigId) {
+                return 'not mapped';
+            }
+        }
+        return this.lineStatus
+    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

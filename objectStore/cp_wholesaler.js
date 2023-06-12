@@ -12,8 +12,10 @@ class cp_wholesaler_Collection extends _persistentTable.Table {
     async select(params) {
         if (!params) { params = {} };
 
-        var query = {
-            sql: `
+        var query = null;
+        if (params.s) {
+            var query = {
+                sql: `
                 select	    w.*, s.shopCode, s.shopName, ws.defaultOptions
                 from	    cp_wholesaler w
                 inner join  cp_wholesalerShop ws ON ws.wholesalerId = w.wholesalerId
@@ -21,15 +23,16 @@ class cp_wholesaler_Collection extends _persistentTable.Table {
                 where	s.shopId = @shopId
                 order by    w.code
             `,
-            params: [
-                { name: 'shopId', value: params.s }
-            ]
-        };
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+                params: [
+                    { name: 'shopId', value: params.s }
+                ]
+            };
+        } else {
+            var query = { sql: 'select * from cp_wholesaler where 1=1' }
+            this.queryFromParams(query, params);
+            query.sql += ' order by code';
         }
-
+       
         return await super.select(query);
     }
 

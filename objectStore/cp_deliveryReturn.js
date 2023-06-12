@@ -3,7 +3,9 @@
 const _persistentTable = require('./persistent/p-cp_deliveryReturn');
 const _core = require('cx-core');
 const _declarations = require('../cx-client-declarations');
+const _schema = require('../cx-client-schema');
 const _cx_render = require('../cx-client-render');
+
 //
 class cp_deliveryReturn_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -114,6 +116,24 @@ class cp_deliveryReturn extends _persistentTable.Record {
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
+    }
+
+    async generate() {
+
+        var doc = this.cx.table(_schema.cp_invoiceCredit).createNew();
+        doc.populate(this.toObject());
+        doc.transmissionID = -1;
+        doc.documentType = (this.documentType == _declarations.CP_DOCUMENT.TYPE.Delivery) ? _declarations.CP_DOCUMENT.TYPE.Invoice : _declarations.CP_DOCUMENT.TYPE.CreditNote;
+        doc.documentStatus = _declarations.CP_DOCUMENT.STATUS.Generating;
+        doc.documentStatusMessage = `document is being generated from ${this.documentTypeName} ${this.documentNumber}...`;
+        doc.createdFrom = this.delRetId;
+        doc.createdFromType = this.documentType;
+        doc.createdBy = null;
+        doc.created = null;
+        doc.modifiedBy = null;
+        doc.modified = null;
+        await doc.save();
+        return doc;
     }
 }
 //

@@ -14,15 +14,19 @@ class CxMapConfigRender extends RenderBase {
         var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
+        
+        var readOnly = !this.dataSource.isNew();
 
         this.options.fields = [
             {
                 group: 'mainOuter', title: '', columnCount: 4, fields: [
                     {
                         group: 'main', title: 'main info', columnCount: 1, column: 1, inLine: true, fields: [
-                            { name: _cxSchema.cx_map_config_tax.EPOSTAXCODE, label: 'epos tax code', column: 1, readOnly: true },
-                            { name: _cxSchema.cx_map_config_tax.EPOSTAXRATE, label: 'epos tax rate', column: 1, readOnly: true },
-                            { name: _cxSchema.cx_map_config_tax.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: true },
+                            { name: _cxSchema.cx_map_config_tax.MAPCONFIGID, hidden: true },
+                            { name: _cxSchema.cx_map_config_tax.EPOSTAXCODE, label: 'epos tax code', column: 1, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: _cxSchema.cx_map_config_tax.EPOSTAXRATE, label: 'epos tax rate', column: 1, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: _cxSchema.cx_map_config_tax.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: readOnly },
+                            { name: _cxSchema.cx_map_config_tax.EPOSCURRENCYCODE, label: 'epos currency', column: 1, lookUps: _cxConst.CX_CURRENCY.toList(true), readOnly: readOnly, validation: '{ "mandatory": true }' },
                         ]
                     },
                     {
@@ -110,6 +114,25 @@ class CxMapConfigRender extends RenderBase {
         })
 
     }
+
+
+    async dropDown(dropDownSelectionOptions) {
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a tax'; }
+        if (this.options.label == undefined) { this.options.label = 'epos tax'; }
+
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(dropDownSelectionOptions); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record.taxMapConfigId,
+                text: record.eposTaxCode + ' [' + record.eposTaxRate + '%] ' + record.eposDescription,
+            });
+        });
+        this.options.items = dropDownItems;
+    }
+
 
 
 }

@@ -14,15 +14,16 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cp_wholesalerProvider';
+const _tableName = 'cp_productAliasShop';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    WHOLESALERPROVIDERID: 'wholesalerProviderId',
-    WHOLESALERID: 'wholesalerId',
-    DATAPROVIDERID: 'dataProviderId',
-    DATAPROVIDERNAME: 'dataProviderName',
+    ALIASID: 'aliasId',
+    SHOPID: 'shopId',
+    DEPMAPCONFIGID: 'depMapConfigId',
+    TAXMAPCONFIGID: 'taxMapConfigId',
+    TRADERACCOUNTID: 'traderAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -33,10 +34,11 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    wholesalerProviderId: { name: 'wholesalerProviderId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    dataProviderId: { name: 'dataProviderId', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
-    dataProviderName: { name: 'dataProviderName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
+    aliasId: { name: 'aliasId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
+    shopId: { name: 'shopId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
+    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    traderAccountId: { name: 'traderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -46,7 +48,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cp_wholesalerProvider_Collection extends _cx_data.DBTable {
+class Persistent_cp_productAliasShop_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -55,33 +57,41 @@ class Persistent_cp_wholesalerProvider_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cp_wholesalerProvider extends _cx_data.DBRecord {
+class Persistent_cp_productAliasShop extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get wholesalerProviderId() {
-        return super.getValue(_fieldNames.WHOLESALERPROVIDERID);
+    get aliasId() {
+        return super.getValue(_fieldNames.ALIASID);
+    } set aliasId(val) {
+        super.setValue(_fieldNames.ALIASID, val);
     }
 
-    get wholesalerId() {
-        return super.getValue(_fieldNames.WHOLESALERID);
-    } set wholesalerId(val) {
-        super.setValue(_fieldNames.WHOLESALERID, val);
+    get shopId() {
+        return super.getValue(_fieldNames.SHOPID);
+    } set shopId(val) {
+        super.setValue(_fieldNames.SHOPID, val);
     }
 
-    get dataProviderId() {
-        return super.getValue(_fieldNames.DATAPROVIDERID);
-    } set dataProviderId(val) {
-        super.setValue(_fieldNames.DATAPROVIDERID, val);
+    get depMapConfigId() {
+        return super.getValue(_fieldNames.DEPMAPCONFIGID);
+    } set depMapConfigId(val) {
+        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
     }
 
-    get dataProviderName() {
-        return super.getValue(_fieldNames.DATAPROVIDERNAME);
-    } set dataProviderName(val) {
-        super.setValue(_fieldNames.DATAPROVIDERNAME, val);
+    get taxMapConfigId() {
+        return super.getValue(_fieldNames.TAXMAPCONFIGID);
+    } set taxMapConfigId(val) {
+        super.setValue(_fieldNames.TAXMAPCONFIGID, val);
+    }
+
+    get traderAccountId() {
+        return super.getValue(_fieldNames.TRADERACCOUNTID);
+    } set traderAccountId(val) {
+        super.setValue(_fieldNames.TRADERACCOUNTID, val);
     }
 
     get created() {
@@ -114,6 +124,6 @@ class Persistent_cp_wholesalerProvider extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cp_wholesalerProvider_Collection,
-    Record: Persistent_cp_wholesalerProvider,
+    Table: Persistent_cp_productAliasShop_Collection,
+    Record: Persistent_cp_productAliasShop,
 }
