@@ -39,10 +39,12 @@ class CPErpTransactionGLRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXDESCRIPTION, title: 'Description', input: textInputReadOnly });
         }
 
+        var signedPostfix = (this.options.editMode) ? '' : 'Signed';
+        
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput });
-        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUENET + 'Signed', title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
-        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUETAX + 'Signed', title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
-        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + 'Signed', title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true });
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUENET + signedPostfix, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUETAX + signedPostfix, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + signedPostfix, title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true });
 
         this.options.cellHighlights = [];
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
@@ -60,14 +62,14 @@ class CPErpTransactionGLRender extends RenderBase {
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Error));
 
         this.options.cellHighlights.push({
-            column: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + 'Signed',
+            column: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + signedPostfix,
             op: '<',
             value: 0,
             style: 'color: rgb(230,0,0);',
             columns: [
-                _cxSchema.cp_erp_transaction_gl.VALUENET + 'Signed',
-                _cxSchema.cp_erp_transaction_gl.VALUETAX + 'Signed',
-                _cxSchema.cp_erp_transaction_gl.VALUEGROSS + 'Signed'
+                _cxSchema.cp_erp_transaction_gl.VALUENET + signedPostfix,
+                _cxSchema.cp_erp_transaction_gl.VALUETAX + signedPostfix,
+                _cxSchema.cp_erp_transaction_gl.VALUEGROSS + signedPostfix
             ]
         });
     }
