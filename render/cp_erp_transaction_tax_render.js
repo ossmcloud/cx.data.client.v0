@@ -19,6 +19,8 @@ class CPErpTransactionTaxRender extends RenderBase {
             this.options.rowTemplate = this.dataSource.createNew();
         }
 
+        var signedPostfix = (this.options.editMode) ? '' : 'Signed';
+
         this.options.columns = [
             { name: 'editedIcon', title: ' ', align: 'center', width: '10px' },
             { name: _cxSchema.cp_erp_transaction_tax.STATUSMESSAGE, title: 'status', align: 'center', width: '90px', style: 'white-space: normal;' },
@@ -26,9 +28,9 @@ class CPErpTransactionTaxRender extends RenderBase {
             { name: _cxSchema.cp_erp_transaction_tax.TAXRATE, title: 'Rate', align: 'right', width: '50px', formatMoney: true, input: textInputReadOnly },
             { name: _cxSchema.cp_erp_transaction_tax.TAXDESCRIPTION, title: 'Description', input: textInputReadOnly },
             { name: _cxSchema.cp_erp_transaction_tax.NARRATIVE, title: 'Narrative', nullText: '', input: textInput },
-            { name: _cxSchema.cp_erp_transaction_tax.VALUENET + 'Signed', title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
-            { name: _cxSchema.cp_erp_transaction_tax.VALUETAX + 'Signed', title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
-            { name: _cxSchema.cp_erp_transaction_tax.VALUEGROSS + 'Signed', title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true },
+            { name: _cxSchema.cp_erp_transaction_tax.VALUENET + signedPostfix, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
+            { name: _cxSchema.cp_erp_transaction_tax.VALUETAX + signedPostfix, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput },
+            { name: _cxSchema.cp_erp_transaction_tax.VALUEGROSS + signedPostfix, title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true },
 
         ];
 
@@ -48,14 +50,14 @@ class CPErpTransactionTaxRender extends RenderBase {
         this.options.cellHighlights.push(getCellHighlight(_cxConst.ERP_TRAN_STATUS.Error));
 
         this.options.cellHighlights.push({
-            column: _cxSchema.cp_erp_transaction_tax.VALUEGROSS + 'Signed',
+            column: _cxSchema.cp_erp_transaction_tax.VALUEGROSS + signedPostfix,
             op: '<',
             value: 0,
             style: 'color: rgb(230,0,0);',
             columns: [
-                _cxSchema.cp_erp_transaction_tax.VALUENET + 'Signed',
-                _cxSchema.cp_erp_transaction_tax.VALUETAX + 'Signed',
-                _cxSchema.cp_erp_transaction_tax.VALUEGROSS + 'Signed'
+                _cxSchema.cp_erp_transaction_tax.VALUENET + signedPostfix,
+                _cxSchema.cp_erp_transaction_tax.VALUETAX + signedPostfix,
+                _cxSchema.cp_erp_transaction_tax.VALUEGROSS + signedPostfix
             ]
         });
     }
