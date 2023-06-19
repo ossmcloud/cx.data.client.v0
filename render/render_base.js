@@ -308,6 +308,7 @@ class RenderBase {
         }
         if (renderType == _cxConst.RENDER.TYPE.DROP_DOWN) {
             if (this.dataSource.count() == 0 && !this.options.noLoad) {
+                if (!options) { options = {}; }
                 options.noPaging = true;
                 await this.dataSource.select(options);
             }
