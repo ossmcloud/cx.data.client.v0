@@ -91,10 +91,35 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
+    async toLookUpList(shopId, addEmpty, allowEditOnly) {
+        await this.select({ s: shopId, manual: ((allowEditOnly) ? 'T' : 'F') });
+        var lookUpValues = [];
+        if (addEmpty) {
+            if (addEmpty.constructor.name == 'String') {
+                lookUpValues.push({ value: '', text: addEmpty });
+            } else {
+                lookUpValues.push({ value: '', text: '' });
+            }
+        };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.tranTypeConfigId,
+                text: `[${rec.eposTranType}/${rec.eposTranSubType}] ${rec.description} (${rec.cbHeading})`
+            })
+        });
+        return lookUpValues;
+    }
+
     async toLookUpListByCfg(mapConfigId, addEmpty, allowEditOnly) {
         await this.select({ mid: mapConfigId, manual: ((allowEditOnly) ? 'T' : 'F') });
         var lookUpValues = [];
-        if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        if (addEmpty) {
+            if (addEmpty.constructor.name == 'String') {
+                lookUpValues.push({ value: '', text: addEmpty });   
+            } else {
+                lookUpValues.push({ value: '', text: '' });
+            }
+        };
         super.each(function (rec) {
             lookUpValues.push({
                 value: rec.tranTypeConfigId,

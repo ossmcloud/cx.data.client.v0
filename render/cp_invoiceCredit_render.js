@@ -384,6 +384,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' },
+                { name: 'supplierName', title: 'supplier name' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' },
                 { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' },

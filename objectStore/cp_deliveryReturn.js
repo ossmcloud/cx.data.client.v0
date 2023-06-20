@@ -17,10 +17,12 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  d.*, s.shopCode, s.shopName
-                      from    ${this.type} d, cx_shop s
-                      where   d.${this.FieldNames.SHOPID} = s.shopId
-                      and     d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+        query.sql = ` select            d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName
+                      from              ${this.type} d
+                      inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                      left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
+                      left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -83,16 +85,19 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     #documentSign = 1;
+    #supplierName = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        this.#supplierName = defaults['supplierName'];
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
     };
 
+    get supplierName() { return this.#supplierName; }
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }

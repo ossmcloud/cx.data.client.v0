@@ -206,6 +206,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' },
+                { name: 'supplierName', title: 'supplier name' },
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' },
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' },
 

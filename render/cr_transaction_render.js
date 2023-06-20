@@ -198,22 +198,24 @@ class CRCashBookRender extends RenderBase {
         var cbTranTypes = [{ value: '', text: ' - all - ' }];
         var query = { sql: 'select cbTranTypeId as value, code as text from cr_cb_tran_type' };
         var cbTranTypeSrc = await this.dataSource.cx.exec(query);
-        cbTranTypeSrc.each(function (t) {
-            cbTranTypes.push({ value: t.value, text: t.text });
-        })
+        cbTranTypeSrc.each(function (t) { cbTranTypes.push({ value: t.value, text: t.text }); });
 
+        if (this.options.query.cb) {
+            this.options.query.s = await this.dataSource.cx.table(_cxSchema.cr_cb_transaction).lookUp(this.options.query.cb, _cxSchema.cr_cb_transaction.SHOPID);
+        }
+
+        var tranTypeConfigs = await this.dataSource.cx.table(_cxSchema.cr_tran_type_config).toLookUpList(this.options.query.s, '- all -');
 
         this.options.filters = [
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-            {
-                label: 'transaction type', fieldName: 'tt', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
-                items: cbTranTypes,
-            },
+            { label: 'transaction type', fieldName: 'tt', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: cbTranTypes, },
+            { label: 'tran. config.', fieldName: 'ttt', width: '200px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: tranTypeConfigs, },
             { label: 'epos tran. type', fieldName: 'e_tt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'epos tran. sub-type', fieldName: 'e_ts', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'epos tran. no', fieldName: 'e_tn', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'customer', fieldName: 'cust', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'cashbook heading', fieldName: 'cb_h', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'cb', fieldName: 'cb', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: false, width: '30px', readOnly: true },
         ];
@@ -224,6 +226,8 @@ class CRCashBookRender extends RenderBase {
             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, title: 'date', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, title: 'date/time', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, title: 'epos tran. no' },
+            { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, title: 'a/c', nullText: '' }, 
+            { name: 'customerName', title: 'a/c name' },
             { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, title: 'epos tran type' },
             { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, title: 'sub-type' },
             { name: _cxSchema.cr_transaction.REFERENCE1, title: 'reference 1' },
