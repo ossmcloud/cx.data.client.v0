@@ -74,11 +74,11 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             query.sql += ' and c.cbHeading like @cbHeading';
             query.params.push({ name: 'cbHeading', value: params.e_cbh + '%' });
         }
-        
+
 
 
         // NOTE: these are parameters set by  cashbook-svc processes
-        if (params.manual == 'T') {            query.sql += ' and c.allowEdit = 1';        }
+        if (params.manual == 'T') { query.sql += ' and c.allowEdit = 1'; }
         if (params.decla) {
             if (params.decla == 'T') {
                 query.sql += ' and c.requiresDeclaration > 0';
@@ -91,10 +91,35 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
+    async toLookUpList(shopId, addEmpty, allowEditOnly) {
+        await this.select({ s: shopId, manual: ((allowEditOnly) ? 'T' : 'F') });
+        var lookUpValues = [];
+        if (addEmpty) {
+            if (addEmpty.constructor.name == 'String') {
+                lookUpValues.push({ value: '', text: addEmpty });
+            } else {
+                lookUpValues.push({ value: '', text: '' });
+            }
+        };
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.tranTypeConfigId,
+                text: `[${rec.eposTranType}/${rec.eposTranSubType}] ${rec.description} (${rec.cbHeading})`
+            })
+        });
+        return lookUpValues;
+    }
+
     async toLookUpListByCfg(mapConfigId, addEmpty, allowEditOnly) {
         await this.select({ mid: mapConfigId, manual: ((allowEditOnly) ? 'T' : 'F') });
         var lookUpValues = [];
-        if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
+        if (addEmpty) {
+            if (addEmpty.constructor.name == 'String') {
+                lookUpValues.push({ value: '', text: addEmpty });
+            } else {
+                lookUpValues.push({ value: '', text: '' });
+            }
+        };
         super.each(function (rec) {
             lookUpValues.push({
                 value: rec.tranTypeConfigId,
@@ -167,7 +192,7 @@ class cr_tran_type_config extends _persistentTable.Record {
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        
+
         await super.save()
     }
 }

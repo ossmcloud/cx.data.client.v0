@@ -6,6 +6,11 @@ class cx_shop_group_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cx_shop_group(this, defaults);
     }
+
+    async select(params) {
+        await super.select();
+    }
+    
 }
 //
 //

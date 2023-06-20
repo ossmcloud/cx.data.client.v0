@@ -14,13 +14,15 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var isBatchProcessing = (params.batch == 'T' || params.batch == 'true');
-        
+
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  d.*, s.shopCode, s.shopName
-                      from    ${this.type} d, cx_shop s
-                      where   d.${this.FieldNames.SHOPID} = s.shopId
-                      and     d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+        query.sql = ` select  d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName
+                      from    ${this.type} d
+                      inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                      left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
+                      left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -71,12 +73,12 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                 query.sql += ' and d.documentStatus in (' + validStatuses.join(',') + ')';
             }
         }
-        
+
         if (params.st) {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: params.st });
         }
-        
+
         if (params.su) {
             query.sql += ' and d.supplierCode like @supplierCode';
             query.params.push({ name: 'supplierCode', value: '%' + params.su });
@@ -103,7 +105,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         }
         if (params.ued) {
             query.sql += ' and isnull(d.isUserEdited, 0) = @isUserEdited';
-            query.params.push({ name: 'isUserEdited', value: (params.ued=='true') });
+            query.params.push({ name: 'isUserEdited', value: (params.ued == 'true') });
         }
         if (params.from) {
             query.sql += ' and d.createdFrom = @createdFrom';
@@ -152,6 +154,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 class cp_invoiceCredit extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
+    #supplierName = null;
     #documentSign = 1;
     #postingStatus = '';
     #postingStatusMessage = '';
@@ -169,6 +172,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        this.#supplierName = defaults['supplierName'];
         this.#postingStatus = defaults['postingStatus'] || '';
         this.#postingStatusMessage = defaults['postingStatusMessage'] || '';
         this.#postingURN = defaults['postingURN'] || '';
@@ -180,9 +184,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#postedOn = defaults['postedOn'] || '';
         this.#postedBy = defaults['postedBy'] || '';
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) { this.#documentSign = -1; }
-        
+
     };
 
+    get supplierName() { return this.#supplierName; }
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
@@ -224,7 +229,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
         if (this.createdFrom) { return '&#x2699;'; }
 
         if (this.isUserEdited) { return '&#x270E;'; }
-        
+
         return '';
     }
 

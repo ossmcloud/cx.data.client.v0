@@ -13,23 +13,30 @@ class cr_transaction_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  t.*, s.shopCode, s.shopName
+        query.sql = ` select  t.*, s.shopCode, s.shopName, cust.traderName as customerName
                       from    ${this.type} t
-                      inner join cx_shop s ON s.shopId = t.shopId
-                      left outer join cr_tran_type_config tranType ON tranType.tranTypeConfigId = t.tranTypeConfigId
+                      inner      join cx_shop               s           ON s.shopId = t.shopId
+                      left outer join cr_tran_type_config   tranType    ON tranType.tranTypeConfigId = t.tranTypeConfigId
+                      left outer join cx_traderAccount      cust        ON cust.shopId = t.shopId AND cust.traderCode = t.customerAccount AND cust.traderType = 'C' 
                       where   t.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
-        if (params.s) {
-            query.sql += ' and t.shopId = @shopId';
-            query.params.push({ name: 'shopId', value: params.s });
-        }
         if (params.cb) {
             query.sql += ' and t.cbTranId = @cbTranId';
             query.params.push({ name: 'cbTranId', value: params.cb });
+        } else if (params.s) {
+            query.sql += ' and t.shopId = @shopId';
+            query.params.push({ name: 'shopId', value: params.s });
         }
+
         if (params.cb_h) {
             query.sql += ' and tranType.cbHeading = @cbHeading';
-            query.params.push({ name: 'cbHeading', value: params.cb_h });
+            if (params.cb_h.indexOf('A/C') == 0) {
+                query.sql += ' and t.customerAccount is not null';
+                query.params.push({ name: 'cbHeading', value: params.cb_h.substring(4) });
+            } else {
+                query.sql += ' and t.customerAccount is null';
+                query.params.push({ name: 'cbHeading', value: params.cb_h });
+            }
         }
 
         if (params.tt) {
@@ -145,16 +152,20 @@ class cr_transaction_Collection extends _persistentTable.Table {
 class cr_transaction extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
+    #customerName = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        this.#customerName = defaults['customerName'] || '';
     };
 
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+
+    get customerName() { return this.#customerName; }
 
     async save() {
         if (this.isManual) {
