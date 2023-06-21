@@ -4,8 +4,7 @@ const _persistentTable = require('./persistent/p-epos_dtfs_setting');
 //
 class epos_dtfs_setting_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new
-            (this, defaults);
+        return new (this, defaults);
     }
 
 
