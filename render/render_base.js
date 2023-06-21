@@ -83,9 +83,9 @@ class RenderBase {
 
         this.options.pageSize = _cxConst.SQL.PAGE_SIZE;
 
-        if (!this.options.cellHighlights) {
-            this.options.cellHighlights = [];
-        }
+        if (!this.options.cellHighlights) { this.options.cellHighlights = []; }
+
+        if (this.options.query == undefined) { this.options.query = {}; }
     }
 
     async getUserListOptions() {
