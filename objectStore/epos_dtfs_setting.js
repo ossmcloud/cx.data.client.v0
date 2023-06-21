@@ -15,8 +15,8 @@ class epos_dtfs_setting extends _persistentTable.Record {
         super(table, defaults);
     };
 
-    async select() {
-        super.select();
+    async select(params) {
+        await super.select();
     }
 
     // async select(params) {
