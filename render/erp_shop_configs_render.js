@@ -29,7 +29,7 @@ class ErpShopConfig extends RenderBase {
         this.options.columns = [
             { name: _cxSchema.erp_shop_configs.CONFIGID, title: 'id', align: 'left' },
             { name: _cxSchema.erp_shop_configs.CONFIGNAME, title: 'name', align: 'left' },
-            { name: _cxSchema.erp_shop_configs.CONFIGVALUE, title: 'value', align: 'left' },
+            { name: _cxSchema.erp_shop_configs.CONFIGVALUE + 'Display', title: 'value', align: 'left' },
         ];
     }
 

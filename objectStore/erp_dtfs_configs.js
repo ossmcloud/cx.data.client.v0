@@ -25,9 +25,7 @@ class erp_dtfs_configs_Collection extends _persistentTable.Table {
         if (await super.select()) {
             var config = this.first();
             value = config.configValue;
-            if (config.valueEncrypted == true) {
-                value = _cx_crypto.Aes.decrypt(value, config.configName + '_' + config.id);
-            }
+            if (config.valueEncrypted == true) { value = _cx_crypto.Aes.decrypt(value, config.configName + '_' + config.id); }
             if (parseJason) {
                 if (!value) { return null; }
                 try {
@@ -49,6 +47,11 @@ class erp_dtfs_configs extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
     };
+
+    get configValueDisplay() {
+        if (this.valueEncrypted) { return "[value is encrypted]"; }
+        return this.configValue;
+    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

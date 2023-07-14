@@ -126,8 +126,13 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
+    BWG_CRM_CONFIG: 'BWGCRMConfig',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        if (configName == this.BWG_CRM_CONFIG) { return true; }
+        return false;
+    }
 }
 
 const ERP_DTFS_CONFIGS = {
