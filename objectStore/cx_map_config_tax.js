@@ -15,15 +15,15 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
                             ('[' + etax.code + '] ' + etax.description + '(' + convert(varchar, etax.rate) + '%) - ' + etax.currencyCode) as taxAccount,
                             ('[' + etaxp.code + '] ' + etaxp.description + '(' + convert(varchar, etaxp.rate) + '%) - ' + etaxp.currencyCode) as taxAccountPurchase
                     from	cx_map_config_tax tax
-                    inner join  cx_shop s on tax.mapConfigId = s.taxMapConfigId
                     left outer join erp_tax_account etax ON tax.taxAccountId = etax.erpTaxAccountId
-                    left outer join erp_tax_account etaxp ON tax.purchaseTaxAccountId = etaxp.erpTaxAccountId
-                    
-                    where   1 = 1`;
+                    left outer join erp_tax_account etaxp ON tax.purchaseTaxAccountId = etaxp.erpTaxAccountId`;
 
         if (params.s) {
-            query.sql += ' and s.shopId = @shopId';
+            query.sql += 'inner join  cx_shop s on tax.mapConfigId = s.taxMapConfigId';
+            query.sql += ' where s.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
+        } else {
+            query.sql += ' where   1 = 1';
         }
 
         if (params.mid) {

@@ -10,7 +10,7 @@ class cx_shop_group_Collection extends _persistentTable.Table {
     async select(params) {
         await super.select();
     }
-    
+
 }
 //
 //

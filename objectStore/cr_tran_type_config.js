@@ -115,7 +115,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         var lookUpValues = [];
         if (addEmpty) {
             if (addEmpty.constructor.name == 'String') {
-                lookUpValues.push({ value: '', text: addEmpty });
+                lookUpValues.push({ value: '', text: addEmpty });   
             } else {
                 lookUpValues.push({ value: '', text: '' });
             }

@@ -862,6 +862,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        VALUEENCRYPTED: 'valueEncrypted',
     },
 
     epos_dtfs_ping: {
@@ -925,6 +926,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        VALUEENCRYPTED: 'valueEncrypted',
     },
 
     epos_shop_setting: {
@@ -1044,6 +1046,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        VALUEENCRYPTED: 'valueEncrypted',
     },
 
     erp_shop_setting: {

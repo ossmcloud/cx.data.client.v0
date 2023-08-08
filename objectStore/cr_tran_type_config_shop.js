@@ -28,7 +28,7 @@ class cr_tran_type_config_shop_Collection extends _persistentTable.Table {
                                 ('[' + tranType2.tranLedger + '] ' + tranType2.tranName) as tranInfo2,
                                 ('[' + traderAcc2.traderCode + '] ' + traderAcc2.traderName) as traderInfo2,
                                 ('[' + glAcc2.code + '] ' + glAcc2.description) as glAccount2,
-                                ('[' + glAccContra.code + '] ' + glAccContra.description) as glAccountContra2,
+                                ('[' + glAccContra2.code + '] ' + glAccContra.description) as glAccountContra2,
                                 ('[' + bankAcc2.code + '] ' + bankAcc2.description) as bankAccount2,
                                 ('[' + taxAcc2.code + '] ' + taxAcc2.description) as taxAccount2
                                                                 

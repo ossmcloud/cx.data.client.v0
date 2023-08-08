@@ -126,8 +126,13 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
+    BWG_CRM_CONFIG: 'BWGCRMConfig',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        if (configName == this.BWG_CRM_CONFIG) { return true; }
+        return false;
+    }
 }
 
 const ERP_DTFS_CONFIGS = {
@@ -159,8 +164,10 @@ const CX_ERP_PROVIDER = {
 const CX_EPOS_PROVIDER = {
     CBE: 'CBE',
     RS: 'RS',
+    EDGE: 'EDGE',
+    MRDN: 'MRDN',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian' }); }
 }
 const CX_EPOS_PROVIDERS = {
     supported: [
@@ -177,6 +184,20 @@ const CX_EPOS_PROVIDERS = {
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "OLEDB",   "connString": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.EDGE,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "CXDLL",   "connString": "dll-name;conn-string"  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.MRDN,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },
             ]
         }
     ],

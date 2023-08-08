@@ -226,7 +226,7 @@ class CRCashBookRender extends RenderBase {
             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, title: 'date', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, title: 'date/time', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, title: 'epos tran. no' },
-            { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, title: 'a/c', nullText: '' },
+            { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, title: 'a/c', nullText: '' }, 
             { name: 'customerName', title: 'a/c name' },
             { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, title: 'epos tran type' },
             { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, title: 'sub-type' },

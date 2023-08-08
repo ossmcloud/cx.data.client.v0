@@ -30,7 +30,7 @@ class ErpDtfsConfig extends RenderBase {
         this.options.columns = [
             { name: _cxSchema.erp_dtfs_configs.CONFIGID, title: 'id', align: 'left' },
             { name: _cxSchema.erp_dtfs_configs.CONFIGNAME, title: 'name', align: 'left' },
-            { name: _cxSchema.erp_dtfs_configs.CONFIGVALUE, title: 'value', align: 'left' },
+            { name: _cxSchema.erp_dtfs_configs.CONFIGVALUE + 'Display', title: 'value', align: 'left' },
         ];
     }
 
