@@ -110,7 +110,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get documentTypeName() {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
-    
+
 
     get totalNetSign() { return this.totalNet * this.#documentSign; }
     get totalVatSign() { return this.totalVat * this.#documentSign; }

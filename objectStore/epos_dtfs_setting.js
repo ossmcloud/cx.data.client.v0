@@ -7,7 +7,6 @@ class epos_dtfs_setting_Collection extends _persistentTable.Table {
         return new epos_dtfs_setting(this, defaults);
     }
 
-
     async select() {
         await super.select();
     }
@@ -44,6 +43,15 @@ class epos_dtfs_setting_Collection extends _persistentTable.Table {
     //     }
     //     return await super.select(query);
     // }
+}
+//
+// ----------------------------------------------------------------------------------------
+//
+class epos_dtfs_setting extends _persistentTable.Record {
+    constructor(table, defaults) {
+        super(table, defaults);
+    };
+
 }
 //
 // ----------------------------------------------------------------------------------------

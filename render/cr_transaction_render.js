@@ -42,7 +42,7 @@ class CRCashBookRender extends RenderBase {
         if (this.dataSource.tranTypeConfigId) {
             tranTypeCfg = await this.dataSource.cx.table(_cxSchema.cr_tran_type_config).fetch(this.dataSource.tranTypeConfigId, true);
         }
-        
+
 
 
         var fgMainInfo = { group: 'main', title: 'main info', column: 1, columnCount: 2, inline: true, fields: [] }
@@ -257,7 +257,7 @@ class CRCashBookRender extends RenderBase {
         if (!this.options.dialog) {
             this.options.paging = true;
             this.options.pageNo = (this.options.query.page || 1);
-            
+
             // this.options.actionsShowFirst = true;
             // this.options.actions = [
             //     { label: 'delete', funcName: 'deleteManualTransaction' },

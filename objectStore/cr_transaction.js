@@ -27,7 +27,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.sql += ' and t.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
-       
+
         if (params.cb_h) {
             query.sql += ' and tranType.cbHeading = @cbHeading';
             if (params.cb_h.indexOf('A/C') == 0) {

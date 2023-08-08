@@ -74,11 +74,11 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             query.sql += ' and c.cbHeading like @cbHeading';
             query.params.push({ name: 'cbHeading', value: params.e_cbh + '%' });
         }
-        
+
 
 
         // NOTE: these are parameters set by  cashbook-svc processes
-        if (params.manual == 'T') {            query.sql += ' and c.allowEdit = 1';        }
+        if (params.manual == 'T') { query.sql += ' and c.allowEdit = 1'; }
         if (params.decla) {
             if (params.decla == 'T') {
                 query.sql += ' and c.requiresDeclaration > 0';
@@ -192,7 +192,7 @@ class cr_tran_type_config extends _persistentTable.Record {
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        
+
         await super.save()
     }
 }

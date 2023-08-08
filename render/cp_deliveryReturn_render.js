@@ -64,7 +64,7 @@ class CPDeliveryReturnRender extends RenderBase {
         this.options.title += '</div>';
 
 
-            
+
         this.options.fields = [
             {
                 group: 'main', title: '', columnCount: 4, fields: [
@@ -98,10 +98,10 @@ class CPDeliveryReturnRender extends RenderBase {
                             { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, label: 'reference 1' },
                             { name: _cxSchema.cp_deliveryReturn.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
                             { name: _cxSchema.cp_deliveryReturn.DOCUMENTMEMO, label: 'memo' },
-                            
+
                         ]
                     },
-                   
+
                     {
                         group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, width: '300px', fields: [
                             { name: _cxSchema.cp_deliveryReturn.TOTALNET, label: 'total net', formatMoney: 'N2' },
@@ -139,10 +139,10 @@ class CPDeliveryReturnRender extends RenderBase {
 
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
-        
+
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
-        
+
         var relatedTransactionsOptions = await this.getRelatedDocumentListOptions();
         if (relatedTransactionsOptions) {
             subListsGroup.fields.push({ group: 'logs', title: 'related documents', column: 1, fields: [relatedTransactionsOptions], collapsed: true });
@@ -154,7 +154,7 @@ class CPDeliveryReturnRender extends RenderBase {
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
         }
 
-        
+
         if (this.options.mode == 'view') {
 
             var s = this.dataSource.documentStatus;
@@ -227,7 +227,7 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Discount] });
 
-            
+
             var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
             for (let sx = 0; sx < statuses.length; sx++) {
@@ -266,7 +266,7 @@ class CPDeliveryReturnRender extends RenderBase {
         } catch (error) {
             throw error;
         }
-       
+
     }
 
 
