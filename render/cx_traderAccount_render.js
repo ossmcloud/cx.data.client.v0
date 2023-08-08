@@ -13,66 +13,87 @@ class CXTraderAccount extends RenderBase {
 
     async _record() {
         var readOnly = !this.dataSource.isNew();
+        if (this.dataSource.isNew()) {
+            this.dataSource.shopId = this.options.query.s;
+            this.dataSource.traderType = this.options.query.tt;
+        }
         var validationMandatory = null;
         var shopField = { name: 'shopInfo', label: 'store', column: 1, readOnly: readOnly };
         if (!readOnly) {
             validationMandatory = '{ "mandatory": true }';
-            shopField = await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'mapMasterShop', column: 1, validation: '{ "mandatory": true }', label: 'store' });
+            shopField = await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }', label: 'store' });
         }
-        
-        this.options.fields = [
-            {
-                group: 'traderOuter', title: '', columnCount: 3, fields: [
-                    {
-                        group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            shopField,
-                            { name: 'traderType', label: 'type', column: 2, readOnly: readOnly, items: [{ value: '', text: '' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }], validation: validationMandatory },
-                            { name: 'traderCode', label: 'Code', column: 1, readOnly: readOnly, validation: validationMandatory },
-                            { name: 'traderName', label: 'Name', column: 2, readOnly: readOnly },
-                            { name: 'contact', label: 'contact', column: 1, readOnly: readOnly },
-                            { name: 'phone', label: 'phone', column: 2, readOnly: readOnly },
-                            { name: 'address1', label: 'address line 1', column: 1, readOnly: readOnly },
-                            { name: 'address2', label: 'address line 2', column: 2, readOnly: readOnly },
-                            { name: 'address3', label: 'address line 3', column: 1, readOnly: readOnly },
-                            { name: 'address4', label: 'address line 4', column: 2, readOnly: readOnly },
-                            { name: 'postCode', label: 'post code', column: 1, readOnly: readOnly },
-                            { name: 'countryCode', label: 'Country', column: 2, readOnly: readOnly },
+
+        if (!this.options.query.s || !this.options.query.tt) {
+            this.dataSource.note = '<span style="color: var(--main-color-4)">select store and trader type</span>';
+            this.options.fields = [
+                {
+                    group: 'traderOuter', title: '', columnCount: 1, fields: [
+                        {
+                            group: 'main', title: 'main info', column: 1, columnCount: 5, fields: [
+                                { name: 'note', label: 'notes', column: 1, readOnly: true },
+                                shopField,
+                                { name: 'traderType', label: 'type', column: 1, readOnly: readOnly, items: [{ value: '', text: '' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }], validation: validationMandatory }
+                            ]
+                        }
+                    ]
+                }
+            ];
+        } else {
+            shopField.readOnly = true;
+            this.options.fields = [
+                {
+                    group: 'traderOuter', title: '', columnCount: 3, fields: [
+                        {
+                            group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
+                                shopField,
+                                { name: 'traderType', label: 'type', column: 2, readOnly: true, items: [{ value: '', text: '' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }], validation: validationMandatory },
+                                { name: 'traderCode', label: 'Code', column: 1, readOnly: readOnly, validation: validationMandatory },
+                                { name: 'traderName', label: 'Name', column: 2, readOnly: readOnly },
+                                { name: 'contact', label: 'contact', column: 1, readOnly: readOnly },
+                                { name: 'phone', label: 'phone', column: 2, readOnly: readOnly },
+                                { name: 'address1', label: 'address line 1', column: 1, readOnly: readOnly },
+                                { name: 'address2', label: 'address line 2', column: 2, readOnly: readOnly },
+                                { name: 'address3', label: 'address line 3', column: 1, readOnly: readOnly },
+                                { name: 'address4', label: 'address line 4', column: 2, readOnly: readOnly },
+                                { name: 'postCode', label: 'post code', column: 1, readOnly: readOnly },
+                                { name: 'countryCode', label: 'Country', column: 2, readOnly: readOnly },
 
 
-                        ]
-                    },
-                    {
-                        group: 'mapping', title: 'erp mapping', column: 2, columnCount: 1, fields: [
-                            await this.fieldDropDownOptions(_cxSchema.erp_traderAccount, {
-                                id: 'erpTraderAccountId', name: 'erpTraderAccountId', column: 1, dropDownSelectOptions: {
-                                    s: this.dataSource.shopId,
-                                    tt: this.dataSource.traderType,
+                            ]
+                        },
+                        {
+                            group: 'mapping', title: 'erp mapping', column: 2, columnCount: 1, fields: [
+                                await this.fieldDropDownOptions(_cxSchema.erp_traderAccount, {
+                                    id: 'erpTraderAccountId', name: 'erpTraderAccountId', column: 1, dropDownSelectOptions: {
+                                        s: this.dataSource.shopId || 0,
+                                        tt: this.dataSource.traderType || 'X',
+                                    }
+                                }),
+                                { name: 'isWholesaler', label: 'is wholesaler', column: 1 },
+                                { name: 'wholesalerCode', label: 'wholesaler code', column: 1 },
+                            ]
+                        },
+                        {
+                            group: 'audit', title: 'audit info', column: 3, columnCount: 2, fields: [
+                                {
+                                    group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                        { name: 'created', label: 'created', column: 1, readOnly: true },
+                                        { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                                    ]
+                                },
+                                {
+                                    group: 'audit2', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                                        { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                                        { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                                    ]
                                 }
-                            }),
-                            { name: 'isWholesaler', label: 'is wholesaler', column: 1 },
-                            { name: 'wholesalerCode', label: 'wholesaler code', column: 1 },
-                        ]
-                    },
-                    {
-                        group: 'audit', title: 'audit info', column: 3, columnCount: 2, fields: [
-                            {
-                                group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: 'created', label: 'created', column: 1, readOnly: true },
-                                    { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
-                                ]
-                            },
-                            {
-                                group: 'audit2', title: '', column: 2, columnCount: 2, inline: true, fields: [
-                                    { name: 'modified', label: 'modified', column: 1, readOnly: true },
-                                    { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-
+                            ]
+                        }
+                    ]
+                }
+            ];
+        }
         // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
         //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
         // }
