@@ -233,6 +233,15 @@ class cr_cb_transaction extends _persistentTable.Record {
         query.returnFirst = true;
 
         var result = await this.cx.exec(query);
+
+        if (save) {
+            if (this.totalSales != result.totalSales) { this.logInfo(`total sales changed from ${this.totalSales} to ${result.totalSales}`); }
+            if (this.totalAccountSales != result.totalAccountSales) { this.logInfo(`total a/c sales changed from ${this.totalAccountSales} to ${result.totalAccountSales}`); }
+            if (this.totalLodgement != result.totalLodgement) { this.logInfo(`total lodgment changed from ${this.totalLodgement} to ${result.totalLodgement}`); }
+            if (this.totalAccountLodgement != result.totalAccountLodgement) { this.logInfo(`total a/c lodgment changed from ${this.totalAccountLodgement} to ${result.totalAccountLodgement}`); }
+            if (this.tillDifference != result.tillDifference) { this.logInfo(`till difference changed from ${this.tillDifference} to ${result.tillDifference}`); }
+        }
+            
         this.totalSales = result.totalSales;
         this.totalAccountSales = result.totalAccountSales;
         this.totalLodgement = result.totalLodgement;
@@ -250,12 +259,16 @@ class cr_cb_transaction extends _persistentTable.Record {
     async logError(error) {
         await this.log(_declarations.CX_LOG_TYPE.ERROR, error.message || error);
     }
+    async logCritical(error) {
+        await this.log(_declarations.CX_LOG_TYPE.CRITICAL, error.message || error);
+    }
     async log(type, message) {
         try {
             var newLog = await this.cx.table(_schema.cr_cb_transactionAudit).createNew();
             newLog.cbTranId = this.cbTranId;
             newLog.logType = type || _declarations.CX_LOG_TYPE.INFO;
             newLog.logMessage = message || 'no message provided';
+            newLog.logMessage = newLog.logMessage.substring(0, 255);
             newLog.save();
         } catch (error) {
             // ignore we could not log

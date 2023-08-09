@@ -107,7 +107,7 @@ const CX_LOG_TYPE = {
     INFO: 'info',
     WARN: 'warning',
     ERROR: 'ERROR',
-    CRITICAL: 'ERROR-CRITICAL'
+    CRITICAL: 'IMPORTANT'
 }
 
 
