@@ -58,7 +58,7 @@ class CRPreferenceEngine {
 
         var prefValue = null;
         
-        // TODO: check for others
+        // check for others
         if (options.records.length > 0) {
             var configs = await getPrefConfigs(this.#cx, options.preference);
             configs.each(function (cfg, idx) {
@@ -78,7 +78,7 @@ class CRPreferenceEngine {
         var prefValueType = pref.type;
         if (prefValueType == 'value') {
             prefValue = await this.#cx.table(_cxSchema.cr_preference_value).fetch(prefValue, true);
-            // TODO: should we get the default value if not found???
+            // @@TODO: should we get the default value if not found???
             if (!prefValue) { return null; }
             prefValueType = prefValue.type;
             prefValue = prefValue.value;

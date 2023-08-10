@@ -43,7 +43,7 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.sql += ' and tranType.cbTranTypeId = @cbTranTypeId';
             query.params.push({ name: 'cbTranTypeId', value: params.tt });
         }
-       
+
         if (params.ttt) {
             query.sql += ' and tranType.tranTypeConfigId = @tranTypeConfigId';
             query.params.push({ name: 'tranTypeConfigId', value: params.ttt });
@@ -75,13 +75,51 @@ class cr_transaction_Collection extends _persistentTable.Table {
         }
 
         if (params.cust) {
-            query.sql += ` and t.${this.FieldNames.CUSTOMERACCOUNT} = @${this.FieldNames.CUSTOMERACCOUNT}`;
-            query.params.push({ name: this.FieldNames.CUSTOMERACCOUNT, value: params.cust });
+            if (params.cust == '*') {
+                query.sql += ` and isnull(t.${this.FieldNames.CUSTOMERACCOUNT}, '') != ''`;
+                
+            } else {
+                query.sql += ` and t.${this.FieldNames.CUSTOMERACCOUNT} = @${this.FieldNames.CUSTOMERACCOUNT}`;
+                query.params.push({ name: this.FieldNames.CUSTOMERACCOUNT, value: params.cust });
+            }
         }
 
         if (params.manual) {
-            query.sql += ` and t.${this.FieldNames.ISMANUAL} = @${this.FieldNames.ISMANUAL}`;
-            query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T') ? 1 : 0 });
+            query.sql += ` and isnull(t.${this.FieldNames.ISMANUAL}, 0) = @${this.FieldNames.ISMANUAL}`;
+            query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T' || params.manual == 'true') ? 1 : 0 });
+        }
+        if (params.ignored) {
+            query.sql += ` and isnull(t.${this.FieldNames.IGNORED}, 0) = @${this.FieldNames.IGNORED}`;
+            query.params.push({ name: this.FieldNames.IGNORED, value: (params.ignored == 'T' || params.ignored   == 'true') ? 1 : 0 });
+        }
+        if (params.voided) {
+            query.sql += ` and isnull(t.${this.FieldNames.VOIDED}, 0) = @${this.FieldNames.VOIDED}`;
+            query.params.push({ name: this.FieldNames.VOIDED, value: (params.voided == 'T' || params.voided == 'true') ? 1 : 0 });
+        }
+        if (params.duplicate) {
+            query.sql += ` and isnull(t.${this.FieldNames.ISDUPLICATE}, 0) = @${this.FieldNames.ISDUPLICATE}`;
+            query.params.push({ name: this.FieldNames.ISDUPLICATE, value: (params.duplicate == 'T' || params.duplicate == 'true') ? 1 : 0 });
+        }
+        if (params.edited) {
+            query.sql += ` and isnull(t.${this.FieldNames.ISEDITED}, 0) = @${this.FieldNames.ISEDITED}`;
+            query.params.push({ name: this.FieldNames.ISEDITED, value: (params.edited == 'T' || params.edited == 'true') ? 1 : 0 });
+        }
+
+        if (params.ref1) {
+            query.sql += ` and t.${this.FieldNames.REFERENCE1} like @${this.FieldNames.REFERENCE1}`;
+            query.params.push({ name: this.FieldNames.REFERENCE1, value: params.ref1 + '%' });
+        }
+        if (params.ref2) {
+            query.sql += ` and t.${this.FieldNames.REFERENCE2} like @${this.FieldNames.REFERENCE2}`;
+            query.params.push({ name: this.FieldNames.REFERENCE2, value: params.ref2 + '%' });
+        }
+        if (params.barcode) {
+            query.sql += ` and t.${this.FieldNames.ITEMBARCODE} like @${this.FieldNames.ITEMBARCODE}`;
+            query.params.push({ name: this.FieldNames.ITEMBARCODE, value: params.barcode + '%' });
+        }
+        if (params.descr) {
+            query.sql += ` and t.${this.FieldNames.ITEMDESCRIPTION} like @${this.FieldNames.ITEMDESCRIPTION}`;
+            query.params.push({ name: this.FieldNames.ITEMDESCRIPTION, value: params.descr + '%' });
         }
 
         if (params.decla) {

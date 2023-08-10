@@ -24,7 +24,7 @@ class CXTraderAccount extends RenderBase {
             shopField = await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }', label: 'store' });
         }
 
-        if (!this.options.query.s || !this.options.query.tt) {
+        if (this.dataSource.isNew() && (!this.options.query.s || !this.options.query.tt)) {
             this.dataSource.note = '<span style="color: var(--main-color-4)">select store and trader type</span>';
             this.options.fields = [
                 {

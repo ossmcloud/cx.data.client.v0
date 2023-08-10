@@ -22,8 +22,6 @@ class CxMapConfig extends RenderBase {
                                 id: 'mapMasterShop', name: 'mapMasterShop', column: 1, validation: (this.options.mode == 'view') ? '' : '{ "mandatory": true }', label: 'map master shop'
                             }),
                             { name: 'mapTypeId', label: 'map type', column: 2, lookUps: _cxConst.CX_MAP_CONFIG_TYPE.toList(), readOnly: !newRecord },
-
-                            // TODO: drop downs
                             { name: 'eposProvider', label: 'EPoS', column: 1, readOnly: !newRecord, lookUps: _cxConst.CX_EPOS_PROVIDER.toList(true) },
                             { name: 'erpProvider', label: 'ERP', column: 2, readOnly: !newRecord, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true) },
                         ]

@@ -3,7 +3,6 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
-const objBuilder = require('cx-data/builder/obj-builder');
 
 class CRCashBookRender extends RenderBase {
     constructor(dataSource, options) {
@@ -189,9 +188,6 @@ class CRCashBookRender extends RenderBase {
         }
 
         this.options.buttons.push({ id: 'cr_cb_view', text: 'View Cash Book', function: 'viewCashBook' });
-        // if (this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING || this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.PENDING) {
-        //     this.options.buttons.push({ id: 'epos_dtfs_transmission_abort', text: 'Abort Transmission', function: 'abort' });
-        // }
     }
 
     async _list() {
@@ -212,11 +208,21 @@ class CRCashBookRender extends RenderBase {
             { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             { label: 'transaction type', fieldName: 'tt', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: cbTranTypes, },
             { label: 'tran. config.', fieldName: 'ttt', width: '200px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: tranTypeConfigs, },
+            { label: 'manual', fieldName: 'manual', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
+            { label: 'edited', fieldName: 'edited', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
+            { label: 'duplicate', fieldName: 'duplicate', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
+            { label: 'voided', fieldName: 'voided', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
+            { label: 'ignored', fieldName: 'ignored', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
+            { html: '<br />' },
+            { label: 'customer', fieldName: 'cust', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'epos tran. type', fieldName: 'e_tt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'epos tran. sub-type', fieldName: 'e_ts', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'epos tran. no', fieldName: 'e_tn', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
-            { label: 'customer', fieldName: 'cust', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'cashbook heading', fieldName: 'cb_h', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'reference 1', fieldName: 'ref1', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '200px' },
+            { label: 'reference 2', fieldName: 'ref2', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '200px' },
+            { label: 'item code', fieldName: 'barcode', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '100px' },
+            { label: 'item description', fieldName: 'descr', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '200px' },
             { label: 'cb', fieldName: 'cb', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: false, width: '30px', readOnly: true },
         ];
         this.options.columns = [
@@ -226,7 +232,7 @@ class CRCashBookRender extends RenderBase {
             { name: _cxSchema.cr_transaction.TRANSACTIONDATE, title: 'date', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, title: 'date/time', align: 'center', width: '130px' },
             { name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, title: 'epos tran. no' },
-            { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, title: 'a/c', nullText: '' }, 
+            { name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, title: 'a/c', nullText: '' },
             { name: 'customerName', title: 'a/c name' },
             { name: _cxSchema.cr_transaction.TRANSACTIONTYPE, title: 'epos tran type' },
             { name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, title: 'sub-type' },
@@ -248,34 +254,16 @@ class CRCashBookRender extends RenderBase {
         ];
         this.options.highlights = [
             { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
-            // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Error, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
-            // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.PostingError, style: 'color: #DF0101; background-color: var(--element-bg-color);' },
-            // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.New, style: 'color: darkturquoise; ' },
-            // { column: 'status', op: '=', value: _cxConst.CR_CASH_BOOK.STATUS.Pending, style: 'color: #FFCD00; background-color: var(--element-bg-color);' }
         ];
 
         if (!this.options.dialog) {
             this.options.paging = true;
             this.options.pageNo = (this.options.query.page || 1);
 
-            // this.options.actionsShowFirst = true;
-            // this.options.actions = [
-            //     { label: 'delete', funcName: 'deleteManualTransaction' },
-            //     { label: 'edit', funcName: 'editManualTransaction' },
-            //     //{ label: 'epos', link: '/epos/transmissions?s=', target: '_blank' },
-            // ]
         }
 
-        // this.options.allowEditCondition = function (object) {
-        //     return object.isManual;
-        // }
 
         this.options.allowActionCondition = function (action, object) {
-            // TODO: also do not allow if cb processed some-how
-            // if (!object.isManual) { return false; }
-            // var query = { sql: 'select status from cr_cb_transaction where cbTranId=@cbTranId', params: [{ name: 'cbTranId', value: object.cbTranId }] };
-            // var cbStatus = await this.dataSource.cx.exec(query);
-            // return !(cbStatus == _cx.Const.CR_CASH_BOOK.STATUS.New || cbStatus == _cx.Const.CR_CASH_BOOK.STATUS.Pending || cbStatus == _cx.Const.CR_CASH_BOOK.STATUS);
             return object.isManual;
         }
 

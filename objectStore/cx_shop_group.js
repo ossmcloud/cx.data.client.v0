@@ -29,7 +29,6 @@ class cx_shop_group extends _persistentTable.Record {
     }
 
     async delete() {
-        // TODO: CX-DATA-CLIENT: check if store can be deleted
         await super.delete()
     }
 }

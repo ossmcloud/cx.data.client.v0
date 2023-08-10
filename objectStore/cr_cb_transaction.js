@@ -190,7 +190,6 @@ class cr_cb_transaction extends _persistentTable.Record {
     }
 
     async refreshTotals(save) {
-        // TODO: 
         if (this.status != _declarations.CR_CASH_BOOK.STATUS.New && this.status != _declarations.CR_CASH_BOOK.STATUS.Pending && this.status != _declarations.CR_CASH_BOOK.STATUS.Error) {
             throw new Error('Cannot refresh cash book totals as status is: ' + this.status);
         }

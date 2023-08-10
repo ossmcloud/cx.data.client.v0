@@ -34,10 +34,7 @@ class ErpGLAccount extends RenderBase {
     }
 
     async getUserListOptions() {
-        // TODO:
         var testOptions = await super.getUserListOptions();
-        // testOptions[_cxSchema.erp_gl_account.CREATED] = { column: { hide: true }, filter: { hide: true } };
-        // testOptions[_cxSchema.erp_gl_account.CREATEDBY] = { column: { hide: true }, filter: { hide: true } };
         return testOptions;
     }
 
