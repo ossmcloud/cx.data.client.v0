@@ -95,7 +95,7 @@ class erp_dtfs_transmission extends _persistentTable.Record {
 
         this.message = message || ('transmission manually aborted by: ' + this.cx.userName);
 
-        // TODO: we should also set the correspondent raw_getLog adn raw_getRequest (if there)
+        // @@TODO: we should also set the correspondent raw_getLog and raw_getRequest (if there)
 
         await this.save();
     }

@@ -63,7 +63,7 @@ class cr_tran_type_config_shop extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
 
-        // TODO: move this bit to base class but do not run by default
+        // @@TODO: move this bit to base class but do not run by default
         for (var key in defaults) {
             if (key == 'rowver') { continue; }
             if (this.fields[key] === undefined) {

@@ -157,9 +157,9 @@ module.exports = {
         //       cx.svc will call this with an object that is the dbConfig
         var dbConfig = options.dbConfig || options;
 
-        // TODO: SHOULD NOT BE HERE BUT ON .ENV FILE ???
+        // @@CLEAN-UP: SHOULD NOT BE HERE BUT ON .ENV FILE ???
 
-        // @WORKING: should I use pool management by user ???
+        // @@CLEAN-UP: should I use pool management by user ???
         dbConfig.noPullManager = false;
         dbConfig.config.connectionTimeout = 60000;
         dbConfig.config.requestTimeout = 180000;
@@ -187,7 +187,7 @@ module.exports = {
         var transmissionId = svcId + accountId.toString() + shopId.toString();
         // we also use the system ticks we should make it unique
 
-        // TODO-IMPORTANT: NOTE:
+        // @@REVIEW: NOTE:
         //      the tran id has a tick time stamp, 13 digits
         //      plus we add an identifier for the type of service, the account id and store id
         //      in addition the accountId and shopId are SQL index fields so could easily be larger than 19 digits long which is the max for big int

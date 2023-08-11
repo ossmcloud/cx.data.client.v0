@@ -42,7 +42,7 @@ class cp_invoiceCreditLog_Collection extends _persistentTable.Table {
             await log.save();
 
         } catch (error) {
-            // TODO: @EX: what to do here ??
+            // @@TODO: @EX: what to do here ??
             console.log("cp_invoiceCreditLogCollection.Log", error);
         }
     }

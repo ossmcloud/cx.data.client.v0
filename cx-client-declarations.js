@@ -1,6 +1,5 @@
 'use strict'
 
-// TODO: move to core sdk
 function enumToList(obj, addEmpty, aliases) {
     if (!aliases) { aliases = {}; }
 
@@ -107,7 +106,7 @@ const CX_LOG_TYPE = {
     INFO: 'info',
     WARN: 'warning',
     ERROR: 'ERROR',
-    CRITICAL: 'ERROR-CRITICAL'
+    CRITICAL: 'IMPORTANT'
 }
 
 
@@ -153,14 +152,14 @@ const ERP_DTFS_CONFIGS = {
     }
 }
 
-// TODO: this should come from sys_provider table
+// @@TODO: this should come from sys_provider table
 const CX_ERP_PROVIDER = {
     SG200: 'sage200',
     SG200STD: 'sage200std',
     SAGE50: 'sage50',
     toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts' }); }
 }
-// TODO: this should come from sys_provider table
+// @@TODO: this should come from sys_provider table
 const CX_EPOS_PROVIDER = {
     CBE: 'CBE',
     RS: 'RS',
@@ -437,7 +436,6 @@ const EPOS_DTFS_UPGRADE_AUDIT = {
         toList: function (addEmpty) { return enumToList(this, addEmpty); }
     },
 
-    // TODO: move to own enum
     SERVICES: {
         DTFS: 'dtfs',
         ERPS: 'erps',

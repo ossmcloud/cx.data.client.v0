@@ -97,7 +97,7 @@ class raw_getRequest extends _persistentTable.Record {
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
     async save() {
-        return super.save();
+        return await super.save();
     }
 }
 //
