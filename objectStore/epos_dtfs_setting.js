@@ -52,15 +52,6 @@ class epos_dtfs_setting extends _persistentTable.Record {
         super(table, defaults);
     };
 
-}
-//
-// ----------------------------------------------------------------------------------------
-//
-class epos_dtfs_setting extends _persistentTable.Record {
-    constructor(table, defaults) {
-        super(table, defaults);
-    };
-
     async fetch(id, returnNull) {
         var query = {
             sql: `  select  *
