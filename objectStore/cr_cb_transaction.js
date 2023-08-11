@@ -268,7 +268,7 @@ class cr_cb_transaction extends _persistentTable.Record {
             newLog.logType = type || _declarations.CX_LOG_TYPE.INFO;
             newLog.logMessage = message || 'no message provided';
             newLog.logMessage = newLog.logMessage.substring(0, 255);
-            newLog.save();
+            await newLog.save();
         } catch (error) {
             // ignore we could not log
             if (process.env.DEV) { console.log(error.message); }
