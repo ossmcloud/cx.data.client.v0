@@ -45,7 +45,7 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
-            var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
+            var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre, erpSett.mergeGLAndTax);
             transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
 
             if (erpSett.mergeGLAndTax) {
