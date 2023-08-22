@@ -76,15 +76,25 @@ class erp_gl_account_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
-    async toErpLookUpList(shopId, fixedGlSeg2) {
-        await super.select({
-            sql: 'select code, description from erp_gl_account where shopId = @shopId and costCentre = @costCentre order by code',
-            params: [
-                { name: 'shopId', value: shopId },
-                { name: 'costCentre', value: fixedGlSeg2 }
-            ],
-            noPaging: true,
-        });
+    async toErpLookUpList(shopId, fixedGlSeg2, mergeGLAndTax) {
+        if (mergeGLAndTax) {
+            await super.select({
+                sql: 'select code, description from erp_gl_account where shopId = @shopId order by code',
+                params: [
+                    { name: 'shopId', value: shopId },
+                ],
+                noPaging: true,
+            });   
+        } else {
+            await super.select({
+                sql: 'select code, description from erp_gl_account where shopId = @shopId and costCentre = @costCentre order by code',
+                params: [
+                    { name: 'shopId', value: shopId },
+                    { name: 'costCentre', value: fixedGlSeg2 }
+                ],
+                noPaging: true,
+            });
+        }
 
         var lookUpValues = [];
         //if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
