@@ -31,6 +31,8 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    DEPCONFIGID: 'depConfigId',
+    TAXCONFIGID: 'taxConfigId',
 
 }
 //
@@ -49,6 +51,8 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    depConfigId: { name: 'depConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
+    taxConfigId: { name: 'taxConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
 
 }
 //
@@ -138,6 +142,18 @@ class Persistent_cp_productAlias extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get depConfigId() {
+        return super.getValue(_fieldNames.DEPCONFIGID);
+    } set depConfigId(val) {
+        super.setValue(_fieldNames.DEPCONFIGID, val);
+    }
+
+    get taxConfigId() {
+        return super.getValue(_fieldNames.TAXCONFIGID);
+    } set taxConfigId(val) {
+        super.setValue(_fieldNames.TAXCONFIGID, val);
     }
 
 

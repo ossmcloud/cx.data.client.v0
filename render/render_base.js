@@ -118,9 +118,11 @@ class RenderBase {
         var dataSource = this.dataSource;
         var userListOptions = await this.getUserListOptions();
         
+        var fields = this.autoLoadFields || dataSource.fields;
 
-        for (var f in dataSource.fields) {
-            var field = dataSource.fields[f];
+        for (var f in fields) {
+            var field = fields[f];
+            if (field == null) { field = dataSource.fields[f]; }
 
             var column = { name: f, title: f.fromCamelCase() };
             var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: f, inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
@@ -142,7 +144,7 @@ class RenderBase {
             }
             if (field.dataType == 'money') {
                 column.align = 'right';
-                column.formatMoney = 'N0';
+                column.formatMoney = 'N2';
                 column.addTotals = true;
             }
 
@@ -322,7 +324,7 @@ class RenderBase {
         this.options.allowEdit = permissions.allowEdit;
         this.options.allowNew = permissions.allowNew;
         this.options.allowView = permissions.allowView;
-        this.options.allowDelete = permissions.allowDelete;
+        this.options.allowDelete = (permissions.allowDelete && this.options.mode != 'new');
     }
 
     async record(request, h) {

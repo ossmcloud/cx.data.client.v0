@@ -19,7 +19,7 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
                     left outer join erp_tax_account etaxp ON tax.purchaseTaxAccountId = etaxp.erpTaxAccountId`;
 
         if (params.s) {
-            query.sql += 'inner join  cx_shop s on tax.mapConfigId = s.taxMapConfigId';
+            query.sql += ' inner join  cx_shop s on tax.mapConfigId = s.taxMapConfigId';
             query.sql += ' where s.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         } else {

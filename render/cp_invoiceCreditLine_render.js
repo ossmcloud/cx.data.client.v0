@@ -18,14 +18,14 @@ class CPInvoiceReturnLineRender extends RenderBase {
         // this.options.filters = [
         //     { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         // ];
-        
+
         this.options.columns = [
             //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
 
             { name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
             { name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
-            { title: ' ', name: 'productIcon', width: '10px', unbound: true },
-            { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code' },
+            { title: ' ', name: 'productIcon', width: '10px', unbound: true},
+            { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)', nullText: '' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' },

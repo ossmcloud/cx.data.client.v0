@@ -191,7 +191,7 @@ class CPProductRender extends RenderBase {
                 { name: 'supplierCode', title: 'supplier' },
                 { name: 'traderName', title: 'supplier name', nullText: '[supplier does not exist]' },
                 { name: 'itemCostPrice', title: 'cost price', align: 'right', width: '90px', formatMoney: 'N2' },
-                { name: 'aliasInfo', title: 'alias', nullText: '[not set]' },
+                { name: 'aliasInfo', title: 'alias', nullText: '[not set]', link: { url: '/cp/config/product-alias?id={alias}', valueField: 'aliasId', paramName: 'alias' } },
                 { name: 'modified', title: 'modified', align: 'center', width: '130px' },
                 { name: 'modifiedBy', title: 'by', align: 'left', width: '130px' },
             ];

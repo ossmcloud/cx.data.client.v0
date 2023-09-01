@@ -35,6 +35,8 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
+        RECOSTATUS: 'recoStatus',
+        RECOSTATUSMESSAGE: 'recoStatusMessage',
     },
 
     cp_deliveryReturnLine: {
@@ -220,6 +222,9 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
+        TEMP_FLAG: 'temp_flag',
+        RECOSTATUS: 'recoStatus',
+        RECOSTATUSMESSAGE: 'recoStatusMessage',
     },
 
     cp_invoiceCreditLine: {
@@ -361,6 +366,8 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DEPCONFIGID: 'depConfigId',
+        TAXCONFIGID: 'taxConfigId',
     },
 
     cp_productAliasShop: {
@@ -374,6 +381,44 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_recoSession: {
+        TBL_NAME: 'cp_recoSession',
+        RECOSESSIONID: 'recoSessionId',
+        RECOSOURCEID: 'recoSourceId',
+        RECOSTATUSID: 'recoStatusId',
+        RECOSTATUSMESSAGE: 'recoStatusMessage',
+        RECOSCORE: 'recoScore',
+        BALANCENET: 'balanceNet',
+        BALANCEVAT: 'balanceVat',
+        BALANCEGROSS: 'balanceGross',
+        NOTES: 'notes',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        SHOPID: 'shopId',
+    },
+
+    cp_recoSessionDocument: {
+        TBL_NAME: 'cp_recoSessionDocument',
+        RECOSESSIONDOCID: 'recoSessionDocId',
+        RECOSESSIONID: 'recoSessionId',
+        RECOSOURCEID: 'recoSourceId',
+        RECOSTATUSID: 'recoStatusId',
+        RECOSTATUSMESSAGE: 'recoStatusMessage',
+        RECOSCORE: 'recoScore',
+        DOCUMENTTYPE: 'documentType',
+        DOCUMENTID: 'documentId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        DOCUMENTNET: 'documentNet',
+        DOCUMENTVAT: 'documentVat',
+        DOCUMENTGROSS: 'documentGross',
+        ISMAINDOCUMENT: 'isMainDocument',
     },
 
     cp_wholesaler: {
@@ -490,6 +535,7 @@ module.exports = {
         GLACCOUNTSEG2: 'glAccountSeg2',
         GLACCOUNTSEG3: 'glAccountSeg3',
         GLACCOUNTDESCRIPTION: 'glAccountDescription',
+        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         NARRATIVE: 'narrative',
         VALUENET: 'valueNet',
         TAXACCOUNT: 'taxAccount',
@@ -503,7 +549,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         GLCONTRAENTRY: 'glContraEntry',
     },
 
@@ -557,11 +602,11 @@ module.exports = {
         PREFERENCEID: 'preferenceId',
         LEVELID: 'levelId',
         RECORDTYPE: 'recordType',
-        DISABLED: 'disabled',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DISABLED: 'disabled',
     },
 
     cr_preference_value: {
@@ -787,11 +832,11 @@ module.exports = {
         EPOSTAXRATE: 'eposTaxRate',
         EPOSDESCRIPTION: 'eposDescription',
         TAXACCOUNTID: 'taxAccountId',
-        PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
     },
 
     cx_shop: {
@@ -802,6 +847,10 @@ module.exports = {
         SHOPNAME: 'shopName',
         SHOPADDRESS: 'shopAddress',
         STATUS: 'status',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
         SHOPPOSTCODE: 'shopPostCode',
         SHOPLATITUDE: 'shopLatitude',
         SHOPLONGITUDE: 'shopLongitude',
@@ -810,10 +859,6 @@ module.exports = {
         TAXMAPCONFIGID: 'taxMapConfigId',
         CURRENCYCODE: 'currencyCode',
         SHOPCOLOR: 'shopColor',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
     },
 
     cx_shop_group: {
@@ -1054,15 +1099,15 @@ module.exports = {
         SHOPID: 'shopId',
         ERPPROVIDER: 'erpProvider',
         ERPCOMPANYNAME: 'erpCompanyName',
-        ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
-        ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
-        ERPCOSTCENTRE: 'erpCostCentre',
-        ERPDEPARTMENT: 'erpDepartment',
         DTFSSETTINGID: 'dtfsSettingId',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
+        ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
+        ERPCOSTCENTRE: 'erpCostCentre',
+        ERPDEPARTMENT: 'erpDepartment',
     },
 
     erp_tax_account: {

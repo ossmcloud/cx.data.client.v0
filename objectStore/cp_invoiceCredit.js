@@ -17,11 +17,13 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName
+        query.sql = ` select  d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId
                       from    ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
-                      left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
-                      left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
+                      left outer join   cx_traderAccount supp2          ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cp_invoiceGroup  grp            ON grp.invGrpId = d.invGrpId 
+                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.s) {
@@ -129,11 +131,13 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         query.sql = ` select  l.*, s.shopCode, s.shopName, 
                                 erp.postingURN, erp.postingReference, erp.status as postingStatus, erp.statusMessage as postingStatusMessage, 
                                 erp.transactionReference, erp.transactionSecondReference, erp.accountReference, erp.accountName,
-                                erp.modified as postedOn, erp.modifiedBy as postedBy
+                                erp.modified as postedOn, erp.modifiedBy as postedBy,
+                                recoDoc.recoSessionId
 
                       from    ${this.type} l
                       inner join   cx_shop s ON s.shopId = l.shopId
                       left outer join cp_erp_transaction erp ON erp.invCreId = l.invCreId
+                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = l.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
                       
                       where     l.${this.FieldNames.SHOPID}  in ${this.cx.shopList}
                       and     l.${this.FieldNames.INVCREID} = @invCreId`;
@@ -166,6 +170,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
     #accountName = '';
     #postedOn = '';
     #postedBy = '';
+    #groupDocumentNumber = '';
+    #recoSessionId = null;
     #logs = null;
     constructor(table, defaults) {
         super(table, defaults);
@@ -183,6 +189,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#accountName = defaults['accountName'] || '';
         this.#postedOn = defaults['postedOn'] || '';
         this.#postedBy = defaults['postedBy'] || '';
+        this.#groupDocumentNumber = defaults['groupDocumentNumber'] || '';
+        this.#recoSessionId = defaults['recoSessionId'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) { this.#documentSign = -1; }
 
     };
@@ -225,6 +233,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get totalGrossSign() { return this.totalGross * this.#documentSign; }
     get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
 
+    get groupDocumentNumber() { return this.#groupDocumentNumber; }
+
     get editedIcon() {
         if (this.createdFrom) { return '&#x2699;'; }
 
@@ -232,6 +242,18 @@ class cp_invoiceCredit extends _persistentTable.Record {
 
         return '';
     }
+
+    get recoStatusName() {
+        return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatus);
+    }
+
+    get recoStatus() {
+        return super.recoStatus || 0;
+    } set recoStatus(val) {
+        super.recoStatus = val || 0;
+    }
+
+    get recoSessionId() { return this.#recoSessionId; }
 
     get logs() {
         return this.#logs;

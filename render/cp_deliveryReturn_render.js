@@ -61,6 +61,13 @@ class CPDeliveryReturnRender extends RenderBase {
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
+        var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
+        this.options.title += `
+            
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
+                ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+            </div>
+        `;
         this.options.title += '</div>';
 
 
@@ -204,6 +211,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: 'status', title: 'status', align: 'center', width: '70px' },
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
+                { name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } },
                 { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },
                 { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' },
                 { name: 'supplierName', title: 'supplier name' },
@@ -240,6 +248,19 @@ class CPDeliveryReturnRender extends RenderBase {
                     columns: ['status']
                 })
             }
+
+            var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
+            for (let sx = 0; sx < recoStatuses.length; sx++) {
+                const s = recoStatuses[sx];
+                this.options.cellHighlights.push({
+                    column: _cxSchema.cp_deliveryReturn.RECOSTATUS,
+                    op: '=',
+                    value: s.value,
+                    style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['recoStatus']
+                })
+            }
+
 
             var types = _cxConst.CP_DOCUMENT.TYPE.toList();
             for (let sx = 0; sx < types.length; sx++) {

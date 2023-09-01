@@ -539,10 +539,14 @@ const CP_DOCUMENT = {
         Invoice: 2,
         CreditNote: 3,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                CreditNote: 'credit note',
+            });
+        },
         getName: function (value) {
             return enumGetName(this, value, {
-                CreditNote: 'Credit Note',
+                CreditNote: 'credit note',
             });
         },
 
@@ -651,6 +655,69 @@ const CP_DOCUMENT = {
             } else if (status == this.DeleteAndPull) {
                 color = '255,255,255';
                 bkgColor = '83,49,138';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+    },
+
+    RECO_STATUS: {
+        NotAnalyzed: 0,
+        NotReconciled: 1,
+        PartReconciled: 5,
+        Pending: 6,
+        Reconciled: 7,
+        NeverReconcile: 8,
+        ERROR: 9,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                NotAnalyzed: 'not analyzed',
+                NotReconciled: 'not matched',
+                PartReconciled: 'part matched',
+                Pending: 'needs attention',
+                Reconciled: 'matched',
+                NeverReconcile: 'ignore matching',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, (value || this.NotAnalyzed), {
+                NotAnalyzed: 'not analyzed',
+                NotReconciled: 'not matched',
+                PartReconciled: 'part matched',
+                Pending: 'needs attention',
+                Reconciled: 'matched',
+                NeverReconcile: 'ignore matching',
+
+            });
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+            if (!status) { status == this.NotAnalyzed; }
+            if (status == this.NotAnalyzed || status == this.NotReconciled) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            } else if (status == this.Pending) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
+            } else if (status == this.PartReconciled) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Reconciled || status == this.NeverReconcile) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
             } else {
                 color = '255,255,255';
                 bkgColor = '128,128,128';

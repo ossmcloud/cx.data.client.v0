@@ -94,6 +94,16 @@ class CPInvoiceReturnRender extends RenderBase {
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
+
+        // recoSessionId
+        
+        var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
+        this.options.title += `
+            
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
+                ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+            </div>
+        `;
         if (this.dataSource.isUserEdited) {
             this.options.title += `
                 <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited">
@@ -373,30 +383,29 @@ class CPInvoiceReturnRender extends RenderBase {
                 Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
             }
-            this.options.columns = [
-                { name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' },
-
-                { name: 'shopInfo', title: 'store', width: '200px' },
-                //{ name: _cxSchema.cp_invoiceCredit.ISUSEREDITED, title: '&#x270E;', align: 'center', width: '20px', nullText: '' },
-                { name: 'editedIcon', title: ' ', align: 'center', width: '10px' },
-
-                { name: 'status', title: 'status', align: 'center', width: '70px' },
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },
-                { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' },
-                { name: 'supplierName', title: 'supplier name' },
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' },
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' },
-                { name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' },
-
-                { name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-
-                { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' },
-                { name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' },
-            ];
+            this.options.columns = [];
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' });
+            this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
+            this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+            this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
+            this.options.columns.push({ name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
+            this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
+            if (!this.options.listView) {
+                // NOTE: this means it is a sublist of the group invoice so no reason to show this
+                this.options.columns.push({ name: 'groupDocumentNumber', title: 'whs invoice', link: { url: '/cp/invoice-group?id={groupDocumentNumber}', valueField: _cxSchema.cp_invoiceCredit.INVGRPID } });
+            }
+            this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' });
 
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
 
@@ -420,6 +429,18 @@ class CPInvoiceReturnRender extends RenderBase {
                     value: s.value,
                     style: _cxConst.CP_DOCUMENT.STATUS.getStyleInverted(s.value) + applyStyle,
                     columns: ['status']
+                })
+            }
+
+            var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
+            for (let sx = 0; sx < recoStatuses.length; sx++) {
+                const s = recoStatuses[sx];
+                this.options.cellHighlights.push({
+                    column: _cxSchema.cp_invoiceCredit.RECOSTATUS,
+                    op: '=',
+                    value: s.value,
+                    style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['recoStatus']
                 })
             }
 

@@ -175,6 +175,13 @@ async function getPermission(recordType, role) {
         permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
     }
 
+    if (recordType == _cxSchema.cp_recoSession.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = false;
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowView = false;
+    }
+
 
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');
