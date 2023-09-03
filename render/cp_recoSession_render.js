@@ -16,18 +16,17 @@ class CPRecoSessionRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSession.SHOPID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSOURCEID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSTATUSID] = null;
-//        this.autoLoadFields[_cxSchema.cp_recoSession.RECOSTATUSMESSAGE] = null;
+
+        this.autoLoadFields['documentDate'] = { name: 'documentDate', dataType: 'datetime' };
+        this.autoLoadFields['documentNumber'] = { name: 'documentNumber' };
+        this.autoLoadFields['supplierCode'] = { name: 'supplierCode' };
+
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSCORE] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.BALANCENET] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.BALANCEVAT] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.BALANCEGROSS] = null;
 
-        this.autoLoadFields['documentDate'] = { name: 'documentDate', dataType: 'datetime' };
-        this.autoLoadFields['documentNumber'] = { name: 'documentNumber' };
-        this.autoLoadFields['supplierCode'] = { name: 'supplierCode' };
-        
-
-        this.autoLoadFields[_cxSchema.cp_recoSession.NOTES] = null;
+        this.autoLoadFields['notesDisplay'] = { name: 'notesDisplay' };
         this.autoLoadFields[_cxSchema.cp_recoSession.CREATED] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.MODIFIED] = null;
     }
@@ -56,8 +55,9 @@ class CPRecoSessionRender extends RenderBase {
             column.addTotals = false;
             column.align = 'center';
 
-        } else if (field.name == _cxSchema.cp_recoSession.NOTES) {
+        } else if (field.name == 'notesDisplay') {
             column.nullText = '';
+            column.title = 'notes';
         }
     }
     async initFilter(field, filter) {
@@ -65,7 +65,7 @@ class CPRecoSessionRender extends RenderBase {
             filter.replace = await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 'shopId' });
             filter.hide = false;
         } else if (field.name == _cxSchema.cp_recoSession.RECOSTATUSID) {
-            filter.replace = { label: 'status', fieldName: 'reco.'+_cxSchema.cp_recoSession.RECOSTATUSID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') }
+            filter.replace = { label: 'status', fieldName: 'reco.' + _cxSchema.cp_recoSession.RECOSTATUSID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') }
             filter.hide = false;
         } else if (field.name == _cxSchema.cp_recoSession.MODIFIED || field.name == _cxSchema.cp_recoSession.CREATED
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
@@ -89,11 +89,11 @@ class CPRecoSessionRender extends RenderBase {
         this.options.cellHighlights.push({ column: _cxSchema.cp_recoSession.BALANCEGROSS, op: '<', value: '0', style: 'color: red;' });
 
         this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '25', style: 'color: rgb(255,0,0);', stop: true });
-        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '50', style: 'color: rgb(200,0,0);', stop:true });
-        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '75', style: 'color: rgb(155,0,0);', stop:true });
-        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '95', style: 'color: rgb(0,255,0);', stop:true });
-        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '100', style: 'color: rgb(0,200,0);', stop:true });
-        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '=', value: '100', style: 'color: rgb(0,150,0);;', stop:true });
+        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '50', style: 'color: rgb(200,0,0);', stop: true });
+        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '75', style: 'color: rgb(155,0,0);', stop: true });
+        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '95', style: 'color: rgb(0,255,0);', stop: true });
+        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '100', style: 'color: rgb(0,200,0);', stop: true });
+        this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '=', value: '100', style: 'color: rgb(0,150,0);;', stop: true });
 
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; display: block; overflow: hidden; text-align: center;';
         var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();

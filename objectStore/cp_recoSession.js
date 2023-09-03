@@ -29,7 +29,7 @@ class cp_recoSession_Collection extends _persistentTable.Table {
             this.queryFromParams(query, params);
         }
 
-        query.sql += ' order by reco.created desc';
+        query.sql += ' order by doc.documentDate desc';
 
         return await super.select(query);
     }
@@ -77,6 +77,12 @@ class cp_recoSession extends _persistentTable.Record {
         sc = sc / 100;
 
         return sc;
+    }
+
+    get notesDisplay() {
+        if (!this.notes) { return ''; }
+        if (this.notes.length > 30) { return this.notes.substring(0, 30) + '...'; }
+        return this.notes;
     }
 
     async save() {
