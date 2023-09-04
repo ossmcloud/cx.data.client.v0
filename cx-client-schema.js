@@ -35,8 +35,6 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
-        RECOSTATUS: 'recoStatus',
-        RECOSTATUSMESSAGE: 'recoStatusMessage',
     },
 
     cp_deliveryReturnLine: {
@@ -222,9 +220,6 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
-        TEMP_FLAG: 'temp_flag',
-        RECOSTATUS: 'recoStatus',
-        RECOSTATUSMESSAGE: 'recoStatusMessage',
     },
 
     cp_invoiceCreditLine: {
@@ -386,6 +381,7 @@ module.exports = {
     cp_recoSession: {
         TBL_NAME: 'cp_recoSession',
         RECOSESSIONID: 'recoSessionId',
+        SHOPID: 'shopId',
         RECOSOURCEID: 'recoSourceId',
         RECOSTATUSID: 'recoStatusId',
         RECOSTATUSMESSAGE: 'recoStatusMessage',
@@ -398,7 +394,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        SHOPID: 'shopId',
     },
 
     cp_recoSessionDocument: {
@@ -409,16 +404,38 @@ module.exports = {
         RECOSTATUSID: 'recoStatusId',
         RECOSTATUSMESSAGE: 'recoStatusMessage',
         RECOSCORE: 'recoScore',
+        RECOMATCHLEVEL: 'recoMatchLevel',
         DOCUMENTTYPE: 'documentType',
         DOCUMENTID: 'documentId',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
         DOCUMENTNET: 'documentNet',
         DOCUMENTVAT: 'documentVat',
         DOCUMENTGROSS: 'documentGross',
         ISMAINDOCUMENT: 'isMainDocument',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_recoSessionDocumentLine: {
+        TBL_NAME: 'cp_recoSessionDocumentLine',
+        RECOSESSIONDOCLINEID: 'recoSessionDocLineId',
+        RECOSESSIONDOCID: 'recoSessionDocId',
+        RECOMATCHLEVEL: 'recoMatchLevel',
+        RECOSCORE: 'recoScore',
+        LINEID: 'lineId',
+        BALANCEQTY: 'balanceQty',
+        BALANCERATE: 'balanceRate',
+        BALANCENET: 'balanceNet',
+        BALANCEVAT: 'balanceVat',
+        BALANCEGROSS: 'balanceGross',
+        VATRATEMISMATCH: 'vatRateMismatch',
+        MATCHEDLINEID: 'matchedLineId',
+        MATCHEDLINENO: 'matchedLineNo',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cp_wholesaler: {

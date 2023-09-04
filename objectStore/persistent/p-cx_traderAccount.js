@@ -34,11 +34,11 @@ const _fieldNames = {
     PHONE: 'phone',
     ISWHOLESALER: 'isWholesaler',
     WHOLESALERCODE: 'wholesalerCode',
-    ERPTRADERACCOUNTID: 'erpTraderAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    ERPTRADERACCOUNTID: 'erpTraderAccountId',
 
 }
 //
@@ -47,7 +47,7 @@ const _fieldNames = {
 const _fields = {
     traderAccountId: { name: 'traderAccountId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    traderType: { name: 'traderType', dataType: 'char', pk: false, identity: false, maxLength: 1, null: false },
+    traderType: { name: 'traderType', dataType: 'varchar', pk: false, identity: false, maxLength: 1, null: false },
     traderCode: { name: 'traderCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     traderName: { name: 'traderName', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     countryCode: { name: 'countryCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
@@ -60,11 +60,11 @@ const _fields = {
     phone: { name: 'phone', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     isWholesaler: { name: 'isWholesaler', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     wholesalerCode: { name: 'wholesalerCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
-    erpTraderAccountId: { name: 'erpTraderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpTraderAccountId: { name: 'erpTraderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -84,7 +84,7 @@ class Persistent_cx_traderAccount extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get traderAccountId() {
         return super.getValue(_fieldNames.TRADERACCOUNTID);
@@ -174,12 +174,6 @@ class Persistent_cx_traderAccount extends _cx_data.DBRecord {
         super.setValue(_fieldNames.WHOLESALERCODE, val);
     }
 
-    get erpTraderAccountId() {
-        return super.getValue(_fieldNames.ERPTRADERACCOUNTID);
-    } set erpTraderAccountId(val) {
-        super.setValue(_fieldNames.ERPTRADERACCOUNTID, val);
-    }
-
     get created() {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
@@ -202,6 +196,12 @@ class Persistent_cx_traderAccount extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get erpTraderAccountId() {
+        return super.getValue(_fieldNames.ERPTRADERACCOUNTID);
+    } set erpTraderAccountId(val) {
+        super.setValue(_fieldNames.ERPTRADERACCOUNTID, val);
     }
 
 

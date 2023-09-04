@@ -14,21 +14,24 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cp_recoSession';
+const _tableName = 'cp_recoSessionDocumentLine';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    RECOSESSIONID: 'recoSessionId',
-    SHOPID: 'shopId',
-    RECOSOURCEID: 'recoSourceId',
-    RECOSTATUSID: 'recoStatusId',
-    RECOSTATUSMESSAGE: 'recoStatusMessage',
+    RECOSESSIONDOCLINEID: 'recoSessionDocLineId',
+    RECOSESSIONDOCID: 'recoSessionDocId',
+    RECOMATCHLEVEL: 'recoMatchLevel',
     RECOSCORE: 'recoScore',
+    LINEID: 'lineId',
+    BALANCEQTY: 'balanceQty',
+    BALANCERATE: 'balanceRate',
     BALANCENET: 'balanceNet',
     BALANCEVAT: 'balanceVat',
     BALANCEGROSS: 'balanceGross',
-    NOTES: 'notes',
+    VATRATEMISMATCH: 'vatRateMismatch',
+    MATCHEDLINEID: 'matchedLineId',
+    MATCHEDLINENO: 'matchedLineNo',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
@@ -39,16 +42,19 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    recoSessionId: { name: 'recoSessionId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    recoSourceId: { name: 'recoSourceId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
-    recoStatusId: { name: 'recoStatusId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
-    recoStatusMessage: { name: 'recoStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    recoSessionDocLineId: { name: 'recoSessionDocLineId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    recoSessionDocId: { name: 'recoSessionDocId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    recoMatchLevel: { name: 'recoMatchLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     recoScore: { name: 'recoScore', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    lineId: { name: 'lineId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    balanceQty: { name: 'balanceQty', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
+    balanceRate: { name: 'balanceRate', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
     balanceNet: { name: 'balanceNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
     balanceVat: { name: 'balanceVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
     balanceGross: { name: 'balanceGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
-    notes: { name: 'notes', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    vatRateMismatch: { name: 'vatRateMismatch', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
+    matchedLineId: { name: 'matchedLineId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    matchedLineNo: { name: 'matchedLineNo', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
@@ -58,7 +64,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cp_recoSession_Collection extends _cx_data.DBTable {
+class Persistent_cp_recoSessionDocumentLine_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -67,45 +73,51 @@ class Persistent_cp_recoSession_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cp_recoSession extends _cx_data.DBRecord {
+class Persistent_cp_recoSessionDocumentLine extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get recoSessionId() {
-        return super.getValue(_fieldNames.RECOSESSIONID);
+    get recoSessionDocLineId() {
+        return super.getValue(_fieldNames.RECOSESSIONDOCLINEID);
     }
 
-    get shopId() {
-        return super.getValue(_fieldNames.SHOPID);
-    } set shopId(val) {
-        super.setValue(_fieldNames.SHOPID, val);
+    get recoSessionDocId() {
+        return super.getValue(_fieldNames.RECOSESSIONDOCID);
+    } set recoSessionDocId(val) {
+        super.setValue(_fieldNames.RECOSESSIONDOCID, val);
     }
 
-    get recoSourceId() {
-        return super.getValue(_fieldNames.RECOSOURCEID);
-    } set recoSourceId(val) {
-        super.setValue(_fieldNames.RECOSOURCEID, val);
-    }
-
-    get recoStatusId() {
-        return super.getValue(_fieldNames.RECOSTATUSID);
-    } set recoStatusId(val) {
-        super.setValue(_fieldNames.RECOSTATUSID, val);
-    }
-
-    get recoStatusMessage() {
-        return super.getValue(_fieldNames.RECOSTATUSMESSAGE);
-    } set recoStatusMessage(val) {
-        super.setValue(_fieldNames.RECOSTATUSMESSAGE, val);
+    get recoMatchLevel() {
+        return super.getValue(_fieldNames.RECOMATCHLEVEL);
+    } set recoMatchLevel(val) {
+        super.setValue(_fieldNames.RECOMATCHLEVEL, val);
     }
 
     get recoScore() {
         return super.getValue(_fieldNames.RECOSCORE);
     } set recoScore(val) {
         super.setValue(_fieldNames.RECOSCORE, val);
+    }
+
+    get lineId() {
+        return super.getValue(_fieldNames.LINEID);
+    } set lineId(val) {
+        super.setValue(_fieldNames.LINEID, val);
+    }
+
+    get balanceQty() {
+        return super.getValue(_fieldNames.BALANCEQTY);
+    } set balanceQty(val) {
+        super.setValue(_fieldNames.BALANCEQTY, val);
+    }
+
+    get balanceRate() {
+        return super.getValue(_fieldNames.BALANCERATE);
+    } set balanceRate(val) {
+        super.setValue(_fieldNames.BALANCERATE, val);
     }
 
     get balanceNet() {
@@ -126,10 +138,22 @@ class Persistent_cp_recoSession extends _cx_data.DBRecord {
         super.setValue(_fieldNames.BALANCEGROSS, val);
     }
 
-    get notes() {
-        return super.getValue(_fieldNames.NOTES);
-    } set notes(val) {
-        super.setValue(_fieldNames.NOTES, val);
+    get vatRateMismatch() {
+        return super.getValue(_fieldNames.VATRATEMISMATCH);
+    } set vatRateMismatch(val) {
+        super.setValue(_fieldNames.VATRATEMISMATCH, val);
+    }
+
+    get matchedLineId() {
+        return super.getValue(_fieldNames.MATCHEDLINEID);
+    } set matchedLineId(val) {
+        super.setValue(_fieldNames.MATCHEDLINEID, val);
+    }
+
+    get matchedLineNo() {
+        return super.getValue(_fieldNames.MATCHEDLINENO);
+    } set matchedLineNo(val) {
+        super.setValue(_fieldNames.MATCHEDLINENO, val);
     }
 
     get created() {
@@ -162,6 +186,6 @@ class Persistent_cp_recoSession extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cp_recoSession_Collection,
-    Record: Persistent_cp_recoSession,
+    Table: Persistent_cp_recoSessionDocumentLine_Collection,
+    Record: Persistent_cp_recoSessionDocumentLine,
 }

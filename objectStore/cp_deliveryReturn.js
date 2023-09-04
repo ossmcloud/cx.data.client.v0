@@ -17,12 +17,13 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select            d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, recoDoc.recoSessionId
+        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, recoDoc.recoSessionId, reco.recoStatusId
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
+                      left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.s) {
@@ -84,12 +85,13 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (this.cx.cxSvc == true) { return await super.fetch(id); }
 
         var query = { sql: '', params: [{ name: 'delRetId', value: id }] };
-        query.sql = ` select            d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, recoDoc.recoSessionId
+        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, recoDoc.recoSessionId, reco.recoStatusId
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
+                      left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}
                       and               d.${this.FieldNames.DELRETID} = @delRetId`;
         query.noResult = 'null';
@@ -110,6 +112,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #documentSign = 1;
     #supplierName = null;
     #recoSessionId = null;
+    #recoStatus = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -117,6 +120,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#shopCode = defaults['shopCode'] || '';
         this.#supplierName = defaults['supplierName'];
         this.#recoSessionId = defaults['recoSessionId'] || null;
+        this.#recoStatus = defaults['recoStatusId'] || 0;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -143,17 +147,11 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
 
 
-    get recoStatusName() {
-        return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatus);
-    }
-
-    get recoStatus() {
-        return super.recoStatus || 0;
-    } set recoStatus(val) {
-        super.recoStatus = val || 0;
-    }
-
     get recoSessionId() { return this.#recoSessionId; }
+    get recoStatus() { return this.#recoStatus || 0; }
+    get recoStatusName() { return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatus); }
+
+
 
 
     async save() {

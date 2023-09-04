@@ -94,14 +94,11 @@ class CPInvoiceReturnRender extends RenderBase {
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
-
-        // recoSessionId
         
         var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
         this.options.title += `
-            
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-                ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+               &#128274; ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
             </div>
         `;
         if (this.dataSource.isUserEdited) {
@@ -436,7 +433,7 @@ class CPInvoiceReturnRender extends RenderBase {
             for (let sx = 0; sx < recoStatuses.length; sx++) {
                 const s = recoStatuses[sx];
                 this.options.cellHighlights.push({
-                    column: _cxSchema.cp_invoiceCredit.RECOSTATUS,
+                    column: 'recoStatus',
                     op: '=',
                     value: s.value,
                     style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',

@@ -51,8 +51,6 @@ const _fieldNames = {
     ISUSEREDITED: 'isUserEdited',
     CREATEDFROM: 'createdFrom',
     CREATEDFROMTYPE: 'createdFromType',
-    RECOSTATUS: 'recoStatus',
-    RECOSTATUSMESSAGE: 'recoStatusMessage',
 
 }
 //
@@ -91,8 +89,6 @@ const _fields = {
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     createdFrom: { name: 'createdFrom', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    recoStatus: { name: 'recoStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    recoStatusMessage: { name: 'recoStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -302,18 +298,6 @@ class Persistent_cp_deliveryReturn extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDFROMTYPE);
     } set createdFromType(val) {
         super.setValue(_fieldNames.CREATEDFROMTYPE, val);
-    }
-
-    get recoStatus() {
-        return super.getValue(_fieldNames.RECOSTATUS);
-    } set recoStatus(val) {
-        super.setValue(_fieldNames.RECOSTATUS, val);
-    }
-
-    get recoStatusMessage() {
-        return super.getValue(_fieldNames.RECOSTATUSMESSAGE);
-    } set recoStatusMessage(val) {
-        super.setValue(_fieldNames.RECOSTATUSMESSAGE, val);
     }
 
 
