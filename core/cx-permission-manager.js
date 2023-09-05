@@ -176,10 +176,16 @@ async function getPermission(recordType, role) {
     }
 
     if (recordType == _cxSchema.cp_recoSession.TBL_NAME) {
-        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        //permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowEdit = false;
         permission.allowNew = false;
         permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
-        //permission.allowView = false;
+        permission.allowView = true;
+    }
+    if (recordType == _cxSchema.cp_recoSetting.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
 

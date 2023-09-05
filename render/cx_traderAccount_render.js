@@ -110,6 +110,7 @@ class CXTraderAccount extends RenderBase {
             { id: 'cx_trader_type', inputType: _cxConst.RENDER.CTRL_TYPE.SELECT, fieldName: 'tt', label: 'trader type', width: '100px', items: _cxConst.CX_TRADER_TYPE.toList(true) },
             { id: 'cx_trader_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tc', label: 'trader code' },
             { id: 'cx_trader_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tn', label: 'trader name' },
+            { id: 'cx_trader_whs', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'whs', label: 'wholesaler code' },
         ];
         this.options.columns = [
             { name: 'traderAccountId', title: ' ', align: 'center' },

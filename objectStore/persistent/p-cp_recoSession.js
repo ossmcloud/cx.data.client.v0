@@ -28,6 +28,7 @@ const _fieldNames = {
     BALANCENET: 'balanceNet',
     BALANCEVAT: 'balanceVat',
     BALANCEGROSS: 'balanceGross',
+    MATCHEDBYUSER: 'matchedByUser',
     NOTES: 'notes',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
@@ -48,6 +49,7 @@ const _fields = {
     balanceNet: { name: 'balanceNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
     balanceVat: { name: 'balanceVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
     balanceGross: { name: 'balanceGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: false },
+    matchedByUser: { name: 'matchedByUser', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     notes: { name: 'notes', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
@@ -124,6 +126,12 @@ class Persistent_cp_recoSession extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.BALANCEGROSS);
     } set balanceGross(val) {
         super.setValue(_fieldNames.BALANCEGROSS, val);
+    }
+
+    get matchedByUser() {
+        return super.getValue(_fieldNames.MATCHEDBYUSER);
+    } set matchedByUser(val) {
+        super.setValue(_fieldNames.MATCHEDBYUSER, val);
     }
 
     get notes() {

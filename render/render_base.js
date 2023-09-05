@@ -48,6 +48,10 @@ class RenderBase {
     get dataSourceColumns() { return this.#dataSourceColumns; }
     get dataSourceFilters() { return this.#dataSourceFilters; }
 
+    hasModule(module) {
+        return this.dataSource.cx.dbInfo.modules.indexOf((module || '').toLowerCase()) >= 0;
+    }
+
     formatOptions() {
         // get data source title
         this.#title = this.options.title || this.dataSourceType.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
@@ -147,11 +151,17 @@ class RenderBase {
                 column.formatMoney = 'N2';
                 column.addTotals = true;
             }
-
             if (field.name == 'createdBy' || field.name == 'modifiedBy') {
                 column.addTotals = false;
                 column.width = '90px';
             }
+            column.lookUps = field.lookUps;
+            if (field.align) { column.align = field.align; }
+            if (field.width) { column.width = field.width; }
+            if (field.title) { column.title = field.title; }
+            if (field.link) { column.link = field.link; }
+            if (field.nullText) { column.nullText = field.nullText; }
+            if (field.toolTip) { column.toolTip = field.toolTip; }
 
             userListOptions.copyColumn(field.name, column);
             userListOptions.copyFilter(field.name, filter);

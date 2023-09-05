@@ -5,10 +5,12 @@ const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
 class CPInvoiceReturnRender extends RenderBase {
+    matchingEnabled = false;
     constructor(dataSource, options) {
         super(dataSource, options);
         if (!options.path) { options.path = '../cp/invoice'; }
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
+        this.matchingEnabled = this.hasModule('cm');
     }
 
 
@@ -95,12 +97,15 @@ class CPInvoiceReturnRender extends RenderBase {
             </div>
         `;
         
-        var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
-        this.options.title += `
-            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-               &#128274; ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
-            </div>
-        `;
+        if (this.matchingEnabled) {
+            var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
+            this.options.title += `
+                <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
+                &#128274; ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+                </div>
+            `;
+        }
+
         if (this.dataSource.isUserEdited) {
             this.options.title += `
                 <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited">
@@ -313,6 +318,8 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
+
+
         if (this.options.allowEdit) {
             this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
         }
@@ -386,7 +393,9 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
-            this.options.columns.push({ name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+            if (this.matchingEnabled) {
+                this.options.columns.push({ name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+            }
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
             this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
@@ -429,16 +438,18 @@ class CPInvoiceReturnRender extends RenderBase {
                 })
             }
 
-            var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
-            for (let sx = 0; sx < recoStatuses.length; sx++) {
-                const s = recoStatuses[sx];
-                this.options.cellHighlights.push({
-                    column: 'recoStatus',
-                    op: '=',
-                    value: s.value,
-                    style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
-                    columns: ['recoStatus']
-                })
+            if (this.matchingEnabled) {
+                var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
+                for (let sx = 0; sx < recoStatuses.length; sx++) {
+                    const s = recoStatuses[sx];
+                    this.options.cellHighlights.push({
+                        column: 'recoStatus',
+                        op: '=',
+                        value: s.value,
+                        style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                        columns: ['recoStatus']
+                    })
+                }
             }
 
             var types = _cxConst.CP_DOCUMENT.TYPE.toList();

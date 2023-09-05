@@ -3,7 +3,6 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
-const { columns } = require('mssql');
 
 class CPRecoSessionRender extends RenderBase {
     constructor(dataSource, options) {
@@ -13,13 +12,17 @@ class CPRecoSessionRender extends RenderBase {
 
         this.autoLoadFields = {};
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSESSIONID] = null;
+        this.autoLoadFields['recoMatchLevel'] = { name: 'recoMatchLevel', title: ' ', toolTip: { valueField: 'recoMatchLevel', suppressText: true } };
         this.autoLoadFields[_cxSchema.cp_recoSession.SHOPID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSOURCEID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSTATUSID] = null;
+        this.autoLoadFields['matchByUserDisplay'] = { name: 'matchByUserDisplay', title: ' ', width: '30px' };
 
+        this.autoLoadFields['documentType'] = { name: 'documentType', title: 'type', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList(), align: 'center', width: '70px' };
         this.autoLoadFields['documentDate'] = { name: 'documentDate', dataType: 'datetime' };
-        this.autoLoadFields['documentNumber'] = { name: 'documentNumber' };
+        this.autoLoadFields['documentNumber'] = { name: 'documentNumber', link: { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' } };
         this.autoLoadFields['supplierCode'] = { name: 'supplierCode' };
+        this.autoLoadFields['supplierName'] = { name: 'supplierName', nullText: 'not found' };
 
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSCORE] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.BALANCENET] = null;
@@ -95,7 +98,20 @@ class CPRecoSessionRender extends RenderBase {
         this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '<', value: '100', style: 'color: rgb(0,200,0);', stop: true });
         this.options.cellHighlights.push({ column: 'recoScoreDisplay', op: '=', value: '100', style: 'color: rgb(0,150,0);;', stop: true });
 
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; display: block; overflow: hidden; text-align: center;';
+        var applyStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: -1, style: `background-color: red; color: white;` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 0, style: `background-color: rgb(0,255,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 1, style: `background-color: rgb(0,200,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 2, style: `background-color: rgb(0,150,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 3, style: `background-color: rgb(250,250,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 4, style: `background-color: rgb(200,200,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 5, style: `background-color: rgb(150,150,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 6, style: `background-color: orange;` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 7, style: `background-color: rgb(200,0,0);` + applyStyle, columns: 'recoMatchLevel' });
+
+
+        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        //var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; display: block; overflow: hidden; text-align: center;';
         var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
         for (let sx = 0; sx < recoStatuses.length; sx++) {
             const s = recoStatuses[sx];
@@ -108,6 +124,17 @@ class CPRecoSessionRender extends RenderBase {
             })
         }
 
+        var types = _cxConst.CP_DOCUMENT.TYPE.toList();
+        for (let sx = 0; sx < types.length; sx++) {
+            const s = types[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE,
+                op: '=',
+                value: s.value,
+                style: _cxConst.CP_DOCUMENT.TYPE.getStyleInverted(s.value) + applyStyle,
+                columns: [_cxSchema.cp_invoiceCredit.DOCUMENTTYPE]
+            })
+        }
 
 
     }

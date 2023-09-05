@@ -5,8 +5,12 @@ const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
 class CPDeliveryReturnRender extends RenderBase {
+    matchingEnabled = false;
     constructor(dataSource, options) {
         super(dataSource, options);
+        if (!options.path) { options.path = '../cp/delivery'; }
+        if (!options.listPath) { options.listPath = '../cp/deliveries'; }
+        this.matchingEnabled = this.hasModule('cm');
     }
 
     async getDocumentLineListOptions() {
@@ -61,16 +65,16 @@ class CPDeliveryReturnRender extends RenderBase {
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
-        var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
-        this.options.title += `
-            
-            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-                ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
-            </div>
-        `;
+        if (this.matchingEnabled) {
+            var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
+            this.options.title += `
+                <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
+                    &#128274; ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+                </div>
+            `;
+        }
+
         this.options.title += '</div>';
-
-
 
         this.options.fields = [
             {
@@ -205,27 +209,26 @@ class CPDeliveryReturnRender extends RenderBase {
                 Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT + 'Sign',
             }
-            this.options.columns = [
-                { name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' },
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' });
+            this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
+            this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
+            if (this.matchingEnabled) {
+                this.options.columns.push({ name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+            }
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' });
+            this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' });
+            this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.CREATED, title: 'created', align: 'center', width: '130px' });
 
-                { name: 'shopInfo', title: 'store', width: '200px' },
-                { name: 'status', title: 'status', align: 'center', width: '70px' },
-                { name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
-                { name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } },
-                { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },
-                { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' },
-                { name: 'supplierName', title: 'supplier name' },
-                { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' },
-                { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' },
-
-                { name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-
-                { name: _cxSchema.cp_deliveryReturn.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' },
-                { name: _cxSchema.cp_deliveryReturn.CREATED, title: 'created', align: 'center', width: '130px' },
-            ];
+            
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
