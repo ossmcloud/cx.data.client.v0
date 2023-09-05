@@ -209,6 +209,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT + 'Sign',
             }
+            this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' });
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
