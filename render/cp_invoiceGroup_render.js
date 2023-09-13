@@ -5,8 +5,10 @@ const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
 class CPInvoiceGroupRender extends RenderBase {
+    matchingEnabled = false;
     constructor(dataSource, options) {
         super(dataSource, options);
+        this.matchingEnabled = this.hasModule('cm');
     }
 
     async getDocumentListOptions() {
@@ -89,6 +91,41 @@ class CPInvoiceGroupRender extends RenderBase {
         return transactionLinesOptions;
     }
 
+    async getMatchingSummary() {
+        var sql = `
+            select	        reco.recoStatusId, avg(reco.recoScore) as recoScore, count(*) as count
+            from	        cp_invoiceGroup grp
+            inner join      cp_invoiceCredit doc on doc.invGrpId = grp.invGrpId
+            left outer join cp_recoSessionDocument recoDoc on recoDoc.documentId = doc.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
+            left outer join cp_recoSession reco on reco.recoSessionId = recoDoc.recoSessionId
+            where           grp.invGrpId = ${this.dataSource.id}
+            group by reco.recoStatusId
+            order by reco.recoStatusId desc
+        `;
+        
+        var res = await this.dataSource.cx.exec({ sql: sql });
+        var matchSummary = { total: 0, html: '', splits: [] };
+        res.each(function (rec, idx) {
+            matchSummary.total += rec.count;
+        });
+        matchSummary.html += '<div style="padding: 3px; margin-top: 7px; width: 200px;">';
+        res.each(function (rec, idx) {
+            matchSummary.splits.push({
+                status: rec.recoStatusId,
+                avgScore: rec.recoScore,
+                count: rec.count,
+                pc: rec.count / matchSummary.total
+            });
+
+            var style = _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(rec.recoStatusId);
+            
+            matchSummary.html += `<div style="display: inline-block; width: ${(rec.count / matchSummary.total) * 200}px;  height: 30px; ${style}"></div>`;
+        });
+        matchSummary.html += '</div>';
+        //console.log(matchSummary);
+        return matchSummary;
+    }
+
     async setRecordTitle() {
         // SET TAB TITLE
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber}]`;
@@ -113,6 +150,11 @@ class CPInvoiceGroupRender extends RenderBase {
                 </div>
             `;
             this.options.tabTitle = '\u270E ' + this.options.tabTitle;
+        }
+
+        if (this.matchingEnabled) {
+            var matchSummary = await this.getMatchingSummary();
+            this.options.title += matchSummary.html;
         }
 
         this.options.title += '</div>';
