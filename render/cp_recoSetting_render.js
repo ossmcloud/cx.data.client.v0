@@ -9,7 +9,22 @@ class CPRecoSettingRender extends RenderBase {
         super(dataSource, options);
         this.title = 'matching settings';
         this.autoLoad = true;
+
+        this.autoLoadFields = {};
+        this.autoLoadFields[_cxSchema.cp_recoSetting.RECOSETTINGID] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.WHOLESALERID] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.SHOPID] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.HTOLERANCE] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.HTOLERANCEPC] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.LTOLERANCE] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.LTOLERANCEPC] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.FORCENOTES] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.CREATED] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.MODIFIED] = null;
+
     }
+
+
 
     async initColumn(field, column) {
         if (field.name == _cxSchema.cp_recoSetting.WHOLESALERID) {
@@ -23,6 +38,8 @@ class CPRecoSettingRender extends RenderBase {
             column.addTotals = false;
             column.align = 'left';
         } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE) {
+            column.addTotals = false;
+        } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCEPC || field.name == _cxSchema.cp_recoSetting.LTOLERANCEPC) {
             column.addTotals = false;
         } else if (field.name == _cxSchema.cp_recoSetting.FORCENOTES) {
             column.align = 'center';
@@ -38,10 +55,42 @@ class CPRecoSettingRender extends RenderBase {
             filter.hide = true;
         } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE || field.name == _cxSchema.cp_recoSetting.FORCENOTES) {
             filter.hide = true;
+        } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCEPC || field.name == _cxSchema.cp_recoSetting.LTOLERANCEPC) {
+            filter.hide = true;
         }
     }
 
-    async _list() { }
+    async _list() { 
+        
+    }
+
+
+
+
+    async getSupplierSettingsListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.cp_recoSettingSupplier);
+        await configs.select({ recoSettingId: this.dataSource.id });
+        if (configs.count() > 0) { this.options.allowDelete = false; }
+
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        configListOptions.columns.shift();
+        configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            configListOptions.actionsShowFirst = true;
+            if (this.options.allowEdit) {
+
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: '&#x270E;', toolTip: 'edit...', funcName: 'editSupplierConfig' });
+                configListOptions.actions.push({ label: '&#128465;', toolTip: 'delete', funcName: 'deleteSupplierConfig' });
+                configListOptions.showButtons = [{ id: 'cr_tran_type_config_shop_add', text: 'Add Configuration', function: 'addSupplierConfig' }];
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewSupplierConfig' }];
+            }
+        }
+        return configListOptions;
+    }
 
     async _record() {
 
@@ -55,9 +104,21 @@ class CPRecoSettingRender extends RenderBase {
                             await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', column: 1 }),
                             //{ name: 'shopId', label: 'store', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', column: 1 }),
-                            { name: 'hTolerance', label: 'tolerance (header)', width: '130px', column: 2 },
-                            { name: 'lTolerance', label: 'tolerance (line)', width: '130px', column: 2 },
-                            { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 2 },
+                            {
+                                group: 'hTolerance', title: '', column: 2, columnCount: 2, fields: [
+                                    { name: 'hTolerance', label: 'tolerance (header)', width: '130px', column: 1 },
+                                    { name: 'hTolerancePc', label: 'tolerance %', width: '130px', column: 2 },    
+                                ]
+                            },
+                            {
+                                group: 'lTolerance', title: '', column: 2, columnCount: 2, fields: [
+                                    { name: 'lTolerance', label: 'tolerance (line)', width: '130px', column: 1 },
+                                    { name: 'lTolerancePc', label: 'tolerance %', width: '130px', column: 2 },
+                                ]
+                            },
+                            
+                          
+                            { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 1 },
                         ]
                     },
                     {
@@ -80,6 +141,14 @@ class CPRecoSettingRender extends RenderBase {
             }
         ];
 
+        var supplierConfigs = await this.getSupplierSettingsListOptions();
+        var listsSuppliers = {
+            group: 'listsOuter', title: '', columnCount: 1, fields: [
+                { group: 'config', title: 'supplier specific configurations', column: 1, fields: [supplierConfigs] }
+            ]
+        }
+        this.options.fields.push(listsSuppliers);
+
 
     }
 
@@ -88,3 +157,5 @@ class CPRecoSettingRender extends RenderBase {
 
 
 module.exports = CPRecoSettingRender;
+
+

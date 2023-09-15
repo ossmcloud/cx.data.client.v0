@@ -101,6 +101,7 @@ class cp_recoSession extends _persistentTable.Record {
     }
 
     get recoScoreDisplay() {
+        if (this.recoScore == null) { return null; }
         var sc = parseFloat(this.recoScore);
         sc = sc / 100;
 
@@ -108,6 +109,7 @@ class cp_recoSession extends _persistentTable.Record {
     }
 
     get matchByUserDisplay() {
+        if (this.matchedAlone) { return '&cross;'; }
         if (this.matchedByUser) { return '&check;'; }
         return '';
     }

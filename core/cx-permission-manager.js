@@ -182,11 +182,12 @@ async function getPermission(recordType, role) {
         permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
         permission.allowView = true;
     }
-    if (recordType == _cxSchema.cp_recoSetting.TBL_NAME) {
+    if (recordType == _cxSchema.cp_recoSetting.TBL_NAME || recordType == _cxSchema.cp_recoSettingSupplier.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
         permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
         permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
+    
 
 
     if (!permission.allowView) {

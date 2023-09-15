@@ -141,7 +141,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
         fieldGroupStyles.push('min-width: 500px;');
         var fieldGroup_main = {
-            group: 'main1', title: 'main info', column: fieldGroupIdx++, columnCount: 3, fields: [
+            group: 'main1', title: 'main info', column: fieldGroupIdx++, columnCount: 4, fields: [
                 {
                     group: 'main1.col1', column: 1, columnCount: 1, fields: [
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
@@ -165,6 +165,13 @@ class CPInvoiceReturnRender extends RenderBase {
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number', validation: '{ "mandatory": true, "max": 20  }' },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, column: 1, label: 'date' },
                         { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
+                    ]
+                },
+                {
+                    group: 'main1.col4', column: 4, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, label: 'docket number' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCKETDATE, column: 1, label: 'docket date' },
+                        
                     ]
                 },
             ]

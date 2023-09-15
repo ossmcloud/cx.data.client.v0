@@ -12,8 +12,10 @@ class WholesalerShop extends RenderBase {
 
     async initColumn(field, column) {
         if (field.name == _cxSchema.cp_wholesalerShop.WHOLESALERID) {
-            column.name = 'whsShopId';
-            column.dataHidden = 'whs-shop-id';
+            // column.name = 'whsShopId';
+            // column.dataHidden = 'whs-shop-id';
+            column.name = 'whsInfo';
+            column.width = '75px';
         } else if (field.name == _cxSchema.cp_wholesalerShop.SHOPID) {
             column.name = 'shopInfo';
             column.title = 'shop info';

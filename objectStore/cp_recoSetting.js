@@ -7,17 +7,19 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         return new cp_recoSetting(this, defaults);
     }
 
-    async select(params) {
-        if (!params) { params = {} };
-
-        var query = {
-            sql: `
+    buildQuery() { 
+        return `
                 select	            sett.*, whs.code as wholesalerCode, whs.name as wholesalerName, s.shopCode, s.shopName
                 from	            cp_recoSetting  sett
                 left outer join     cp_wholesaler	whs ON whs.wholesalerId = sett.wholesalerId
                 left outer join     cx_shop         s   ON s.shopId = sett.shopId
-            `
-        };
+            `;
+    }
+
+    async select(params) {
+        if (!params) { params = {} };
+
+        var query = { sql: this.buildQuery() };
 
         // if (params.s) {
         //     query.sql += ' where s.shopId = @shopId\n';
@@ -29,6 +31,16 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         query.sql += ' order by sett.recoSettingId';
 
         return await super.select(query);
+    }
+
+    async fetch(id) {
+        var query = { sql: this.buildQuery(), params: [{ name: 'recoSettingId', value: id }] };
+        query.sql += ` where sett.recoSettingId = @recoSettingId`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
+        return super.populate(rawRecord);
     }
 
     find(wholesalerId, shopId) {

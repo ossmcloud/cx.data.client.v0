@@ -57,6 +57,7 @@ class CPRecoSessionRender extends RenderBase {
             column.formatNumber = 'N2';
             column.addTotals = false;
             column.align = 'center';
+            column.nullText = 'N/A';
 
         } else if (field.name == 'notesDisplay') {
             column.nullText = '';
@@ -70,6 +71,9 @@ class CPRecoSessionRender extends RenderBase {
         } else if (field.name == _cxSchema.cp_recoSession.RECOSTATUSID) {
             filter.replace = { label: 'status', fieldName: 'reco.' + _cxSchema.cp_recoSession.RECOSTATUSID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') }
             filter.hide = false;
+        } else if (field.name == 'documentType') {
+            filter.replace = { label: 'type', fieldName: 'doc.documentType', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') };
+        
         } else if (field.name == _cxSchema.cp_recoSession.MODIFIED || field.name == _cxSchema.cp_recoSession.CREATED
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
             || field.name == _cxSchema.cp_recoSession.BALANCENET || field.name == _cxSchema.cp_recoSession.BALANCEVAT || field.name == _cxSchema.cp_recoSession.BALANCEGROSS) {
@@ -108,6 +112,7 @@ class CPRecoSessionRender extends RenderBase {
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 5, style: `background-color: rgb(150,150,0);` + applyStyle, columns: 'recoMatchLevel' });
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 6, style: `background-color: orange;` + applyStyle, columns: 'recoMatchLevel' });
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 7, style: `background-color: rgb(200,0,0);` + applyStyle, columns: 'recoMatchLevel' });
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 8, style: `background-color: rgb(255,0,0);` + applyStyle, columns: 'recoMatchLevel' });
 
 
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';

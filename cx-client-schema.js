@@ -395,6 +395,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        MATCHEDALONE: 'matchedAlone',
     },
 
     cp_recoSessionDocument: {
@@ -447,6 +448,23 @@ module.exports = {
         HTOLERANCE: 'hTolerance',
         LTOLERANCE: 'lTolerance',
         FORCENOTES: 'forceNotes',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        HTOLERANCEPC: 'hTolerancePc',
+        LTOLERANCEPC: 'lTolerancePc',
+    },
+
+    cp_recoSettingSupplier: {
+        TBL_NAME: 'cp_recoSettingSupplier',
+        RECOSETTINGSUPPID: 'recoSettingSuppId',
+        RECOSETTINGID: 'recoSettingId',
+        SUPPLIERCODE: 'supplierCode',
+        MATCHINGSUPPLIERCODES: 'matchingSupplierCodes',
+        IGNOREVATMISMATCH: 'ignoreVatMismatch',
+        NODELIVERY: 'noDelivery',
+        NODELIVERYCOMMENT: 'noDeliveryComment',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
