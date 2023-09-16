@@ -79,6 +79,8 @@ class CPRecoSessionRender extends RenderBase {
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
             || field.name == _cxSchema.cp_recoSession.BALANCENET || field.name == _cxSchema.cp_recoSession.BALANCEVAT || field.name == _cxSchema.cp_recoSession.BALANCEGROSS) {
             return false;
+        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay') {
+            filter.hide = true;
         }
     }
 
