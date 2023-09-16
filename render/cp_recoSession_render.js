@@ -21,6 +21,7 @@ class CPRecoSessionRender extends RenderBase {
         this.autoLoadFields['documentType'] = { name: 'documentType', title: 'type', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList(), align: 'center', width: '70px' };
         this.autoLoadFields['documentDate'] = { name: 'documentDate', dataType: 'datetime' };
         this.autoLoadFields['documentNumber'] = { name: 'documentNumber', link: { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' } };
+        this.autoLoadFields['docketNumber'] = { name: 'docketNumber' };
         this.autoLoadFields['supplierCode'] = { name: 'supplierCode' };
         this.autoLoadFields['supplierName'] = { name: 'supplierName', nullText: 'not found' };
 
@@ -30,8 +31,8 @@ class CPRecoSessionRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSession.BALANCEGROSS] = null;
 
         this.autoLoadFields['notesDisplay'] = { name: 'notesDisplay' };
-        this.autoLoadFields[_cxSchema.cp_recoSession.CREATED] = null;
-        this.autoLoadFields[_cxSchema.cp_recoSession.MODIFIED] = null;
+        // this.autoLoadFields[_cxSchema.cp_recoSession.CREATED] = null;
+        // this.autoLoadFields[_cxSchema.cp_recoSession.MODIFIED] = null;
     }
 
     async initColumn(field, column) {
@@ -73,7 +74,7 @@ class CPRecoSessionRender extends RenderBase {
             filter.hide = false;
         } else if (field.name == 'documentType') {
             filter.replace = { label: 'type', fieldName: 'doc.documentType', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') };
-        
+
         } else if (field.name == _cxSchema.cp_recoSession.MODIFIED || field.name == _cxSchema.cp_recoSession.CREATED
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
             || field.name == _cxSchema.cp_recoSession.BALANCENET || field.name == _cxSchema.cp_recoSession.BALANCEVAT || field.name == _cxSchema.cp_recoSession.BALANCEGROSS) {
@@ -88,6 +89,14 @@ class CPRecoSessionRender extends RenderBase {
     }
 
     async _list() {
+        if (this.options.query['reco.recoStatusId'] == _cxConst.CP_DOCUMENT.RECO_STATUS.NotReconciled) {
+            this.options.title = 'unmatched documents';
+        } else if (this.options.query['reco.recoStatusId'] == _cxConst.CP_DOCUMENT.RECO_STATUS.Pending) {
+            this.options.title = 'matched documents for user validations';
+        } else {
+            this.options.title = 'document matching sessions';
+        }
+
         this.options.cellHighlights.push({ column: _cxSchema.cp_recoSession.BALANCENET, op: '=', value: '0', style: 'color: gray;' });
         this.options.cellHighlights.push({ column: _cxSchema.cp_recoSession.BALANCEVAT, op: '=', value: '0', style: 'color: gray;' });
         this.options.cellHighlights.push({ column: _cxSchema.cp_recoSession.BALANCEGROSS, op: '=', value: '0', style: 'color: gray;' });

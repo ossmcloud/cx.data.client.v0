@@ -108,7 +108,9 @@ class CPInvoiceGroupRender extends RenderBase {
         res.each(function (rec, idx) {
             matchSummary.total += rec.count;
         });
-        matchSummary.html += '<div style="padding: 3px; margin-top: 7px; width: 200px;">';
+        //matchSummary.html += '<div style="padding: 3px; margin-top: 7px; width: 200px;">';
+        matchSummary.html += '<div style="border: 5px solid var(--main-bg-color); display: block; border-radius: 15px; overflow: hidden;">';
+        //matchSummary.html += '<span style="font-size: 8px">matching status</span>';
         res.each(function (rec, idx) {
             matchSummary.splits.push({
                 status: rec.recoStatusId,
@@ -118,8 +120,8 @@ class CPInvoiceGroupRender extends RenderBase {
             });
 
             var style = _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(rec.recoStatusId);
-            
-            matchSummary.html += `<div style="display: inline-block; width: ${(rec.count / matchSummary.total) * 200}px;  height: 30px; ${style}"></div>`;
+            var tooltip = _cxConst.CP_DOCUMENT.RECO_STATUS.getName(rec.recoStatusId) + ': ' + ((rec.count / matchSummary.total) * 100).toFixed(2) + '%';            
+            matchSummary.html += `<div title="${tooltip}" style="display: table-cell; width: ${(rec.count / matchSummary.total) * 150}px;  height: 32px; ${style}"></div>`;
         });
         matchSummary.html += '</div>';
         //console.log(matchSummary);

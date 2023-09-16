@@ -604,7 +604,7 @@ const CP_DOCUMENT = {
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 REFRESH: 'refreshing erp info',
-                NEED_ATTENTION: 'need attention',
+                NEED_ATTENTION: 'mapping issue',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -615,7 +615,7 @@ const CP_DOCUMENT = {
         getName: function (value) {
             return enumGetName(this, value, {
                 REFRESH: 'refreshing erp info',
-                NEED_ATTENTION: 'need attention',
+                NEED_ATTENTION: 'mapping issue',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',

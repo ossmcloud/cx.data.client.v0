@@ -15,7 +15,7 @@ class cp_recoSession_Collection extends _persistentTable.Table {
         var query = {
             sql: `
                 select	            distinct reco.*, s.shopCode, s.shopName, 
-                                    doc.documentNumber, doc.documentDate, doc.supplierCode, doc.documentType, doc.invCreId, recoDoc.recoMatchLevel,
+                                    doc.documentNumber, doc.docketNumber, doc.documentDate, doc.supplierCode, doc.documentType, doc.invCreId, recoDoc.recoMatchLevel, 
                                     (
                                         select  top 1 traderName 
                                         from    cx_traderAccount supp
@@ -58,6 +58,7 @@ class cp_recoSession extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     #documentNumber = '';
+    #docketNumber = '';
     #documentType = '';
     #documentDate = '';
     #supplierCode = '';
@@ -70,6 +71,7 @@ class cp_recoSession extends _persistentTable.Record {
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
         this.#documentNumber = defaults['documentNumber'] || '';
+        this.#docketNumber = defaults['docketNumber'] || '';
         this.#documentType = defaults['documentType'] || '';
         this.#documentDate = defaults['documentDate'] || '';
         this.#supplierCode = defaults['supplierCode'] || '';
@@ -85,6 +87,7 @@ class cp_recoSession extends _persistentTable.Record {
 
     get documentType() { return this.#documentType; }
     get documentNumber() { return this.#documentNumber; }
+    get docketNumber() { return this.#docketNumber; }
     get documentDate() { return this.#documentDate; }
     get supplierCode() { return this.#supplierCode; }
     get supplierName() { return this.#supplierName; }

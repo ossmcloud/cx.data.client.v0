@@ -96,7 +96,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
-        
+
         if (this.matchingEnabled) {
             var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
             this.options.title += `
@@ -171,7 +171,7 @@ class CPInvoiceReturnRender extends RenderBase {
                     group: 'main1.col4', column: 4, columnCount: 1, fields: [
                         { name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, label: 'docket number' },
                         { name: _cxSchema.cp_invoiceCredit.DOCKETDATE, column: 1, label: 'docket date' },
-                        
+
                     ]
                 },
             ]
@@ -401,7 +401,8 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
             if (this.matchingEnabled) {
-                this.options.columns.push({ name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+                var matchIcon = '<img src="/public/images/puzzle_dark.png" style="width: 20px" />'
+                this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
             }
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
