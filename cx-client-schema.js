@@ -454,6 +454,8 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         HTOLERANCEPC: 'hTolerancePc',
         LTOLERANCEPC: 'lTolerancePc',
+        IGNOREVATMISMATCH: 'ignoreVatMismatch',
+        IGNORELINETOLERANCE: 'ignoreLineTolerance',
     },
 
     cp_recoSettingSupplier: {
@@ -469,6 +471,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        IGNORELINETOLERANCE: 'ignoreLineTolerance',
     },
 
     cp_wholesaler: {

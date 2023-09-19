@@ -51,16 +51,16 @@ class CPRecoSettingSupplierRender extends RenderBase {
 
     async _list() { 
         var appendStyleNoWidth = 'padding: 1px 7px 1px 7px; border-radius: 5px; overflow: hidden; text-align: center; display: inline-block;';
-        this.options.cellHighlights.push({
-            column: _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH, op: '=', value: true,
-            columns: [_cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cp_recoSettingSupplier.NODELIVERY, op: '=', value: true,
-            columns: [_cxSchema.cp_recoSettingSupplier.NODELIVERY],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH, op: '=', value: true,
+        //     columns: [_cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cp_recoSettingSupplier.NODELIVERY, op: '=', value: true,
+        //     columns: [_cxSchema.cp_recoSettingSupplier.NODELIVERY],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
     }
 
 
@@ -79,6 +79,7 @@ class CPRecoSettingSupplierRender extends RenderBase {
                             { name: 'supplierCode', label: 'applies to wholesaler supplier code', width: '130px', column: 1 },
                             { name: 'matchingSupplierCodes', label: 'alternative supplier codes (csv)', width: '200px', column: 1 },
                             { name: 'ignoreVatMismatch', label: 'ignore vat differences (only match net)', column: 1 },
+                            { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 3 },
                             
                         ]
                     },

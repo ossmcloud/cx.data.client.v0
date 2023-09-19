@@ -683,7 +683,7 @@ const CP_DOCUMENT = {
                 NotAnalyzed: 'not analyzed',
                 NotReconciled: 'not matched',
                 PartReconciled: 'part matched',
-                Pending: 'needs attention',
+                Pending: 'validate match',
                 Reconciled: 'matched',
                 NeverReconcile: 'ignore matching',
             });
@@ -693,7 +693,7 @@ const CP_DOCUMENT = {
                 NotAnalyzed: 'not analyzed',
                 NotReconciled: 'not matched',
                 PartReconciled: 'part matched',
-                Pending: 'needs attention',
+                Pending: 'validate match',
                 Reconciled: 'matched',
                 NeverReconcile: 'ignore matching',
 

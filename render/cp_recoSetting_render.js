@@ -99,7 +99,7 @@ class CPRecoSettingRender extends RenderBase {
             {
                 group: 'all', title: '', columnCount: 2, fields: [
                     {
-                        group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
+                        group: 'main', title: 'main info', column: 1, columnCount: 3, fields: [
                             //{ name: 'wholesalerId', label: 'wholesaler', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', column: 1 }),
                             //{ name: 'shopId', label: 'store', column: 1 },
@@ -116,9 +116,10 @@ class CPRecoSettingRender extends RenderBase {
                                     { name: 'lTolerancePc', label: 'tolerance %', width: '130px', column: 2 },
                                 ]
                             },
-                            
-                          
-                            { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 1 },
+                                                      
+                            { name: 'ignoreVatMismatch', label: 'ignore vat differences (only match net)', column: 3 },
+                            { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 3 },
+                            { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 3 },
                         ]
                     },
                     {

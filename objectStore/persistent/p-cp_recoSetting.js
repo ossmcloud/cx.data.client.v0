@@ -31,6 +31,8 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     HTOLERANCEPC: 'hTolerancePc',
     LTOLERANCEPC: 'lTolerancePc',
+    IGNOREVATMISMATCH: 'ignoreVatMismatch',
+    IGNORELINETOLERANCE: 'ignoreLineTolerance',
 
 }
 //
@@ -49,6 +51,8 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     hTolerancePc: { name: 'hTolerancePc', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     lTolerancePc: { name: 'lTolerancePc', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
+    ignoreVatMismatch: { name: 'ignoreVatMismatch', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
+    ignoreLineTolerance: { name: 'ignoreLineTolerance', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -138,6 +142,18 @@ class Persistent_cp_recoSetting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.LTOLERANCEPC);
     } set lTolerancePc(val) {
         super.setValue(_fieldNames.LTOLERANCEPC, val);
+    }
+
+    get ignoreVatMismatch() {
+        return super.getValue(_fieldNames.IGNOREVATMISMATCH);
+    } set ignoreVatMismatch(val) {
+        super.setValue(_fieldNames.IGNOREVATMISMATCH, val);
+    }
+
+    get ignoreLineTolerance() {
+        return super.getValue(_fieldNames.IGNORELINETOLERANCE);
+    } set ignoreLineTolerance(val) {
+        super.setValue(_fieldNames.IGNORELINETOLERANCE, val);
     }
 
 

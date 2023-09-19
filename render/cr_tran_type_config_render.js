@@ -246,26 +246,26 @@ class CrTranTypeConfigRender extends RenderBase {
         });
 
         var appendStyleNoWidth = 'padding: 1px 7px 1px 7px; border-radius: 5px; overflow: hidden; text-align: center; display: inline-block;';
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.IGNORE],
-            style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.INVERTSIGN, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.INVERTSIGN],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.ALLOWEDIT, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.ALLOWEDIT],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.ALLOWNEW, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.ALLOWNEW],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.IGNORE],
+        //     style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.INVERTSIGN, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.INVERTSIGN],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.ALLOWEDIT, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.ALLOWEDIT],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.ALLOWNEW, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.ALLOWNEW],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
         this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, op: '=', value: true,
             columns: [_cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE],
@@ -276,11 +276,11 @@ class CrTranTypeConfigRender extends RenderBase {
             columns: [_cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS],
             style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
         })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
 
         this.options.cellHighlights.push({
             column: 'cbTranTypeId',
