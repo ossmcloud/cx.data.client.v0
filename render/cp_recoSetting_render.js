@@ -19,8 +19,10 @@ class CPRecoSettingRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSetting.LTOLERANCE] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.LTOLERANCEPC] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.FORCENOTES] = null;
-        this.autoLoadFields[_cxSchema.cp_recoSetting.CREATED] = null;
-        this.autoLoadFields[_cxSchema.cp_recoSetting.MODIFIED] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.IGNOREVATMISMATCH] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.IGNORELINETOLERANCE] = null;
+        // this.autoLoadFields[_cxSchema.cp_recoSetting.CREATED] = null;
+        // this.autoLoadFields[_cxSchema.cp_recoSetting.MODIFIED] = null;
 
     }
 
@@ -53,9 +55,9 @@ class CPRecoSettingRender extends RenderBase {
         } else if (field.name == _cxSchema.cp_recoSetting.WHOLESALERID) {
             //filter.replace = await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' });
             filter.hide = true;
-        } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE || field.name == _cxSchema.cp_recoSetting.FORCENOTES) {
-            filter.hide = true;
-        } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCEPC || field.name == _cxSchema.cp_recoSetting.LTOLERANCEPC) {
+        } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE 
+            || field.name == _cxSchema.cp_recoSetting.HTOLERANCEPC || field.name == _cxSchema.cp_recoSetting.LTOLERANCEPC
+            || field.name == _cxSchema.cp_recoSetting.FORCENOTES || field.name == _cxSchema.cp_recoSetting.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSetting.IGNORELINETOLERANCE) {
             filter.hide = true;
         }
     }
@@ -75,7 +77,7 @@ class CPRecoSettingRender extends RenderBase {
         var configListOptions = await this.listOptions(configs, { listView: true });
         configListOptions.quickSearch = true;
         configListOptions.columns.shift();
-        configListOptions.columns.shift();
+        // configListOptions.columns.shift();
 
         if (this.options.mode == 'view') {
             configListOptions.actionsShowFirst = true;

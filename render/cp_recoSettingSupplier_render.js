@@ -9,6 +9,16 @@ class CPRecoSettingSupplierRender extends RenderBase {
         super(dataSource, options);
         this.title = 'matching supplier settings';
         this.autoLoad = true;
+
+        this.autoLoadFields = {};
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.RECOSETTINGID] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.SUPPLIERCODE] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.MATCHINGSUPPLIERCODES] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.IGNORELINETOLERANCE] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.NODELIVERY] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.NODELIVERYCOMMENT] = null;
+
     }
 
     async initColumn(field, column) {
@@ -19,48 +29,18 @@ class CPRecoSettingSupplierRender extends RenderBase {
             column.align = 'left';
         } else if (field.name == _cxSchema.cp_recoSettingSupplier.MATCHINGSUPPLIERCODES) {
             column.nullText = '';
-        } else if (field.name == _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSettingSupplier.NODELIVERY) {
+        } else if (field.name == _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSettingSupplier.IGNORELINETOLERANCE || field.name == _cxSchema.cp_recoSettingSupplier.NODELIVERY) {
             column.align = 'center';
+            column.width = '100px';
         }
-        // else if (field.name == _cxSchema.cp_recoSetting.SHOPID) {
-        //     column.name = 'shopInfo';
-        //     column.title = 'store';
-        //     column.addTotals = false;
-        //     column.align = 'left';
-        // } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE) {
-        //     column.addTotals = false;
-        // } else if (field.name == _cxSchema.cp_recoSetting.FORCENOTES) {
-        //     column.align = 'center';
-
-        // }
     }
     async initFilter(field, filter) {
         if (field.name == _cxSchema.cp_recoSettingSupplier.RECOSETTINGID) {
             filter.hide = true;
         }
-        // if (field.name == _cxSchema.cp_recoSetting.SHOPID) {
-        //     filter.replace = await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 'shopId' });
-        //     filter.hide = false;
-        // } else if (field.name == _cxSchema.cp_recoSetting.WHOLESALERID) {
-        //     //filter.replace = await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' });
-        //     filter.hide = true;
-        // } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE || field.name == _cxSchema.cp_recoSetting.FORCENOTES) {
-        //     filter.hide = true;
-        // }
     }
 
     async _list() { 
-        var appendStyleNoWidth = 'padding: 1px 7px 1px 7px; border-radius: 5px; overflow: hidden; text-align: center; display: inline-block;';
-        // this.options.cellHighlights.push({
-        //     column: _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH, op: '=', value: true,
-        //     columns: [_cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH],
-        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        // })
-        // this.options.cellHighlights.push({
-        //     column: _cxSchema.cp_recoSettingSupplier.NODELIVERY, op: '=', value: true,
-        //     columns: [_cxSchema.cp_recoSettingSupplier.NODELIVERY],
-        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        // })
     }
 
 
@@ -79,7 +59,7 @@ class CPRecoSettingSupplierRender extends RenderBase {
                             { name: 'supplierCode', label: 'applies to wholesaler supplier code', width: '130px', column: 1 },
                             { name: 'matchingSupplierCodes', label: 'alternative supplier codes (csv)', width: '200px', column: 1 },
                             { name: 'ignoreVatMismatch', label: 'ignore vat differences (only match net)', column: 1 },
-                            { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 3 },
+                            { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 1 },
                             
                         ]
                     },

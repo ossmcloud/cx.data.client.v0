@@ -11,7 +11,8 @@ class CPRecoSessionRender extends RenderBase {
         this.autoLoad = true;
 
         this.autoLoadFields = {};
-        this.autoLoadFields[_cxSchema.cp_recoSession.RECOSESSIONID] = null;
+        //this.autoLoadFields[_cxSchema.cp_recoSession.RECOSESSIONID] = null;
+        this.autoLoadFields['action'] = { name: 'action', title: ' ', align: 'center', link: { valueField: _cxSchema.cp_recoSession.RECOSESSIONID, text: '&#x270E;', onclick: 'openSession' } };
         this.autoLoadFields['recoMatchLevel'] = { name: 'recoMatchLevel', title: ' ', toolTip: { valueField: 'recoMatchLevel', suppressText: true } };
         this.autoLoadFields[_cxSchema.cp_recoSession.SHOPID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSOURCEID] = null;
@@ -79,7 +80,7 @@ class CPRecoSessionRender extends RenderBase {
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
             || field.name == _cxSchema.cp_recoSession.BALANCENET || field.name == _cxSchema.cp_recoSession.BALANCEVAT || field.name == _cxSchema.cp_recoSession.BALANCEGROSS) {
             return false;
-        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay') {
+        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay' || field.name == 'action') {
             filter.hide = true;
         }
     }

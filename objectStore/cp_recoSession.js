@@ -40,10 +40,10 @@ class cp_recoSession_Collection extends _persistentTable.Table {
         if (params.s) {
             query.sql += ' where s.shopId = @shopId\n';
             query.params = [{ name: 'shopId', value: params.s }];
-        } else if (params.nextMatch) {
-            query.sql += ' where reco.recoSessionId != @recoSessionId\n';
-            query.sql += ' and reco.recoStatusId = ' + _declarations.CP_DOCUMENT.RECO_STATUS.Pending;
-            query.params = [{ name: 'recoSessionId', value: params.nextMatch }];
+        // } else if (params.nextMatch) {
+        //     query.sql += ' where reco.recoSessionId != @recoSessionId\n';
+        //     query.sql += ' and reco.recoStatusId = ' + _declarations.CP_DOCUMENT.RECO_STATUS.Pending;
+        //     query.params = [{ name: 'recoSessionId', value: params.nextMatch }];
         } else {
             this.queryFromParams(query, params, 'reco');
         }
