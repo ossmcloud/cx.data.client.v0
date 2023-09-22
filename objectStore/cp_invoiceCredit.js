@@ -17,7 +17,16 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId
+        query.sql = ` select    d.*, s.shopCode, s.shopName, 
+                                isnull(supp.traderName, (
+                                                select  top 1 '&#x2048;' + tx.traderName
+                                                from    cx_traderAccount tx 
+                                                where   tx.shopId = d.shopId and tx.traderType = 'S' 
+                                                and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
+                                                order by traderAccountId desc
+                                            )
+                                        ) as supplierName,
+                                grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId
                       from    ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
@@ -114,6 +123,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.createdFrom = @createdFrom';
             query.params.push({ name: 'createdFrom', value: params.from });
         }
+
         query.sql += ' order by d.documentDate desc';
 
         query.paging = {

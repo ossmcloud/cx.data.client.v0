@@ -17,7 +17,16 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, recoDoc.recoSessionId, reco.recoStatusId
+        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, 
+                                        isnull(supp.traderName, (
+                                                select  top 1 '&#x2048;' + tx.traderName 
+                                                from    cx_traderAccount tx 
+                                                where   tx.shopId = d.shopId and tx.traderType = 'S' 
+                                                and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
+                                                order by traderAccountId desc
+                                            )
+                                        ) as supplierName,
+                                        recoDoc.recoSessionId, reco.recoStatusId
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
@@ -41,6 +50,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (params.dt) {
             query.sql += ' and d.documentDate <= @to';
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
+        }
+        if (params.vf) {
+            query.sql += ' and d.totalNet >= @vfrom';
+            query.params.push({ name: 'vfrom', value: params.vf });
+        }
+        if (params.vt) {
+            query.sql += ' and d.totalNet <= @vto';
+            query.params.push({ name: 'vto', value: params.vt });
         }
         if (params.udf) {
             query.sql += ' and d.uploadDate >= @uFrom';
@@ -70,11 +87,26 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.delRetId = @delRetId';
             query.params.push({ name: 'delRetId', value: params.id });
         }
+        if (params.matched) {
+            if (params.matched == 'T') {
+                query.sql += ' and reco.recoSessionId >' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            } else {
+                query.sql += ' and  isnull(reco.recoSessionId,0) <=' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            }
+        }
+        if (params.whs) {
+            query.sql += ' and (isnull(supp.traderCode, supp2.traderCode) = @wholesalerCode OR isnull(supp.wholesalerCode, supp2.wholesalerCode) = @wholesalerCode)'
+            query.params.push({ name: 'wholesalerCode', value: params.whs });
+        }
         query.sql += ' order by d.documentDate desc';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (params.paging) {
+            query.paging = params.paging;
+        }else{
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
 
         return await super.select(query);

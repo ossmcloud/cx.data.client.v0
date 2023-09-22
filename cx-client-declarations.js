@@ -677,6 +677,7 @@ const CP_DOCUMENT = {
         Reconciled: 7,
         NeverReconcile: 8,
         ERROR: 9,
+        Processing: 99,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {

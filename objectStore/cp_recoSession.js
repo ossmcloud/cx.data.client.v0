@@ -145,4 +145,4 @@ module.exports = {
     Table: cp_recoSession_Collection,
     Record: cp_recoSession,
 }
-
+    
