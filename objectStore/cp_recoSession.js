@@ -54,6 +54,10 @@ class cp_recoSession_Collection extends _persistentTable.Table {
             query.sql += ' order by doc.documentDate desc';
         }
 
+        query.paging = {
+            page: params.page || 1,
+            pageSize: _declarations.SQL.PAGE_SIZE
+        }
         
 
         return await super.select(query);
@@ -145,4 +149,4 @@ module.exports = {
     Table: cp_recoSession_Collection,
     Record: cp_recoSession,
 }
-    
+
