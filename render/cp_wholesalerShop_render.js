@@ -74,6 +74,35 @@ class WholesalerShop extends RenderBase {
 
     }
 
+    async getConfigListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig);
+        
+        await configs.select(this.dataSource.wholesalerId, this.dataSource.shopId);
+        if (configs.count() > 0) { this.options.allowDelete = false; }
+
+        var showBwgGetStore = false;
+        configs.each((rec, idx) => { if (rec.configName == _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG) { showBwgGetStore = true; return false; } });
+
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            if (this.options.allowEdit) {
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: 'edit', funcName: 'editConfig' });
+                configListOptions.actions.push({ label: 'delete', funcName: 'deleteConfig' });
+                configListOptions.showButtons = [{ id: 'whs_shop_configs_add', text: 'Add Configuration', function: 'addConfig' }];
+                if (showBwgGetStore) {
+                    configListOptions.showButtons.push({ id: 'whs_bwg_storeList', text: 'BWG Store List', function: 'bwgShowStores' });
+                }
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewConfig' }];
+            }
+        }
+        return configListOptions;
+    }
+
 
 
     async _record() {
@@ -112,7 +141,7 @@ class WholesalerShop extends RenderBase {
         this.options.fields = [
             
             {
-                group: 'all', title: '', columnCount: 2, fields: [
+                group: 'all', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 1, fields: mainGroupFields
                         // [
@@ -143,6 +172,11 @@ class WholesalerShop extends RenderBase {
                 ]
             }
         ];
+
+        if (!this.dataSource.isNew()) {
+            var configListOptions = await this.getConfigListOptions();
+            this.options.fields[0].fields.push({ group: 'query', title: 'query configurations', column: 3, fields: [configListOptions] });
+        }
 
         if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {

@@ -125,11 +125,9 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
-    BWG_CRM_CONFIG: 'BWGCRMConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
-        if (configName == this.BWG_CRM_CONFIG) { return true; }
         return false;
     }
 }
@@ -849,6 +847,26 @@ const CP_DOCUMENT_LINE = {
     }
 }
 
+
+const CP_WHS_CONFIG = {
+    BWG_CRM_CONFIG: 'BWGCRMConfig',
+    EMAIL_CONFIG: 'EmailConfig',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        return true;
+    }
+}
+const CP_WHS_SHOP_CONFIG = {
+    BWG_CRM_CONFIG: 'BWGCRMConfig',
+    EMAIL_CONFIG: 'EmailConfig',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        return true;
+    }
+}
+
 const CP_DOCUMENT_LOG = {
     STATUS: {
         INFO: 'INFO',
@@ -919,6 +937,8 @@ module.exports = {
     CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
     CP_DOCUMENT_LOG: CP_DOCUMENT_LOG,
     CP_PRODUCT: CP_PRODUCT,
+    CP_WHS_CONFIG: CP_WHS_CONFIG,
+    CP_WHS_SHOP_CONFIG: CP_WHS_SHOP_CONFIG,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

@@ -94,6 +94,12 @@ class CPRecoSessionRender extends RenderBase {
     }
 
     async _list() {
+        if (this.options.query) {
+            this.options.paging = true;
+            this.options.pageNo = (this.options.query.page || 1);
+        }
+
+        
         if (this.options.query['reco.recoStatusId'] == _cxConst.CP_DOCUMENT.RECO_STATUS.NotReconciled) {
             this.options.title = 'unmatched documents';
         } else if (this.options.query['reco.recoStatusId'] == _cxConst.CP_DOCUMENT.RECO_STATUS.Pending) {

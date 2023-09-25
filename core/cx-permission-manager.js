@@ -188,6 +188,16 @@ async function getPermission(recordType, role) {
         permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
     
+    if (recordType == _cxSchema.cp_wholesalerConfig.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.cp_wholesalerShopConfig.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
 
 
     if (!permission.allowView) {

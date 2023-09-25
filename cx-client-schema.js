@@ -378,6 +378,40 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    cp_query: {
+        TBL_NAME: 'cp_query',
+        QUERYID: 'queryId',
+        SHOPID: 'shopId',
+        INVGRPID: 'invGrpId',
+        INVCREID: 'invCreId',
+        WHOLESALERID: 'wholesalerId',
+        STATUSID: 'statusId',
+        STATUSMESSAGE: 'statusMessage',
+        QUERYTYPEID: 'queryTypeId',
+        QUERYNET: 'queryNet',
+        QUERYVAT: 'queryVat',
+        QUERYGROSS: 'queryGross',
+        QUERYMESSAGE: 'queryMessage',
+        NOTES: 'notes',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_queryType: {
+        TBL_NAME: 'cp_queryType',
+        QUERYTYPEID: 'queryTypeId',
+        WHOLESALERID: 'wholesalerId',
+        NAME: 'name',
+        CODE: 'code',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        MANDATORYFIELDS: 'mandatoryFields',
+    },
+
     cp_recoSession: {
         TBL_NAME: 'cp_recoSession',
         RECOSESSIONID: 'recoSessionId',
@@ -486,6 +520,19 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    cp_wholesalerConfig: {
+        TBL_NAME: 'cp_wholesalerConfig',
+        CONFIGID: 'configId',
+        WHOLESALERID: 'wholesalerId',
+        CONFIGNAME: 'configName',
+        CONFIGVALUE: 'configValue',
+        VALUEENCRYPTED: 'valueEncrypted',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+    },
+
     cp_wholesalerProvider: {
         TBL_NAME: 'cp_wholesalerProvider',
         WHOLESALERPROVIDERID: 'wholesalerProviderId',
@@ -508,6 +555,20 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_wholesalerShopConfig: {
+        TBL_NAME: 'cp_wholesalerShopConfig',
+        CONFIGID: 'configId',
+        WHOLESALERID: 'wholesalerId',
+        SHOPID: 'shopId',
+        CONFIGNAME: 'configName',
+        CONFIGVALUE: 'configValue',
+        VALUEENCRYPTED: 'valueEncrypted',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
     },
 
     cr_cb_tran_type: {

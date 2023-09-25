@@ -49,14 +49,45 @@ class Wholesaler extends RenderBase {
         wholesalerShopsOptions.quickSearch = true;
         //wholesalerShopsOptions.path = '/cp/config/product';
         wholesalerShopsOptions.title = ' ';    //'<span style="padding-right: 17px;">the products below are associated with this alias</span>';
-        //wholesalerShopsOptions.actions = [{ label: 'remove', funcName: 'detachProduct' }];
+        //wholesalerShopsOptions.actions = [{ label: 'bwg shop list', funcName: 'bwgGetStores' }];
         //wholesalerShopsOptions.showButtons = [{ id: 'cr_products_add', text: 'Attach Products', function: 'attachProducts' }];
         return wholesalerShopsOptions;
     }
 
+    async getConfigListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.cp_wholesalerConfig);
+        await configs.select(this.dataSource.id);
+        if (configs.count() > 0) { this.options.allowDelete = false; }
+
+        var showBwgGetStore = false;
+        configs.each((rec, idx) => { if (rec.configName == _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG) { showBwgGetStore = true; return false; } });
+
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            if (this.options.allowEdit) {
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: 'edit', funcName: 'editConfig' });
+                configListOptions.actions.push({ label: 'delete', funcName: 'deleteConfig' });
+                configListOptions.showButtons = [{ id: 'whs_configs_add', text: 'Add Configuration', function: 'addConfig' }];
+                if (showBwgGetStore) {
+                    configListOptions.showButtons.push({ id: 'whs_bwg_storeList', text: 'BWG Store List', function: 'bwgShowStores' });
+                }
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewConfig' }];
+                
+            }
+        }
+        return configListOptions;
+    }
+
+
 
 
     async _record() {
+
         this.options.fields = [
             {
                 group: 'all', title: '', columnCount: 2, fields: [
@@ -88,8 +119,17 @@ class Wholesaler extends RenderBase {
         ];
 
         if (!this.dataSource.isNew()) {
-            var storeConfgs = await this.getShopsListOptions();
-            this.options.fields.push({ group: 'stores', title: 'stores configurations', column: 1, fields: [storeConfgs] });
+            var subLists = { group: 'sublists', title: '', column: 1, columnCount: 2, styles: ['width: 100%;', 'min-width: 700px;'], fields: [] };
+                        
+            var storeConfigs = await this.getShopsListOptions();
+
+            subLists.fields.push({ group: 'stores', title: 'stores configurations', column: 1, fields: [storeConfigs] });
+
+
+            var configListOptions = await this.getConfigListOptions();
+            subLists.fields.push({ group: 'query', title: 'query configurations', column: 2, fields: [configListOptions] });
+
+            this.options.fields.push(subLists);
         }
     }
 
