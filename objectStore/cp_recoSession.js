@@ -15,7 +15,8 @@ class cp_recoSession_Collection extends _persistentTable.Table {
         var query = {
             sql: `
                 select	            distinct reco.*, s.shopCode, s.shopName, 
-                                    doc.documentNumber, doc.docketNumber, doc.documentDate, doc.supplierCode, doc.documentType, doc.invCreId, recoDoc.recoMatchLevel, 
+                                    doc.documentNumber, doc.docketNumber, doc.documentDate, doc.supplierCode, doc.documentType, doc.invCreId, 
+                                    recoDoc.recoMatchLevel, grp.documentNumber as groupInvoice,
                                     (
                                         select  top 1 traderName 
                                         from    cx_traderAccount supp
@@ -32,8 +33,10 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                                     from	            cp_recoSession          reco
                 left outer join     cp_recoSessionDocument	recoDoc ON recoDoc.recoSessionId = reco.recoSessionId and recoDoc.isMainDocument = 1
                 left outer join     cp_invoiceCredit        doc     ON doc.invCreId = recoDoc.documentId
+                left outer join     cp_invoiceGroup         grp     ON grp.invGrpId = doc.invGrpId
                 
                 inner join          cx_shop s ON s.shopId = reco.shopId
+                where 1=1
             `
         };
 
@@ -46,6 +49,34 @@ class cp_recoSession_Collection extends _persistentTable.Table {
         //     query.params = [{ name: 'recoSessionId', value: params.nextMatch }];
         } else {
             this.queryFromParams(query, params, 'reco');
+        }
+
+        if (!query.params) { query.params = []; }
+
+        if (params.SKIP_documentDate || params.SKIP_documentDateTo) {
+            if (params.SKIP_documentDate && params.SKIP_documentDateTo) {
+                query.sql += ` and doc.documentDate between @documentDate and @documentDateTo`;
+                query.params.push({ name: 'documentDate', value: params.SKIP_documentDate });
+                query.params.push({ name: 'documentDateTo', value: params.SKIP_documentDateTo });
+            } else if (params.SKIP_documentDate) {
+                query.sql += ` and doc.documentDate >= @documentDate`;
+                query.params.push({ name: 'documentDate', value: params.SKIP_documentDate });
+            } else if (params.SKIP_documentDateTo) {
+                query.sql += ` and doc.documentDate <= @documentDate`;
+                query.params.push({ name: 'documentDate', value: params.SKIP_documentDateTo });
+            }
+        }
+        if (params.SKIP_documentNumber) {
+            query.sql += ` and doc.documentNumber like @documentNumber`;
+            query.params.push({ name: 'documentNumber', value: params.SKIP_documentNumber + '%' });
+        }
+        if (params.SKIP_docketNumber) {
+            query.sql += ` and doc.docketNumber like @docketNumber`;
+            query.params.push({ name: 'docketNumber', value: params.SKIP_docketNumber + '%' });
+        }
+        if (params.SKIP_groupInvoice) {
+            query.sql += ` and grp.documentNumber like @groupInvoice`;
+            query.params.push({ name: 'groupInvoice', value: params.SKIP_groupInvoice + '%' });
         }
 
         if (params['reco.recoStatusId'] == _declarations.CP_DOCUMENT.RECO_STATUS.Pending) {
@@ -79,6 +110,7 @@ class cp_recoSession extends _persistentTable.Record {
     #supplierName = null;
     #recoMatchLevel = -1;
     #invCreId = null;
+    #groupInvoice = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -93,6 +125,7 @@ class cp_recoSession extends _persistentTable.Record {
         this.#recoMatchLevel = defaults['recoMatchLevel'];
         if (this.#recoMatchLevel == undefined) { this.#recoMatchLevel = -1; }
         this.#invCreId = defaults['invCreId'] || null;
+        this.#groupInvoice = defaults['groupInvoice'] || '';
     };
 
     get shopName() { return this.#shopName; }
@@ -107,6 +140,7 @@ class cp_recoSession extends _persistentTable.Record {
     get supplierName() { return this.#supplierName; }
     get recoMatchLevel() { return this.#recoMatchLevel; }
     get invCreId() { return this.#invCreId; }
+    get groupInvoice() { return this.#groupInvoice; }
 
     get recoStatusName() {
         return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatusId);

@@ -129,7 +129,7 @@ class RenderBase {
             if (field == null) { field = dataSource.fields[f]; }
 
             var column = { name: f, title: f.fromCamelCase() };
-            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: f, inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
+            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: (field.fieldName ||  f), inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
             if (field.pk) {
                 column.align = 'center';
                 column.title = ' ';

@@ -20,9 +20,11 @@ class CPRecoSessionRender extends RenderBase {
         this.autoLoadFields['matchByUserDisplay'] = { name: 'matchByUserDisplay', title: ' ', width: '30px' };
 
         this.autoLoadFields['documentType'] = { name: 'documentType', title: 'type', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList(), align: 'center', width: '70px' };
-        this.autoLoadFields['documentDate'] = { name: 'documentDate', dataType: 'datetime' };
-        this.autoLoadFields['documentNumber'] = { name: 'documentNumber', link: { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' } };
-        this.autoLoadFields['docketNumber'] = { name: 'docketNumber' };
+        this.autoLoadFields['documentDate'] = { name: 'documentDate', fieldName: 'SKIP_documentDate', dataType: 'datetime' };
+        this.autoLoadFields['documentNumber'] = { name: 'documentNumber', fieldName: 'SKIP_documentNumber', link: { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' } };
+        this.autoLoadFields['docketNumber'] = { name: 'docketNumber', fieldName: 'SKIP_docketNumber' };
+        this.autoLoadFields['groupInvoice'] = { name: 'groupInvoice', fieldName: 'SKIP_groupInvoice' };
+        
         this.autoLoadFields['supplierCode'] = { name: 'supplierCode' };
         this.autoLoadFields['supplierName'] = { name: 'supplierName', nullText: 'not found' };
 
@@ -72,7 +74,7 @@ class CPRecoSessionRender extends RenderBase {
             filter.hide = false;
         } else if (field.name == _cxSchema.cp_recoSession.RECOSTATUSID) {
             filter.replace = { label: 'status', fieldName: 'reco.' + _cxSchema.cp_recoSession.RECOSTATUSID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') }
-            filter.hide = false;
+            filter.hide = false;    
         } else if (field.name == 'documentType') {
             filter.replace = { label: 'type', fieldName: 'doc.documentType', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') };
 
@@ -80,7 +82,7 @@ class CPRecoSessionRender extends RenderBase {
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
             || field.name == _cxSchema.cp_recoSession.BALANCENET || field.name == _cxSchema.cp_recoSession.BALANCEVAT || field.name == _cxSchema.cp_recoSession.BALANCEGROSS) {
             return false;
-        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay' || field.name == 'action') {
+        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay' || field.name == 'action' || field.name == 'supplierName') {
             filter.hide = true;
         }
     }
@@ -152,6 +154,16 @@ class CPRecoSessionRender extends RenderBase {
                 columns: [_cxSchema.cp_invoiceCredit.DOCUMENTTYPE]
             })
         }
+
+        var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
+        for (var cx = 0; cx < shopColors.length; cx++) {
+            if (!shopColors[cx].shopColor) { continue; }
+            this.options.cellHighlights.push({
+                column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopInfo']
+            })
+        }
+
 
 
     }

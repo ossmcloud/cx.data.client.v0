@@ -52,11 +52,11 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
         if (params.vf) {
-            query.sql += ' and d.totalNet >= @vfrom';
+            query.sql += ' and isnull(d.totalNet, 0) >= @vfrom';
             query.params.push({ name: 'vfrom', value: params.vf });
         }
         if (params.vt) {
-            query.sql += ' and d.totalNet <= @vto';
+            query.sql += ' and isnull(d.totalNet, 0) <= @vto';
             query.params.push({ name: 'vto', value: params.vt });
         }
         if (params.udf) {
@@ -98,11 +98,15 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and (isnull(supp.traderCode, supp2.traderCode) = @wholesalerCode OR isnull(supp.wholesalerCode, supp2.wholesalerCode) = @wholesalerCode)'
             query.params.push({ name: 'wholesalerCode', value: params.whs });
         }
+        if (params.whsn) {
+            query.sql += ' and isnull(supp.traderName, supp2.traderName) like @supplierName'
+            query.params.push({ name: 'supplierName', value: '%' + params.whsn + '%' });
+        }
         query.sql += ' order by d.documentDate desc';
 
         if (params.paging) {
             query.paging = params.paging;
-        }else{
+        } else {
             query.paging = {
                 page: params.page || 1,
                 pageSize: _declarations.SQL.PAGE_SIZE
