@@ -14,7 +14,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         query.sql = `select	dep.* from cx_map_config_dep dep`;
 
         if (params.s) {
-            query.sql += 'inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId'
+            query.sql += ' inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId'
             query.sql += ' where s.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         } else {
