@@ -847,6 +847,53 @@ const CP_DOCUMENT_LINE = {
     }
 }
 
+const CP_QUERY_STATUS = {
+    PENDING: 0,
+    SUBMITTED: 1,
+    IN_PROGRESS: 2,
+    RESOLVED: 8,
+    CLOSED: 10,
+    ERROR: 9,
+
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { IN_PROGRESS: 'in progress' }); },
+    getName: function (value) {
+        return enumGetName(this, value, { IN_PROGRESS: 'in progress' });
+    },
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+
+        if (status == this.PENDING) {
+            color = '255,255,255';
+            bkgColor = '246,71,146';
+        } else if (status == this.SUBMITTED) {
+            color = '255,255,255';
+            bkgColor = '25,130,196';
+        } else if (status == this.IN_PROGRESS) {
+            color = '175,0,0';
+            bkgColor = '230,230,0';
+        } else if (status == this.ERROR) {
+            color = '255,255,255';
+            bkgColor = '234,30,37';
+        } else if (status == this.RESOLVED) {
+            color = '0,100,0';
+            bkgColor = '138,201,38';
+        } else if (status == this.CLOSED) {
+            color = '100,0,0';
+            bkgColor = '128,128,128';
+        } else {
+            color = '255,255,255';
+            bkgColor = '128,128,128';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
+}
+
 
 const CP_WHS_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
@@ -880,7 +927,8 @@ const CX_CURRENCY = {
     EUR: 'EUR',
     GBP: 'GBP',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { EUR: 'EUR', GBP: 'GBP' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { EUR: 'EUR', GBP: 'GBP' }); },
+    getName: function (value) { return enumGetName(this, value); },
 }
 
 
@@ -939,6 +987,7 @@ module.exports = {
     CP_PRODUCT: CP_PRODUCT,
     CP_WHS_CONFIG: CP_WHS_CONFIG,
     CP_WHS_SHOP_CONFIG: CP_WHS_SHOP_CONFIG,
+    CP_QUERY_STATUS: CP_QUERY_STATUS,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

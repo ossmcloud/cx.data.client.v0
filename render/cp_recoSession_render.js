@@ -90,7 +90,7 @@ class CPRecoSessionRender extends RenderBase {
 
 
     async _record() {
-
+       
     }
 
     async _list() {
@@ -133,7 +133,7 @@ class CPRecoSessionRender extends RenderBase {
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 6, style: `background-color: orange;` + applyStyle, columns: 'recoMatchLevel' });
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 7, style: `background-color: rgb(200,0,0);` + applyStyle, columns: 'recoMatchLevel' });
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 8, style: `background-color: rgb(255,0,0);` + applyStyle, columns: 'recoMatchLevel' });
-
+        this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 9, style: `background-color: purple;` + applyStyle, columns: 'recoMatchLevel' });
 
         var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         //var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; display: block; overflow: hidden; text-align: center;';

@@ -199,6 +199,23 @@ async function getPermission(recordType, role) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
+    if (recordType == _cxSchema.cp_query.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+    }
+    if (recordType == _cxSchema.cp_queryType.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+    }
+    if (recordType == _cxSchema.cp_queryResolutionType.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+    }
+
 
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');

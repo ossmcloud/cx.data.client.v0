@@ -1,10 +1,10 @@
 'use strict'
 //
-const _persistentTable = require('./persistent/p-cp_invoiceCreditLog');
+const _persistentTable = require('./persistent/p-cp_queryLog');
 //
-class cp_invoiceCreditLog_Collection extends _persistentTable.Table {
+class cp_queryLog_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new cp_invoiceCreditLog(this, defaults);
+        return new cp_queryLog(this, defaults);
     }
 
     async select(params) {
@@ -14,11 +14,11 @@ class cp_invoiceCreditLog_Collection extends _persistentTable.Table {
         var query = { sql: '', params: [] };
         query.sql = ` select  *
                       from    ${this.type}
-                      where   invCreId = @invCreId`;
-        query.params.push({ name: 'invCreId', value: params.pid });
+                      where   queryId = @queryId`;
+        query.params.push({ name: 'queryId', value: params.qid });
 
         if (params.id) {
-            query.sql += ' and invCreLogId = @invCreLogId';
+            query.sql += ' and queryLogId = @queryLogId';
             query.params.push({ name: 'invCreLogId', value: params.id });
         }
         query.sql += ' order by created desc';
@@ -31,29 +31,33 @@ class cp_invoiceCreditLog_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
-    async log(invCreId, type, message, info) {
+    async log(queryId, type, title, message, info) {
         try {
             var log = this.createNew();
-            log.invCreId = invCreId;
-            log.logType = type || 'NONE';
-            log.logMessage = message || 'no log message';
-            log.logInfo = info || '';
-            //log.Fields.TruncateValues();
+            log.queryId = queryId;
+            log.logType = (type || 'NONE').substring(0, 10);
+            log.logTitle = (title || 'no title').substring(0, 50);
+            log.logMessage = (message || 'no log message').substring(0,255);
+            log.logInfo = (info || '').substring(0, 2000);
             await log.save();
 
         } catch (error) {
             // @@TODO: @EX: what to do here ??
-            console.log("cp_invoiceCreditLogCollection.Log", error);
+            console.log("cp_queryLog_Collection.Log", error);
         }
     }
+
+
 }
 //
 // ----------------------------------------------------------------------------------------
 //
-class cp_invoiceCreditLog extends _persistentTable.Record {
+class cp_queryLog extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
-        
+        this.getField(this.FieldNames.LOGTITLE).truncate = true;
+        this.getField(this.FieldNames.LOGMESSAGE).truncate = true;
+        this.getField(this.FieldNames.LOGINFO).truncate = true;
     };
 
     async save() {
@@ -65,7 +69,7 @@ class cp_invoiceCreditLog extends _persistentTable.Record {
 // ----------------------------------------------------------------------------------------
 //
 module.exports = {
-    Table: cp_invoiceCreditLog_Collection,
-    Record: cp_invoiceCreditLog,
+    Table: cp_queryLog_Collection,
+    Record: cp_queryLog,
 }
 

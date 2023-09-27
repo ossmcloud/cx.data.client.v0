@@ -1,10 +1,10 @@
 'use strict'
 //
-const _persistentTable = require('./persistent/p-cp_queryType');
+const _persistentTable = require('./persistent/p-cp_queryResolutionType');
 //
-class cp_queryType_Collection extends _persistentTable.Table {
+class cp_queryResolutionType_Collection extends _persistentTable.Table {
     createNew(defaults) {
-        return new cp_queryType(this, defaults);
+        return new cp_queryResolutionType(this, defaults);
     }
 
     async select(params) {
@@ -13,12 +13,12 @@ class cp_queryType_Collection extends _persistentTable.Table {
         var query = {
             sql: `
                 select	    q.*, w.code as wholesalerCode, w.name as wholesalerName
-                from	    cp_queryType q
+                from	    cp_queryResolutionType q
                 inner join  cp_wholesaler w ON w.wholesalerId = q.wholesalerId`
         };
         this.queryFromParams(query, params);
         query.sql += ' order by code';
-        
+
         return await super.select(query);
     }
 
@@ -31,21 +31,20 @@ class cp_queryType_Collection extends _persistentTable.Table {
         if (addEmpty) { lookUpValues.push({ value: '', text: (addEmpty === true) ? '' : addEmpty }); };
         super.each(function (rec) {
             lookUpValues.push({
-                value: rec.queryTypeId,
+                value: rec.queryResTypeId,
                 text: `[${rec.wholesalerCode}] ${rec.name}`,
-                object: rec.messageTemplate
             })
         });
 
         return lookUpValues;
     }
 
-    
+
 }
 //
 // ----------------------------------------------------------------------------------------
 //
-class cp_queryType extends _persistentTable.Record {
+class cp_queryResolutionType extends _persistentTable.Record {
     #wholesalerCode = '';
     #wholesalerName = '';
     constructor(table, defaults) {
@@ -59,24 +58,16 @@ class cp_queryType extends _persistentTable.Record {
     get wholesalerName() { return this.#wholesalerName; }
     get wholesalerInfo() { return `[${this.#wholesalerCode}] ${this.#wholesalerName}`; }
 
-    get messageTemplateDisplay() {
-        if (!this.messageTemplate) { return ''; }
-        if (this.messageTemplate.length > 100) { return this.messageTemplate.substring(0, 100) + '...'; }
-        return this.messageTemplate;
-    }
-
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
-
-   
 }
 //
 // ----------------------------------------------------------------------------------------
 //
 module.exports = {
-    Table: cp_queryType_Collection,
-    Record: cp_queryType,
+    Table: cp_queryResolutionType_Collection,
+    Record: cp_queryResolutionType,
 }
 

@@ -26,7 +26,9 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                                                 order by traderAccountId desc
                                             )
                                         ) as supplierName,
-                                grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId
+                                grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
+                                ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
+                                ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
                       from    ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
@@ -139,19 +141,21 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         if (this.cx.cxSvc == true) { return await super.fetch(id); }
 
         var query = { sql: '', params: [{ name: 'invCreId', value: id }] };
-        query.sql = ` select  l.*, s.shopCode, s.shopName, 
+        query.sql = ` select  d.*, s.shopCode, s.shopName, 
                                 erp.postingURN, erp.postingReference, erp.status as postingStatus, erp.statusMessage as postingStatusMessage, 
                                 erp.transactionReference, erp.transactionSecondReference, erp.accountReference, erp.accountName,
                                 erp.modified as postedOn, erp.modifiedBy as postedBy,
-                                recoDoc.recoSessionId, reco.recoStatusId
+                                recoDoc.recoSessionId, reco.recoStatusId,
+                                ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
+                                ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
 
-                      from    ${this.type} l
-                      inner join   cx_shop s ON s.shopId = l.shopId
-                      left outer join cp_erp_transaction erp ON erp.invCreId = l.invCreId
-                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = l.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
+                      from    ${this.type} d
+                      inner join   cx_shop s ON s.shopId = d.shopId
+                      left outer join cp_erp_transaction erp ON erp.invCreId = d.invCreId
+                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
-                      where     l.${this.FieldNames.SHOPID}  in ${this.cx.shopList}
-                      and     l.${this.FieldNames.INVCREID} = @invCreId`;
+                      where     d.${this.FieldNames.SHOPID}  in ${this.cx.shopList}
+                      and     d.${this.FieldNames.INVCREID} = @invCreId`;
         query.noResult = 'null';
         query.returnFirst = true;
 
@@ -185,6 +189,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
     #recoSessionId = null;
     #recoStatus = null;
     #logs = null;
+    #queryCount = null;
+    #queryCountOpen = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -204,6 +210,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#groupDocumentNumber = defaults['groupDocumentNumber'] || '';
         this.#recoSessionId = defaults['recoSessionId'] || null;
         this.#recoStatus = defaults['recoStatusId'] || 0;
+        this.#queryCount = defaults['queryCount'] || null;
+        this.#queryCountOpen = defaults['queryCountOpen'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) { this.#documentSign = -1; }
 
     };
@@ -259,6 +267,18 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get recoSessionId() { return this.#recoSessionId; }
     get recoStatus() { return this.#recoStatus || 0; }
     get recoStatusName() { return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatus); }
+
+    get queryCount() { return this.#queryCount; }
+    get queryCountOpen() { return this.#queryCountOpen; }
+    get queryCountDisplay() {
+        if (this.queryCount) {
+            if (this.#queryCountOpen) {
+                return `${this.queryCount} queries (${this.#queryCountOpen} open)`;
+            }
+            return `${this.queryCount} queries`;
+        }
+        return this.queryCount;
+    }
 
     get logs() {
         return this.#logs;

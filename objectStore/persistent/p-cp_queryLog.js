@@ -14,43 +14,43 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cp_queryType';
+const _tableName = 'cp_queryLog';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    QUERYTYPEID: 'queryTypeId',
-    WHOLESALERID: 'wholesalerId',
-    NAME: 'name',
-    CODE: 'code',
+    QUERYLOGID: 'queryLogId',
+    QUERYID: 'queryId',
+    LOGTYPE: 'logType',
+    LOGTITLE: 'logTitle',
+    LOGMESSAGE: 'logMessage',
+    LOGINFO: 'logInfo',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    MANDATORYFIELDS: 'mandatoryFields',
-    MESSAGETEMPLATE: 'messageTemplate',
 
 }
 //
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    queryTypeId: { name: 'queryTypeId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
-    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
-    code: { name: 'code', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
+    queryLogId: { name: 'queryLogId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    queryId: { name: 'queryId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    logType: { name: 'logType', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: false, default: '0' },
+    logTitle: { name: 'logTitle', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
+    logMessage: { name: 'logMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
+    logInfo: { name: 'logInfo', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: false },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    mandatoryFields: { name: 'mandatoryFields', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    messageTemplate: { name: 'messageTemplate', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: true },
 
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cp_queryType_Collection extends _cx_data.DBTable {
+class Persistent_cp_queryLog_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -59,33 +59,45 @@ class Persistent_cp_queryType_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cp_queryType extends _cx_data.DBRecord {
+class Persistent_cp_queryLog extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get queryTypeId() {
-        return super.getValue(_fieldNames.QUERYTYPEID);
+    get queryLogId() {
+        return super.getValue(_fieldNames.QUERYLOGID);
     }
 
-    get wholesalerId() {
-        return super.getValue(_fieldNames.WHOLESALERID);
-    } set wholesalerId(val) {
-        super.setValue(_fieldNames.WHOLESALERID, val);
+    get queryId() {
+        return super.getValue(_fieldNames.QUERYID);
+    } set queryId(val) {
+        super.setValue(_fieldNames.QUERYID, val);
     }
 
-    get name() {
-        return super.getValue(_fieldNames.NAME);
-    } set name(val) {
-        super.setValue(_fieldNames.NAME, val);
+    get logType() {
+        return super.getValue(_fieldNames.LOGTYPE);
+    } set logType(val) {
+        super.setValue(_fieldNames.LOGTYPE, val);
     }
 
-    get code() {
-        return super.getValue(_fieldNames.CODE);
-    } set code(val) {
-        super.setValue(_fieldNames.CODE, val);
+    get logTitle() {
+        return super.getValue(_fieldNames.LOGTITLE);
+    } set logTitle(val) {
+        super.setValue(_fieldNames.LOGTITLE, val);
+    }
+
+    get logMessage() {
+        return super.getValue(_fieldNames.LOGMESSAGE);
+    } set logMessage(val) {
+        super.setValue(_fieldNames.LOGMESSAGE, val);
+    }
+
+    get logInfo() {
+        return super.getValue(_fieldNames.LOGINFO);
+    } set logInfo(val) {
+        super.setValue(_fieldNames.LOGINFO, val);
     }
 
     get created() {
@@ -112,24 +124,12 @@ class Persistent_cp_queryType extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    get mandatoryFields() {
-        return super.getValue(_fieldNames.MANDATORYFIELDS);
-    } set mandatoryFields(val) {
-        super.setValue(_fieldNames.MANDATORYFIELDS, val);
-    }
-
-    get messageTemplate() {
-        return super.getValue(_fieldNames.MESSAGETEMPLATE);
-    } set messageTemplate(val) {
-        super.setValue(_fieldNames.MESSAGETEMPLATE, val);
-    }
-
 
 }
 //
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cp_queryType_Collection,
-    Record: Persistent_cp_queryType,
+    Table: Persistent_cp_queryLog_Collection,
+    Record: Persistent_cp_queryLog,
 }

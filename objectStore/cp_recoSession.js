@@ -16,7 +16,7 @@ class cp_recoSession_Collection extends _persistentTable.Table {
             sql: `
                 select	            distinct reco.*, s.shopCode, s.shopName, 
                                     doc.documentNumber, doc.docketNumber, doc.documentDate, doc.supplierCode, doc.documentType, doc.invCreId, 
-                                    recoDoc.recoMatchLevel, grp.documentNumber as groupInvoice,
+                                    recoDoc.recoMatchLevel, grp.documentNumber as groupInvoice, grp.wholesalerId,
                                     (
                                         select  top 1 traderName 
                                         from    cx_traderAccount supp
@@ -94,6 +94,12 @@ class cp_recoSession_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
+    async fetch(id, throwError) {
+        await this.select({ recoSessionId: id });
+        var reco = this.first();
+        if (reco == null && throwError) { throw new Error(`no matching session found with id: ${id}`); }
+        return reco;
+    }
 
 }
 //

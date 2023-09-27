@@ -79,6 +79,8 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async setRecordTitle() {
+        var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId);
+        
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
@@ -86,6 +88,14 @@ class CPInvoiceReturnRender extends RenderBase {
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
         this.options.title = `<div style="display: table;">`;
         this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
+        if (query) {
+            var viewQueryButton = `cursor: pointer;" onclick="window.open('&#47;cp&#47;query?id=${query.queryId}');`;
+            this.options.title += `
+                <div style="${applyStoreColorStyle} background-color: yellow; color: maroon; ${viewQueryButton}">
+                    &#x26A0;
+                </div>
+            `;
+        }
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
                 ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
@@ -134,6 +144,21 @@ class CPInvoiceReturnRender extends RenderBase {
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
+
+        var icon = '';
+        var transaction = this.dataSource;
+        if (transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Posted) {
+            icon = '\u2705';    // green check
+        } else if (transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
+            icon = '\u26A0';    // warning triangle
+            //icon = '\u274C';    // red x
+        } else if (transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.New || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Ready || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
+            icon = '\u2713';    // check mark
+        } else if (transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Generating || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.REFRESH || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Posting || transaction.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingRunning) {
+            //icon = '\uF5D8';    //
+            icon = '\u21BB';
+        }
+        this.options.tabTitle = `${icon} ${this.options.tabTitle}`
     }
 
     async buildFormBody() {
@@ -321,6 +346,8 @@ class CPInvoiceReturnRender extends RenderBase {
 
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+
+          
         }
     }
 
@@ -403,6 +430,9 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.matchingEnabled) {
                 var matchIcon = '<img src="/public/images/puzzle_dark.png" style="width: 20px" />'
                 this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+                
+                var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
+                this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
@@ -458,6 +488,21 @@ class CPInvoiceReturnRender extends RenderBase {
                         columns: ['recoStatus']
                     })
                 }
+
+                this.options.cellHighlights.push({
+                    column: 'queryCount',
+                    op: '>',
+                    value: 0,
+                    style: 'background-color: rgb(127,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['queryCount']
+                })
+                this.options.cellHighlights.push({
+                    column: 'queryCountOpen',
+                    op: '>',
+                    value: 0,
+                    style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['queryCount']
+                })
             }
 
             var types = _cxConst.CP_DOCUMENT.TYPE.toList();

@@ -154,6 +154,7 @@ class RenderBase {
             if (field.name == 'createdBy' || field.name == 'modifiedBy') {
                 column.addTotals = false;
                 column.width = '90px';
+                column.align = 'left';
             }
             column.lookUps = field.lookUps;
             if (field.align) { column.align = field.align; }

@@ -14,12 +14,12 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cp_queryType';
+const _tableName = 'cp_queryResolutionType';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    QUERYTYPEID: 'queryTypeId',
+    QUERYRESTYPEID: 'queryResTypeId',
     WHOLESALERID: 'wholesalerId',
     NAME: 'name',
     CODE: 'code',
@@ -27,15 +27,14 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    MANDATORYFIELDS: 'mandatoryFields',
-    MESSAGETEMPLATE: 'messageTemplate',
+    CREDITISSUED: 'creditIssued',
 
 }
 //
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    queryTypeId: { name: 'queryTypeId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    queryResTypeId: { name: 'queryResTypeId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
     wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     code: { name: 'code', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
@@ -43,14 +42,13 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    mandatoryFields: { name: 'mandatoryFields', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    messageTemplate: { name: 'messageTemplate', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: true },
+    creditIssued: { name: 'creditIssued', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cp_queryType_Collection extends _cx_data.DBTable {
+class Persistent_cp_queryResolutionType_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -59,15 +57,15 @@ class Persistent_cp_queryType_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cp_queryType extends _cx_data.DBRecord {
+class Persistent_cp_queryResolutionType extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get queryTypeId() {
-        return super.getValue(_fieldNames.QUERYTYPEID);
+    get queryResTypeId() {
+        return super.getValue(_fieldNames.QUERYRESTYPEID);
     }
 
     get wholesalerId() {
@@ -112,16 +110,10 @@ class Persistent_cp_queryType extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    get mandatoryFields() {
-        return super.getValue(_fieldNames.MANDATORYFIELDS);
-    } set mandatoryFields(val) {
-        super.setValue(_fieldNames.MANDATORYFIELDS, val);
-    }
-
-    get messageTemplate() {
-        return super.getValue(_fieldNames.MESSAGETEMPLATE);
-    } set messageTemplate(val) {
-        super.setValue(_fieldNames.MESSAGETEMPLATE, val);
+    get creditIssued() {
+        return super.getValue(_fieldNames.CREDITISSUED);
+    } set creditIssued(val) {
+        super.setValue(_fieldNames.CREDITISSUED, val);
     }
 
 
@@ -130,6 +122,6 @@ class Persistent_cp_queryType extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cp_queryType_Collection,
-    Record: Persistent_cp_queryType,
+    Table: Persistent_cp_queryResolutionType_Collection,
+    Record: Persistent_cp_queryResolutionType,
 }

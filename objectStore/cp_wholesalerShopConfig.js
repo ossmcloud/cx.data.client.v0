@@ -25,7 +25,7 @@ class cp_wholesalerShopConfig_Collection extends _persistentTable.Table {
         this.query.addFilter({ name: _cxSchema.cp_wholesalerShopConfig.SHOPID, value: shopId });
         this.query.addFilter({ name: _cxSchema.cp_wholesalerShopConfig.CONFIGNAME, value: configName });
         var value = null;
-        if (await this.select()) {
+        if (await super.select()) {
             var config = this.first();
             value = config.configValue;
             if (config.valueEncrypted == true) { value = _cx_crypto.Aes.decrypt(value, config.configName + '_' + config.id); }
