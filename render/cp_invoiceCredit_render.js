@@ -308,7 +308,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     }
 
-    buildFormActions() {
+    async buildFormActions() {
         // test button
         if (process.env.APP_CONTEXT == 'LOCAL') { this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' }); }
 
@@ -347,7 +347,10 @@ class CPInvoiceReturnRender extends RenderBase {
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
-          
+            var queries = this.dataSource.cx.table(_cxSchema.cp_query);
+            if (await queries.select({invCreId: this.dataSource.id})) {
+                this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+            }
         }
     }
 
@@ -364,7 +367,7 @@ class CPInvoiceReturnRender extends RenderBase {
         // 
         await this.buildFormLists();
         //
-        this.buildFormActions();
+        await this.buildFormActions();
     }
 
     async _list() {

@@ -27,6 +27,7 @@ class CPQueryRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_query.NOTES] = null;
         this.autoLoadFields[_cxSchema.cp_query.SUBMITDATE] = null;
         this.autoLoadFields[_cxSchema.cp_query.RESOLUTIONDATE] = null;
+        this.autoLoadFields[_cxSchema.cp_query.CREATED] = null;
 
 
 
@@ -82,13 +83,17 @@ class CPQueryRender extends RenderBase {
         } else if (field.name == _cxSchema.cp_query.QUERYTYPEID) {
             filter.replace = { label: 'query type', fieldName: _cxSchema.cp_query.QUERYTYPEID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: this.#allQueryTypes }
             filter.hide = false;
-        } else if (field.name == _cxSchema.cp_query.DISPUTEDAMOUNT || field.name == _cxSchema.cp_query.INVCREID
-            || field.name == _cxSchema.cp_query.STATUSMESSAGE) {
+        } else if (field.name == _cxSchema.cp_query.INVCREID) {
+            filter.replace = { label: 'document number', fieldName: 'doc.documentNumber' }
+            filter.hide = false;
+        
+        } else if (field.name == _cxSchema.cp_query.DISPUTEDAMOUNT || field.name == _cxSchema.cp_query.STATUSMESSAGE || field.name == _cxSchema.cp_query.CREATED) {
             filter.hide = true;
         }
     }
 
     async _list() {
+        this.options.title = 'document query list';
 
         var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
         var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();

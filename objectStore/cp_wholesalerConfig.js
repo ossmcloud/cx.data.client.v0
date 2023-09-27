@@ -35,6 +35,7 @@ class cp_wholesalerConfig_Collection extends _persistentTable.Table {
         }
         return null;
     }
+    
 
 }
 //

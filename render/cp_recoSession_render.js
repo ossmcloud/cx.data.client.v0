@@ -14,12 +14,19 @@ class CPRecoSessionRender extends RenderBase {
         //this.autoLoadFields[_cxSchema.cp_recoSession.RECOSESSIONID] = null;
         this.autoLoadFields['action'] = { name: 'action', title: ' ', align: 'center', link: { valueField: _cxSchema.cp_recoSession.RECOSESSIONID, text: '&#x270E;', onclick: 'openSession' } };
         this.autoLoadFields['recoMatchLevel'] = { name: 'recoMatchLevel', title: ' ', toolTip: { valueField: 'recoMatchLevel', suppressText: true } };
+
+
         this.autoLoadFields[_cxSchema.cp_recoSession.SHOPID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSOURCEID] = null;
         this.autoLoadFields[_cxSchema.cp_recoSession.RECOSTATUSID] = null;
         this.autoLoadFields['matchByUserDisplay'] = { name: 'matchByUserDisplay', title: ' ', width: '30px' };
 
+
         this.autoLoadFields['documentType'] = { name: 'documentType', title: 'type', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList(), align: 'center', width: '70px' };
+        var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
+        this.autoLoadFields['queryCount'] = { name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } }
+
+
         this.autoLoadFields['documentDate'] = { name: 'documentDate', fieldName: 'SKIP_documentDate', dataType: 'datetime' };
         this.autoLoadFields['documentNumber'] = { name: 'documentNumber', fieldName: 'SKIP_documentNumber', link: { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' } };
         this.autoLoadFields['docketNumber'] = { name: 'docketNumber', fieldName: 'SKIP_docketNumber' };
@@ -34,6 +41,9 @@ class CPRecoSessionRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSession.BALANCEGROSS] = null;
 
         this.autoLoadFields['notesDisplay'] = { name: 'notesDisplay' };
+
+        
+        
         // this.autoLoadFields[_cxSchema.cp_recoSession.CREATED] = null;
         // this.autoLoadFields[_cxSchema.cp_recoSession.MODIFIED] = null;
     }
@@ -90,7 +100,7 @@ class CPRecoSessionRender extends RenderBase {
 
 
     async _record() {
-       
+    
     }
 
     async _list() {
@@ -170,6 +180,21 @@ class CPRecoSessionRender extends RenderBase {
             })
         }
 
+
+        this.options.cellHighlights.push({
+            column: 'queryCount',
+            op: '>',
+            value: 0,
+            style: 'background-color: rgb(127,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+            columns: ['queryCount']
+        })
+        this.options.cellHighlights.push({
+            column: 'queryCountOpen',
+            op: '>',
+            value: 0,
+            style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+            columns: ['queryCount']
+        })
 
 
     }

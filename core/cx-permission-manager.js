@@ -208,6 +208,7 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
         permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
         permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
     }
     if (recordType == _cxSchema.cp_queryResolutionType.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);

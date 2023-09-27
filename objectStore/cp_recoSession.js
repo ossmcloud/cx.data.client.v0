@@ -28,7 +28,9 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                                             or   supp.wholesalerCode             = doc.supplierCode	
                                         )
                                         order by created desc
-                                    ) as supplierName
+                                    ) as supplierName,
+                                    ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId ) as queryCount,
+                                    ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId and q.statusId < 8 ) as queryCountOpen
                 
                                     from	            cp_recoSession          reco
                 left outer join     cp_recoSessionDocument	recoDoc ON recoDoc.recoSessionId = reco.recoSessionId and recoDoc.isMainDocument = 1
@@ -117,6 +119,8 @@ class cp_recoSession extends _persistentTable.Record {
     #recoMatchLevel = -1;
     #invCreId = null;
     #groupInvoice = '';
+    #queryCount = null;
+    #queryCountOpen = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -132,6 +136,8 @@ class cp_recoSession extends _persistentTable.Record {
         if (this.#recoMatchLevel == undefined) { this.#recoMatchLevel = -1; }
         this.#invCreId = defaults['invCreId'] || null;
         this.#groupInvoice = defaults['groupInvoice'] || '';
+        this.#queryCount = defaults['queryCount'] || null;
+        this.#queryCountOpen = defaults['queryCountOpen'] || null;
     };
 
     get shopName() { return this.#shopName; }
@@ -175,6 +181,18 @@ class cp_recoSession extends _persistentTable.Record {
         if (!this.notes) { return ''; }
         if (this.notes.length > 30) { return this.notes.substring(0, 30) + '...'; }
         return this.notes;
+    }
+
+    get queryCount() { return this.#queryCount; }
+    get queryCountOpen() { return this.#queryCountOpen; }
+    get queryCountDisplay() {
+        if (this.queryCount) {
+            if (this.#queryCountOpen) {
+                return `${this.queryCount} queries (${this.#queryCountOpen} open)`;
+            }
+            return `${this.queryCount} queries`;
+        }
+        return this.queryCount;
     }
 
     async save() {

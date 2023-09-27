@@ -30,7 +30,7 @@ class cp_query_Collection extends _persistentTable.Table {
                 `
         };
         this.queryFromParams(query, params, 'q');
-        query.sql += ' order by doc.documentDate desc';
+        query.sql += ' order by q.created desc';
 
         return await super.select(query);
     }

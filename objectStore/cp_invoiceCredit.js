@@ -258,9 +258,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
 
     get editedIcon() {
         if (this.createdFrom) { return '&#x2699;'; }
-
         if (this.isUserEdited) { return '&#x270E;'; }
-
         return '';
     }
 

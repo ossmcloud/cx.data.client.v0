@@ -49,12 +49,14 @@ class CPQueryRender extends RenderBase {
     async _record() {
         this.options.fields = [];
 
+        var newRecord = this.dataSource.isNew();
+
         var header = { group: 'head', title: 'query type', columnCount: 2, styles: ['width: 20%', 'width: 80%'], fields: [] };
         header.fields = [
-            await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: _cxSchema.cp_queryType.WHOLESALERID, name: _cxSchema.cp_queryType.WHOLESALERID, column: 1, validation: '{"mandatory": true}' }),
+            await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: _cxSchema.cp_queryType.WHOLESALERID, name: _cxSchema.cp_queryType.WHOLESALERID, column: 1, readOnly: !newRecord, validation: '{"mandatory": true}' }),
 
             { name: _cxSchema.cp_queryType.NAME, label: 'query type name', column: 1, validation: '{"mandatory": true}' },
-            { name: _cxSchema.cp_queryType.CODE, label: 'code', column: 1, validation: '{"mandatory": true}' },
+            { name: _cxSchema.cp_queryType.CODE, label: 'code', column: 1, readOnly: !newRecord, validation: '{"mandatory": true}' },
 
             { name: _cxSchema.cp_queryType.MESSAGETEMPLATE, type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, label: 'message template', column: 2 },
         ]
