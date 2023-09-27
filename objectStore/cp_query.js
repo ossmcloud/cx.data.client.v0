@@ -71,7 +71,6 @@ class cp_query_Collection extends _persistentTable.Table {
 class cp_query extends _persistentTable.Record {
     #queryCode = '';
     #queryName = '';
-    #shopId = null;
     #shopCode = '';
     #shopName = '';
     #wholesalerId = null;
@@ -93,7 +92,6 @@ class cp_query extends _persistentTable.Record {
 
         this.#queryCode = defaults['queryCode'] || '';
         this.#queryName = defaults['queryName'] || '';
-        this.#shopId = defaults['shopId'] || null;
         this.#shopCode = defaults['shopCode'] || '';
         this.#shopName = defaults['shopName'] || '';
 
@@ -116,7 +114,6 @@ class cp_query extends _persistentTable.Record {
     get queryName() { return this.#queryName; }
     get queryInfo() { return `[${this.#queryCode}] ${this.#queryName}`; }
 
-    get shopId() { return this.#shopId; }
     get shopCode() { return this.#shopCode; }
     get shopName() { return this.#shopName; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }

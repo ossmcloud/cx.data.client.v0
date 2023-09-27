@@ -146,8 +146,8 @@ class CPQueryRender extends RenderBase {
             this.options.allowEdit = false;
         }
 
-        var applyStyle = 'margin: 7px ;padding: 3px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
-        this.options.title = `${this.dataSource.wholesalerInfo} - query <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}</span>`;
+        var applyStyle = 'margin: 7px ;padding: 0px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
+        this.options.title = `<div style="padding-bottom: 13px;">${this.dataSource.wholesalerInfo} - query <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}</span></div>`;
 
         var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(this.dataSource.wholesalerId, true);
         var queryResTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(this.dataSource.wholesalerId, true);
