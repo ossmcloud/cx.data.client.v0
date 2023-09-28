@@ -847,6 +847,38 @@ const CP_DOCUMENT_LINE = {
     }
 }
 
+const CP_QUERY_TYPE_REQ_DISPUTED = {
+    NO: 0,
+    MANUAL: 1,
+    FULL: 2,
+
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    getName: function (value) {
+        return enumGetName(this, value, { IN_PROGRESS: 'in progress' });
+    },
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+
+        if (status == this.MANUAL) {
+            color = '255,255,255';
+            bkgColor = '246,71,146';
+        } else if (status == this.FULL) {
+            color = '255,255,255';
+            bkgColor = '25,130,196';
+        } else {
+            color = '255,255,255';
+            bkgColor = '77,77,77';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
+}
+
 const CP_QUERY_STATUS = {
     PENDING: 0,
     SUBMITTED: 1,
@@ -988,6 +1020,7 @@ module.exports = {
     CP_WHS_CONFIG: CP_WHS_CONFIG,
     CP_WHS_SHOP_CONFIG: CP_WHS_SHOP_CONFIG,
     CP_QUERY_STATUS: CP_QUERY_STATUS,
+    CP_QUERY_TYPE_REQ_DISPUTED: CP_QUERY_TYPE_REQ_DISPUTED,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

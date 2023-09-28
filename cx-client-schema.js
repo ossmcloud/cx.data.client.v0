@@ -440,6 +440,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         MANDATORYFIELDS: 'mandatoryFields',
         MESSAGETEMPLATE: 'messageTemplate',
+        REQUIRESDISPUTEDAMOUNT: 'requiresDisputedAmount',
     },
 
     cp_recoSession: {

@@ -132,6 +132,46 @@ class CPQueryRender extends RenderBase {
         return queryLogsOptions;
     }
 
+    buildFormTitle() {
+        var applyStyle = 'margin: 7px ;padding: 0px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
+        this.options.title = `<div style="padding-bottom: 7px; width: 100%;">
+            <table><tr><td>
+                ${this.dataSource.wholesalerInfo} - query 
+            </td>
+            <td>
+                <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">
+                    ${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}
+                </span>
+            </td>
+            <td style="padding-left: 17px;">
+                <label style="display: block; padding: 0px;">invoice gross</label>
+                <span  style="display: block; margin-bottom: -10px; color: var(--main-color-3);">${this.dataSource.documentGross}</span>
+            </td></tr></table>
+        </div>`;
+
+        if (this.dataSource.isNew()) {
+            this.options.tabTitle = `cx::new query`;
+        } else {
+            if (this.dataSource.queryReference == 'TBA') {
+                this.options.tabTitle = `query::${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}`
+            } else {
+                this.options.tabTitle = `${this.dataSource.queryReference}`
+            }
+        }
+        var icon = '';
+        if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED) {
+            icon = '\u2713 ';    // check mark
+        } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.PENDING) {
+            icon = '\u21BB ';
+        } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
+            icon = '\u26A0 ';    // warning triangle
+        } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.ERROR) {
+            icon = '\u274C ';    // red x
+        }
+        this.options.tabTitle = `${icon}${this.options.tabTitle}`;
+
+    }
+
 
     async _record() {
         this.options.fields = [];
@@ -141,17 +181,10 @@ class CPQueryRender extends RenderBase {
             readOnly = this.dataSource.statusId > _cxConst.CP_QUERY_STATUS.PENDING;
             canResolve = this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS;
         }
-
-        if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
-            this.options.allowEdit = false;
-        }
-
-        var applyStyle = 'margin: 7px ;padding: 0px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
-        this.options.title = `<div style="padding-bottom: 13px;">${this.dataSource.wholesalerInfo} - query <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}</span></div>`;
+        if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) { this.options.allowEdit = false; }
 
         var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(this.dataSource.wholesalerId, true);
         var queryResTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(this.dataSource.wholesalerId, true);
-
 
         var header = { group: 'head', title: 'query info', columnCount: 5, styles: ['width: 200px', 'width: 200px', 'width: 200px', 'width: calc(50% - 600px)', 'width: calc(50% - 600px)'], fields: [] };
         header.fields = [
@@ -160,14 +193,16 @@ class CPQueryRender extends RenderBase {
             { name: 'shopName', hidden: true },
             { name: 'documentNumber', hidden: true },
             { name: 'documentDate', hidden: true },
+            { name: 'documentNet', hidden: true },
+            { name: 'documentVat', hidden: true },
+            { name: 'documentGross', hidden: true },
             { name: 'groupInvoice', hidden: true },
             { name: 'groupInvoiceDate', hidden: true },
             //
             { name: _cxSchema.cp_query.STATUSID, hidden: true },
             { name: _cxSchema.cp_query.SUBMITDATE, hidden: true },
             { name: _cxSchema.cp_query.RESOLUTIONDATE, hidden: true },
-
-
+            //
             { name: 'wholesalerInfo', label: 'wholesaler', column: 1, readOnly: true },
             { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
 
@@ -177,7 +212,6 @@ class CPQueryRender extends RenderBase {
             { name: _cxSchema.cp_query.DISPUTEDAMOUNT, label: 'disputed amount', column: 3, width: '125px', readOnly: readOnly },
             { name: 'documentNumber', label: 'document #', column: 3, readOnly: true },
             { name: 'groupInvoice', label: 'group invoice #', column: 3, readOnly: true },
-
 
             { name: _cxSchema.cp_query.STATUSID, label: 'status', column: 4, lookUps: _cxConst.CP_QUERY_STATUS.toList(), disabled: true, width: '100px' },
             { name: _cxSchema.cp_query.STATUSMESSAGE, label: 'status message', column: 4, readOnly: true },
@@ -197,12 +231,13 @@ class CPQueryRender extends RenderBase {
         ]
         this.options.fields.push(body);
 
-        var queryLogOptions = await this.getQueryLogListOptions();
-        var auditLogs = { group: 'logs', title: '', columnCount: 1, fields: [queryLogOptions] };
-        this.options.fields.push(auditLogs);
+        if (!this.dataSource.isNew()) {
+            var queryLogOptions = await this.getQueryLogListOptions();
+            var auditLogs = { group: 'logs', title: '', columnCount: 1, fields: [queryLogOptions] };
+            this.options.fields.push(auditLogs);
+        }
 
         var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig).getConfigValue(this.dataSource.wholesalerId, this.dataSource.shopId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
-
         if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR)
                 if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
@@ -221,6 +256,7 @@ class CPQueryRender extends RenderBase {
             }
         }
 
+        this.buildFormTitle();
     }
 }
 

@@ -29,6 +29,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     MANDATORYFIELDS: 'mandatoryFields',
     MESSAGETEMPLATE: 'messageTemplate',
+    REQUIRESDISPUTEDAMOUNT: 'requiresDisputedAmount',
 
 }
 //
@@ -45,6 +46,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     mandatoryFields: { name: 'mandatoryFields', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     messageTemplate: { name: 'messageTemplate', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: true },
+    requiresDisputedAmount: { name: 'requiresDisputedAmount', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -122,6 +124,12 @@ class Persistent_cp_queryType extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MESSAGETEMPLATE);
     } set messageTemplate(val) {
         super.setValue(_fieldNames.MESSAGETEMPLATE, val);
+    }
+
+    get requiresDisputedAmount() {
+        return super.getValue(_fieldNames.REQUIRESDISPUTEDAMOUNT);
+    } set requiresDisputedAmount(val) {
+        super.setValue(_fieldNames.REQUIRESDISPUTEDAMOUNT, val);
     }
 
 

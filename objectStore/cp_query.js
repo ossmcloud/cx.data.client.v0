@@ -18,7 +18,7 @@ class cp_query_Collection extends _persistentTable.Table {
                             qt.code as queryType, qt.name as queryTypeName,
                             s.shopCode, s.shopName,
                             w.wholesalerId, w.code as wholesalerCode, w.name as wholesalerName,
-                            doc.documentNumber, doc.documentDate,
+                            doc.documentNumber, doc.documentDate, doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross,
                             grp.documentNumber as groupInvoice, grp.documentDate as groupInvoiceDate
                 from	    cp_query                     q
                 inner join  cx_shop                      s ON s.shopId = q.shopId
@@ -42,7 +42,7 @@ class cp_query_Collection extends _persistentTable.Table {
                             qt.code as queryType, qt.name as queryTypeName,
                             s.shopCode, s.shopName,
                             w.wholesalerId, w.code as wholesalerCode, w.name as wholesalerName,
-                            doc.documentNumber, doc.documentDate,
+                            doc.documentNumber, doc.documentDate, doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross,
                             grp.documentNumber as groupInvoice, grp.documentDate as groupInvoiceDate
                 from	    cp_query                     q
                 inner join  cx_shop                      s ON s.shopId = q.shopId
@@ -78,6 +78,9 @@ class cp_query extends _persistentTable.Record {
     #wholesalerName = '';
     #documentNumber = '';
     #documentDate = null;
+    #documentNet = null;
+    #documentVat = null;
+    #documentGross = null;
     #groupInvoice = '';
     #groupInvoiceDate = null;
     #queryType = null;
@@ -97,6 +100,10 @@ class cp_query extends _persistentTable.Record {
 
         this.#documentNumber = defaults['documentNumber'] || '';
         this.#documentDate = defaults['documentDate'] || null;
+
+        this.#documentNet = defaults['documentNet'] || null;
+        this.#documentVat = defaults['documentVat'] || null;
+        this.#documentGross = defaults['documentGross'] || null;
 
         this.#groupInvoice = defaults['groupInvoice'] || '';
         this.#groupInvoiceDate = defaults['groupInvoiceDate'] || null;
@@ -120,6 +127,9 @@ class cp_query extends _persistentTable.Record {
 
     get documentNumber() { return this.#documentNumber; }
     get documentDate() { return this.#documentDate; }
+    get documentNet() { return this.#documentNet; }
+    get documentVat() { return this.#documentVat; }
+    get documentGross() { return this.#documentGross; }
 
     get groupInvoice() { return this.#groupInvoice; }
     get groupInvoiceDate() { return this.#groupInvoiceDate; }

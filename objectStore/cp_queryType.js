@@ -1,5 +1,6 @@
 'use strict'
 //
+const _core = require('cx-core');
 const _persistentTable = require('./persistent/p-cp_queryType');
 //
 class cp_queryType_Collection extends _persistentTable.Table {
@@ -18,7 +19,7 @@ class cp_queryType_Collection extends _persistentTable.Table {
         };
         this.queryFromParams(query, params);
         query.sql += ' order by code';
-        
+
         return await super.select(query);
     }
 
@@ -30,17 +31,22 @@ class cp_queryType_Collection extends _persistentTable.Table {
         var lookUpValues = [];
         if (addEmpty) { lookUpValues.push({ value: '', text: (addEmpty === true) ? '' : addEmpty }); };
         super.each(function (rec) {
+            var dataObject = {
+                messageTemplate: rec.messageTemplate,
+                requiresDisputedAmount: rec.requiresDisputedAmount
+            };
+            dataObject = _core.text.toBase64(JSON.stringify(dataObject));
             lookUpValues.push({
                 value: rec.queryTypeId,
                 text: `[${rec.wholesalerCode}] ${rec.name}`,
-                object: rec.messageTemplate
+                object: dataObject
             })
         });
 
         return lookUpValues;
     }
 
-    
+
 }
 //
 // ----------------------------------------------------------------------------------------
@@ -70,7 +76,7 @@ class cp_queryType extends _persistentTable.Record {
         await super.save()
     }
 
-   
+
 }
 //
 // ----------------------------------------------------------------------------------------
