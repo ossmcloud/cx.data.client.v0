@@ -163,6 +163,7 @@ const CX_EPOS_PROVIDER = {
     RS: 'RS',
     EDGE: 'EDGE',
     MRDN: 'MRDN',
+    VME: 'VME',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian' }); }
 }
@@ -192,6 +193,13 @@ const CX_EPOS_PROVIDERS = {
         },
         {
             type: CX_EPOS_PROVIDER.MRDN,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.VME,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },

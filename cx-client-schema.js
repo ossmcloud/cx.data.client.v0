@@ -399,6 +399,7 @@ module.exports = {
         SUBMITDATE: 'submitDate',
         RESOLUTIONMESSAGE: 'resolutionMessage',
         RESOLUTIONDATE: 'resolutionDate',
+        DELRETID: 'delRetId',
     },
 
     cp_queryLog: {

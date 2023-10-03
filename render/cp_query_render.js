@@ -20,6 +20,7 @@ class CPQueryRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_query.STATUSMESSAGE] = null;
         this.autoLoadFields[_cxSchema.cp_query.QUERYTYPEID] = null;
         this.autoLoadFields[_cxSchema.cp_query.INVCREID] = null;
+        this.autoLoadFields[_cxSchema.cp_query.DELRETID] = null;
 
         this.autoLoadFields[_cxSchema.cp_query.DISPUTEDAMOUNT] = null;
 
@@ -55,6 +56,12 @@ class CPQueryRender extends RenderBase {
             column.addTotals = false;
             column.align = 'left';
             column.link = { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' };
+        } else if (field.name == _cxSchema.cp_query.DELRETID) {
+            column.name = 'docketNumber';
+            column.title = 'docket #';
+            column.addTotals = false;
+            column.align = 'left';
+            column.link = { url: '/cp/delivery?id={docketNumber}', valueField: 'delRetId' };
         } else if (field.name == _cxSchema.cp_query.QUERYTYPEID) {
             column.title = 'query type';
             column.addTotals = false;
@@ -85,6 +92,9 @@ class CPQueryRender extends RenderBase {
             filter.hide = false;
         } else if (field.name == _cxSchema.cp_query.INVCREID) {
             filter.replace = { label: 'document number', fieldName: 'doc.documentNumber' }
+            filter.hide = false;
+        } else if (field.name == _cxSchema.cp_query.DELRETID) {
+            filter.replace = { label: 'docket number', fieldName: 'del.documentNumber' }
             filter.hide = false;
         
         } else if (field.name == _cxSchema.cp_query.DISPUTEDAMOUNT || field.name == _cxSchema.cp_query.STATUSMESSAGE || field.name == _cxSchema.cp_query.CREATED) {
@@ -134,20 +144,38 @@ class CPQueryRender extends RenderBase {
 
     buildFormTitle() {
         var applyStyle = 'margin: 7px ;padding: 0px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
-        this.options.title = `<div style="padding-bottom: 7px; width: 100%;">
-            <table><tr><td>
-                ${this.dataSource.wholesalerInfo} - query 
-            </td>
+        this.options.title = `<div style="padding-bottom: 7px; width: 100%;"><table><tr>`;
+
+        if (this.dataSource.invCreId) {
+            this.options.title += `<td>${this.dataSource.wholesalerInfo} - query</td>`;
+        } else {
+            this.options.title += `<td>${this.dataSource.supplierInfo} - query</td>`;
+        }
+        
+        this.options.title += `
             <td>
                 <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">
                     ${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}
                 </span>
-            </td>
+            </td>`;
+        
+        if (this.dataSource.invCreId) {
+            this.options.title += `
             <td style="padding-left: 17px;">
                 <label style="display: block; padding: 0px;">invoice gross</label>
                 <span  style="display: block; margin-bottom: -10px; color: var(--main-color-3);">${this.dataSource.documentGross}</span>
-            </td></tr></table>
-        </div>`;
+            </td>`;
+        }
+
+        if (this.dataSource.delRetId) {
+            this.options.title += `
+            <td style="padding-left: 17px;">
+                <label style="display: block; padding: 0px;">delivery gross</label>
+                <span  style="display: block; margin-bottom: -10px; color: var(--main-color-3);">${this.dataSource.docketGross}</span>
+            </td>`;
+        }
+        this.options.title += `</tr></table></div>`;
+
 
         if (this.dataSource.isNew()) {
             this.options.tabTitle = `cx::new query`;
@@ -196,6 +224,11 @@ class CPQueryRender extends RenderBase {
             { name: 'documentNet', hidden: true },
             { name: 'documentVat', hidden: true },
             { name: 'documentGross', hidden: true },
+            { name: 'docketNumber', hidden: true },
+            { name: 'docketDate', hidden: true },
+            { name: 'docketNet', hidden: true },
+            { name: 'docketVat', hidden: true },
+            { name: 'docketGross', hidden: true },
             { name: 'groupInvoice', hidden: true },
             { name: 'groupInvoiceDate', hidden: true },
             //
@@ -203,7 +236,7 @@ class CPQueryRender extends RenderBase {
             { name: _cxSchema.cp_query.SUBMITDATE, hidden: true },
             { name: _cxSchema.cp_query.RESOLUTIONDATE, hidden: true },
             //
-            { name: 'wholesalerInfo', label: 'wholesaler', column: 1, readOnly: true },
+            { name: 'traderInfo', label: 'wholesaler', column: 1, readOnly: true },
             { name: 'shopInfo', label: 'shop', column: 1, readOnly: true },
 
             { name: _cxSchema.cp_query.QUERYTYPEID, label: 'query type', column: 2, lookUps: queryTypes, readOnly: readOnly, validation: '{"mandatory": true}' },

@@ -38,6 +38,7 @@ const _fieldNames = {
     SUBMITDATE: 'submitDate',
     RESOLUTIONMESSAGE: 'resolutionMessage',
     RESOLUTIONDATE: 'resolutionDate',
+    DELRETID: 'delRetId',
 
 }
 //
@@ -46,7 +47,7 @@ const _fieldNames = {
 const _fields = {
     queryId: { name: 'queryId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    invCreId: { name: 'invCreId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    invCreId: { name: 'invCreId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     statusId: { name: 'statusId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     statusMessage: { name: 'statusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     queryTypeId: { name: 'queryTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
@@ -63,6 +64,7 @@ const _fields = {
     submitDate: { name: 'submitDate', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     resolutionMessage: { name: 'resolutionMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: true },
     resolutionDate: { name: 'resolutionDate', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
+    delRetId: { name: 'delRetId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -194,6 +196,12 @@ class Persistent_cp_query extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.RESOLUTIONDATE);
     } set resolutionDate(val) {
         super.setValue(_fieldNames.RESOLUTIONDATE, val);
+    }
+
+    get delRetId() {
+        return super.getValue(_fieldNames.DELRETID);
+    } set delRetId(val) {
+        super.setValue(_fieldNames.DELRETID, val);
     }
 
 

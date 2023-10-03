@@ -26,7 +26,7 @@ class cp_queryType_Collection extends _persistentTable.Table {
     async toLookUpList(wholesalerId, addEmpty) {
         var options = {};
         if (wholesalerId) { options = { wholesalerId: wholesalerId } }
-        await this.select();
+        await this.select(options);
 
         var lookUpValues = [];
         if (addEmpty) { lookUpValues.push({ value: '', text: (addEmpty === true) ? '' : addEmpty }); };

@@ -79,7 +79,7 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async setRecordTitle() {
-        var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId);
+        var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
         
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;

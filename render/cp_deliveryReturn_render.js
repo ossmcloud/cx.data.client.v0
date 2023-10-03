@@ -45,6 +45,9 @@ class CPDeliveryReturnRender extends RenderBase {
 
 
     async _record() {
+        var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.id, true, true);
+        
+
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
 
@@ -53,6 +56,16 @@ class CPDeliveryReturnRender extends RenderBase {
         this.options.title = `<div style="display: table;">`;
         // document number 
         this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
+
+        if (query) {
+            var viewQueryButton = `cursor: pointer;" onclick="window.open('&#47;cp&#47;query?id=${query.queryId}');`;
+            this.options.title += `
+                <div style="${applyStoreColorStyle} background-color: yellow; color: maroon; ${viewQueryButton}">
+                    &#x26A0;
+                </div>
+            `;
+        }
+
         // document type
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
@@ -182,6 +195,17 @@ class CPDeliveryReturnRender extends RenderBase {
 
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+
+            if (query) {
+                this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+            } else {
+                this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
+            }
+
+            var queries = this.dataSource.cx.table(_cxSchema.cp_query);
+            if (await queries.select({ delRetId: this.dataSource.id })) {
+                this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+            }
         }
     }
 
