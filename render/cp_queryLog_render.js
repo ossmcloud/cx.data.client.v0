@@ -21,7 +21,7 @@ class CPQueryLogRender extends RenderBase {
         ];
 
         this.options.cellHighlights = [];
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         this.options.cellHighlights.push({ column: _cxSchema.cp_queryLog.LOGTYPE, op: '=', value: 'info', style: 'color: gray;' + applyStyle, columns: [_cxSchema.cp_queryLog.LOGTYPE] });
         this.options.cellHighlights.push({ column: _cxSchema.cp_queryLog.LOGTYPE, op: '=', value: 'warning', style: 'color: yellow;' + applyStyle, columns: [_cxSchema.cp_queryLog.LOGTYPE] });
         this.options.cellHighlights.push({ column: _cxSchema.cp_queryLog.LOGTYPE, op: '=', value: 'ERROR', style: 'color: red;' + applyStyle, columns: [_cxSchema.cp_queryLog.LOGTYPE] });

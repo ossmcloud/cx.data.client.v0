@@ -368,7 +368,7 @@ class CPInvoiceGroupRender extends RenderBase {
             this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceGroup.TOTALNET, op: '<', value: '0', style: 'color: red;', columns: [_cxSchema.cp_invoiceGroup.TOTALNET] });
             this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceGroup.TOTALGROSS, op: '<', value: '0', style: 'color: red;', columns: [_cxSchema.cp_invoiceGroup.TOTALGROSS] });
 
-            var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+            var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
             for (let sx = 0; sx < statuses.length; sx++) {
                 const s = statuses[sx];
@@ -393,7 +393,7 @@ class CPInvoiceGroupRender extends RenderBase {
                 })
             }
 
-            var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+            var applyStoreColorStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
             var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
             for (var cx = 0; cx < shopColors.length; cx++) {
                 if (!shopColors[cx].shopColor) { continue; }

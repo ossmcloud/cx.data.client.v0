@@ -145,8 +145,8 @@ class CPRecoSessionRender extends RenderBase {
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 8, style: `background-color: rgb(255,0,0);` + applyStyle, columns: 'recoMatchLevel' });
         this.options.cellHighlights.push({ column: 'recoMatchLevel', op: '=', value: 9, style: `background-color: purple;` + applyStyle, columns: 'recoMatchLevel' });
 
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
-        //var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; display: block; overflow: hidden; text-align: center;';
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        //var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; display: block; overflow: hidden; text-align: center;';
         var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
         for (let sx = 0; sx < recoStatuses.length; sx++) {
             const s = recoStatuses[sx];
@@ -171,7 +171,7 @@ class CPRecoSessionRender extends RenderBase {
             })
         }
 
-        var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var applyStoreColorStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
         var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
         for (var cx = 0; cx < shopColors.length; cx++) {
             if (!shopColors[cx].shopColor) { continue; }

@@ -1,5 +1,7 @@
 'use strict'
 //
+const _cxConst = require('../cx-client-declarations');
+const _cxSchema = require('../cx-client-schema');
 const _persistentTable = require('./persistent/p-epos_dtfs_setting');
 //
 class epos_dtfs_setting_Collection extends _persistentTable.Table {

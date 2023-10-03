@@ -165,7 +165,7 @@ const CX_EPOS_PROVIDER = {
     MRDN: 'MRDN',
     VME: 'VME',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail' }); }
 }
 const CX_EPOS_PROVIDERS = {
     supported: [

@@ -148,7 +148,7 @@ class CXLogin extends RenderBase {
             { name: _cxSchema.cx_login.CREATED, title: 'created', width: '200px' },
         ];
 
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: left;';
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: left;';
         this.options.cellHighlights = [];
         this.options.cellHighlights.push({
             column: _cxSchema.cx_login.ROLEID, op: '=', value: 9,

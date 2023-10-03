@@ -52,7 +52,7 @@ class CPQueryRender extends RenderBase {
     }
 
     async _list() {
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; display: inline-block; min-width: 80px; overflow: hidden; text-align: center;';
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; display: inline-block; min-width: 80px; overflow: hidden; text-align: center;';
         var statuses = _cxConst.CP_QUERY_TYPE_REQ_DISPUTED.toList();
         for (let sx = 0; sx < statuses.length; sx++) {
             const s = statuses[sx];
