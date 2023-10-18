@@ -9,6 +9,18 @@ class ErpGLAccount extends RenderBase {
         super(dataSource, options, true);
         options.title = 'erp gl account list';
         this.autoLoad = true;
+
+        this.autoLoadFields = {};
+        this.autoLoadFields[_cxSchema.erp_gl_account.ERPGLACCOUNTID] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.SHOPID] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.CODE] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.COSTCENTRE] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.DEPARTMENT] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.DESCRIPTION] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.IGNORESTOREGLSEGMENTS] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.CREATED] = null;
+        this.autoLoadFields[_cxSchema.erp_gl_account.MODIFIED] = null;
+
     }
 
     async initColumn(field, column) {
@@ -22,6 +34,12 @@ class ErpGLAccount extends RenderBase {
         if (field.name == _cxSchema.erp_gl_account.CODE) { column.title = 'gl code'; }
         if (field.name == _cxSchema.erp_gl_account.COSTCENTRE) { column.title = 'gl sub code (1)'; }
         if (field.name == _cxSchema.erp_gl_account.DEPARTMENT) { column.title = 'gl sub code (2)'; }
+        if (field.name == _cxSchema.erp_gl_account.IGNORESTOREGLSEGMENTS) {
+            column.nullText = '';
+            column.title = 'ignore gl segments';
+            column.align = 'center';
+            column.width = '150px';
+        }
     }
     async initFilter(field, filter) {
         if (field.name == _cxSchema.erp_gl_account.SHOPID) {
@@ -49,6 +67,7 @@ class ErpGLAccount extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
+                            { name: 'ignoreStoreGLSegments', label: 'ignore custom segments', column: 2 },
                             {
                                 group: 'specification', title: '', column: 1, columnCount: 3, inline: true, fields: [
                                     { name: 'code', label: 'Code', column: 1, readOnly: true },

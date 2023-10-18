@@ -217,6 +217,11 @@ async function getPermission(recordType, role) {
         permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
     }
 
+    if (recordType == _cxSchema.erp_gl_account.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        
+    }
+
 
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');

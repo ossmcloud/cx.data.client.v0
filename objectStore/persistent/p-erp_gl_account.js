@@ -29,6 +29,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    IGNORESTOREGLSEGMENTS: 'ignoreStoreGLSegments',
 
 }
 //
@@ -45,6 +46,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    ignoreStoreGLSegments: { name: 'ignoreStoreGLSegments', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -64,7 +66,7 @@ class Persistent_erp_gl_account extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get erpGLAccountId() {
         return super.getValue(_fieldNames.ERPGLACCOUNTID);
@@ -122,6 +124,12 @@ class Persistent_erp_gl_account extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get ignoreStoreGLSegments() {
+        return super.getValue(_fieldNames.IGNORESTOREGLSEGMENTS);
+    } set ignoreStoreGLSegments(val) {
+        super.setValue(_fieldNames.IGNORESTOREGLSEGMENTS, val);
     }
 
 

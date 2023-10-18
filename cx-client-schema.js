@@ -1228,6 +1228,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        IGNORESTOREGLSEGMENTS: 'ignoreStoreGLSegments',
     },
 
     erp_shop_configs: {
