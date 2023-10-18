@@ -74,8 +74,8 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.params.push({ name: 'documentStatus', value: params.st });
         }
         if (params.su) {
-            query.sql += ' and d.supplierCode like @supplierCode';
-            query.params.push({ name: 'supplierCode', value: '%' + params.su });
+            query.sql += ' and (d.supplierCode like @supplierCode or supp.traderName like @supplierCode)';
+            query.params.push({ name: 'supplierCode', value: '%' + params.su + '%' });
         }
         if (params.tno) {
             query.sql += ' and d.documentNumber like @documentNumber';
