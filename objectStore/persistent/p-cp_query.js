@@ -39,6 +39,8 @@ const _fieldNames = {
     RESOLUTIONMESSAGE: 'resolutionMessage',
     RESOLUTIONDATE: 'resolutionDate',
     DELRETID: 'delRetId',
+    CREDITAPPLIED: 'creditApplied',
+    CREDITNOTENUMBER: 'creditNoteNumber',
 
 }
 //
@@ -65,6 +67,8 @@ const _fields = {
     resolutionMessage: { name: 'resolutionMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: true },
     resolutionDate: { name: 'resolutionDate', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     delRetId: { name: 'delRetId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    creditApplied: { name: 'creditApplied', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    creditNoteNumber: { name: 'creditNoteNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
 
 }
 //
@@ -202,6 +206,18 @@ class Persistent_cp_query extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DELRETID);
     } set delRetId(val) {
         super.setValue(_fieldNames.DELRETID, val);
+    }
+
+    get creditApplied() {
+        return super.getValue(_fieldNames.CREDITAPPLIED);
+    } set creditApplied(val) {
+        super.setValue(_fieldNames.CREDITAPPLIED, val);
+    }
+
+    get creditNoteNumber() {
+        return super.getValue(_fieldNames.CREDITNOTENUMBER);
+    } set creditNoteNumber(val) {
+        super.setValue(_fieldNames.CREDITNOTENUMBER, val);
     }
 
 

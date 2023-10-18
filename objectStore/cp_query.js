@@ -30,7 +30,7 @@ class cp_query_Collection extends _persistentTable.Table {
                 left outer  join cp_invoiceGroup       grp ON grp.invGrpId = doc.invGrpId
                 left outer  join cp_wholesaler           w ON w.wholesalerId = grp.wholesalerId
                 left outer  join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
-                where       1 = 1
+                where       q.${this.FieldNames.SHOPID} in ${this.cx.shopList}
                 `
         };
         this.queryFromParams(query, params, 'q');
@@ -46,7 +46,7 @@ class cp_query_Collection extends _persistentTable.Table {
                 select	    q.*, 
                             qt.code as queryType, qt.name as queryTypeName,
                             s.shopCode, s.shopName,
-                            w.wholesalerId, w.code as wholesalerCode, w.name as wholesalerName,
+                            w.code as wholesalerCode, w.name as wholesalerName,
                             supp.traderAccountId, supp.traderCode as supplierCode, supp.traderName as supplierName,
                             del.documentNumber as docketNumber, del.documentDate as docketDate, del.totalNet as docketNet, del.totalVat as docketVat, del.totalGross as docketGross,
                             doc.documentNumber, doc.documentDate, doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross,
@@ -58,17 +58,18 @@ class cp_query_Collection extends _persistentTable.Table {
                 left outer  join cp_invoiceCredit      doc ON doc.invCreId = q.invCreId
                 left outer  join cp_invoiceGroup       grp ON grp.invGrpId = doc.invGrpId
                 left outer  join cp_wholesaler           w ON w.wholesalerId = grp.wholesalerId
-                left outer  join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId`
+                left outer  join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
+                where       q.${this.FieldNames.SHOPID} in ${this.cx.shopList}`
         };
 
         if (isDelivery) {
             query.sql += `
-                where       del.delRetId =              ${docId}
+                and         del.delRetId =              ${docId}
                 and         q.statusId   <               ${_cxConst.CP_QUERY_STATUS.RESOLVED}
                 `;
         } else {
             query.sql += `
-                where       doc.invCreId =              ${docId}
+                and         doc.invCreId =              ${docId}
                 and         q.statusId   <               ${_cxConst.CP_QUERY_STATUS.RESOLVED}
                 `;
         }
@@ -87,18 +88,20 @@ class cp_query_Collection extends _persistentTable.Table {
         var docInfoSql = '';
         if (isDelivery) {
             docInfoSql = `
-                    select          del.shopId, del.delRetId,
-                                    supp.traderAccountId, supp.traderCode as supplierCode, supp.traderName as supplierName,
+                    select          del.shopId, del.delRetId, whs.wholesalerId,  whs.code as wholesalerCode, whs.name as wholesalerName,
+                                    supp.traderAccountId, supp.traderCode as supplierCode, supp.traderName as supplierName, supp.wholesalerCode as supplierWholesalerCode,
                                     del.documentNumber as docketNumber, del.documentDate as docketDate, del.totalNet as docketNet, del.totalVat as docketVat, del.totalGross as docketGross,
                                     s.shopCode, s.shopName
                     from            cp_deliveryReturn del
                     inner join      cx_shop            s ON s.shopId            = del.shopId
                     left outer      join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
+                    left outer		join cp_wholesalerShop whsShop ON whsShop.shopId = del.shopId
+                    left outer		join cp_wholesaler    whs ON whs.wholesalerId    = whsShop.wholesalerId
                     where           del.delRetId = ${docId}
                 `;
         } else {
             docInfoSql = `
-                    select          doc.shopId, doc.invCreId, whs.code as wholesalerCode, whs.name as wholesalerName,
+                    select          doc.shopId, doc.invCreId, whs.wholesalerId,  whs.code as wholesalerCode, whs.name as wholesalerName,
                                     doc.documentNumber, doc.documentDate, doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross, 
                                     grp.documentNumber as groupInvoice, grp.documentDate as groupInvoiceDate, 
                                     s.shopCode, s.shopName

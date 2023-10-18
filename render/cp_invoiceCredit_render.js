@@ -78,8 +78,8 @@ class CPInvoiceReturnRender extends RenderBase {
         return transactionLinesOptions;
     }
 
-    async setRecordTitle() {
-        var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
+    async setRecordTitle(query) {
+        
         
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
@@ -308,7 +308,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     }
 
-    async buildFormActions() {
+    async buildFormActions(query) {
         // test button
         if (process.env.APP_CONTEXT == 'LOCAL') { this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' }); }
 
@@ -347,6 +347,12 @@ class CPInvoiceReturnRender extends RenderBase {
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
+            if (query) {
+                this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+            } else {
+                this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
+            }
+            
             var queries = this.dataSource.cx.table(_cxSchema.cp_query);
             if (await queries.select({invCreId: this.dataSource.id})) {
                 this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
@@ -355,25 +361,30 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
-
+        var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
 
         if (this.options.allowEdit) {
-            this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+            if (this.dataSource.invGrpId) {
+                this.options.allowEdit = false;
+            } else {
+                this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+            }
         }
         //
-        await this.setRecordTitle();
+        await this.setRecordTitle(query);
         // 
         await this.buildFormBody();
         // 
         await this.buildFormLists();
         //
-        await this.buildFormActions();
+        await this.buildFormActions(query);
     }
 
     async _list() {
         try {
             this.options.allowEdit = true;
             this.options.allowEditCondition = function (object) {
+                if (object.invGrpId) { return false; }
                 return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
             }
 

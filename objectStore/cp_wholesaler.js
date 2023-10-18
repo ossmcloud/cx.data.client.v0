@@ -20,7 +20,8 @@ class cp_wholesaler_Collection extends _persistentTable.Table {
                 from	    cp_wholesaler w
                 inner join  cp_wholesalerShop ws ON ws.wholesalerId = w.wholesalerId
                 inner join  cx_shop s ON s.shopId = ws.shopId
-                where	s.shopId = @shopId
+                where	    s.shopId in ${this.cx.shopList}
+                and         s.shopId = @shopId
                 order by    w.code
             `,
                 params: [

@@ -46,7 +46,7 @@ class CPDeliveryReturnRender extends RenderBase {
 
     async _record() {
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.id, true, true);
-        
+
 
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
@@ -238,8 +238,13 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
+
             if (this.matchingEnabled) {
-                this.options.columns.push({ name: 'recoStatus', title: '&#128274;', align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+                var matchIcon = '<img src="/public/images/puzzle_dark.png" style="width: 20px" />'
+                this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
+
+                var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
+                this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' });
@@ -253,7 +258,7 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.CREATED, title: 'created', align: 'center', width: '130px' });
 
-            
+
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
@@ -277,15 +282,31 @@ class CPDeliveryReturnRender extends RenderBase {
                 })
             }
 
-            var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
-            for (let sx = 0; sx < recoStatuses.length; sx++) {
-                const s = recoStatuses[sx];
+            if (this.matchingEnabled) {
+                var recoStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList();
+                for (let sx = 0; sx < recoStatuses.length; sx++) {
+                    const s = recoStatuses[sx];
+                    this.options.cellHighlights.push({
+                        column: 'recoStatus',
+                        op: '=',
+                        value: s.value,
+                        style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                        columns: ['recoStatus']
+                    })
+                }
                 this.options.cellHighlights.push({
-                    column: 'recoStatus',
-                    op: '=',
-                    value: s.value,
-                    style: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
-                    columns: ['recoStatus']
+                    column: 'queryCount',
+                    op: '>',
+                    value: 0,
+                    style: 'background-color: rgb(127,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['queryCount']
+                })
+                this.options.cellHighlights.push({
+                    column: 'queryCountOpen',
+                    op: '>',
+                    value: 0,
+                    style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['queryCount']
                 })
             }
 

@@ -8,37 +8,26 @@ class Wholesaler extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options, true);
         this.autoLoad = true;
+
+        this.autoLoadFields = {};
+        this.autoLoadFields[_cxSchema.cp_wholesaler.WHOLESALERID] = null;
+        this.autoLoadFields[_cxSchema.cp_wholesaler.CODE] = null;
+        this.autoLoadFields[_cxSchema.cp_wholesaler.NAME] = null;
+        this.autoLoadFields[_cxSchema.cp_wholesaler.CURRENCY] = null;
+        this.autoLoadFields[_cxSchema.cp_wholesaler.WHSPROVIDER] = null;
+        this.autoLoadFields[_cxSchema.cp_wholesaler.CREATED] = null;
+        this.autoLoadFields[_cxSchema.cp_wholesaler.MODIFIED] = null;
     }
 
-    async initColumn(field, column) {
-        // if (field.name == _cxSchema.erp_dtfs_setting.DTFSSETTINGID) {
-        //     column.name = 'dtfsInfo';
-        //     column.title = 'dtfs info';
-        //     column.addTotals = false;
-        //     column.align = 'left';
-        //     column.width = '125px';
-        // } else if (field.name == _cxSchema.erp_dtfs_setting.PINGIP) {
-        //     column.width = '125px';
-        // }
-    }
+    async initColumn(field, column) { }
+    
     async initFilter(field, filter) {
         if (field.name == _cxSchema.cp_wholesaler.MODIFIED || field.name == _cxSchema.cp_wholesaler.CREATED) {
             return false;
         }
     }
 
-    async _list() {
-        // this.options.cellHighlights.push({
-        //     column: _cxSchema.epos_dtfs_ping.RESPONSE,
-        //     customStyle: function (obj, val, h) {
-        //         if (val.indexOf('ERROR') >= 0) {
-        //             return 'background-color: rgba(230,0,0,0.25); color: white; padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
-        //         } else if (val.indexOf('action: get, status: ok') >= 0) {
-        //             return 'background-color: rgba(0,150,0,0.25); color: white; padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
-        //         }
-        //     }
-        // })
-    }
+    async _list() { }
 
 
     async getShopsListOptions() {
@@ -47,10 +36,7 @@ class Wholesaler extends RenderBase {
 
         var wholesalerShopsOptions = await this.listOptions(wholesalerShops, { listView: true });
         wholesalerShopsOptions.quickSearch = true;
-        //wholesalerShopsOptions.path = '/cp/config/product';
         wholesalerShopsOptions.title = ' ';    //'<span style="padding-right: 17px;">the products below are associated with this alias</span>';
-        //wholesalerShopsOptions.actions = [{ label: 'bwg shop list', funcName: 'bwgGetStores' }];
-        //wholesalerShopsOptions.showButtons = [{ id: 'cr_products_add', text: 'Attach Products', function: 'attachProducts' }];
         return wholesalerShopsOptions;
     }
 
@@ -77,7 +63,7 @@ class Wholesaler extends RenderBase {
                 }
             } else {
                 configListOptions.actions = [{ label: 'view', funcName: 'viewConfig' }];
-                
+
             }
         }
         return configListOptions;
@@ -92,8 +78,9 @@ class Wholesaler extends RenderBase {
             {
                 group: 'all', title: '', columnCount: 2, fields: [
                     {
-                        group: 'main', title: 'main info', column: 1, columnCount: 1, fields: [
+                        group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'code', label: 'code', column: 1 },
+                            { name: 'whsProvider', label: 'provider', column: 2, readOnly: true },
                             { name: 'name', label: 'name', column: 1 },
                             { name: 'currency', label: 'currency', column: 1 },
                         ]
@@ -120,7 +107,7 @@ class Wholesaler extends RenderBase {
 
         if (!this.dataSource.isNew()) {
             var subLists = { group: 'sublists', title: '', column: 1, columnCount: 2, styles: ['width: 100%;', 'min-width: 700px;'], fields: [] };
-                        
+
             var storeConfigs = await this.getShopsListOptions();
 
             subLists.fields.push({ group: 'stores', title: 'stores configurations', column: 1, fields: [storeConfigs] });

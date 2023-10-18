@@ -17,7 +17,7 @@ class cp_wholesalerShop_Collection extends _persistentTable.Table {
                 inner join  cp_wholesalerShop ws ON ws.wholesalerId = w.wholesalerId
                 inner join  cx_shop s ON s.shopId = ws.shopId
                 left outer join erp_traderAccount trader ON trader.traderAccountId = ws.erpTraderAccountId
-                where       1=1
+                where       ws.${this.FieldNames.SHOPID} in ${this.cx.shopList}
             `,
             
         };

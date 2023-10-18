@@ -400,6 +400,8 @@ module.exports = {
         RESOLUTIONMESSAGE: 'resolutionMessage',
         RESOLUTIONDATE: 'resolutionDate',
         DELRETID: 'delRetId',
+        CREDITAPPLIED: 'creditApplied',
+        CREDITNOTENUMBER: 'creditNoteNumber',
     },
 
     cp_queryLog: {
@@ -550,6 +552,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        WHSPROVIDER: 'whsProvider',
     },
 
     cp_wholesalerConfig: {

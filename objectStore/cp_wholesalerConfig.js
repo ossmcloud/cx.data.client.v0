@@ -15,6 +15,7 @@ class cp_wholesalerConfig_Collection extends _persistentTable.Table {
 
         this.query.clear();
         this.query.addFilter({ name: _cxSchema.cp_wholesalerConfig.WHOLESALERID, value: wholesalerId });
+
         return await super.select();
     }
 

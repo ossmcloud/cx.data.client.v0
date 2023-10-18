@@ -26,7 +26,9 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                                 order by traderAccountId desc
                                             )
                                         ) as supplierName,
-                                        recoDoc.recoSessionId, reco.recoStatusId
+                                        recoDoc.recoSessionId, reco.recoStatusId,
+                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId ) as queryCount,
+                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
@@ -149,6 +151,8 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #supplierName = null;
     #recoSessionId = null;
     #recoStatus = null;
+    #queryCount = null;
+    #queryCountOpen = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -157,6 +161,8 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#supplierName = defaults['supplierName'];
         this.#recoSessionId = defaults['recoSessionId'] || null;
         this.#recoStatus = defaults['recoStatusId'] || 0;
+        this.#queryCount = defaults['queryCount'] || null;
+        this.#queryCountOpen = defaults['queryCountOpen'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -188,6 +194,17 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get recoStatusName() { return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatus); }
 
 
+    get queryCount() { return this.#queryCount; }
+    get queryCountOpen() { return this.#queryCountOpen; }
+    get queryCountDisplay() {
+        if (this.queryCount) {
+            if (this.#queryCountOpen) {
+                return `${this.queryCount} queries (${this.#queryCountOpen} open)`;
+            }
+            return `${this.queryCount} queries`;
+        }
+        return this.queryCount;
+    }
 
 
     async save() {

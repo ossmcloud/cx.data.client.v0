@@ -38,7 +38,7 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                 left outer join     cp_invoiceGroup         grp     ON grp.invGrpId = doc.invGrpId
                 
                 inner join          cx_shop s ON s.shopId = reco.shopId
-                where 1=1
+                where               reco.${this.FieldNames.SHOPID} in ${this.cx.shopList}
             `
         };
 

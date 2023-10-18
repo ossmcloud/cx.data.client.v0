@@ -17,7 +17,7 @@ class cp_queryType_Collection extends _persistentTable.Table {
                 from	    cp_queryType q
                 inner join  cp_wholesaler w ON w.wholesalerId = q.wholesalerId`
         };
-        this.queryFromParams(query, params);
+        this.queryFromParams(query, params, 'q');
         query.sql += ' order by code';
 
         return await super.select(query);
