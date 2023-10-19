@@ -46,7 +46,15 @@ class CPDeliveryReturnRender extends RenderBase {
 
     async _record() {
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.id, true, true);
-
+        var generatedDocs = await this.dataSource.cx.exec({
+            sql: 'select count(*) as generatedDocs from cp_invoiceCredit where createdFrom = @delRetId and createdFromType = @documentType',
+            params: [
+                { name: 'delRetId', value: this.dataSource.id },
+                { name: 'documentType', value: this.dataSource.documentType }
+            ],
+            returnFirst: true
+        });
+        generatedDocs = generatedDocs.generatedDocs > 0;
 
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
@@ -189,8 +197,11 @@ class CPDeliveryReturnRender extends RenderBase {
 
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 // @@TODO: check if we already have a doc for this
-                var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
-                this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
+
+                if (!query && !generatedDocs) {
+                    var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
+                    this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
+                }
             }
 
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';

@@ -11,14 +11,14 @@ class CxMapConfigRender extends RenderBase {
     }
 
     async _record() {
-        
+
         var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
 
         var readOnly = !this.dataSource.isNew();
-        
-        
+
+
         this.options.fields = [
             {
                 group: 'mainOuter', title: '', columnCount: 4, fields: [
@@ -77,6 +77,7 @@ class CxMapConfigRender extends RenderBase {
 
         this.options.filters = [
             //await this.filterDropDownOptions(_cxSchema.cx_map_config, { fieldName: 'map' }),
+            await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { label: 'mid', fieldName: 'mid', hidden: true },
             { label: 'type', fieldName: 'type', hidden: true },
             { label: 'department', fieldName: 'dep', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
@@ -86,17 +87,24 @@ class CxMapConfigRender extends RenderBase {
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cx_map_config_dep.DEPMAPCONFIGID },
+            { name: 'shopInfo', title: 'store', width: '200px' },
             //{ title: 'map id', name: _cxSchema.cx_map_config_dep.MAPCONFIGID },
             { title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' },
             { title: 'p', name: 'status_p', unbound: true, align: 'center', width: '15px' },
-            { title: 'department', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT },
-            { title: 'sub-department', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT },
+            { title: 'department', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, width: '75px' },
+            { title: 'sub-department', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, width: '75px' },
             { title: 'description', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION },
-            
-            { title: 'created', name: _cxSchema.cx_map_config_dep.CREATED },
-            { title: 'by', name: _cxSchema.cx_map_config_dep.CREATEDBY },
-            { title: 'modified', name: _cxSchema.cx_map_config_dep.MODIFIED },
-            { title: 'by', name: _cxSchema.cx_map_config_dep.MODIFIEDBY },
+
+            { title: 'sales account', name: 'salesSpec', addValues: [{ name: 'salesDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
+            { title: 'purchase account', name: 'purchSpec', addValues: [{ name: 'purchDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
+            { title: 'waste account', name: 'wasteSpec', addValues: [{ name: 'wasteDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
+            { title: 'accrual account', name: 'accrualSpec', addValues: [{ name: 'accrualDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
+            { title: 'cogs account', name: 'cogsSpec', addValues: [{ name: 'cogsDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
+
+            // { title: 'created', name: _cxSchema.cx_map_config_dep.CREATED },
+            // { title: 'by', name: _cxSchema.cx_map_config_dep.CREATEDBY },
+            // { title: 'modified', name: _cxSchema.cx_map_config_dep.MODIFIED },
+            // { title: 'by', name: _cxSchema.cx_map_config_dep.MODIFIEDBY },
         ];
 
         var appendStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
@@ -127,7 +135,16 @@ class CxMapConfigRender extends RenderBase {
                 }
             }
         })
-        
+
+        var applyStoreColorStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
+        for (var cx = 0; cx < shopColors.length; cx++) {
+            if (!shopColors[cx].shopColor) { continue; }
+            this.options.cellHighlights.push({
+                column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopInfo']
+            })
+        }
+
     }
 
     async dropDown(dropDownSelectionOptions) {

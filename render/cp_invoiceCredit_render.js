@@ -334,6 +334,12 @@ class CPInvoiceReturnRender extends RenderBase {
                     this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
                 }
             }
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.Posting || s == _cxConst.CP_DOCUMENT.STATUS.PostingRunning) {
+                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                }
+            }
+
             // allow to delete if not posted
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
