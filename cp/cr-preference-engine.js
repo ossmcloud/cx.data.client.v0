@@ -8,9 +8,9 @@ const _cored = require('cx-core/core/cx-core-date');
 async function getPrefConfigs(cx, prefId) {
     var query = {
         sql: `  select	        p.preferenceId, p.name, p.type, pr.recordType, pr.levelId, pc.recordId, pc.value
-                from	        cr_preference p
-                inner join      cr_preference_record pr ON pr.preferenceId = p.preferenceId
-                inner join      cr_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
+                from	        cp_preference p
+                inner join      cp_preference_record pr ON pr.preferenceId = p.preferenceId
+                inner join      cp_preference_config pc ON pc.preferenceId = p.preferenceId and pc.preferenceRecordId = pr.preferenceRecordId
 
                 where	        p.preferenceId = @preferenceId
                 and             isnull(pr.disabled, 0) = 0
@@ -23,7 +23,7 @@ async function getPrefConfigs(cx, prefId) {
     return await cx.exec(query);
 }
 
-class CRPreferenceEngine {
+class CPPreferenceEngine {
     #cx = null;
     constructor(cx) {
         this.#cx = cx;
@@ -53,7 +53,7 @@ class CRPreferenceEngine {
             })
         }
         
-        var pref = await this.#cx.table(_cxSchema.cr_preference).fetch(options.preference, true);
+        var pref = await this.#cx.table(_cxSchema.cp_preference).fetch(options.preference, true);
         if (!pref) { return null; }
 
         var prefValue = null;
@@ -77,7 +77,7 @@ class CRPreferenceEngine {
 
         var prefValueType = pref.type;
         if (prefValueType == 'value' && prefValue) {
-            prefValue = await this.#cx.table(_cxSchema.cr_preference_value).fetch(prefValue, true);
+            prefValue = await this.#cx.table(_cxSchema.cp_preference_value).fetch(prefValue, true);
             // @@TODO: should we get the default value if not found???
             if (!prefValue) { return null; }
             prefValueType = prefValue.type;
@@ -123,5 +123,5 @@ class CRPreferenceEngine {
 
 
 module.exports = {
-    CRPreferenceEngine: CRPreferenceEngine
+    CPPreferenceEngine: CPPreferenceEngine
 }

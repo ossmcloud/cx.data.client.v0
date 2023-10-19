@@ -315,6 +315,58 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    cp_preference: {
+        TBL_NAME: 'cp_preference',
+        PREFERENCEID: 'preferenceId',
+        NAME: 'name',
+        TYPE: 'type',
+        DESCRIPTION: 'description',
+        DEFAULTVALUE: 'defaultValue',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_preference_config: {
+        TBL_NAME: 'cp_preference_config',
+        PREFERENCEID: 'preferenceId',
+        PREFERENCERECORDID: 'preferenceRecordId',
+        RECORDID: 'recordId',
+        VALUE: 'value',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_preference_record: {
+        TBL_NAME: 'cp_preference_record',
+        PREFERENCERECORDID: 'preferenceRecordId',
+        PREFERENCEID: 'preferenceId',
+        LEVELID: 'levelId',
+        RECORDTYPE: 'recordType',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        DISABLED: 'disabled',
+    },
+
+    cp_preference_value: {
+        TBL_NAME: 'cp_preference_value',
+        PREFERENCEVALUEID: 'preferenceValueId',
+        PREFERENCEID: 'preferenceId',
+        TYPE: 'type',
+        VALUE: 'value',
+        LABEL: 'label',
+        ISDEFAULT: 'isDefault',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     cp_product: {
         TBL_NAME: 'cp_product',
         PRODUCTID: 'productId',

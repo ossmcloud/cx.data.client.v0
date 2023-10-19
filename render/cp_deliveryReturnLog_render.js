@@ -23,7 +23,7 @@ class CPDeliveryReturnLogRender extends RenderBase {
             { name: _cxSchema.cp_deliveryReturnLog.CREATED, title: 'log date-time', align: 'center', width: '90px', },
             { name: _cxSchema.cp_deliveryReturnLog.LOGTYPE, title: 'type', width: '50px' },
             { name: _cxSchema.cp_deliveryReturnLog.LOGMESSAGE, title: 'log message' },
-            { name: _cxSchema.cp_deliveryReturnLog.LOGINFO, title: 'log info', width: '120px' },
+            { name: _cxSchema.cp_deliveryReturnLog.LOGINFO, title: 'log info' },
                        
         ];
 

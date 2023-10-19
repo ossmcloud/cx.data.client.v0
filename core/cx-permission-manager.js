@@ -145,6 +145,18 @@ async function getPermission(recordType, role) {
         //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
+    if (recordType == _cxSchema.cp_preference.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
+    if (recordType == _cxSchema.cp_preference_config.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
+        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
 
 
     if (recordType == _cxSchema.cp_invoiceGroup.TBL_NAME || recordType == _cxSchema.cp_invoiceCredit.TBL_NAME || recordType == _cxSchema.cp_deliveryReturn.TBL_NAME) {

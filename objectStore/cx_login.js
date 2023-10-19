@@ -2,10 +2,21 @@
 //
 const _persistentTable = require('./persistent/p-cx_login');
 const _declarations = require('../cx-client-declarations');
+const _schema = require('../cx-client-schema');
 //
 class cx_login_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cx_login(this, defaults);
+    }
+
+    async select(params) {
+        if (!params) { params = {}; }
+
+        var query = {
+            sql: 'select l.*, (select count(*) from cx_login_roles r where r.roleId >= 8 and r.loginId = l.loginId) as cx_roles from cx_login l order by l.loginId'
+        }
+
+        return await super.select(query)
     }
 
     async selectList(addSysUser) {
@@ -29,8 +40,12 @@ class cx_login_Collection extends _persistentTable.Table {
 //
 //
 class cx_login extends _persistentTable.Record {
+    #cx_role = false;
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
+
+        this.#cx_role = parseInt(defaults['cx_roles'] || 0) > 0;
     };
 
     get displayName() {
@@ -42,6 +57,24 @@ class cx_login extends _persistentTable.Record {
             return this.email;
         }
     }
+
+    get cx_role() {
+        return this.#cx_role;
+    }
+
+    async hasCxRole() {
+        if (this.roleId >= _declarations.CX_ROLE.CX_SUPPORT) { return true; }
+        var roles = this.cx.table(_schema.cx_login_roles);
+        await roles.selectByUser(this.loginId);
+        roles.each(r => {
+            if (r.roleId >= _declarations.CX_ROLE.CX_SUPPORT) {
+                return true;
+            }
+        });
+        return false;
+    }
+
+
 }
 //
 // 

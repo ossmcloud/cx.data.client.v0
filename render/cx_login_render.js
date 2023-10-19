@@ -56,7 +56,23 @@ class CXLogin extends RenderBase {
         } else {
             shopListOptions = await this.getShopListOptions();
             roleListOptions = await this.getRoleListOptions();
+
+            if (this.dataSource.cx.roleId < _cxConst.CX_ROLE.CX_ADMIN) {
+                if (await this.dataSource.hasCxRole()) {
+                    this.options.allowEdit = false;
+                }
+            }
         }
+
+        var lookUps = _cxConst.CX_ROLE.toList();
+        if (this.options.mode != 'view') { 
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+                lookUps.push({ value: 8, text: 'cx support' });
+                lookUps.push({ value: 9, text: 'cx admin' });
+            }
+        }
+        
+        
 
         this.options.fields = [
             { name: 'tfaQr', hidden: true },
@@ -71,7 +87,7 @@ class CXLogin extends RenderBase {
                     },
                     {
                         name: _cxSchema.cx_login.ROLEID, label: 'current role', column: 1,
-                        lookUps: _cxConst.CX_ROLE.toList(),
+                        lookUps: lookUps,
                         readOnly: (this.options.editMode) ? (this.dataSource.cx.roleId < _cxConst.CX_ROLE.ADMIN) : true
                     },
                     { name: _cxSchema.cx_login.FIRSTNAME, label: 'first name', validation: '{ "mandatory": true, "max": 60  }', column: 2 },
@@ -133,6 +149,13 @@ class CXLogin extends RenderBase {
     }
 
     async _list() {
+        if (this.dataSource.cx.roleId < _cxConst.CX_ROLE.CX_ADMIN) {
+            this.options.allowEditCondition = function (object) {
+                return !object.cx_role;
+            }
+        }
+
+
         var lookUps = _cxConst.CX_ROLE.toList();
         lookUps.push({ value: 8, text: 'cx support' });
         lookUps.push({ value: 9, text: 'cx admin' });
