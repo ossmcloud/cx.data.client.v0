@@ -93,6 +93,34 @@ class erp_tax_account_Collection extends _persistentTable.Table {
         return lookUpValues;
     }
 
+
+    async findFromOtherShop(sourceErpAccountId, targetShopId, returnRecord) {
+        var query = {
+            sql: `
+                select	erpTarget.erpTaxAccountId
+                        -- NOTE: need this for debug purposes
+                        -- , erpTarget.code, erpTarget.rate,
+                        -- erpSource.erpTaxAccountId, erpSource.code, erpSource.rate
+                                        
+                from	erp_tax_account erpSource
+                left outer join erp_shop_setting erpSett on erpSett.shopId = @targetShopId
+                left outer join erp_tax_account  erpTarget on erpTarget.shopId = @targetShopId and erpTarget.code = erpSource.code
+                where	erpSource.erpTaxAccountId = @sourceErpAccountId
+            `,
+            params: [
+                { name: 'sourceErpAccountId', value: sourceErpAccountId },
+                { name: 'targetShopId', value: targetShopId },
+            ],
+            returnFirst: true,
+        }
+
+        var res = await this.cx.exec(query);
+        if (!res) { return null; }
+        if (returnRecord) { return await this.fetch(res.erpTaxAccountId); }
+        return res.erpTaxAccountId
+    }
+
+
 }
 //
 // ----------------------------------------------------------------------------------------

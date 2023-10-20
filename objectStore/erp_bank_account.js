@@ -71,6 +71,32 @@ class erp_bank_account_Collection extends _persistentTable.Table {
         return super.populate(rawRecord);
     }
 
+    async findFromOtherShop(sourceErpAccountId, targetShopId, returnRecord) {
+        var query = {
+            sql: `
+                select	erpTarget.erpBankAccountId
+                        -- NOTE: need this for debug purposes
+                        -- , erpTarget.code, erpTarget.description,
+                        -- erpSource.erpBankAccountId, erpSource.code, erpSource.description
+                                        
+                from	PPM.erp_bank_account erpSource
+                left outer join PPM.erp_shop_setting erpSett on erpSett.shopId = @targetShopId
+                left outer join PPM.erp_bank_account  erpTarget on erpTarget.shopId = @targetShopId and erpTarget.code = erpSource.code
+                where	erpSource.erpBankAccountId = @sourceErpAccountId
+            `,
+            params: [
+                { name: 'sourceErpAccountId', value: sourceErpAccountId },
+                { name: 'targetShopId', value: targetShopId },
+            ],
+            returnFirst: true,
+        }
+
+        var res = await this.cx.exec(query);
+        if (!res) { return null; }
+        if (returnRecord) { return await this.fetch(res.erpBankAccountId); }
+        return res.erpBankAccountId
+    }
+
 
 }
 //
