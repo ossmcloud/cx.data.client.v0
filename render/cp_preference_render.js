@@ -68,6 +68,7 @@ class CRPreferenceRender extends RenderBase {
 
                     case        pr.recordType
                         when    'cx_login'          then (select l.firstName + ', ' + l.lastName from cx_login l where l.loginId = pc.recordId)
+                        when    'cx_shop'           then (select '[' + l.shopCode + '] ' + l.shopName from cx_shop l where l.shopId = pc.recordId)
                         when    'cx_shop_group'     then (select '[' + l.groupCode + '] ' + l.groupName from cx_shop_group l where l.shopGroupId = pc.recordId)
                         when    'erp_dtfs_setting'  then (select l.dtfsSettingName from erp_dtfs_setting l where l.dtfsSettingId = pc.recordId)
                         when    'erp_shop_setting'  then (select l.erpCustomerAccount from erp_shop_setting l where l.shopId = pc.recordId)

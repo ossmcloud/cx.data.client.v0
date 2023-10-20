@@ -390,8 +390,9 @@ class RenderBase {
     }
 
 
-    async getPreferenceListOptions() {
-        return await this.dataSource.cx.table('cr_preference').getPreferenceListOptions(this.dataSourceType, this.dataSource.id, (this.options.mode == 'view' && this.options.allowEdit));
+    async getPreferenceListOptions(type) {
+        if (!type) { type = 'cr_preference' }
+        return await this.dataSource.cx.table(type).getPreferenceListOptions(this.dataSourceType, this.dataSource.id, (this.options.mode == 'view' && this.options.allowEdit));
     }
 
 

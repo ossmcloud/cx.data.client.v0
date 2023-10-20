@@ -124,14 +124,28 @@ class CXLogin extends RenderBase {
 
         if (shopListOptions) {
             var prefListOptions = await this.getPreferenceListOptions();
+            var prefCpListOptions = await this.getPreferenceListOptions('cp_preference');
             this.options.fields.push({
                 group: 'sublists', columnCount: 2, fields: [
-                    { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },
-                    { group: 'preferences', title: 'preferences', column: 2, width: '500px', fields: [prefListOptions] },
-                    { group: 'roles', title: 'roles assigned to this user', column: 2, width: '500px', fields: [roleListOptions] },
+                    {
+                        group: 'preferences', title: '', columnCount: 2, fields: [
+                            { group: 'shops', title: 'stores assigned to this user', column: 1, fields: [shopListOptions] },
+                            { group: 'roles', title: 'roles assigned to this user', column: 2, width: '500px', fields: [roleListOptions] },
+                        ]
+                    },
+                    {
+                        group: 'preferences', title: '', columnCount: 2, fields: [
+                            { group: 'cr_preferences', title: 'retail preferences', column: 1, fields: [prefListOptions] },
+                            { group: 'cp_preferences', title: 'purchase preferences', column: 2, fields: [prefCpListOptions] },    
+                        ]
+                    },
+                    
+                    
 
                 ]
             });
+
+           
         }
 
 

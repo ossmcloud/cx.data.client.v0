@@ -31,7 +31,7 @@ class CRCashBookRender extends RenderBase {
     async _list() {
 
         var isBatchProcessing = (this.options.query && this.options.query.batch == 'T');
-        var isExpanded = (this.options.query && this.options.query.expanded == 'true');
+        var isExpanded = (this.options.query && (this.options.query.expanded == 'true' || this.options.query.expanded == 'T'));
 
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
