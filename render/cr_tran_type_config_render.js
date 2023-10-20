@@ -61,9 +61,10 @@ class CrTranTypeConfigRender extends RenderBase {
         var erpCode = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).getErpCode(shopId);
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList(erpCode, true);
 
-        var readOnlyIfNotNew = !this.dataSource.isNew();
+        var forceTaxMapLookUps = this.dataSource.cx.table(_cxSchema.cx_map_config_tax);
+        forceTaxMapLookUps = await forceTaxMapLookUps.toLookupFullList(shopId);
 
-       
+        var readOnlyIfNotNew = !this.dataSource.isNew();
 
         this.options.fields = [
             {
@@ -99,6 +100,7 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, label: 'Ignore store gl segments', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, label: 'Split posting by reference', column: 1, noRender: (!this.dataSource.requiresDeclaration) },
                                     { name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, label: 'Show In Expanded List', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.FORCETAXMAPCONFIGID, label: 'Force Tax Mapping', column: 1, lookUps: forceTaxMapLookUps },
                                 ]
                             },
                             

@@ -862,6 +862,7 @@ module.exports = {
         ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
         SHOWINCASHBOOKLIST: 'showInCashBookList',
         CBREFERENCE: 'cbReference',
+        FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
     },
 
     cr_tran_type_config_shop: {
@@ -945,6 +946,8 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         ISEDITED: 'isEdited',
         RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
+        RAW_TAXCODE: 'raw_taxCode',
+        RAW_TAXRATE: 'raw_taxRate',
     },
 
     cx_login: {
