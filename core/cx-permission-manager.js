@@ -91,6 +91,12 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
     }
+    if (recordType == _cxSchema.cx_traderNameLookUp.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.USER);
+    }
+
    
     if (recordType == _cxSchema.erp_traderAccount.TBL_NAME) {
         permission.allowEdit = false;

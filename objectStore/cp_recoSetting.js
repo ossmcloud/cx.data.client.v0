@@ -36,7 +36,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
 
     async fetch(id) {
         var query = { sql: this.buildQuery(), params: [{ name: 'recoSettingId', value: id }] };
-        query.sql += ` where sett.recoSettingId = @recoSettingId`;
+        query.sql += ` and sett.recoSettingId = @recoSettingId`;
         query.noResult = 'null';
         query.returnFirst = true;
         var rawRecord = await this.db.exec(query);

@@ -1101,6 +1101,19 @@ module.exports = {
         ERPTRADERACCOUNTID: 'erpTraderAccountId',
     },
 
+    cx_traderNameLookUp: {
+        TBL_NAME: 'cx_traderNameLookUp',
+        TRADERNAMELOOKUPID: 'traderNameLookUpId',
+        SHOPID: 'shopId',
+        TRADERTYPE: 'traderType',
+        TRADERCODE: 'traderCode',
+        TRADERNAME: 'traderName',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     epos_dtfs_configs: {
         TBL_NAME: 'epos_dtfs_configs',
         CONFIGID: 'configId',

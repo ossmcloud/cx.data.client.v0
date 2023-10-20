@@ -18,14 +18,16 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         var query = { sql: '', params: [] };
         query.sql = ` select    d.*, s.shopCode, s.shopName, 
-                                isnull(supp.traderName, (
-                                                select  top 1 '&#x2048;' + tx.traderName
-                                                from    cx_traderAccount tx 
-                                                where   tx.shopId = d.shopId and tx.traderType = 'S' 
-                                                and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
-                                                order by traderAccountId desc
-                                            )
-                                        ) as supplierName,
+                                -- isnull(supp.traderName, (
+                                --                 select  top 1 '&#x2048;' + tx.traderName
+                                --                 from    cx_traderAccount tx 
+                                --                 where   tx.shopId = d.shopId and tx.traderType = 'S' 
+                                --                 and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
+                                --                 order by traderAccountId desc
+                                --             )
+                                --         ) as supplierName,
+                                isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as supplierName,
+                                        
                                 grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
@@ -33,6 +35,8 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2          ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cx_traderNameLookUp suppName    ON suppName.shopId = d.shopId AND suppName.traderCode = d.supplierCode AND suppName.traderType = 'S' 
+
                       left outer join   cp_invoiceGroup  grp            ON grp.invGrpId = d.invGrpId 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
