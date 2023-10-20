@@ -69,7 +69,7 @@ const _fields = {
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     supplierCode: { name: 'supplierCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     documentType: { name: 'documentType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
-    documentStatus: { name: 'documentStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
+    documentStatus: { name: 'documentStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '-1' },
     documentStatusMessage: { name: 'documentStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentId: { name: 'documentId', dataType: 'varchar', pk: false, identity: false, maxLength: 200, null: false },
     documentNumber: { name: 'documentNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
