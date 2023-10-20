@@ -326,7 +326,11 @@ class CPInvoiceReturnRender extends RenderBase {
                         var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                         this.options.buttons.push(btnPostToErp);
                     }
+                } else if (s == _cxConst.CP_DOCUMENT.STATUS.PendingReview) {
+                    var btnPostToErp = { id: 'cp_flag_reviewed', text: 'Flag as Reviewed', function: 'flagAsReviewed', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                    this.options.buttons.push(btnPostToErp);
                 }
+
             }
             // allow to un-post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
