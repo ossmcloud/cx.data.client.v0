@@ -590,12 +590,14 @@ const CP_DOCUMENT = {
     },
 
     STATUS: {
-        New: 0,
-        Ready: 1,
-        Generating: 2,
-        REFRESH: 3,
+        New: -1,
+        Ready: 0,
+        Generating: 1,
+        REFRESH: 2,
 
-        NEED_ATTENTION: 4,         // can't post to ERP
+        NEED_ATTENTION: 3,         // can't post to ERP
+
+        PendingReview: 4,
 
         PostingReady: 5,           //
         Posting: 6,                // erps.exe is to pick up the stuff to post
@@ -606,15 +608,13 @@ const CP_DOCUMENT = {
         PostingError: 98,
         DeleteAndPull: 99,
         Delete: 100,
-        // ERROR: 9,
-        // Reconciled_None: 10,
-        // Reconciled_Part: 11,
-        // Reconciled_Full: 12,
+       
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 REFRESH: 'refreshing erp info',
                 NEED_ATTENTION: 'mapping issue',
+                PendingReview: 'pending review',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -626,6 +626,7 @@ const CP_DOCUMENT = {
             return enumGetName(this, value, {
                 REFRESH: 'refreshing erp info',
                 NEED_ATTENTION: 'mapping issue',
+                PendingReview: 'pending review',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -656,6 +657,9 @@ const CP_DOCUMENT = {
             } else if (status == this.NEED_ATTENTION) {
                 color = '175,0,0';
                 bkgColor = '230,230,0';
+            } else if (status == this.PendingReview) {
+                color = '255,255,255';
+                bkgColor = '246,71,146';
             } else if (status == this.ERROR) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
