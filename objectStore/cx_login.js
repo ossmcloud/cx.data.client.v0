@@ -41,6 +41,7 @@ class cx_login_Collection extends _persistentTable.Table {
 //
 class cx_login extends _persistentTable.Record {
     #cx_role = false;
+    #status = 0;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -61,6 +62,15 @@ class cx_login extends _persistentTable.Record {
     get cx_role() {
         return this.#cx_role;
     }
+
+    get status() {
+        return this.#status;
+    } set status(val) {
+        this.#status = val;
+    }
+
+
+
 
     async hasCxRole() {
         if (this.roleId >= _declarations.CX_ROLE.CX_SUPPORT) { return true; }
