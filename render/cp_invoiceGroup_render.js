@@ -196,7 +196,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
     }
 
-    buildFormActions() {
+    buildFormActions(erpName) {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
             // 
@@ -211,7 +211,6 @@ class CPInvoiceGroupRender extends RenderBase {
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
-                    var erpName = 'ERP';
                     var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                     this.options.buttons.push(btnPostToErp);
                 }
@@ -313,7 +312,10 @@ class CPInvoiceGroupRender extends RenderBase {
 
         await this.buildFormLists();
 
-        this.buildFormActions();
+        var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
+        var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
+
+        this.buildFormActions(erpName);
     }
 
     async _list() {

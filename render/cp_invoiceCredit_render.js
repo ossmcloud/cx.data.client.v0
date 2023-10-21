@@ -322,7 +322,8 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
                     if (!this.dataSource.invGrpId) {
-                        var erpName = 'ERP';
+                        var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
+                        var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
                         var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                         this.options.buttons.push(btnPostToErp);
                     }
