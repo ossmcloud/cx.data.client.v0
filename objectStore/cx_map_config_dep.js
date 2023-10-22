@@ -32,7 +32,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
 
             where		s.shopId in ${this.cx.shopList}
         `;
-        
+
 
         if (params.s) {
             //query.sql += ' inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId'
@@ -59,6 +59,16 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         if (params.desc) {
             query.sql += ' and eposDescription like @eposDescription';
             query.params.push({ name: 'eposDescription', value: params.desc + '%' });
+        }
+        if (params.mapped) {
+            var fieldName = '';
+            var fieldFilter = (params.mapped.indexOf('not_') == 0) ? 'is null' : 'is not null';
+            if (params.mapped.indexOf('_sales') > 0) { fieldName = 'saleAccountId'; }
+            if (params.mapped.indexOf('_purchase') > 0) { fieldName = 'purchaseAccountId'; }
+            if (params.mapped.indexOf('_waste') > 0) { fieldName = 'wasteAccountId'; }
+            if (params.mapped.indexOf('_accrual') > 0) { fieldName = 'accrualAccountId'; }
+            if (params.mapped.indexOf('_cogs') > 0) { fieldName = 'cogsAccountId'; }
+            query.sql += ` and dep.${fieldName} ${fieldFilter}`;
         }
 
         query.sql += ' order by eposDepartment, eposSubDepartment';
@@ -180,7 +190,7 @@ class cx_map_config_dep extends _persistentTable.Record {
         this.#shopId = defaults['shopId'] || null;
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
-        
+
         this.#sales_code = defaults['sales_code'] || '';
         this.#sales_cc = defaults['sales_cc'] || '';
         this.#sales_dep = defaults['sales_dep'] || '';

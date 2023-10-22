@@ -74,6 +74,22 @@ class CxMapConfigRender extends RenderBase {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
 
+        var mismapLookUps = [
+            { value: '', text: '- all -' },
+
+            { value: 'not_mapped_sales', text: 'Sales NOT mapped' },
+            { value: 'not_mapped_purchase', text: 'Purchase NOT mapped' },
+            { value: 'not_mapped_waste', text: 'Waste NOT mapped' },
+            { value: 'not_mapped_accrual', text: 'Accruals NOT mapped' },
+            { value: 'not_mapped_cogs', text: 'COGS NOT mapped' },
+
+            { value: 'mapped_sales', text: 'Sales mapped' },
+            { value: 'mapped_purchase', text: 'Purchase mapped' },
+            { value: 'mapped_waste', text: 'Waste mapped' },
+            { value: 'mapped_accrual', text: 'Accruals mapped' },
+            { value: 'mapped_cogs', text: 'COGS mapped' },
+            
+        ]
 
         this.options.filters = [
             //await this.filterDropDownOptions(_cxSchema.cx_map_config, { fieldName: 'map' }),
@@ -83,6 +99,7 @@ class CxMapConfigRender extends RenderBase {
             { label: 'department', fieldName: 'dep', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'sub-department', fieldName: 'sub', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'description', fieldName: 'desc', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+            { label: 'mapping status', fieldName: 'mapped', name: 'mapped', lookUps: mismapLookUps },
 
         ];
         this.options.columns = [
