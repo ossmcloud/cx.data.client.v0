@@ -169,11 +169,15 @@ async function getPermission(recordType, role) {
         permission.allowNew = false;
         permission.allowDelete = false;
     }
-    if (recordType == _cxSchema.cp_invoiceCredit.TBL_NAME || recordType == _cxSchema.cp_deliveryReturn.TBL_NAME) {
+    if (recordType == _cxSchema.cp_invoiceCredit.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = false;
         permission.allowDelete = false;
-        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.cp_deliveryReturn.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowNew = false;
+        permission.allowDelete = false;
     }
 
     if (recordType == _cxSchema.cp_product.TBL_NAME || recordType == _cxSchema.cp_productAlias.TBL_NAME || recordType == _cxSchema.cp_productAliasShop.TBL_NAME) {

@@ -90,7 +90,8 @@ class CPDeliveryReturnRender extends RenderBase {
             var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
             this.options.title += `
                 <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-                    &#128274; ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+                    <img src="/public/images/puzzle_dark.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
+                    <span>${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}</span>
                 </div>
             `;
         }

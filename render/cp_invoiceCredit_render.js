@@ -111,7 +111,8 @@ class CPInvoiceReturnRender extends RenderBase {
             var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
             this.options.title += `
                 <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-                &#128274; ${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}
+                    <img src="/public/images/puzzle_dark.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
+                    <span>${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}</span>
                 </div>
             `;
         }
@@ -376,7 +377,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
         if (this.options.allowEdit) {
             if (this.dataSource.invGrpId) {
-                this.options.allowEdit = false;
+                this.options.allowEdit = (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT)
             } else {
                 this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
             }
@@ -393,10 +394,13 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-            this.options.allowEdit = true;
-            this.options.allowEditCondition = function (object) {
-                if (object.invGrpId) { return false; }
-                return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+
+            if (this.options.allowEdit == true) {
+                var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
+                this.options.allowEditCondition = function (object) {
+                    if (object.invGrpId) { return isCxRole; }
+                    return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+                }
             }
 
             if (this.options.query) {
