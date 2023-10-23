@@ -18,16 +18,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         var query = { sql: '', params: [] };
         query.sql = ` select    d.*, s.shopCode, s.shopName, 
-                                -- isnull(supp.traderName, (
-                                --                 select  top 1 '&#x2048;' + tx.traderName
-                                --                 from    cx_traderAccount tx 
-                                --                 where   tx.shopId = d.shopId and tx.traderType = 'S' 
-                                --                 and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
-                                --                 order by traderAccountId desc
-                                --             )
-                                --         ) as supplierName,
-                                isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as supplierName,
-                                        
+                                isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as supplierName,        
                                 grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
@@ -49,6 +40,15 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         if (params.gid) {
             query.sql += ' and d.invGrpId = @invGrpId';
             query.params.push({ name: 'invGrpId', value: params.gid });
+        }
+        if (params.gno) {
+            var noGrpInvoice = ['none', 'empty', 'no', 'blank', 'n', 'null'];
+            if (noGrpInvoice.indexOf(params.gno.toLowerCase()) >= 0) {
+                query.sql += ' and grp.documentNumber is null';
+            } else {
+                query.sql += ' and grp.documentNumber = @groupInvoiceNo';
+                query.params.push({ name: 'groupInvoiceNo', value: params.gno });
+            }
         }
         if (params.tr) {
             query.sql += ' and d.transmissionId like @transmissionId';
@@ -80,13 +80,22 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.NEED_ATTENTION);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.ERROR);
                 query.sql += ' and isnull(d.isUserEdited, 0) = 0';
+                // IMPORTANT: grouped invoices cannot be refreshed individually
+                query.sql += ' and d.invGrpId is null';
             } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.POST) {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingReady);
+                // IMPORTANT: grouped invoices cannot be posted individually
+                query.sql += ' and d.invGrpId is null';
             } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.UNPOST) {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.Posted);
+                // IMPORTANT: grouped invoices cannot be posted individually
+                query.sql += ' and d.invGrpId is null';
             } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.RESET) {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingError);
+                // IMPORTANT: grouped invoices cannot be posted individually
+                query.sql += ' and d.invGrpId is null';
             }
+
             if (validStatuses.length > 0) {
                 query.sql += ' and d.documentStatus in (' + validStatuses.join(',') + ')';
             }

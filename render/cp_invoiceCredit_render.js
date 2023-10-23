@@ -436,6 +436,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'doc #', fieldName: 'tno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 this.options.filters.push({ label: 'ref (erp)', fieldName: 'tref', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 this.options.filters.push({ label: 'ref (cx)', fieldName: 'tref2', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+                if (!isBatchProcessing) { this.options.filters.push({ label: 'group invoice', fieldName: 'gno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT }); }
                 this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
@@ -471,7 +472,7 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
             if (!this.options.listView) {
                 // NOTE: this means it is a sublist of the group invoice so no reason to show this
-                this.options.columns.push({ name: 'groupDocumentNumber', title: 'whs invoice', link: { url: '/cp/invoice-group?id={groupDocumentNumber}', valueField: _cxSchema.cp_invoiceCredit.INVGRPID } });
+                this.options.columns.push({ name: 'groupDocumentNumber', title: 'group invoice', link: { url: '/cp/invoice-group?id={groupDocumentNumber}', valueField: _cxSchema.cp_invoiceCredit.INVGRPID } });
             }
             this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });

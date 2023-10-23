@@ -17,18 +17,7 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                 select	            distinct reco.*, s.shopCode, s.shopName, 
                                     doc.documentNumber, doc.docketNumber, doc.documentDate, doc.supplierCode, doc.documentType, doc.invCreId, 
                                     recoDoc.recoMatchLevel, grp.documentNumber as groupInvoice, grp.wholesalerId,
-                                    (
-                                        select  top 1 traderName 
-                                        from    cx_traderAccount supp
-                                        where	supp.shopId      = doc.shopId
-                                        and		supp.traderType  = 'S'
-                                        and		(
-                                            isnull(supp.traderAccountId, '')     = isnull(doc.traderAccountId, '')	
-                                            or	 supp.traderCode                 = doc.supplierCode 
-                                            or   supp.wholesalerCode             = doc.supplierCode	
-                                        )
-                                        order by created desc
-                                    ) as supplierName,
+                                    isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as supplierName,
                                     ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId ) as queryCount,
                                     ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId and q.statusId < 8 ) as queryCountOpen
                 
@@ -36,22 +25,22 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                 left outer join     cp_recoSessionDocument	recoDoc ON recoDoc.recoSessionId = reco.recoSessionId and recoDoc.isMainDocument = 1
                 left outer join     cp_invoiceCredit        doc     ON doc.invCreId = recoDoc.documentId
                 left outer join     cp_invoiceGroup         grp     ON grp.invGrpId = doc.invGrpId
+
+                left outer join	    cx_traderAccount supp           ON supp.traderAccountId = doc.traderAccountId
+                left outer join     cx_traderAccount supp2          ON supp2.shopId = doc.shopId AND supp2.traderCode = doc.supplierCode AND supp2.traderType = 'S' 
+                left outer join     cx_traderNameLookUp suppName    ON suppName.shopId = doc.shopId AND suppName.traderCode = doc.supplierCode AND suppName.traderType = 'S' 
                 
                 inner join          cx_shop s ON s.shopId = reco.shopId
                 where               reco.${this.FieldNames.SHOPID} in ${this.cx.shopList}
             `
         };
 
-        if (params.s) {
-            query.sql += ' where s.shopId = @shopId\n';
-            query.params = [{ name: 'shopId', value: params.s }];
-        // } else if (params.nextMatch) {
-        //     query.sql += ' where reco.recoSessionId != @recoSessionId\n';
-        //     query.sql += ' and reco.recoStatusId = ' + _declarations.CP_DOCUMENT.RECO_STATUS.Pending;
-        //     query.params = [{ name: 'recoSessionId', value: params.nextMatch }];
-        } else {
+        // if (params.s) {
+        //     query.sql += ' where s.shopId = @shopId\n';
+        //     query.params = [{ name: 'shopId', value: params.s }];
+        // } else {
             this.queryFromParams(query, params, 'reco');
-        }
+        //}
 
         if (!query.params) { query.params = []; }
 
@@ -77,8 +66,14 @@ class cp_recoSession_Collection extends _persistentTable.Table {
             query.params.push({ name: 'docketNumber', value: params.SKIP_docketNumber + '%' });
         }
         if (params.SKIP_groupInvoice) {
-            query.sql += ` and grp.documentNumber like @groupInvoice`;
-            query.params.push({ name: 'groupInvoice', value: params.SKIP_groupInvoice + '%' });
+            var noGrpInvoice = ['none', 'empty', 'no', 'blank', 'n', 'null'];
+            if (noGrpInvoice.indexOf(params.SKIP_groupInvoice.toLowerCase()) >= 0) {
+                query.sql += ' and grp.documentNumber is null';
+            } else {
+                query.sql += ` and grp.documentNumber = @groupInvoice`;
+                query.params.push({ name: 'groupInvoice', value: params.SKIP_groupInvoice });
+            }
+            
         }
 
         if (params['reco.recoStatusId'] == _declarations.CP_DOCUMENT.RECO_STATUS.Pending) {
