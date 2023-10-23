@@ -1,8 +1,8 @@
 'use strict'
 
 const _cxConst = require('./cx-client-declarations');
-const { cp_shop_setting } = require('./cx-client-schema');
 const _cxSchema = require('./cx-client-schema');
+
 
 
 async function getCustomOptions(renderType, table) {

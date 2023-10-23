@@ -61,9 +61,10 @@ class CrTranTypeConfigRender extends RenderBase {
         var erpCode = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).getErpCode(shopId);
         erpTranTypeLookUps = await erpTranTypeLookUps.toLookUpList(erpCode, true);
 
-        var readOnlyIfNotNew = !this.dataSource.isNew();
+        var forceTaxMapLookUps = this.dataSource.cx.table(_cxSchema.cx_map_config_tax);
+        forceTaxMapLookUps = await forceTaxMapLookUps.toLookupFullList(shopId);
 
-       
+        var readOnlyIfNotNew = !this.dataSource.isNew();
 
         this.options.fields = [
             {
@@ -99,6 +100,7 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, label: 'Ignore store gl segments', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, label: 'Split posting by reference', column: 1, noRender: (!this.dataSource.requiresDeclaration) },
                                     { name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, label: 'Show In Expanded List', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.FORCETAXMAPCONFIGID, label: 'Force Tax Mapping', column: 1, lookUps: forceTaxMapLookUps },
                                 ]
                             },
                             
@@ -246,26 +248,26 @@ class CrTranTypeConfigRender extends RenderBase {
         });
 
         var appendStyleNoWidth = 'padding: 1px 7px 1px 7px; border-radius: 5px; overflow: hidden; text-align: center; display: inline-block;';
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.IGNORE],
-            style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.INVERTSIGN, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.INVERTSIGN],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.ALLOWEDIT, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.ALLOWEDIT],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.ALLOWNEW, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.ALLOWNEW],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.IGNORE],
+        //     style: 'background-color: silver; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.INVERTSIGN, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.INVERTSIGN],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.ALLOWEDIT, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.ALLOWEDIT],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.ALLOWNEW, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.ALLOWNEW],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
         this.options.cellHighlights.push({
             column: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, op: '=', value: true,
             columns: [_cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE],
@@ -276,11 +278,11 @@ class CrTranTypeConfigRender extends RenderBase {
             columns: [_cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS],
             style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
         })
-        this.options.cellHighlights.push({
-            column: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, op: '=', value: true,
-            columns: [_cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST],
-            style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
-        })
+        // this.options.cellHighlights.push({
+        //     column: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, op: '=', value: true,
+        //     columns: [_cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST],
+        //     style: 'background-color: green; color: whitesmoke; font-weight: bold; ' + appendStyleNoWidth,
+        // })
 
         this.options.cellHighlights.push({
             column: 'cbTranTypeId',

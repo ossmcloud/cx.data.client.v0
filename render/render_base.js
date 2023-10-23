@@ -48,6 +48,10 @@ class RenderBase {
     get dataSourceColumns() { return this.#dataSourceColumns; }
     get dataSourceFilters() { return this.#dataSourceFilters; }
 
+    hasModule(module) {
+        return this.dataSource.cx.dbInfo.modules.indexOf((module || '').toLowerCase()) >= 0;
+    }
+
     formatOptions() {
         // get data source title
         this.#title = this.options.title || this.dataSourceType.replace('cx_', '').replace('cr_', '').replace('cp_', '').replaceAll('_', ' ');
@@ -118,12 +122,14 @@ class RenderBase {
         var dataSource = this.dataSource;
         var userListOptions = await this.getUserListOptions();
         
+        var fields = this.autoLoadFields || dataSource.fields;
 
-        for (var f in dataSource.fields) {
-            var field = dataSource.fields[f];
+        for (var f in fields) {
+            var field = fields[f];
+            if (field == null) { field = dataSource.fields[f]; }
 
             var column = { name: f, title: f.fromCamelCase() };
-            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: f, inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
+            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: (field.fieldName ||  f), inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
             if (field.pk) {
                 column.align = 'center';
                 column.title = ' ';
@@ -142,14 +148,21 @@ class RenderBase {
             }
             if (field.dataType == 'money') {
                 column.align = 'right';
-                column.formatMoney = 'N0';
+                column.formatMoney = 'N2';
                 column.addTotals = true;
             }
-
             if (field.name == 'createdBy' || field.name == 'modifiedBy') {
                 column.addTotals = false;
                 column.width = '90px';
+                column.align = 'left';
             }
+            column.lookUps = field.lookUps;
+            if (field.align) { column.align = field.align; }
+            if (field.width) { column.width = field.width; }
+            if (field.title) { column.title = field.title; }
+            if (field.link) { column.link = field.link; }
+            if (field.nullText) { column.nullText = field.nullText; }
+            if (field.toolTip) { column.toolTip = field.toolTip; }
 
             userListOptions.copyColumn(field.name, column);
             userListOptions.copyFilter(field.name, filter);
@@ -322,7 +335,7 @@ class RenderBase {
         this.options.allowEdit = permissions.allowEdit;
         this.options.allowNew = permissions.allowNew;
         this.options.allowView = permissions.allowView;
-        this.options.allowDelete = permissions.allowDelete;
+        this.options.allowDelete = (permissions.allowDelete && this.options.mode != 'new');
     }
 
     async record(request, h) {
@@ -377,8 +390,9 @@ class RenderBase {
     }
 
 
-    async getPreferenceListOptions() {
-        return await this.dataSource.cx.table('cr_preference').getPreferenceListOptions(this.dataSourceType, this.dataSource.id, (this.options.mode == 'view' && this.options.allowEdit));
+    async getPreferenceListOptions(type) {
+        if (!type) { type = 'cr_preference' }
+        return await this.dataSource.cx.table(type).getPreferenceListOptions(this.dataSourceType, this.dataSource.id, (this.options.mode == 'view' && this.options.allowEdit));
     }
 
 

@@ -91,6 +91,12 @@ async function getPermission(recordType, role) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
     }
+    if (recordType == _cxSchema.cx_traderNameLookUp.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.USER);
+    }
+
    
     if (recordType == _cxSchema.erp_traderAccount.TBL_NAME) {
         permission.allowEdit = false;
@@ -145,13 +151,33 @@ async function getPermission(recordType, role) {
         //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
+    if (recordType == _cxSchema.cp_preference.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
+    if (recordType == _cxSchema.cp_preference_config.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.ADMIN);
+        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
 
 
-    if (recordType == _cxSchema.cp_invoiceGroup.TBL_NAME || recordType == _cxSchema.cp_invoiceCredit.TBL_NAME || recordType == _cxSchema.cp_deliveryReturn.TBL_NAME) {
+    if (recordType == _cxSchema.cp_invoiceGroup.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowNew = false;
+        permission.allowDelete = false;
+    }
+    if (recordType == _cxSchema.cp_invoiceCredit.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = false;
         permission.allowDelete = false;
-        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.cp_deliveryReturn.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowNew = false;
+        permission.allowDelete = false;
     }
 
     if (recordType == _cxSchema.cp_product.TBL_NAME || recordType == _cxSchema.cp_productAlias.TBL_NAME || recordType == _cxSchema.cp_productAliasShop.TBL_NAME) {
@@ -173,6 +199,53 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.cp_documentImport.TBL_NAME) {
         permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
+    }
+
+    if (recordType == _cxSchema.cp_recoSession.TBL_NAME) {
+        //permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowEdit = false;
+        permission.allowNew = false;
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowView = true;
+    }
+    if (recordType == _cxSchema.cp_recoSetting.TBL_NAME || recordType == _cxSchema.cp_recoSettingSupplier.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    
+    if (recordType == _cxSchema.cp_wholesalerConfig.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.cp_wholesalerShopConfig.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+
+    if (recordType == _cxSchema.cp_query.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+    }
+    if (recordType == _cxSchema.cp_queryType.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+    }
+    if (recordType == _cxSchema.cp_queryResolutionType.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowView = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+    }
+
+    if (recordType == _cxSchema.erp_gl_account.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        
     }
 
 

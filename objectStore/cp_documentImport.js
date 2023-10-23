@@ -35,7 +35,7 @@ class cp_documentImport_Collection extends _persistentTable.Table {
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
         if (params.type == 'cpDocImportValidate') {
-            query.sql += ` and d.importStatus not in (${_declarations.CP_DOCUMENT.IMPORT_STATUS.Deleted}, ${_declarations.CP_DOCUMENT.IMPORT_STATUS.Cancelled})`;
+            query.sql += ` and d.importStatus not in (${_declarations.CP_DOCUMENT.IMPORT_STATUS.Deleted}, ${_declarations.CP_DOCUMENT.IMPORT_STATUS.Cancelled}, ${_declarations.CP_DOCUMENT.IMPORT_STATUS.ERROR})`;
         } else if (params.st) {
             query.sql += ' and d.importStatus = @importStatus';
             query.params.push({ name: 'importStatus', value: params.st });

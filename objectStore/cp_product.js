@@ -72,9 +72,9 @@ class cp_product_Collection extends _persistentTable.Table {
             //     query.sql += ' and (prod.depMapConfigId is null or prod.taxMapConfigId is null)';
             // } else
             if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_DEP) {
-                query.sql += ' and prod.depMapConfigId is null';
+                query.sql += ' and prod.depMapConfigId is null and prod.aliasId is null';
             } else if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_TAX) {
-                query.sql += ' and prod.taxMapConfigId is null';
+                query.sql += ' and prod.taxMapConfigId is null and prod.aliasId is null';
             }
 
         }

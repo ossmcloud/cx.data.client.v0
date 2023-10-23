@@ -35,7 +35,7 @@ class CPErpTransactionTaxRender extends RenderBase {
         ];
 
         this.options.cellHighlights = [];
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         var getCellHighlight = function (status) {
             return {
                 column: _cxSchema.cp_erp_transaction_gl.STATUS,

@@ -55,6 +55,7 @@ const _fieldNames = {
     ERP2NDGLCONTRAACCOUNTID: 'erp2ndGLContraAccountId',
     SHOWINCASHBOOKLIST: 'showInCashBookList',
     CBREFERENCE: 'cbReference',
+    FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
 
 }
 //
@@ -97,6 +98,7 @@ const _fields = {
     erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     showInCashBookList: { name: 'showInCashBookList', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     cbReference: { name: 'cbReference', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false, default: '' },
+    forceTaxMapConfigId: { name: 'forceTaxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -330,6 +332,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CBREFERENCE);
     } set cbReference(val) {
         super.setValue(_fieldNames.CBREFERENCE, val);
+    }
+
+    get forceTaxMapConfigId() {
+        return super.getValue(_fieldNames.FORCETAXMAPCONFIGID);
+    } set forceTaxMapConfigId(val) {
+        super.setValue(_fieldNames.FORCETAXMAPCONFIGID, val);
     }
 
 

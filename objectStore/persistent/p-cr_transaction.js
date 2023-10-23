@@ -76,6 +76,8 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     ISEDITED: 'isEdited',
     RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
+    RAW_TAXCODE: 'raw_taxCode',
+    RAW_TAXRATE: 'raw_taxRate',
 
 }
 //
@@ -139,6 +141,8 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isEdited: { name: 'isEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     raw_customerAccount: { name: 'raw_customerAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
+    raw_taxCode: { name: 'raw_taxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
+    raw_taxRate: { name: 'raw_taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
 
 }
 //
@@ -498,6 +502,18 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.RAW_CUSTOMERACCOUNT);
     } set raw_customerAccount(val) {
         super.setValue(_fieldNames.RAW_CUSTOMERACCOUNT, val);
+    }
+
+    get raw_taxCode() {
+        return super.getValue(_fieldNames.RAW_TAXCODE);
+    } set raw_taxCode(val) {
+        super.setValue(_fieldNames.RAW_TAXCODE, val);
+    }
+
+    get raw_taxRate() {
+        return super.getValue(_fieldNames.RAW_TAXRATE);
+    } set raw_taxRate(val) {
+        super.setValue(_fieldNames.RAW_TAXRATE, val);
     }
 
 

@@ -76,7 +76,7 @@ class CRPreferenceEngine {
         if (!prefValue) { prefValue = pref.defaultValue }
 
         var prefValueType = pref.type;
-        if (prefValueType == 'value') {
+        if (prefValueType == 'value' && prefValue) {
             prefValue = await this.#cx.table(_cxSchema.cr_preference_value).fetch(prefValue, true);
             // @@TODO: should we get the default value if not found???
             if (!prefValue) { return null; }

@@ -158,6 +158,7 @@ class EposDtfsSettingRender extends RenderBase {
             { title: 'name', name: _cxSchema.epos_dtfs_setting.DTFSSETTINGNAME },
             { title: 'epos provider', name: _cxSchema.epos_dtfs_setting.EPOSPROVIDER },
             
+            { title: 'pairing code', name: _cxSchema.epos_dtfs_setting.DTFSPAIRINGCODE },
             { title: 'pairing status', name: _cxSchema.epos_dtfs_setting.DTFSPAIRINGSTATUS, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
             
             { title: 'dtfs version', name: _cxSchema.epos_dtfs_setting.DTFSPAIREDVERSION },

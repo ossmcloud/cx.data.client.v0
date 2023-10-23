@@ -5,8 +5,10 @@ const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
 
 class CPInvoiceGroupRender extends RenderBase {
+    matchingEnabled = false;
     constructor(dataSource, options) {
         super(dataSource, options);
+        this.matchingEnabled = this.hasModule('cm');
     }
 
     async getDocumentListOptions() {
@@ -89,6 +91,43 @@ class CPInvoiceGroupRender extends RenderBase {
         return transactionLinesOptions;
     }
 
+    async getMatchingSummary() {
+        var sql = `
+            select	        reco.recoStatusId, avg(reco.recoScore) as recoScore, count(*) as count
+            from	        cp_invoiceGroup grp
+            inner join      cp_invoiceCredit doc on doc.invGrpId = grp.invGrpId
+            left outer join cp_recoSessionDocument recoDoc on recoDoc.documentId = doc.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
+            left outer join cp_recoSession reco on reco.recoSessionId = recoDoc.recoSessionId
+            where           grp.invGrpId = ${this.dataSource.id}
+            group by reco.recoStatusId
+            order by reco.recoStatusId desc
+        `;
+        
+        var res = await this.dataSource.cx.exec({ sql: sql });
+        var matchSummary = { total: 0, html: '', splits: [] };
+        res.each(function (rec, idx) {
+            matchSummary.total += rec.count;
+        });
+        //matchSummary.html += '<div style="padding: 3px; margin-top: 7px; width: 200px;">';
+        matchSummary.html += '<div style="border: 5px solid var(--main-bg-color); display: block; border-radius: 15px; overflow: hidden;">';
+        //matchSummary.html += '<span style="font-size: 8px">matching status</span>';
+        res.each(function (rec, idx) {
+            matchSummary.splits.push({
+                status: rec.recoStatusId,
+                avgScore: rec.recoScore,
+                count: rec.count,
+                pc: rec.count / matchSummary.total
+            });
+
+            var style = _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(rec.recoStatusId);
+            var tooltip = _cxConst.CP_DOCUMENT.RECO_STATUS.getName(rec.recoStatusId) + ': ' + ((rec.count / matchSummary.total) * 100).toFixed(2) + '%';            
+            matchSummary.html += `<div title="${tooltip}" style="display: table-cell; width: ${(rec.count / matchSummary.total) * 150}px;  height: 32px; ${style}"></div>`;
+        });
+        matchSummary.html += '</div>';
+        //console.log(matchSummary);
+        return matchSummary;
+    }
+
     async setRecordTitle() {
         // SET TAB TITLE
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber}]`;
@@ -113,6 +152,11 @@ class CPInvoiceGroupRender extends RenderBase {
                 </div>
             `;
             this.options.tabTitle = '\u270E ' + this.options.tabTitle;
+        }
+
+        if (this.matchingEnabled) {
+            var matchSummary = await this.getMatchingSummary();
+            this.options.title += matchSummary.html;
         }
 
         this.options.title += '</div>';
@@ -152,7 +196,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
     }
 
-    buildFormActions() {
+    buildFormActions(erpName) {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
             // 
@@ -167,7 +211,6 @@ class CPInvoiceGroupRender extends RenderBase {
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
-                    var erpName = 'ERP';
                     var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                     this.options.buttons.push(btnPostToErp);
                 }
@@ -269,7 +312,10 @@ class CPInvoiceGroupRender extends RenderBase {
 
         await this.buildFormLists();
 
-        this.buildFormActions();
+        var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
+        var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
+
+        this.buildFormActions(erpName);
     }
 
     async _list() {
@@ -324,7 +370,7 @@ class CPInvoiceGroupRender extends RenderBase {
             this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceGroup.TOTALNET, op: '<', value: '0', style: 'color: red;', columns: [_cxSchema.cp_invoiceGroup.TOTALNET] });
             this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceGroup.TOTALGROSS, op: '<', value: '0', style: 'color: red;', columns: [_cxSchema.cp_invoiceGroup.TOTALGROSS] });
 
-            var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+            var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
             for (let sx = 0; sx < statuses.length; sx++) {
                 const s = statuses[sx];
@@ -349,7 +395,7 @@ class CPInvoiceGroupRender extends RenderBase {
                 })
             }
 
-            var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+            var applyStoreColorStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
             var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
             for (var cx = 0; cx < shopColors.length; cx++) {
                 if (!shopColors[cx].shopColor) { continue; }

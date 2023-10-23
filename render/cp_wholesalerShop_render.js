@@ -12,8 +12,10 @@ class WholesalerShop extends RenderBase {
 
     async initColumn(field, column) {
         if (field.name == _cxSchema.cp_wholesalerShop.WHOLESALERID) {
-            column.name = 'whsShopId';
-            column.dataHidden = 'whs-shop-id';
+            // column.name = 'whsShopId';
+            // column.dataHidden = 'whs-shop-id';
+            column.name = 'whsInfo';
+            column.width = '75px';
         } else if (field.name == _cxSchema.cp_wholesalerShop.SHOPID) {
             column.name = 'shopInfo';
             column.title = 'shop info';
@@ -58,18 +60,47 @@ class WholesalerShop extends RenderBase {
             columns: ['traderInfo'],
             customStyle: function (obj, val, h) {
                 if (val == null) {
-                    return 'background-color: rgba(230,0,0,0.25); color: white; padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
+                    return 'background-color: rgba(230,0,0,0.25); color: white; padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
                 }
             }
         })
 
-        var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+        var applyStoreColorStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
         var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
         for (var cx = 0; cx < shopColors.length; cx++) {
             if (!shopColors[cx].shopColor) { continue; }
             this.options.cellHighlights.push({ column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopInfo'] })
         }
 
+    }
+
+    async getConfigListOptions() {
+        var configs = this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig);
+        
+        await configs.select(this.dataSource.wholesalerId, this.dataSource.shopId);
+        if (configs.count() > 0) { this.options.allowDelete = false; }
+
+        var showBwgGetStore = false;
+        configs.each((rec, idx) => { if (rec.configName == _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG) { showBwgGetStore = true; return false; } });
+
+        var configListOptions = await this.listOptions(configs, { listView: true });
+        configListOptions.quickSearch = true;
+        configListOptions.columns.shift();
+
+        if (this.options.mode == 'view') {
+            if (this.options.allowEdit) {
+                configListOptions.actions = [];
+                configListOptions.actions.push({ label: 'edit', funcName: 'editConfig' });
+                configListOptions.actions.push({ label: 'delete', funcName: 'deleteConfig' });
+                configListOptions.showButtons = [{ id: 'whs_shop_configs_add', text: 'Add Configuration', function: 'addConfig' }];
+                if (showBwgGetStore) {
+                    configListOptions.showButtons.push({ id: 'whs_bwg_storeList', text: 'BWG Store List', function: 'bwgShowStores' });
+                }
+            } else {
+                configListOptions.actions = [{ label: 'view', funcName: 'viewConfig' }];
+            }
+        }
+        return configListOptions;
     }
 
 
@@ -110,7 +141,7 @@ class WholesalerShop extends RenderBase {
         this.options.fields = [
             
             {
-                group: 'all', title: '', columnCount: 2, fields: [
+                group: 'all', title: '', columnCount: 3, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 1, fields: mainGroupFields
                         // [
@@ -141,6 +172,11 @@ class WholesalerShop extends RenderBase {
                 ]
             }
         ];
+
+        if (!this.dataSource.isNew()) {
+            var configListOptions = await this.getConfigListOptions();
+            this.options.fields[0].fields.push({ group: 'query', title: 'query configurations', column: 3, fields: [configListOptions] });
+        }
 
         if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {

@@ -40,9 +40,9 @@ class EposDtfsPing extends RenderBase {
             column: _cxSchema.epos_dtfs_ping.RESPONSE,
             customStyle: function (obj, val, h) {
                 if (val.indexOf('ERROR') >= 0) {
-                    return 'background-color: rgba(230,0,0,0.25); color: white; padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
+                    return 'background-color: rgba(230,0,0,0.25); color: white; padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
                 } else if (val.indexOf('action: get, status: ok') >= 0) {
-                    return 'background-color: rgba(0,150,0,0.25); color: white; padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
+                    return 'background-color: rgba(0,150,0,0.25); color: white; padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden;';
                 }
             }
         })

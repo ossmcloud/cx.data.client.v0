@@ -43,6 +43,10 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
             query.sql += ' and t.erpTraderAccountId like @erpTraderAccountId';
             query.params.push({ name: 'erpTraderAccountId', value: params.erp });
         }
+        if (params.whs) {
+            query.sql += ' and t.wholesalerCode like @wholesalerCode';
+            query.params.push({ name: 'wholesalerCode', value: params.whs + '%' });
+        }
 
         query.sql += ' order by s.shopCode, t.traderCode';
 

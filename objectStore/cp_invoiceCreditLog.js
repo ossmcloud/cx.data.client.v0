@@ -53,6 +53,7 @@ class cp_invoiceCreditLog_Collection extends _persistentTable.Table {
 class cp_invoiceCreditLog extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
+        
     };
 
     async save() {

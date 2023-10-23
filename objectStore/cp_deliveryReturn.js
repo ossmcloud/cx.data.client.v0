@@ -17,11 +17,24 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select            d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName
+        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, 
+                                        isnull(supp.traderName, (
+                                                select  top 1 '&#x2048;' + tx.traderName 
+                                                from    cx_traderAccount tx 
+                                                where   tx.shopId = d.shopId and tx.traderType = 'S' 
+                                                and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
+                                                order by traderAccountId desc
+                                            )
+                                        ) as supplierName,
+                                        recoDoc.recoSessionId, reco.recoStatusId,
+                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId ) as queryCount,
+                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
+                      left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.s) {
@@ -40,6 +53,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.documentDate <= @to';
             query.params.push({ name: 'to', value: params.dt + ' 23:59:59' });
         }
+        if (params.vf) {
+            query.sql += ' and isnull(d.totalNet, 0) >= @vfrom';
+            query.params.push({ name: 'vfrom', value: params.vf });
+        }
+        if (params.vt) {
+            query.sql += ' and isnull(d.totalNet, 0) <= @vto';
+            query.params.push({ name: 'vto', value: params.vt });
+        }
         if (params.udf) {
             query.sql += ' and d.uploadDate >= @uFrom';
             query.params.push({ name: 'uFrom', value: params.udf + ' 00:00:00' });
@@ -53,8 +74,8 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.params.push({ name: 'documentStatus', value: params.st });
         }
         if (params.su) {
-            query.sql += ' and d.supplierCode like @supplierCode';
-            query.params.push({ name: 'supplierCode', value: '%' + params.su });
+            query.sql += ' and (d.supplierCode like @supplierCode or supp.traderName like @supplierCode)';
+            query.params.push({ name: 'supplierCode', value: '%' + params.su + '%' });
         }
         if (params.tno) {
             query.sql += ' and d.documentNumber like @documentNumber';
@@ -68,14 +89,56 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.delRetId = @delRetId';
             query.params.push({ name: 'delRetId', value: params.id });
         }
+        if (params.matched) {
+            if (params.matched == 'T') {
+                query.sql += ' and reco.recoSessionId >' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            } else {
+                query.sql += ' and  isnull(reco.recoSessionId,0) <=' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            }
+        }
+        if (params.whs) {
+            query.sql += ' and (isnull(supp.traderCode, supp2.traderCode) = @wholesalerCode OR isnull(supp.wholesalerCode, supp2.wholesalerCode) = @wholesalerCode)'
+            query.params.push({ name: 'wholesalerCode', value: params.whs });
+        }
+        if (params.whsn) {
+            query.sql += ' and isnull(supp.traderName, supp2.traderName) like @supplierName'
+            query.params.push({ name: 'supplierName', value: '%' + params.whsn + '%' });
+        }
         query.sql += ' order by d.documentDate desc';
 
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+        if (params.paging) {
+            query.paging = params.paging;
+        } else {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
 
         return await super.select(query);
+    }
+
+    async fetch(id, returnNull) {
+        //return super.fetch(id, returnNull);##
+        if (this.cx.cxSvc == true) { return await super.fetch(id); }
+
+        var query = { sql: '', params: [{ name: 'delRetId', value: id }] };
+        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, isnull(supp.traderName, supp2.traderName) as supplierName, recoDoc.recoSessionId, reco.recoStatusId
+                      from              ${this.type} d
+                      inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                      left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
+                      left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
+                      left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
+                      where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+                      and               d.${this.FieldNames.DELRETID} = @delRetId`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) { throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`); }
+
+        return super.populate(rawRecord);
     }
 }
 //
@@ -86,12 +149,20 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #shopCode = '';
     #documentSign = 1;
     #supplierName = null;
+    #recoSessionId = null;
+    #recoStatus = null;
+    #queryCount = null;
+    #queryCountOpen = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
         this.#supplierName = defaults['supplierName'];
+        this.#recoSessionId = defaults['recoSessionId'] || null;
+        this.#recoStatus = defaults['recoStatusId'] || 0;
+        this.#queryCount = defaults['queryCount'] || null;
+        this.#queryCountOpen = defaults['queryCountOpen'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -116,6 +187,24 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get totalVatSign() { return this.totalVat * this.#documentSign; }
     get totalGrossSign() { return this.totalGross * this.#documentSign; }
     get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
+
+
+    get recoSessionId() { return this.#recoSessionId; }
+    get recoStatus() { return this.#recoStatus || 0; }
+    get recoStatusName() { return _declarations.CP_DOCUMENT.RECO_STATUS.getName(this.recoStatus); }
+
+
+    get queryCount() { return this.#queryCount; }
+    get queryCountOpen() { return this.#queryCountOpen; }
+    get queryCountDisplay() {
+        if (this.queryCount) {
+            if (this.#queryCountOpen) {
+                return `${this.queryCount} queries (${this.#queryCountOpen} open)`;
+            }
+            return `${this.queryCount} queries`;
+        }
+        return this.queryCount;
+    }
 
 
     async save() {

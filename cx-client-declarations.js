@@ -125,11 +125,9 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
-    BWG_CRM_CONFIG: 'BWGCRMConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
-        if (configName == this.BWG_CRM_CONFIG) { return true; }
         return false;
     }
 }
@@ -165,8 +163,9 @@ const CX_EPOS_PROVIDER = {
     RS: 'RS',
     EDGE: 'EDGE',
     MRDN: 'MRDN',
+    VME: 'VME',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail' }); }
 }
 const CX_EPOS_PROVIDERS = {
     supported: [
@@ -194,6 +193,13 @@ const CX_EPOS_PROVIDERS = {
         },
         {
             type: CX_EPOS_PROVIDER.MRDN,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.VME,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },
@@ -482,7 +488,12 @@ const CR_PREFERENCE = {
     CB_SHOW_DELETE: 111,
     CB_SHOW_REFRESH: 112,
     CB_SHOW_ADD: 113,
+    CB_SHOW_EXPAND: 114,
+}
 
+const CP_PREFERENCE = {
+    USER_LANDING_PAGE: 10,
+    INV_REQUIRES_REVIEW: 100,
 }
 
 const CP_PRODUCT = {
@@ -539,10 +550,14 @@ const CP_DOCUMENT = {
         Invoice: 2,
         CreditNote: 3,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                CreditNote: 'credit note',
+            });
+        },
         getName: function (value) {
             return enumGetName(this, value, {
-                CreditNote: 'Credit Note',
+                CreditNote: 'credit note',
             });
         },
 
@@ -576,12 +591,14 @@ const CP_DOCUMENT = {
     },
 
     STATUS: {
-        New: 0,
-        Ready: 1,
-        Generating: 2,
-        REFRESH: 3,
+        New: -1,
+        Ready: 0,
+        Generating: 1,
+        REFRESH: 2,
 
-        NEED_ATTENTION: 4,         // can't post to ERP
+        NEED_ATTENTION: 3,         // can't post to ERP
+
+        PendingReview: 4,
 
         PostingReady: 5,           //
         Posting: 6,                // erps.exe is to pick up the stuff to post
@@ -592,15 +609,13 @@ const CP_DOCUMENT = {
         PostingError: 98,
         DeleteAndPull: 99,
         Delete: 100,
-        // ERROR: 9,
-        // Reconciled_None: 10,
-        // Reconciled_Part: 11,
-        // Reconciled_Full: 12,
+       
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 REFRESH: 'refreshing erp info',
-                NEED_ATTENTION: 'need attention',
+                NEED_ATTENTION: 'mapping issue',
+                PendingReview: 'pending review',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -611,7 +626,8 @@ const CP_DOCUMENT = {
         getName: function (value) {
             return enumGetName(this, value, {
                 REFRESH: 'refreshing erp info',
-                NEED_ATTENTION: 'need attention',
+                NEED_ATTENTION: 'mapping issue',
+                PendingReview: 'pending review',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -642,6 +658,9 @@ const CP_DOCUMENT = {
             } else if (status == this.NEED_ATTENTION) {
                 color = '175,0,0';
                 bkgColor = '230,230,0';
+            } else if (status == this.PendingReview) {
+                color = '255,255,255';
+                bkgColor = '246,71,146';
             } else if (status == this.ERROR) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
@@ -651,6 +670,70 @@ const CP_DOCUMENT = {
             } else if (status == this.DeleteAndPull) {
                 color = '255,255,255';
                 bkgColor = '83,49,138';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+    },
+
+    RECO_STATUS: {
+        NotAnalyzed: 0,
+        NotReconciled: 1,
+        PartReconciled: 5,
+        Pending: 6,
+        Reconciled: 7,
+        NeverReconcile: 8,
+        ERROR: 9,
+        Processing: 99,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                NotAnalyzed: 'not analyzed',
+                NotReconciled: 'not matched',
+                PartReconciled: 'part matched',
+                Pending: 'validate match',
+                Reconciled: 'matched',
+                NeverReconcile: 'ignore matching',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, (value || this.NotAnalyzed), {
+                NotAnalyzed: 'not analyzed',
+                NotReconciled: 'not matched',
+                PartReconciled: 'part matched',
+                Pending: 'validate match',
+                Reconciled: 'matched',
+                NeverReconcile: 'ignore matching',
+
+            });
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+            if (!status) { status == this.NotAnalyzed; }
+            if (status == this.NotAnalyzed || status == this.NotReconciled) {
+                color = '255,255,255';
+                bkgColor = '78,78,78';
+            } else if (status == this.Pending) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
+            } else if (status == this.PartReconciled) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Reconciled || status == this.NeverReconcile) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
             } else {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
@@ -781,6 +864,105 @@ const CP_DOCUMENT_LINE = {
     }
 }
 
+const CP_QUERY_TYPE_REQ_DISPUTED = {
+    NO: 0,
+    MANUAL: 1,
+    FULL: 2,
+
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    getName: function (value) {
+        return enumGetName(this, value, { IN_PROGRESS: 'in progress' });
+    },
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+
+        if (status == this.MANUAL) {
+            color = '255,255,255';
+            bkgColor = '246,71,146';
+        } else if (status == this.FULL) {
+            color = '255,255,255';
+            bkgColor = '25,130,196';
+        } else {
+            color = '255,255,255';
+            bkgColor = '77,77,77';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
+}
+
+const CP_QUERY_STATUS = {
+    PENDING: 0,
+    SUBMITTED: 1,
+    IN_PROGRESS: 2,
+    RESOLVED: 8,
+    CLOSED: 10,
+    ERROR: 9,
+
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { IN_PROGRESS: 'in progress' }); },
+    getName: function (value) {
+        return enumGetName(this, value, { IN_PROGRESS: 'in progress' });
+    },
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+
+        if (status == this.PENDING) {
+            color = '255,255,255';
+            bkgColor = '246,71,146';
+        } else if (status == this.SUBMITTED) {
+            color = '255,255,255';
+            bkgColor = '25,130,196';
+        } else if (status == this.IN_PROGRESS) {
+            color = '175,0,0';
+            bkgColor = '230,230,0';
+        } else if (status == this.ERROR) {
+            color = '255,255,255';
+            bkgColor = '234,30,37';
+        } else if (status == this.RESOLVED) {
+            color = '0,100,0';
+            bkgColor = '138,201,38';
+        } else if (status == this.CLOSED) {
+            color = '100,0,0';
+            bkgColor = '128,128,128';
+        } else {
+            color = '255,255,255';
+            bkgColor = '128,128,128';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
+}
+
+
+const CP_WHS_CONFIG = {
+    BWG_CRM_CONFIG: 'BWGCRMConfig',
+    EMAIL_CONFIG: 'EmailConfig',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        return true;
+    }
+}
+const CP_WHS_SHOP_CONFIG = {
+    BWG_CRM_CONFIG: 'BWGCRMConfig',
+    EMAIL_CONFIG: 'EmailConfig',
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toEncrypt: function (configName) {
+        return true;
+    }
+}
+
 const CP_DOCUMENT_LOG = {
     STATUS: {
         INFO: 'INFO',
@@ -794,7 +976,8 @@ const CX_CURRENCY = {
     EUR: 'EUR',
     GBP: 'GBP',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { EUR: 'EUR', GBP: 'GBP' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { EUR: 'EUR', GBP: 'GBP' }); },
+    getName: function (value) { return enumGetName(this, value); },
 }
 
 
@@ -847,10 +1030,15 @@ module.exports = {
     CX_TRADER_TYPE: CX_TRADER_TYPE,
     CR_CASH_BOOK: CR_CASH_BOOK,
     CR_PREFERENCE: CR_PREFERENCE,
+    CP_PREFERENCE: CP_PREFERENCE,
     CP_DOCUMENT: CP_DOCUMENT,
     CP_DOCUMENT_LINE: CP_DOCUMENT_LINE,
     CP_DOCUMENT_LOG: CP_DOCUMENT_LOG,
     CP_PRODUCT: CP_PRODUCT,
+    CP_WHS_CONFIG: CP_WHS_CONFIG,
+    CP_WHS_SHOP_CONFIG: CP_WHS_SHOP_CONFIG,
+    CP_QUERY_STATUS: CP_QUERY_STATUS,
+    CP_QUERY_TYPE_REQ_DISPUTED: CP_QUERY_TYPE_REQ_DISPUTED,
     EPOS_DTFS_CONFIGS: EPOS_DTFS_CONFIGS,
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,

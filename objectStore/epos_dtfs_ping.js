@@ -32,6 +32,9 @@ class epos_dtfs_ping_Collection extends _persistentTable.Table {
                         and		ss.shopId ${shopFilter} ${shopFilterValue}
                     )`;
         
+        // @@TODO: need to have more consistency or control in queryFromParams
+        delete params.s;
+        
         this.queryFromParams(query, params, 'p');
 
         query.sql += ' order by p.created desc, p.pingId desc';

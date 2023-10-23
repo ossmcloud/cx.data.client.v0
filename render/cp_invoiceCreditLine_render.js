@@ -18,14 +18,14 @@ class CPInvoiceReturnLineRender extends RenderBase {
         // this.options.filters = [
         //     { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
         // ];
-        
+
         this.options.columns = [
             //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
 
             { name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
             { name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
-            { title: ' ', name: 'productIcon', width: '10px', unbound: true },
-            { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code' },
+            { title: ' ', name: 'productIcon', width: '10px', unbound: true},
+            { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)', nullText: '' },
             { name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' },
@@ -51,7 +51,7 @@ class CPInvoiceReturnLineRender extends RenderBase {
         this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceCreditLine.VATRATE, op: '!=', value: '-', style: 'color: gray;', columns: [_cxSchema.cp_invoiceCreditLine.VATRATE] });
         this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceCreditLine.EPOSLINEDISCOUNT, op: '=', value: 0, style: 'color: gray;', columns: [_cxSchema.cp_invoiceCreditLine.EPOSLINEDISCOUNT] });
 
-        var applyStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         var statuses = _cxConst.CP_DOCUMENT_LINE.STATUS.toList();
         for (let sx = 0; sx < statuses.length; sx++) {
             const s = statuses[sx];

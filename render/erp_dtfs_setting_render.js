@@ -102,6 +102,7 @@ class ErpTraderAccount extends RenderBase {
             { name: 'dtfsSettingId', title: ' ', align: 'center' },
             { name: 'dtfsSettingName', title: 'settings name' },
             { name: 'erpProvider', title: 'erp provider', lookUps: _cxConst.CX_ERP_PROVIDER.toList() },
+            { name: 'dtfsPairingCode', title: 'pairing code' },
             { name: 'dtfsPairingStatus', title: 'pairing status', lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
             { name: 'dtfsPairedMachineName', title: 'paired machine name' },
             { name: 'dtfsPairedMachineOS', title: 'paired machine OS' },
