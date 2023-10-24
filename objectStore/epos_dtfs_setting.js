@@ -81,13 +81,18 @@ class epos_dtfs_setting extends _persistentTable.Record {
         if (newSettings) {
             //
             if (this.eposProvider) {
-                var query = { sql: '', params: [] };
-                var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
-                for (var ex = 0; ex < epos.length; ex++) {
-                    query.sql += `insert into ${_cxSchema.epos_shop_configs.TBL_NAME} (${_cxSchema.epos_shop_configs.SHOPID}, ${_cxSchema.epos_shop_configs.CONFIGNAME}, ${_cxSchema.epos_shop_configs.CONFIGVALUE}, ${_cxSchema.epos_shop_configs.CREATEDBY})`;
-                    query.sql += `values (${this.shopId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;
+                try {
+                    var query = { sql: '', params: [] };
+                    var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
+                    for (var ex = 0; ex < epos.length; ex++) {
+                        query.sql += `insert into ${_cxSchema.epos_dtfs_configs.TBL_NAME} (${_cxSchema.epos_dtfs_configs.SETTINGID}, ${_cxSchema.epos_dtfs_configs.CONFIGNAME}, ${_cxSchema.epos_dtfs_configs.CONFIGVALUE}, ${_cxSchema.epos_dtfs_configs.CREATEDBY})`;
+                        query.sql += `values (${this.dtfsSettingId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;
+                    }
+                    await this.cx.exec(query);
+                } catch (error) {
+                    // @@TODO: where to store error???
+                    console.log(error);
                 }
-                await this.cx.exec(query);
             }
         }
     }
