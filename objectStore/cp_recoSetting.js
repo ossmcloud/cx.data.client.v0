@@ -13,7 +13,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
                 from	            cp_recoSetting  sett
                 left outer join     cp_wholesaler	whs ON whs.wholesalerId = sett.wholesalerId
                 left outer join     cx_shop         s   ON s.shopId = sett.shopId
-                where               sett.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+                where               (sett.${this.FieldNames.SHOPID} is null or sett.${this.FieldNames.SHOPID} in ${this.cx.shopList})
             `;
     }
 
