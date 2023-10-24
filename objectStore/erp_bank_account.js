@@ -79,9 +79,9 @@ class erp_bank_account_Collection extends _persistentTable.Table {
                         -- , erpTarget.code, erpTarget.description,
                         -- erpSource.erpBankAccountId, erpSource.code, erpSource.description
                                         
-                from	PPM.erp_bank_account erpSource
-                left outer join PPM.erp_shop_setting erpSett on erpSett.shopId = @targetShopId
-                left outer join PPM.erp_bank_account  erpTarget on erpTarget.shopId = @targetShopId and erpTarget.code = erpSource.code
+                from	erp_bank_account erpSource
+                left outer join erp_shop_setting erpSett on erpSett.shopId = @targetShopId
+                left outer join erp_bank_account  erpTarget on erpTarget.shopId = @targetShopId and erpTarget.code = erpSource.code
                 where	erpSource.erpBankAccountId = @sourceErpAccountId
             `,
             params: [
