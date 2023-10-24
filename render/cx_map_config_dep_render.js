@@ -93,7 +93,7 @@ class CxMapConfigRender extends RenderBase {
 
         this.options.filters = [
             //await this.filterDropDownOptions(_cxSchema.cx_map_config, { fieldName: 'map' }),
-            await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            //await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { label: 'mid', fieldName: 'mid', hidden: true },
             { label: 'type', fieldName: 'type', hidden: true },
             { label: 'department', fieldName: 'dep', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
@@ -104,7 +104,7 @@ class CxMapConfigRender extends RenderBase {
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cx_map_config_dep.DEPMAPCONFIGID },
-            { name: 'shopInfo', title: 'store', width: '200px' },
+            //{ name: 'shopInfo', title: 'store', width: '200px' },
             //{ title: 'map id', name: _cxSchema.cx_map_config_dep.MAPCONFIGID },
             { title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' },
             { title: 'p', name: 'status_p', unbound: true, align: 'center', width: '15px' },
