@@ -79,8 +79,8 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async setRecordTitle(query) {
-        
-        
+
+
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
@@ -364,9 +364,9 @@ class CPInvoiceReturnRender extends RenderBase {
             } else {
                 this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
             }
-            
+
             var queries = this.dataSource.cx.table(_cxSchema.cp_query);
-            if (await queries.select({invCreId: this.dataSource.id})) {
+            if (await queries.select({ invCreId: this.dataSource.id })) {
                 this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
             }
         }
@@ -379,7 +379,12 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.dataSource.invGrpId) {
                 this.options.allowEdit = (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT)
             } else {
-                this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+                this.options.allowEdit = (
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
+                );
             }
         }
         //
@@ -460,7 +465,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.matchingEnabled) {
                 var matchIcon = '<img src="/public/images/puzzle_dark.png" style="width: 20px" />'
                 this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
-                
+
                 var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
                 this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
