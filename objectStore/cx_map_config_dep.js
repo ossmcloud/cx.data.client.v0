@@ -23,7 +23,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
                         s.shopId, s.shopCode, s.shopName 
                         
             from		cx_map_config_dep dep
-            inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId
+            inner join  cx_map_config map on map.mapConfigId = dep.mapConfigId
+            inner join  cx_shop s on s.shopId = map.mapMasterShop
             left outer join erp_gl_account glSales ON glSales.erpGLAccountId = dep.saleAccountId
             left outer join erp_gl_account glPurch ON glPurch.erpGLAccountId = dep.purchaseAccountId
             left outer join erp_gl_account glWaste ON glWaste.erpGLAccountId = dep.wasteAccountId
@@ -44,7 +45,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         }
 
         if (params.mid) {
-            query.sql += ' and mapConfigId = @mapConfigId';
+            query.sql += ' and dep.mapConfigId = @mapConfigId';
             query.params.push({ name: 'mapConfigId', value: params.mid });
         }
 
