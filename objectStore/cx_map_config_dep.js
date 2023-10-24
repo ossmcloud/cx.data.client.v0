@@ -61,6 +61,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             query.sql += ' and eposDescription like @eposDescription';
             query.params.push({ name: 'eposDescription', value: params.desc + '%' });
         }
+
         if (params.mapped) {
             var fieldName = '';
             var fieldFilter = (params.mapped.indexOf('not_') == 0) ? 'is null' : 'is not null';
@@ -279,6 +280,7 @@ class cx_map_config_dep extends _persistentTable.Record {
         if (this.cogsDep) { spec += `/${this.cogsDep}`; }
         return spec;
     }
+
 
 
     async save() {
