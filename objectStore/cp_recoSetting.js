@@ -7,13 +7,13 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         return new cp_recoSetting(this, defaults);
     }
 
-    buildQuery() { 
+    buildQuery() {
         return `
                 select	            sett.*, whs.code as wholesalerCode, whs.name as wholesalerName, s.shopCode, s.shopName
                 from	            cp_recoSetting  sett
                 left outer join     cp_wholesaler	whs ON whs.wholesalerId = sett.wholesalerId
                 left outer join     cx_shop         s   ON s.shopId = sett.shopId
-                where               sett.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+                where               (sett.${this.FieldNames.SHOPID} is null or sett.${this.FieldNames.SHOPID} in ${this.cx.shopList})
             `;
     }
 
@@ -26,7 +26,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         //     query.sql += ' where s.shopId = @shopId\n';
         //     query.params = [{ name: 'shopId', value: params.s }];
         // } else {
-            this.queryFromParams(query, params);
+        this.queryFromParams(query, params);
         // }
 
         query.sql += ' order by sett.recoSettingId';
@@ -55,7 +55,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         });
         if (found) { return found; }
         this.each((s, i) => {
-            if (s.shopId==0 && s.wholesalerId == 0) { found = s; return false; }
+            if (s.shopId == 0 && s.wholesalerId == 0) { found = s; return false; }
         });
         if (found) { return found; }
         return cp_recoSetting_Collection.createNew();
