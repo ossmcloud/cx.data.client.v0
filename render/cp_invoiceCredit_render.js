@@ -379,7 +379,12 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.dataSource.invGrpId) {
                 this.options.allowEdit = (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT)
             } else {
-                this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+                this.options.allowEdit = (
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
+                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
+                );
             }
         }
         //
