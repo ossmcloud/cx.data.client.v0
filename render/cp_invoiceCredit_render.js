@@ -404,7 +404,12 @@ class CPInvoiceReturnRender extends RenderBase {
                 var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
                 this.options.allowEditCondition = function (object) {
                     if (object.invGrpId) { return isCxRole; }
-                    return (object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
+                    return (
+                        object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
+                        object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
+                        object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
+                        object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
+                    );
                 }
             }
 
