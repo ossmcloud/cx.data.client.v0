@@ -102,8 +102,9 @@ class cp_query_Collection extends _persistentTable.Table {
         } else {
             docInfoSql = `
                     select          doc.shopId, doc.invCreId, whs.wholesalerId,  whs.code as wholesalerCode, whs.name as wholesalerName,
-                                    doc.documentNumber, doc.documentDate, doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross, 
-                                    grp.documentNumber as groupInvoice, grp.documentDate as groupInvoiceDate, 
+                                    doc.supplierCode, doc.documentNumber, doc.documentDate, doc.docketNumber, doc.docketDate,
+                                    doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross,
+                                    grp.documentNumber as groupInvoice, grp.documentDate as groupInvoiceDate,
                                     s.shopCode, s.shopName
                     from            cp_invoiceCredit doc
                     inner join      cx_shop            s ON s.shopId            = doc.shopId
