@@ -142,6 +142,41 @@ class cr_transaction_Collection extends _persistentTable.Table {
 
         }
 
+        if (params.epos_dep) {
+            query.sql += ` and t.${this.FieldNames.DEPARTMENT} = @${this.FieldNames.DEPARTMENT}`;
+            query.params.push({ name: this.FieldNames.DEPARTMENT, value: params.epos_dep });
+        }
+        if (params.epos_sdep) {
+            query.sql += ` and t.${this.FieldNames.SUBDEPARTMENT} = @${this.FieldNames.SUBDEPARTMENT}`;
+            query.params.push({ name: this.FieldNames.SUBDEPARTMENT, value: params.epos_sdep });
+        }
+        if (params.epos_depd) {
+            query.sql += ` and dep.eposDescription like @eposDescription`;
+            query.params.push({ name: 'eposDescription', value: params.epos_depd + '%' });
+        }
+        if (params.epos_tax) {
+            query.sql += ` and t.${this.FieldNames.TAXCODE} = @${this.FieldNames.TAXCODE}`;
+            query.params.push({ name: this.FieldNames.TAXCODE, value: params.epos_tax });
+        }
+        
+
+        if (params.erp_code) {
+            query.sql += ` and gl.code = @glCode`;
+            query.params.push({ name: 'glCode', value: params.erp_code });
+        }
+        if (params.erp_scode) {
+            query.sql += ` and gl.costCentre = @glSedg2`;
+            query.params.push({ name: 'glSedg2', value: params.erp_scode });
+        }
+        if (params.erp_coded) {
+            query.sql += ` and gl.description like @erpDescription`;
+            query.params.push({ name: 'erpDescription', value: params.erp_coded + '%' });
+        }
+        if (params.erp_tax) {
+            query.sql += ` and glTax.code = @erpTaxCode`;
+            query.params.push({ name: 'erpTaxCode', value: params.erp_tax });
+        }
+
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
 
         query.paging = {
@@ -308,6 +343,27 @@ class cr_transaction extends _persistentTable.Record {
     }
 
     get customerName() { return this.#customerName; }
+
+    get editedIcon() {
+        var icon = '';
+        if (this.isManual) { icon += '&#x2699;'; }
+        if (this.isEdited) { icon += '&#x270E;'; }
+        return icon;
+    }
+
+    get voidedIcon() {
+        var icon = '';
+        if (this.voided) { icon += '&cross;'; }
+        if (this.ignored) { icon += '&#x1F6AB;'; }
+        return icon;
+    }
+
+    get isDuplicateIcon() {
+        var icon = '';
+        if (this.isDuplicate) { icon += '&#x29C9;'; }
+        return icon;
+    }
+
 
     async save() {
         if (this.isManual) {

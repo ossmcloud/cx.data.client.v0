@@ -3,8 +3,6 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
-const { columns } = require('mssql');
-const { trimRight } = require('cx-core/core/cx-core-text');
 
 class CPQueryRender extends RenderBase {
     #allQueryTypes = null;

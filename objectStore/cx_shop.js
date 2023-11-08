@@ -45,6 +45,20 @@ class cx_shop_Collection extends _persistentTable.Table {
 
     }
 
+    async selectByCustomScriptNot(scriptId) {
+        var query = {
+            sql: `  select  s.*, g.groupCode, g.groupName
+                    from    cx_shop s
+                    left    outer join cx_shop_group g on g.shopGroupId = s.shopGroupId
+                    where   s.shopId not in (select shopId from sys_customScriptShop where scriptId = @scriptId)
+                    order by g.groupCode, s.shopCode`,
+            params: [{ name: 'scriptId', value: scriptId }]
+        }
+        return await super.select(query);
+
+    }
+
+
     async select(params) {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };

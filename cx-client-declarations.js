@@ -151,6 +151,15 @@ const ERP_DTFS_CONFIGS = {
 }
 
 // @@TODO: this should come from sys_provider table
+const CX_WHS_PROVIDER = {
+    BWG: 'bwg',
+    SCP: 'scp',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP' }); },
+    getName: function (value) {
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP' });
+    },
+}
+// @@TODO: this should come from sys_provider table
 const CX_ERP_PROVIDER = {
     SG200: 'sage200',
     SG200STD: 'sage200std',
@@ -167,6 +176,8 @@ const CX_EPOS_PROVIDER = {
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail' }); }
 }
+
+
 const CX_EPOS_PROVIDERS = {
     supported: [
         {
@@ -1013,6 +1024,24 @@ const ERP_TRAN_STATUS = {
     }
 }
 
+const SYS_CUSTOM_SCRIPT = {
+    STAGE: {
+        BEFORE: 'before',
+        AFTER: 'after',
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) { return enumGetName(this, value); },
+    },
+
+    PROCESS: {
+        TRANSFORM: 'transform',
+        POST: 'post',
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) { return enumGetName(this, value); },
+    }
+}
+
 
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
@@ -1022,6 +1051,7 @@ module.exports = {
     CX_MODULE: CX_MODULE,
     CX_SERVICES: CX_SERVICES,
     CX_LOG_TYPE: CX_LOG_TYPE,
+    CX_WHS_PROVIDER: CX_WHS_PROVIDER,
     CX_ERP_PROVIDER: CX_ERP_PROVIDER,
     CX_EPOS_PROVIDER: CX_EPOS_PROVIDER,
     CX_EPOS_PROVIDERS: CX_EPOS_PROVIDERS,
@@ -1046,6 +1076,7 @@ module.exports = {
     ERP_DTFS_CONFIGS: ERP_DTFS_CONFIGS,
     ERP_TRAN_STATUS, ERP_TRAN_STATUS,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
+    SYS_CUSTOM_SCRIPT: SYS_CUSTOM_SCRIPT,
     RENDER: RENDER,
     SQL: SQL,
 }

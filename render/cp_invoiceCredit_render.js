@@ -284,7 +284,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async buildFormLists() {
 
-        var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(this.dataSource.shopId);
+        var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetchOrNew(this.dataSource.shopId);
         var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
 
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };

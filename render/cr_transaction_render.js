@@ -188,6 +188,10 @@ class CRCashBookRender extends RenderBase {
         }
 
         this.options.buttons.push({ id: 'cr_cb_view', text: 'View Cash Book', function: 'viewCashBook' });
+
+        if (this.options.mode == 'view') {
+            this.options.buttons.push({ id: 'cr_cb_all_fields', text: (showAllFields) ? 'Show less fields' : 'Show all fields', function: 'toggleAllFields' });
+        }
     }
 
     async _list() {
@@ -224,6 +228,16 @@ class CRCashBookRender extends RenderBase {
             { label: 'item code', fieldName: 'barcode', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '100px' },
             { label: 'item description', fieldName: 'descr', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '200px' },
             { label: 'cb', fieldName: 'cb', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: false, width: '30px', readOnly: true },
+            { html: '<br />' },
+            { label: 'epos department', fieldName: 'epos_dep', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'epos sub department', fieldName: 'epos_sdep', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'epos description', fieldName: 'epos_depd', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '350px' },
+            { label: 'gl code', fieldName: 'erp_code', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'gl sub code', fieldName: 'erp_scode', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
+            { label: 'gl description', fieldName: 'erp_coded', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '350px' },
+
+            { label: 'epos tax code', fieldName: 'epos_tax', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '100px' },
+            { label: 'gl tax code', fieldName: 'erp_tax', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '100px' },
         ];
 
         var addValuesStyle = 'border-top: 1px dotted rgb(97,97,97); color: gray;';
@@ -231,25 +245,19 @@ class CRCashBookRender extends RenderBase {
         this.options.columns = [];
         this.options.columns.push({ name: 'tranId', title: ' ', align: 'center' });
         if (!this.options.query.s) { this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' }); }
-        //this.options.columns.push({ name: _cxSchema.cr_transaction.TRANSACTIONDATE, title: 'date', align: 'center', width: '130px' });
+
+        //
+        this.options.columns.push({ name: 'editedIcon', headerToolTip: 'manual / edited', title: ' ', align: 'center', width: '30px' });
+        this.options.columns.push({ name: 'voidedIcon', headerToolTip: 'voided or ignored', title: ' ', align: 'center', width: '30px' });
+        this.options.columns.push({ name: 'isDuplicateIcon', headerToolTip: 'is duplicated transaction', title: ' ', align: 'center', width: '30px' });
         this.options.columns.push({ name: 'transactionDateDisplay', title: `date${addValuesStyleTitle}time</span>`, align: 'center', width: '130px' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.EPOSTRANSACTIONNO, title: `epos tran. no${addValuesStyleTitle}customer</span>`, addValues: [{ name: 'customerAccountDisplay', style: addValuesStyle }], nullText: '' });
-        //this.options.columns.push({ name: _cxSchema.cr_transaction.CUSTOMERACCOUNT, title: 'account', addValues: [{ name: 'customerName', style: addValuesStyle }], nullText: '' });
-        //this.options.columns.push({ name: 'customerName', title: 'a/c name' });
-        //
         this.options.columns.push({ name: "cbTranInfo", title: `cb tran. type${addValuesStyleTitle}epos tran. type</span>`, addValues: [{ name: 'transactionTypeDisplay', style: addValuesStyle }] });
-        //this.options.columns.push({ name: _cxSchema.cr_transaction.TRANSACTIONSUBTYPE, title: 'sub-type' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.REFERENCE1, title: `reference 1${addValuesStyleTitle}reference 2</span>`, addValues: [{ name: _cxSchema.cr_transaction.REFERENCE2, style: addValuesStyle }] });
-        //this.options.columns.push({ name: _cxSchema.cr_transaction.REFERENCE2, title: 'reference 2' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.LINENUMBER, title: `line${addValuesStyleTitle}qty</span>`, align: 'right', width: '30px', addValues: [{ name: 'quantityDisplay', style: addValuesStyle }] });
         this.options.columns.push({ name: _cxSchema.cr_transaction.ITEMBARCODE, title: `item barcode${addValuesStyleTitle}item description</span>`, nullText: '', addValues: [{ name: 'itemDescriptionDisplay', style: addValuesStyle }] });
-        //this.options.columns.push({ name: _cxSchema.cr_transaction.ITEMBARCODE, title: 'barcode', nullText: '' });
-        //this.options.columns.push({ name: _cxSchema.cr_transaction.ITEMDESCRIPTION, title: 'item description' });
         this.options.columns.push({ name: "departmentInfo", title: `department${addValuesStyleTitle}gl account info</span>`, addValues: [{ name: 'erpGLInfo', style: addValuesStyle }] });
-        //this.options.columns.push({ name: "erpGLInfo", title: 'erp' });
-
         this.options.columns.push({ name: "taxInfo", title: `tax${addValuesStyleTitle}gl tax info</span>`, addValues: [{ name: 'erpTaxInfo', style: addValuesStyle }] });
-        
         this.options.columns.push({ name: _cxSchema.cr_transaction.VALUEGROSS, title: 'gross', align: 'right', width: '90px', addTotals: true, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.VALUENET, title: 'net', align: 'right', width: '90px', addTotals: true, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.VALUETAX, title: 'tax', align: 'right', width: '90px', addTotals: true, nullText: '' });
@@ -257,10 +265,11 @@ class CRCashBookRender extends RenderBase {
         this.options.columns.push({ name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, title: 'promo', align: 'right', width: '90px', addTotals: true, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.CHANGE, title: 'change', align: 'right', width: '90px', addTotals: true, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.CASHBACK, title: 'cashback', align: 'right', width: '90px', addTotals: true, nullText: '' });
-        //this.options.columns.push({ name: 'created', title: 'created', align: 'center', width: '130px' });
 
         this.options.highlights = [
-            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
+            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' },
+            { column: 'voided', op: '=', value: true, style: 'color: var(--element-color-faint);' },
+            { column: 'ignored', op: '=', value: true, style: 'color: var(--element-color-faint);' },
         ];
 
         if (!this.options.dialog) {
@@ -269,12 +278,7 @@ class CRCashBookRender extends RenderBase {
 
         }
 
-
-        this.options.allowActionCondition = function (action, object) {
-            return object.isManual;
-        }
-
-
+        this.options.allowActionCondition = function (action, object) { return object.isManual; }
     }
 
 }
