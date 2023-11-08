@@ -1,5 +1,6 @@
 'use script';
 //
+const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
@@ -102,7 +103,7 @@ class CPInvoiceGroupRender extends RenderBase {
             group by reco.recoStatusId
             order by reco.recoStatusId desc
         `;
-        
+
         var res = await this.dataSource.cx.exec({ sql: sql });
         var matchSummary = { total: 0, html: '', splits: [] };
         res.each(function (rec, idx) {
@@ -110,20 +111,28 @@ class CPInvoiceGroupRender extends RenderBase {
         });
         //matchSummary.html += '<div style="padding: 3px; margin-top: 7px; width: 200px;">';
         matchSummary.html += '<div style="border: 5px solid var(--main-bg-color); display: block; border-radius: 15px; overflow: hidden;">';
+
+        var canvasToolTip = '';
         //matchSummary.html += '<span style="font-size: 8px">matching status</span>';
         res.each(function (rec, idx) {
             matchSummary.splits.push({
                 status: rec.recoStatusId,
                 avgScore: rec.recoScore,
                 count: rec.count,
-                pc: rec.count / matchSummary.total
+                pc: rec.count / matchSummary.total,
+                color: _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(rec.recoStatusId, true).bkgColor
             });
 
             var style = _cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(rec.recoStatusId);
-            var tooltip = _cxConst.CP_DOCUMENT.RECO_STATUS.getName(rec.recoStatusId) + ': ' + ((rec.count / matchSummary.total) * 100).toFixed(2) + '%';            
+            var tooltip = _cxConst.CP_DOCUMENT.RECO_STATUS.getName(rec.recoStatusId) + ': ' + ((rec.count / matchSummary.total) * 100).toFixed(2) + '%';
             matchSummary.html += `<div title="${tooltip}" style="display: table-cell; width: ${(rec.count / matchSummary.total) * 150}px;  height: 32px; ${style}"></div>`;
+
+            var tooltip2 = _cxConst.CP_DOCUMENT.RECO_STATUS.getName(rec.recoStatusId) + ':\t' + ((rec.count / matchSummary.total) * 100).toFixed(2) + '% (' + rec.count + ')';
+            canvasToolTip += (tooltip2 + '\n');
         });
         matchSummary.html += '</div>';
+        matchSummary.html2 = '<canvas title="' + canvasToolTip + '" id="matching_status" style="margin-bottom: -7px; margin-left: 7px" width="40" height="40" data-matching="' + _core.text.toBase64(JSON.stringify(matchSummary.splits)) + '" />';
+
         //console.log(matchSummary);
         return matchSummary;
     }
@@ -156,7 +165,8 @@ class CPInvoiceGroupRender extends RenderBase {
 
         if (this.matchingEnabled) {
             var matchSummary = await this.getMatchingSummary();
-            this.options.title += matchSummary.html;
+            // this.options.title += matchSummary.html;
+            this.options.title += matchSummary.html2;
         }
 
         this.options.title += '</div>';

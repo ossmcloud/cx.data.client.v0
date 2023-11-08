@@ -732,7 +732,7 @@ const CP_DOCUMENT = {
             if (!status) { status == this.NotAnalyzed; }
             if (status == this.NotAnalyzed || status == this.NotReconciled) {
                 color = '255,255,255';
-                bkgColor = '78,78,78';
+                bkgColor = 'var(--main-bg-color)';
             } else if (status == this.Pending) {
                 color = '175,0,0';
                 bkgColor = '230,230,0';
