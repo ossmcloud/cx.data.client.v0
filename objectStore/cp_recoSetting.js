@@ -7,7 +7,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         return new cp_recoSetting(this, defaults);
     }
 
-    buildQuery() { 
+    buildQuery() {
         return `
                 select	            sett.*, whs.code as wholesalerCode, whs.name as wholesalerName, s.shopCode, s.shopName
                 from	            cp_recoSetting  sett
@@ -26,7 +26,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         //     query.sql += ' where s.shopId = @shopId\n';
         //     query.params = [{ name: 'shopId', value: params.s }];
         // } else {
-            this.queryFromParams(query, params);
+        this.queryFromParams(query, params);
         // }
 
         query.sql += ' order by sett.recoSettingId';
@@ -55,7 +55,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         });
         if (found) { return found; }
         this.each((s, i) => {
-            if (s.shopId==0 && s.wholesalerId == 0) { found = s; return false; }
+            if (s.shopId == 0 && s.wholesalerId == 0) { found = s; return false; }
         });
         if (found) { return found; }
         return cp_recoSetting_Collection.createNew();

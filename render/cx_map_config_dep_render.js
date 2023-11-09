@@ -88,7 +88,7 @@ class CxMapConfigRender extends RenderBase {
             { value: 'mapped_waste', text: 'Waste mapped' },
             { value: 'mapped_accrual', text: 'Accruals mapped' },
             { value: 'mapped_cogs', text: 'COGS mapped' },
-            
+
         ]
 
         this.options.filters = [
