@@ -109,11 +109,9 @@ class CPInvoiceGroupRender extends RenderBase {
         res.each(function (rec, idx) {
             matchSummary.total += rec.count;
         });
-        //matchSummary.html += '<div style="padding: 3px; margin-top: 7px; width: 200px;">';
         matchSummary.html += '<div style="border: 5px solid var(--main-bg-color); display: block; border-radius: 15px; overflow: hidden;">';
 
-        var canvasToolTip = '';
-        //matchSummary.html += '<span style="font-size: 8px">matching status</span>';
+        var pieToolTip = '';
         res.each(function (rec, idx) {
             matchSummary.splits.push({
                 status: rec.recoStatusId,
@@ -128,12 +126,12 @@ class CPInvoiceGroupRender extends RenderBase {
             matchSummary.html += `<div title="${tooltip}" style="display: table-cell; width: ${(rec.count / matchSummary.total) * 150}px;  height: 32px; ${style}"></div>`;
 
             var tooltip2 = _cxConst.CP_DOCUMENT.RECO_STATUS.getName(rec.recoStatusId) + ':\t' + ((rec.count / matchSummary.total) * 100).toFixed(2) + '% (' + rec.count + ')';
-            canvasToolTip += (tooltip2 + '\n');
+            pieToolTip += (tooltip2 + '\n');
         });
         matchSummary.html += '</div>';
-        matchSummary.html2 = '<canvas title="' + canvasToolTip + '" id="matching_status" style="margin-bottom: -7px; margin-left: 7px" width="40" height="40" data-matching="' + _core.text.toBase64(JSON.stringify(matchSummary.splits)) + '" />';
+        
+        matchSummary.htmlPie = '<canvas title="' + pieToolTip + '" id="matching_status" style="margin-bottom: -7px; margin-left: 7px" width="40" height="40" data-matching="' + _core.text.toBase64(JSON.stringify(matchSummary.splits)) + '" />';
 
-        //console.log(matchSummary);
         return matchSummary;
     }
 
@@ -166,7 +164,7 @@ class CPInvoiceGroupRender extends RenderBase {
         if (this.matchingEnabled) {
             var matchSummary = await this.getMatchingSummary();
             // this.options.title += matchSummary.html;
-            this.options.title += matchSummary.html2;
+            this.options.title += matchSummary.htmlPie;
         }
 
         this.options.title += '</div>';
