@@ -56,7 +56,7 @@ class ErpTraderAccount extends RenderBase {
         var cxTraders = this.dataSource.cx.table(_cxSchema.cx_traderAccount);
         await cxTraders.select({ erp: this.dataSource.traderAccountId });
 
-        if (cxTraders.records.count > 0) {
+        if (cxTraders.records.length > 0) {
             var link = '/cr/config/trader-account?id=';
             var html = '';
             cxTraders.each(function (r, i) {
