@@ -113,27 +113,36 @@ class erp_gl_account_Collection extends _persistentTable.Table {
 
 
     async findFromOtherShop(sourceErpAccountId, targetShopId, returnRecord) {
+        var sqlScript = `
+            select	glTarget.erpGLAccountId
+                    -- NOTE: need this for debug purposes
+                    -- , glTarget.code, glTarget.costCentre,
+                    -- glSource.erpGLAccountId, glSource.code, glSource.costCentre
+
+            from	erp_gl_account glSource
+            left outer join erp_shop_setting erpSett on erpSett.shopId = @targetShopId
+            left outer join erp_gl_account  glTarget on glTarget.shopId = @targetShopId and glTarget.code = glSource.code
+                    {USE_COST_CENTER}
+            where	glSource.erpGLAccountId = @sourceErpAccountId
+        `
+
         var query = {
-            sql: `
-                select	glTarget.erpGLAccountId
-                        -- NOTE: need this for debug purposes
-                        -- , glTarget.code, glTarget.costCentre,
-                        -- glSource.erpGLAccountId, glSource.code, glSource.costCentre
-                        
-                from	erp_gl_account glSource
-                left outer join erp_shop_setting erpSett on erpSett.shopId = @targetShopId
-                left outer join erp_gl_account  glTarget on glTarget.shopId = @targetShopId and glTarget.code = glSource.code and isnull(glTarget.costCentre, '') = isnull(erpSett.erpCostCentre, '')
-                where	glSource.erpGLAccountId = @sourceErpAccountId
-            `,
+            sql: '',
             params: [
                 { name: 'sourceErpAccountId', value: sourceErpAccountId },
                 { name: 'targetShopId', value: targetShopId },
             ],
             returnFirst: true,
         }
+        query.sql = sqlScript.replace('{USE_COST_CENTER}', " and isnull(glTarget.costCentre, '') = isnull(erpSett.erpCostCentre, '')");
 
         var res = await this.cx.exec(query);
-        if (!res) { return null; }
+        if (!res) {
+            query.sql = sqlScript.replace('{USE_COST_CENTER}', '');
+            res = await this.cx.exec(query);
+            
+            if (!res) { return null; }
+        }
         if (returnRecord) { return await this.fetch(res.erpGLAccountId); }
         return res.erpGLAccountId
     }
