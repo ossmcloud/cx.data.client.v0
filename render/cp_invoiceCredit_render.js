@@ -284,7 +284,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async buildFormLists() {
 
-        var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(this.dataSource.shopId);
+        var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetchOrNew(this.dataSource.shopId);
         var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
 
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
@@ -427,8 +427,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.title = 'invoice / credits batch processing';
                 if (batchActionSelected) {
                     this.options.showButtons = [];
-                    this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'check all', function: 'checkAll' });
-                    this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'uncheck all', function: 'uncheckAll' });
+                    this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
+                    this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
                 }
                 this.options.filters.push({ fieldName: 'batch', type: _cxConst.RENDER.CTRL_TYPE.HIDDEN });

@@ -1,5 +1,6 @@
 'use strict'
 //
+const _cored = require('cx-core/core/cx-core-date');
 const _declarations = require('../cx-client-declarations');
 const _persistentTable = require('./persistent/p-cr_transaction');
 //
@@ -13,11 +14,24 @@ class cr_transaction_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  t.*, s.shopCode, s.shopName, cust.traderName as customerName
-                      from    ${this.type} t
+        query.sql = ` select    t.*, s.shopCode, s.shopName, cust.traderName as customerName,
+                                dep.eposDescription as departmentDescription,
+                                gl.code as erpGLSegment1, gl.costCentre as erpGLSegment2, gl.department as erpGLSegment3, gl.description as erpGLDescription,
+                                glTax.code as erpTaxCode, glTax.rate as erpTaxRate, glTax.description as erpTaxDescription,
+                                cbTranType.code as cbTranType, tranType.cbHeading, tranType.description as cbDescription
+                                
+
+                      from            ${this.type} t
                       inner      join cx_shop               s           ON s.shopId = t.shopId
                       left outer join cr_tran_type_config   tranType    ON tranType.tranTypeConfigId = t.tranTypeConfigId
+                      left outer join cr_cb_tran_type       cbTranType  ON cbTranType.cbTranTypeId = tranType.cbTranTypeId
                       left outer join cx_traderAccount      cust        ON cust.shopId = t.shopId AND cust.traderCode = t.customerAccount AND cust.traderType = 'C' 
+                      left outer join cx_map_config_dep     dep         ON dep.depMapConfigId = t.depMapConfigId 
+                      left outer join erp_gl_account        gl          ON gl.erpGLAccountId = dep.saleAccountId
+
+                      left outer join cx_map_config_tax     tax         ON tax.taxMapConfigId = t.taxMapConfigId 
+                      left outer join erp_tax_account       glTax       ON glTax.erpTaxAccountId = tax.taxAccountId
+
                       where   t.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.cb) {
@@ -128,6 +142,41 @@ class cr_transaction_Collection extends _persistentTable.Table {
 
         }
 
+        if (params.epos_dep) {
+            query.sql += ` and t.${this.FieldNames.DEPARTMENT} = @${this.FieldNames.DEPARTMENT}`;
+            query.params.push({ name: this.FieldNames.DEPARTMENT, value: params.epos_dep });
+        }
+        if (params.epos_sdep) {
+            query.sql += ` and t.${this.FieldNames.SUBDEPARTMENT} = @${this.FieldNames.SUBDEPARTMENT}`;
+            query.params.push({ name: this.FieldNames.SUBDEPARTMENT, value: params.epos_sdep });
+        }
+        if (params.epos_depd) {
+            query.sql += ` and dep.eposDescription like @eposDescription`;
+            query.params.push({ name: 'eposDescription', value: params.epos_depd + '%' });
+        }
+        if (params.epos_tax) {
+            query.sql += ` and t.${this.FieldNames.TAXCODE} = @${this.FieldNames.TAXCODE}`;
+            query.params.push({ name: this.FieldNames.TAXCODE, value: params.epos_tax });
+        }
+        
+
+        if (params.erp_code) {
+            query.sql += ` and gl.code = @glCode`;
+            query.params.push({ name: 'glCode', value: params.erp_code });
+        }
+        if (params.erp_scode) {
+            query.sql += ` and gl.costCentre = @glSedg2`;
+            query.params.push({ name: 'glSedg2', value: params.erp_scode });
+        }
+        if (params.erp_coded) {
+            query.sql += ` and gl.description like @erpDescription`;
+            query.params.push({ name: 'erpDescription', value: params.erp_coded + '%' });
+        }
+        if (params.erp_tax) {
+            query.sql += ` and glTax.code = @erpTaxCode`;
+            query.params.push({ name: 'erpTaxCode', value: params.erp_tax });
+        }
+
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
 
         query.paging = {
@@ -191,19 +240,130 @@ class cr_transaction extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     #customerName = '';
+    #departmentDescription = '';
+    #erpGLSegment1 = '';
+    #erpGLSegment2 = '';
+    #erpGLSegment3 = '';
+    #erpGLDescription = '';
+    #cbTranType = '';
+    #cbHeading = '';
+    #cbDescription = '';
+
+    #erpTaxDescription = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
         this.#customerName = defaults['customerName'] || '';
+        this.#departmentDescription = defaults['departmentDescription'] || '';
+        this.#erpGLSegment1 = defaults['erpGLSegment1'] || '';
+        this.#erpGLSegment2 = defaults['erpGLSegment2'] || '';
+        this.#erpGLSegment3 = defaults['erpGLSegment3'] || '';
+        this.#erpGLDescription = defaults['erpGLDescription'] || '';
+        this.#cbTranType = defaults['cbTranType'] || '';
+        this.#cbHeading = defaults['cbHeading'] || '';
+        this.#cbDescription = defaults['cbDescription'] || '';
+
+        this.#erpTaxDescription = defaults['erpTaxDescription'] || '';
     };
 
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
+    get transactionTypeDisplay() {
+        var info = this.transactionType;
+        if (this.transactionSubType) { info += ` / ${this.transactionSubType}`; }
+        return info;
+    }
+
+    get itemDescriptionDisplay() {
+        if (!this.itemDescription) { return ''; }
+        return this.itemDescription;
+    }
+
+    get transactionDateDisplay() {
+        var dt = _cored.format({
+            date: this.transactionDateTime,
+            dateTimeSep: '<br />',
+            inverted: true,
+            showTime: true,
+        })
+        return dt;
+    }
+
+    get departmentInfo() {
+        if (!this.depMapConfigId) { return ''; }
+        var info = this.department;
+        if (this.subDepartment) { info += ` / ${this.subDepartment}`; }
+        info = `[${info}] ${this.#departmentDescription}`;
+        return info
+    }
+
+    get erpGLInfo() {
+        if (!this.#erpGLSegment1) { return ''; }
+        var info = this.#erpGLSegment1;
+        if (this.erpGLSegment2) { info += ` / ${this.#erpGLSegment2}`; }
+        if (this.erpGLSegment3) { info += ` / ${this.#erpGLSegment3}`; }
+        info = `[${info}] ${this.#erpGLDescription}`;
+        return info
+    }
+
+    get customerAccountDisplay() {
+        if (!this.customerAccount) { return `` }
+        return `[${this.customerAccount}] ${this.#customerName}`;
+    }
+
+    get quantityDisplay() {
+        if (this.quantity == null) { return ''; }
+        return this.quantity;
+    }
+
+    get cbTranInfo() {
+        var info = this.#cbTranType;
+        if (this.#cbHeading) { info += ` / ${this.#cbHeading}`; }
+        if (this.#cbDescription && this.#cbDescription != this.#cbHeading) { info += ` / ${this.#cbDescription}`; }
+        return info;
+    }
+
+    get taxInfo() {
+        if (this.taxCode == null) { return ''; }
+        return `[${this.taxCode}] ${this.taxRate}%`;
+    }
+
+    get erpTaxInfo() {
+        // if (!this.#erpGLSegment1) { return ''; }
+        // var info = this.#erpGLSegment1;
+        // if (this.erpGLSegment2) { info += ` / ${this.#erpGLSegment2}`; }
+        // if (this.erpGLSegment3) { info += ` / ${this.#erpGLSegment3}`; }
+        // info = `[${info}] ${this.#erpGLDescription}`;
+        // return info
+        return this.#erpTaxDescription;
+    }
+
     get customerName() { return this.#customerName; }
+
+    get editedIcon() {
+        var icon = '';
+        if (this.isManual) { icon += '&#x2699;'; }
+        if (this.isEdited) { icon += '&#x270E;'; }
+        return icon;
+    }
+
+    get voidedIcon() {
+        var icon = '';
+        if (this.voided) { icon += '&cross;'; }
+        if (this.ignored) { icon += '&#x1F6AB;'; }
+        return icon;
+    }
+
+    get isDuplicateIcon() {
+        var icon = '';
+        if (this.isDuplicate) { icon += '&#x29C9;'; }
+        return icon;
+    }
+
 
     async save() {
         if (this.isManual) {

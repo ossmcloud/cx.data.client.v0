@@ -1664,6 +1664,35 @@ module.exports = {
         SVCNAME: 'svcName',
     },
 
+    sys_customScript: {
+        TBL_NAME: 'sys_customScript',
+        SCRIPTID: 'scriptId',
+        SCRIPTNAME: 'scriptName',
+        SCRIPTTEXT: 'scriptText',
+        SVCNAME: 'svcName',
+        MODULE: 'module',
+        PROCESS: 'process',
+        STAGE: 'stage',
+        EXECSEQUENCE: 'execSequence',
+        INACTIVE: 'inactive',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    sys_customScriptShop: {
+        TBL_NAME: 'sys_customScriptShop',
+        SCRIPTSHOPID: 'scriptShopId',
+        SCRIPTID: 'scriptId',
+        SHOPID: 'shopId',
+        INACTIVE: 'inactive',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     sys_dbInfo: {
         TBL_NAME: 'sys_dbInfo',
         DBVERSION: 'dbVersion',

@@ -58,7 +58,7 @@ class Wholesaler extends RenderBase {
                 configListOptions.actions.push({ label: 'edit', funcName: 'editConfig' });
                 configListOptions.actions.push({ label: 'delete', funcName: 'deleteConfig' });
                 configListOptions.showButtons = [{ id: 'whs_configs_add', text: 'Add Configuration', function: 'addConfig' }];
-                if (showBwgGetStore) {
+                if (showBwgGetStore && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
                     configListOptions.showButtons.push({ id: 'whs_bwg_storeList', text: 'BWG Store List', function: 'bwgShowStores' });
                 }
             } else {
@@ -73,6 +73,7 @@ class Wholesaler extends RenderBase {
 
 
     async _record() {
+        var newRecord = (this.options.mode == 'new');
 
         this.options.fields = [
             {
@@ -80,7 +81,7 @@ class Wholesaler extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'code', label: 'code', column: 1 },
-                            { name: 'whsProvider', label: 'provider', column: 2, readOnly: true },
+                            { name: 'whsProvider', label: 'provider', column: 2, lookUps: _cxConst.CX_WHS_PROVIDER.toList(true), validation: '{ "mandatory": true }', readOnly: !newRecord },
                             { name: 'name', label: 'name', column: 1 },
                             { name: 'currency', label: 'currency', column: 1 },
                         ]

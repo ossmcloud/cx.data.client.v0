@@ -93,7 +93,7 @@ class WholesalerShop extends RenderBase {
                 configListOptions.actions.push({ label: 'edit', funcName: 'editConfig' });
                 configListOptions.actions.push({ label: 'delete', funcName: 'deleteConfig' });
                 configListOptions.showButtons = [{ id: 'whs_shop_configs_add', text: 'Add Configuration', function: 'addConfig' }];
-                if (showBwgGetStore) {
+                if (showBwgGetStore && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
                     configListOptions.showButtons.push({ id: 'whs_bwg_storeList', text: 'BWG Store List', function: 'bwgShowStores' });
                 }
             } else {
