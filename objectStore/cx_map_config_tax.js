@@ -39,6 +39,11 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
             query.params.push({ name: 'eposDescription', value: params.ts + '%' });
         }
 
+        if (params.manual) {
+            query.sql += ` and isnull(${this.FieldNames.ISMANUAL}, 0) = @${this.FieldNames.ISMANUAL}`;
+            query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T' || params.manual == 'true') ? 1 : 0 });
+        }
+
         query.sql += ' order by eposTaxCode';
 
         if (!params.noPaging) {
@@ -121,7 +126,7 @@ class cx_map_config_tax extends _persistentTable.Record {
     get taxAccountPurchase() { return this.#taxAccountPurchase; }
 
     async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        if (this.isNew() && this.cx.tUserId > 0) { this.isManual = true; }
         await super.save()
     }
 }

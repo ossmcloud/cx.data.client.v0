@@ -26,11 +26,12 @@ const _fieldNames = {
     EPOSTAXRATE: 'eposTaxRate',
     EPOSDESCRIPTION: 'eposDescription',
     TAXACCOUNTID: 'taxAccountId',
-    PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
+    ISMANUAL: 'isManual',
 
 }
 //
@@ -41,14 +42,15 @@ const _fields = {
     mapConfigId: { name: 'mapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     eposCurrencyCode: { name: 'eposCurrencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: false },
     eposTaxCode: { name: 'eposTaxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
-    eposTaxRate: { name: 'eposTaxRate', dataType: 'decimal', pk: false, identity: false, maxLength: 5, null: true },
+    eposTaxRate: { name: 'eposTaxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     taxAccountId: { name: 'taxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    purchaseTaxAccountId: { name: 'purchaseTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    purchaseTaxAccountId: { name: 'purchaseTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -68,7 +70,7 @@ class Persistent_cx_map_config_tax extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get taxMapConfigId() {
         return super.getValue(_fieldNames.TAXMAPCONFIGID);
@@ -110,12 +112,6 @@ class Persistent_cx_map_config_tax extends _cx_data.DBRecord {
         super.setValue(_fieldNames.TAXACCOUNTID, val);
     }
 
-    get purchaseTaxAccountId() {
-        return super.getValue(_fieldNames.PURCHASETAXACCOUNTID);
-    } set purchaseTaxAccountId(val) {
-        super.setValue(_fieldNames.PURCHASETAXACCOUNTID, val);
-    }
-
     get created() {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
@@ -138,6 +134,18 @@ class Persistent_cx_map_config_tax extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get purchaseTaxAccountId() {
+        return super.getValue(_fieldNames.PURCHASETAXACCOUNTID);
+    } set purchaseTaxAccountId(val) {
+        super.setValue(_fieldNames.PURCHASETAXACCOUNTID, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 

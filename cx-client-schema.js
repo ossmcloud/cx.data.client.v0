@@ -948,6 +948,9 @@ module.exports = {
         RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
         RAW_TAXCODE: 'raw_taxCode',
         RAW_TAXRATE: 'raw_taxRate',
+        ANALYSIS1: 'analysis1',
+        ANALYSIS2: 'analysis2',
+        ANALYSIS3: 'analysis3',
     },
 
     cx_login: {
@@ -1025,6 +1028,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISMANUAL: 'isManual',
     },
 
     cx_map_config_tax: {
@@ -1041,6 +1045,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
+        ISMANUAL: 'isManual',
     },
 
     cx_shop: {
@@ -1518,6 +1523,9 @@ module.exports = {
         VOIDED: 'voided',
         BUNKERED: 'bunkered',
         CREATED: 'created',
+        ANALYSIS1: 'analysis1',
+        ANALYSIS2: 'analysis2',
+        ANALYSIS3: 'analysis3',
     },
 
     raw_cx_department: {

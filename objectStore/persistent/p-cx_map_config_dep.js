@@ -33,6 +33,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    ISMANUAL: 'isManual',
 
 }
 //
@@ -53,6 +54,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -72,7 +74,7 @@ class Persistent_cx_map_config_dep extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get depMapConfigId() {
         return super.getValue(_fieldNames.DEPMAPCONFIGID);
@@ -154,6 +156,12 @@ class Persistent_cx_map_config_dep extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 

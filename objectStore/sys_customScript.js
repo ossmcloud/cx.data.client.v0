@@ -34,6 +34,8 @@ class sys_customScript extends _persistentTable.Record {
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        if (this.isNew()) { this.inactive = true; }
+        
         await super.save()
     }
 }
