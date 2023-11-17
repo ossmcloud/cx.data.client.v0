@@ -98,6 +98,7 @@ const CX_SERVICES = {
     ERPS: 'erps',
     ERP: 'erp',
     MMS: 'mms',
+    SVR: 'server',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
@@ -235,6 +236,8 @@ const CX_SYS_USERS = {
     SYSTEM: -1,
     DTFS: -2,
     ERPS: -3,
+    MMS: -4,
+    SVR: -5,
 }
 
 const CX_SHOP = {
@@ -620,7 +623,7 @@ const CP_DOCUMENT = {
         PostingError: 98,
         DeleteAndPull: 99,
         Delete: 100,
-       
+
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
@@ -1042,6 +1045,57 @@ const SYS_CUSTOM_SCRIPT = {
     }
 }
 
+const SYS_SERVER_TASK = {
+    TASK_TYPE: {
+        Server: 0,
+        Task: 1,
+
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Server: 'Server Task',
+                Task: 'Worker Task'
+            });
+        },
+    },
+    TASK_STATUS: {
+        Disabled: 0,
+        NotScheduled: 1,
+        Scheduled: 2,
+
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Disabled: 'Disabled',
+                NotScheduled: 'Not Scheduled',
+                Scheduled: 'Scheduled',
+            });
+        },
+    },
+    RUN_STATUS: {
+        Idle: 0,
+        ManualStart: 1,
+        Pending: 3,
+        Deferred: 5,
+        Running: 7,
+        Completed: 8,
+        ERROR: 9,
+
+        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Idle: 'Idle',
+                ManualStart: 'Manual Start',
+                Pending: 'Pending',
+                Deferred: 'Deferred',
+                Running: 'Running',
+                Completed: 'Completed',
+                ERROR: 'ERROR',
+            });
+        },
+    }
+}
+
 
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
@@ -1077,6 +1131,7 @@ module.exports = {
     ERP_TRAN_STATUS, ERP_TRAN_STATUS,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     SYS_CUSTOM_SCRIPT: SYS_CUSTOM_SCRIPT,
+    SYS_SERVER_TASK: SYS_SERVER_TASK,
     RENDER: RENDER,
     SQL: SQL,
 }
