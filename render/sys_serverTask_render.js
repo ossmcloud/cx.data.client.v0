@@ -30,22 +30,26 @@ class SysServerTaskRender extends RenderBase {
         if (field.name == _cxSchema.sys_serverTask.TASKTYPEID) {
             column.title = 'task type';
             column.addTotals = false;
-            column.align = 'left';
+            column.align = 'center';
+            column.width = '100px';
             column.lookUps = _cxConst.SYS_SERVER_TASK.TASK_TYPE.toList();
         } else if (field.name == _cxSchema.sys_serverTask.TASKSTATUSID) {
             column.title = 'task status';
             column.addTotals = false;
-            column.align = 'left';
+            column.align = 'center';
+            column.width = '100px';
             column.lookUps = _cxConst.SYS_SERVER_TASK.TASK_STATUS.toList();
         } else if (field.name == _cxSchema.sys_serverTask.RUNSTATUSID) {
             column.title = 'run status';
             column.addTotals = false;
-            column.align = 'left';
+            column.align = 'center';
+            column.width = '100px';
             column.lookUps = _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList();
         } else if (field.name == _cxSchema.sys_serverTask.LASTRUNSTATUSID) {
             column.title = 'last run status';
             column.addTotals = false;
-            column.align = 'left';
+            column.align = 'center';
+            column.width = '100px';
             column.lookUps = _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList();
         } else if (field.name == _cxSchema.sys_serverTask.RUNFREQUENCY) {
             column.title = 'frequency<br />(mins)';
@@ -76,6 +80,65 @@ class SysServerTaskRender extends RenderBase {
     async _list() {
         this.options.title = 'server tasks';
 
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        var statuses = _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList();
+        for (let sx = 0; sx < statuses.length; sx++) {
+            const s = statuses[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.sys_serverTask.RUNSTATUSID,
+                op: '=',
+                value: s.value,
+                style: _cxConst.SYS_SERVER_TASK.RUN_STATUS.getStyleInverted(s.value) + applyStyle,
+                columns: [_cxSchema.sys_serverTask.RUNSTATUSID]
+            })
+        }
+
+        for (let sx = 0; sx < statuses.length; sx++) {
+            const s = statuses[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.sys_serverTask.LASTRUNSTATUSID,
+                op: '=',
+                value: s.value,
+                style: _cxConst.SYS_SERVER_TASK.RUN_STATUS.getStyleInverted(s.value) + applyStyle,
+                columns: [_cxSchema.sys_serverTask.LASTRUNSTATUSID]
+            })
+        }
+
+        var taskStatuses = _cxConst.SYS_SERVER_TASK.TASK_STATUS.toList();
+        for (let sx = 0; sx < taskStatuses.length; sx++) {
+            const s = taskStatuses[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.sys_serverTask.TASKSTATUSID,
+                op: '=',
+                value: s.value,
+                style: _cxConst.SYS_SERVER_TASK.TASK_STATUS.getStyleInverted(s.value) + applyStyle,
+                columns: [_cxSchema.sys_serverTask.TASKSTATUSID]
+            })
+        }
+
+        var taskTypes = _cxConst.SYS_SERVER_TASK.TASK_TYPE.toList();
+        for (let sx = 0; sx < taskTypes.length; sx++) {
+            const s = taskTypes[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.sys_serverTask.TASKTYPEID,
+                op: '=',
+                value: s.value,
+                style: _cxConst.SYS_SERVER_TASK.TASK_TYPE.getStyleInverted(s.value) + applyStyle,
+                columns: [_cxSchema.sys_serverTask.TASKTYPEID]
+            })
+        }
+       
+    }
+
+
+    async getTaskRunListOptions() {
+        var taskRuns = this.dataSource.cx.table(_cxSchema.sys_serverTaskRun);
+        await taskRuns.select({ taskId: this.options.query.id });
+
+        var taskRunsOptions = await this.listOptions(taskRuns, { listView: true });
+        taskRunsOptions.quickSearch = true;
+        taskRunsOptions.title = '<span>task runs</span>';
+        return taskRunsOptions;
     }
 
     async _record() {
@@ -110,26 +173,10 @@ class SysServerTaskRender extends RenderBase {
         });
         header.fields.push({ name: _cxSchema.sys_serverTask.RUNSTATUSMESSAGE, label: 'status message', column: 3, readOnly: true });
         
-
-
-        //header.fields.push({ name: _cxSchema.sys_serverTask.TASKTYPEID, label: 'type', column: 2, items: _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList() });
-        // header.fields.push({
-        //     group: 'stage_seq', label: '', column: 1, columnCount: 2, styles: ['width: calc(100% - 120px)', 'width: 125px'], fields: [
-        //         { name: _cxSchema.sys_customScript.STAGE, label: 'stage', column: 1, items: _cxConst.SYS_CUSTOM_SCRIPT.STAGE.toList(), validation: '{"mandatory": true}' },
-        //         { name: _cxSchema.sys_customScript.EXECSEQUENCE, label: 'exec sequence', column: 2, validation: '{"mandatory": true}' }
-        //     ]
-        // });
-        // header.fields.push({
-        //     group: 'svc_info', label: '', column: 2, columnCount: 3, styles: ['width: 125px', 'width: 125px', 'width: 125px'], fields: [
-        //         { name: _cxSchema.sys_customScript.SVCNAME, label: 'service', items: svcList, column: 1, validation: '{"mandatory": true}', width: '100px', readOnly: readOnly },
-        //         { name: _cxSchema.sys_customScript.MODULE, label: 'module', items: _cxConst.CX_MODULE.toList(), column: 2, validation: '{"mandatory": true}', width: '100px', readOnly: readOnly },
-        //         { name: _cxSchema.sys_customScript.PROCESS, label: 'process', items: _cxConst.SYS_CUSTOM_SCRIPT.PROCESS.toList(), column: 3, validation: '{"mandatory": true}', width: '100px', readOnly: readOnly }
-        //     ]
-        // });
-
-        // header.fields.push({ name: _cxSchema.sys_customScript.INACTIVE, label: 'is inactive', column: 2 });
-
+        var taskRunsOptions = await this.getTaskRunListOptions();
+            
         this.options.fields.push(header);
+        this.options.fields.push({ group: 'runs', title: 'server runs', column: 1, fields: [taskRunsOptions] });
 
     }
 }

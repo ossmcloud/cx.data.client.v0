@@ -1050,20 +1050,53 @@ const SYS_SERVER_TASK = {
         Server: 0,
         Task: 1,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Server: 'Server Task',
+                Task: 'Worker Task'
+            });
+        },
         getName: function (value) {
             return enumGetName(this, value, {
                 Server: 'Server Task',
                 Task: 'Worker Task'
             });
         },
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Server) {
+                color = '255,255,255';
+                bkgColor = '138,175,78';
+            } else if (status == this.Task) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+
     },
     TASK_STATUS: {
         Disabled: 0,
         NotScheduled: 1,
         Scheduled: 2,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Disabled: 'Disabled',
+                NotScheduled: 'Not Scheduled',
+                Scheduled: 'Scheduled',
+            });
+        },
         getName: function (value) {
             return enumGetName(this, value, {
                 Disabled: 'Disabled',
@@ -1071,6 +1104,28 @@ const SYS_SERVER_TASK = {
                 Scheduled: 'Scheduled',
             });
         },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.NotScheduled) {
+                color = '255,255,255';
+                bkgColor = '146,71,146';
+            } else if (status == this.Scheduled) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
     },
     RUN_STATUS: {
         Idle: 0,
@@ -1081,7 +1136,17 @@ const SYS_SERVER_TASK = {
         Completed: 8,
         ERROR: 9,
 
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Idle: 'Idle',
+                ManualStart: 'Manual Start',
+                Pending: 'Pending',
+                Deferred: 'Deferred',
+                Running: 'Running',
+                Completed: 'Completed',
+                ERROR: 'ERROR',
+            });
+        },
         getName: function (value) {
             return enumGetName(this, value, {
                 Idle: 'Idle',
@@ -1093,6 +1158,47 @@ const SYS_SERVER_TASK = {
                 ERROR: 'ERROR',
             });
         },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Pending || status == this.ManualStart) {
+                color = '255,255,255';
+                bkgColor = '246,71,146';
+            } else if (status == this.Deferred) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Running) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else if (status == this.Completed) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.Idle) {
+                color = '100,0,0';
+                bkgColor = '128,128,128';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+
+    },
+    LOG_TYPE: {
+        INFO: 'info',
+        WARN: 'warning',
+        ERROR: 'ERROR',
+        CRITICAL: 'IMPORTANT'
     }
 }
 

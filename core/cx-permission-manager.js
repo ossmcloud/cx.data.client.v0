@@ -261,6 +261,13 @@ async function getPermission(recordType, role) {
         permission.allowView = (role >= _cxConst.CX_ROLE.MANAGER);
         permission.allowDelete = false;
     }
+    if (recordType == _cxSchema.sys_serverTaskRun.TBL_NAME) {
+        permission.allowEdit = false;
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowDelete = false;
+    }
+
     
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');
