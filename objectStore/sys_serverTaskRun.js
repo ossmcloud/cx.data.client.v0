@@ -1,5 +1,6 @@
 'use strict'
 //
+const _corded = require('cx-core/core/cx-core-date');
 const _persistentTable = require('./persistent/p-sys_serverTaskRun');
 const _declarations = require('../cx-client-declarations');
 //
@@ -45,6 +46,20 @@ class sys_serverTaskRun extends _persistentTable.Record {
     };
 
     get taskName() { return this.#taskName; }
+
+    get runTimeDisplay() {
+        var ts = new _corded.TimeSpan(this.taskCompleted - this.taskStarted);
+        return ts.toString();
+    }
+    get waitTimeDisplay() {
+        var ts = new _corded.TimeSpan(this.taskStarted - this.created);
+        return ts.toString();
+    }
+    get fullRunTimeDisplay() {
+        var ts = new _corded.TimeSpan(this.taskCompleted - this.created);
+        return ts.toString();
+    }
+
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

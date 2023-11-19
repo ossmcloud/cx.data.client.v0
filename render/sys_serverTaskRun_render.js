@@ -24,7 +24,10 @@ class SysServerTaskRunRender extends RenderBase {
         this.autoLoadFields[_cxSchema.sys_serverTaskRun.CREATED] = null;
         this.autoLoadFields[_cxSchema.sys_serverTaskRun.TASKSTARTED] = null;
         this.autoLoadFields[_cxSchema.sys_serverTaskRun.TASKCOMPLETED] = null;
-        
+        this.autoLoadFields['waitTimeDisplay'] = { name: 'waitTimeDisplay', title: 'waiting time', align: 'center', width: '100px' };
+        this.autoLoadFields['runTimeDisplay'] = { name: 'runTimeDisplay', title: 'run time', align: 'center', width: '100px' };
+        this.autoLoadFields['fullRunTimeDisplay'] = { name: 'fullRunTimeDisplay', title: 'elapsed time', align: 'center', width: '100px' };
+
 
 
     }
@@ -38,8 +41,8 @@ class SysServerTaskRunRender extends RenderBase {
             column.lookUps = _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList();
 
         } else if (field.name == _cxSchema.sys_serverTaskRun.CREATED) {
-            column.title='run created on';
-        } 
+            column.title = 'run created on';
+        }
     }
     async initFilter(field, filter) {
         if (field.name == _cxSchema.sys_serverTaskRun.TASKID || field.name == _cxSchema.sys_serverTaskRun.TASKRUNID || field.name == _cxSchema.sys_serverTaskRun.TASKSTARTED
@@ -53,9 +56,9 @@ class SysServerTaskRunRender extends RenderBase {
     async _list() {
         this.options.title = 'server tasks runs';
 
-        
+
         this.options.cellHighlights = [];
-        
+
         var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
         var statuses = _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList();
         for (let sx = 0; sx < statuses.length; sx++) {
@@ -85,15 +88,25 @@ class SysServerTaskRunRender extends RenderBase {
         this.options.fields = [];
 
         var header = { group: 'head', title: 'server task run info', columnCount: 4, styles: ['width: 450px', 'width: 450px', 'width: 400px'], fields: [] };
-        
-        header.fields.push({
-            group: 'run_status', label: '', column: 1, columnCount: 3, styles: ['width: 100px', 'width: 150px', 'width: 150px'], fields: [
-                { name: _cxSchema.sys_serverTaskRun.RUNSTATUSID, label: 'run status', column: 1, items: _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList(), readOnly: true },
-                { name: _cxSchema.sys_serverTaskRun.TASKSTARTED, label: 'started', column: 2, readOnly: true },
-                { name: _cxSchema.sys_serverTaskRun.TASKCOMPLETED, label: 'completed', column: 3, readOnly: true }
-            ]
-        });
-        
+
+        header.fields.push(
+            {
+                group: 'run_status', label: '', column: 1, columnCount: 3, styles: ['width: 100px', 'width: 150px', 'width: 150px'], fields: [
+                    { name: _cxSchema.sys_serverTaskRun.RUNSTATUSID, label: 'run status', column: 1, items: _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList(), readOnly: true },
+                    { name: _cxSchema.sys_serverTaskRun.TASKSTARTED, label: 'started', column: 2, readOnly: true },
+                    { name: _cxSchema.sys_serverTaskRun.TASKCOMPLETED, label: 'completed', column: 3, readOnly: true }
+                ]
+            },
+            {
+                group: 'run_times', label: '', column: 1, columnCount: 3, styles: ['width: 100px', 'width: 150px', 'width: 150px'], fields: [
+                    { name: 'waitTimeDisplay', label: 'wait time', column: 1, readOnly: true },
+                    { name: 'runTimeDisplay', label: 'run time', column: 2, readOnly: true },
+                    { name: 'fullRunTimeDisplay', label: 'elapsed time', column: 3, readOnly: true },
+                    
+                ]
+            }
+        );
+
         header.fields.push({ name: _cxSchema.sys_serverTaskRun.RUNSTATUSMESSAGE, label: 'status message', column: 2, readOnly: true });
         header.fields.push({ name: _cxSchema.sys_serverTaskRun.RUNPARAMETERS, label: 'run parameters', column: 3, readOnly: true });
 
@@ -101,7 +114,9 @@ class SysServerTaskRunRender extends RenderBase {
 
         var taskRunLogsOptions = await this.getTaskRunLogListOptions();
         this.options.fields.push({ group: 'runs', title: 'run logs', column: 1, fields: [taskRunLogsOptions] });
- 
+
+       
+
     }
 }
 

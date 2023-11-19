@@ -127,7 +127,7 @@ class SysServerTaskRender extends RenderBase {
                 columns: [_cxSchema.sys_serverTask.TASKTYPEID]
             })
         }
-       
+
     }
 
 
@@ -143,9 +143,10 @@ class SysServerTaskRender extends RenderBase {
 
     async _record() {
         this.options.fields = [];
+        this.options.fields.push({ name: 'action', id: 'action', hidden: true })
 
 
-        var header = { group: 'head', title: 'server task info', columnCount: 4, styles: ['width: 450px', 'width: 450px', 'width: 400px'], fields: [] };
+        var header = { group: 'head', title: 'server task info', columnCount: 4, styles: ['width: 450px', 'width: 450px', 'width: 450px'], fields: [] };
         header.fields.push({
             group: 'task_name', label: '', column: 1, columnCount: 2, styles: ['width: 100px', 'width: 350px'], fields: [
                 { name: _cxSchema.sys_serverTask.TASKTYPEID, label: 'type', column: 1, items: _cxConst.SYS_SERVER_TASK.TASK_TYPE.toList(), readOnly: true },
@@ -166,17 +167,26 @@ class SysServerTaskRender extends RenderBase {
         header.fields.push({ name: _cxSchema.sys_serverTask.RUNPARAMETERS, label: 'run parameters', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 2 });
 
         header.fields.push({
-            group: 'run_status', label: '', column: 3, columnCount: 2, styles: ['width: 100px', 'width: 350px'], fields: [
-                { name: _cxSchema.sys_serverTask.RUNSTATUSID, label: 'run status', column: 1, items: _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList(), readOnly: true },        
+            group: 'run_status', label: '', column: 3, columnCount: 2, styles: ['width: 150px', 'width: 350px'], fields: [
+                { name: _cxSchema.sys_serverTask.RUNSTATUSID, label: 'run status', column: 1, items: _cxConst.SYS_SERVER_TASK.RUN_STATUS.toList(), readOnly: true },
                 { name: _cxSchema.sys_serverTask.LASTRUNTIME, label: 'last run time', column: 2, readOnly: true }
             ]
         });
         header.fields.push({ name: _cxSchema.sys_serverTask.RUNSTATUSMESSAGE, label: 'status message', column: 3, readOnly: true });
-        
+
         var taskRunsOptions = await this.getTaskRunListOptions();
-            
+
         this.options.fields.push(header);
         this.options.fields.push({ group: 'runs', title: 'server runs', column: 1, fields: [taskRunsOptions] });
+
+        if (this.options.mode == 'edit') {
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {
+                if (this.dataSource.taskStatusId != _cxConst.SYS_SERVER_TASK.TASK_STATUS.Disabled &&
+                    (this.dataSource.runStatusId == _cxConst.SYS_SERVER_TASK.RUN_STATUS.Idle || this.dataSource.runStatusId == _cxConst.SYS_SERVER_TASK.RUN_STATUS.ERROR)) {
+                    this.options.buttons.push({ id: 'sys_task_manual_start', text: 'Run Task Now', function: 'manualStart' });
+                }
+            }
+        }
 
     }
 }
