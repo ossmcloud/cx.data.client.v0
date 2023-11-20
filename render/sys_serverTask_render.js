@@ -179,7 +179,7 @@ class SysServerTaskRender extends RenderBase {
         this.options.fields.push(header);
         this.options.fields.push({ group: 'runs', title: 'server runs', column: 1, fields: [taskRunsOptions] });
 
-        if (this.options.mode == 'edit') {
+        if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {
                 if (this.dataSource.taskStatusId != _cxConst.SYS_SERVER_TASK.TASK_STATUS.Disabled &&
                     (this.dataSource.runStatusId == _cxConst.SYS_SERVER_TASK.RUN_STATUS.Idle || this.dataSource.runStatusId == _cxConst.SYS_SERVER_TASK.RUN_STATUS.ERROR)) {

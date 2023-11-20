@@ -14,7 +14,7 @@ class sys_serverTask_Collection extends _persistentTable.Table {
         query.sql = 'select * from sys_serverTask t where 1=1';
 
         this.queryFromParams(query, params, 't');
-        query.sql += ' order by t.runSequence desc';
+        query.sql += ' order by t.runSequence';
 
         return await super.select(query);
     }

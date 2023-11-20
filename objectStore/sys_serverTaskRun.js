@@ -48,15 +48,15 @@ class sys_serverTaskRun extends _persistentTable.Record {
     get taskName() { return this.#taskName; }
 
     get runTimeDisplay() {
-        var ts = new _corded.TimeSpan(this.taskCompleted - this.taskStarted);
+        var ts = new _corded.TimeSpan((this.taskCompleted || new Date()) - (this.taskStarted || new Date()));
         return ts.toString();
     }
     get waitTimeDisplay() {
-        var ts = new _corded.TimeSpan(this.taskStarted - this.created);
+        var ts = new _corded.TimeSpan((this.taskStarted || new Date()) - this.created);
         return ts.toString();
     }
     get fullRunTimeDisplay() {
-        var ts = new _corded.TimeSpan(this.taskCompleted - this.created);
+        var ts = new _corded.TimeSpan((this.taskCompleted || new Date()) - this.created);
         return ts.toString();
     }
 
