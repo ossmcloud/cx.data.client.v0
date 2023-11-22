@@ -15,13 +15,14 @@ class SysServerTaskRender extends RenderBase {
         this.autoLoadFields[_cxSchema.sys_serverTask.TASKTYPEID] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.TASKSTATUSID] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.TASKNAME] = null;
+        this.autoLoadFields[_cxSchema.sys_serverTask.WORKERTYPEID] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.RUNTIME] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.RUNFREQUENCY] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.RUNSTATUSID] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.RUNSTATUSMESSAGE] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.RUNSEQUENCE] = null;
         this.autoLoadFields[_cxSchema.sys_serverTask.LASTRUNTIME] = null;
-        this.autoLoadFields[_cxSchema.sys_serverTask.LASTRUNSTATUSID] = null;
+        // this.autoLoadFields[_cxSchema.sys_serverTask.LASTRUNSTATUSID] = null;
 
 
     }
@@ -39,6 +40,12 @@ class SysServerTaskRender extends RenderBase {
             column.align = 'center';
             column.width = '100px';
             column.lookUps = _cxConst.SYS_SERVER_TASK.TASK_STATUS.toList();
+        } else if (field.name == _cxSchema.sys_serverTask.WORKERTYPEID) {
+            column.title = 'task worker';
+            column.addTotals = false;
+            column.align = 'left';
+            column.width = '100px';
+            column.lookUps = _cxConst.SYS_SERVER_TASK.TASK_WORKER.toList();
         } else if (field.name == _cxSchema.sys_serverTask.RUNSTATUSID) {
             column.title = 'run status';
             column.addTotals = false;
@@ -65,7 +72,7 @@ class SysServerTaskRender extends RenderBase {
         }
     }
     async initFilter(field, filter) {
-        if (field.name == _cxSchema.sys_serverTask.TASKID || field.name == _cxSchema.sys_serverTask.RUNTIME || field.name == _cxSchema.sys_serverTask.RUNFREQUENCY
+        if (field.name == _cxSchema.sys_serverTask.TASKID || field.name == _cxSchema.sys_serverTask.WORKERTYPEID || field.name == _cxSchema.sys_serverTask.RUNTIME || field.name == _cxSchema.sys_serverTask.RUNFREQUENCY
             || field.name == _cxSchema.sys_serverTask.RUNSEQUENCE || field.name == _cxSchema.sys_serverTask.LASTRUNSTATUSID) {
             filter.hide = true;
         } else if (field.name == _cxSchema.sys_serverTask.TASKTYPEID) {
@@ -93,16 +100,16 @@ class SysServerTaskRender extends RenderBase {
             })
         }
 
-        for (let sx = 0; sx < statuses.length; sx++) {
-            const s = statuses[sx];
-            this.options.cellHighlights.push({
-                column: _cxSchema.sys_serverTask.LASTRUNSTATUSID,
-                op: '=',
-                value: s.value,
-                style: _cxConst.SYS_SERVER_TASK.RUN_STATUS.getStyleInverted(s.value) + applyStyle,
-                columns: [_cxSchema.sys_serverTask.LASTRUNSTATUSID]
-            })
-        }
+        // for (let sx = 0; sx < statuses.length; sx++) {
+        //     const s = statuses[sx];
+        //     this.options.cellHighlights.push({
+        //         column: _cxSchema.sys_serverTask.LASTRUNSTATUSID,
+        //         op: '=',
+        //         value: s.value,
+        //         style: _cxConst.SYS_SERVER_TASK.RUN_STATUS.getStyleInverted(s.value) + applyStyle,
+        //         columns: [_cxSchema.sys_serverTask.LASTRUNSTATUSID]
+        //     })
+        // }
 
         var taskStatuses = _cxConst.SYS_SERVER_TASK.TASK_STATUS.toList();
         for (let sx = 0; sx < taskStatuses.length; sx++) {
@@ -150,7 +157,7 @@ class SysServerTaskRender extends RenderBase {
         header.fields.push({
             group: 'task_name', label: '', column: 1, columnCount: 2, styles: ['width: 100px', 'width: 350px'], fields: [
                 { name: _cxSchema.sys_serverTask.TASKTYPEID, label: 'type', column: 1, items: _cxConst.SYS_SERVER_TASK.TASK_TYPE.toList(), readOnly: true },
-                { name: _cxSchema.sys_serverTask.TASKNAME, label: 'task name', column: 2, readOnly: true },
+                { name: _cxSchema.sys_serverTask.TASKNAME, label: 'task name', column: 2 },
             ]
         });
         header.fields.push({ name: _cxSchema.sys_serverTask.TASKDESCRIPTION, label: 'description', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 1 });

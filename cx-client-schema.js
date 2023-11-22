@@ -1535,6 +1535,7 @@ module.exports = {
         SHOPID: 'shopId',
         DEPARTMENT: 'department',
         DEPARTMENTNAME: 'departmentName',
+        CREATED: 'created',
     },
 
     raw_cx_pluCost: {
@@ -1556,6 +1557,7 @@ module.exports = {
         DEPARTMENT: 'department',
         SUBDEPARTMENT: 'subDepartment',
         SUBDEPARTMENTNAME: 'subDepartmentName',
+        CREATED: 'created',
     },
 
     raw_cx_taxRate: {
@@ -1567,6 +1569,7 @@ module.exports = {
         TAXCODE: 'taxCode',
         TAXRATE: 'taxRate',
         TAXNAME: 'taxName',
+        CREATED: 'created',
     },
 
     raw_cx_traderAccount: {
@@ -1587,6 +1590,7 @@ module.exports = {
         PHONE: 'phone',
         ISWHOLESALER: 'isWholesaler',
         WHOLESALERCODE: 'wholesalerCode',
+        CREATED: 'created',
     },
 
     raw_erp_bankAccount: {
@@ -1598,6 +1602,7 @@ module.exports = {
         CURRENCYCODE: 'currencyCode',
         CODE: 'code',
         DESCRIPTION: 'description',
+        CREATED: 'created',
     },
 
     raw_erp_glAccount: {
@@ -1609,6 +1614,7 @@ module.exports = {
         SUBCODE1: 'subCode1',
         SUBCODE2: 'subCode2',
         DESCRIPTION: 'description',
+        CREATED: 'created',
     },
 
     raw_erp_taxRate: {
@@ -1622,6 +1628,7 @@ module.exports = {
         TAXRATE: 'taxRate',
         TAXNAME: 'taxName',
         TAXTYPE: 'taxType',
+        CREATED: 'created',
     },
 
     raw_erp_traderAccount: {
@@ -1641,6 +1648,7 @@ module.exports = {
         CONTACT: 'contact',
         PHONE: 'phone',
         CURRENCYCODE: 'currencyCode',
+        CREATED: 'created',
     },
 
     raw_getLog: {
@@ -1738,6 +1746,7 @@ module.exports = {
         TASKSTATUSID: 'taskStatusId',
         TASKNAME: 'taskName',
         TASKDESCRIPTION: 'taskDescription',
+        WORKERTYPEID: 'workerTypeId',
         RUNSTATUSID: 'runStatusId',
         RUNSTATUSMESSAGE: 'runStatusMessage',
         RUNTIME: 'runTime',

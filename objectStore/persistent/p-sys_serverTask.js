@@ -24,6 +24,7 @@ const _fieldNames = {
     TASKSTATUSID: 'taskStatusId',
     TASKNAME: 'taskName',
     TASKDESCRIPTION: 'taskDescription',
+    WORKERTYPEID: 'workerTypeId',
     RUNSTATUSID: 'runStatusId',
     RUNSTATUSMESSAGE: 'runStatusMessage',
     RUNTIME: 'runTime',
@@ -44,11 +45,12 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    taskId: { name: 'taskId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
+    taskId: { name: 'taskId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     taskTypeId: { name: 'taskTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     taskStatusId: { name: 'taskStatusId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     taskName: { name: 'taskName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     taskDescription: { name: 'taskDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
+    workerTypeId: { name: 'workerTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     runStatusId: { name: 'runStatusId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     runStatusMessage: { name: 'runStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
     runTime: { name: 'runTime', dataType: 'varchar', pk: false, identity: false, maxLength: 5, null: false },
@@ -86,8 +88,6 @@ class Persistent_sys_serverTask extends _cx_data.DBRecord {
     // DEFINE TABLE FIELDS AS PROPERTIES
     get taskId() {
         return super.getValue(_fieldNames.TASKID);
-    } set taskId(val) {
-        super.setValue(_fieldNames.TASKID, val);
     }
 
     get taskTypeId() {
@@ -112,6 +112,12 @@ class Persistent_sys_serverTask extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TASKDESCRIPTION);
     } set taskDescription(val) {
         super.setValue(_fieldNames.TASKDESCRIPTION, val);
+    }
+
+    get workerTypeId() {
+        return super.getValue(_fieldNames.WORKERTYPEID);
+    } set workerTypeId(val) {
+        super.setValue(_fieldNames.WORKERTYPEID, val);
     }
 
     get runStatusId() {

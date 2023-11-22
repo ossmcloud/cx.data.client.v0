@@ -155,9 +155,10 @@ const ERP_DTFS_CONFIGS = {
 const CX_WHS_PROVIDER = {
     BWG: 'bwg',
     SCP: 'scp',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP' }); },
+    NISA: 'nisa',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' }); },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -960,6 +961,7 @@ const CP_QUERY_STATUS = {
 
 const CP_WHS_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
+    WHS_API_CONFIG: 'WhsAPIConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -969,6 +971,7 @@ const CP_WHS_CONFIG = {
 }
 const CP_WHS_SHOP_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
+    WHS_API_CONFIG: 'WhsAPIConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -1126,6 +1129,17 @@ const SYS_SERVER_TASK = {
 
             return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
+    },
+    TASK_WORKER: {
+        Cx_Log_CleanUp: 1,
+        Cx_RawData_CleanUp: 2,
+        Whs_Document_Import: 100,
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
     },
     RUN_STATUS: {
         Idle: 0,
