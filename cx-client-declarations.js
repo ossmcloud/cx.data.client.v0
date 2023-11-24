@@ -1,6 +1,8 @@
 'use strict'
 
-function enumToList(obj, addEmpty, aliases) {
+const _core = require('cx-core');
+
+function enumToList(obj, addEmpty, aliases, dataObjects) {
     if (!aliases) { aliases = {}; }
 
     var enums = [];
@@ -18,10 +20,12 @@ function enumToList(obj, addEmpty, aliases) {
         if (key == 'CX_SUPPORT') { continue; }
         if (key == '_NAME') { continue; }
 
-
+        
+        var dataObject = (dataObjects) ? dataObjects[key] : null;
         enums.push({
             value: obj[key],
             text: (aliases[key]) ? aliases[key] : key.toLowerCase(),
+            object: (dataObject) ? _core.text.toBase64(JSON.stringify(dataObject)) : '',
         });
     }
     return enums;
@@ -1130,17 +1134,6 @@ const SYS_SERVER_TASK = {
             return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
     },
-    TASK_WORKER: {
-        Cx_Log_CleanUp: 1,
-        Cx_RawData_CleanUp: 2,
-        Whs_Document_Import: 100,
-        toList: function (addEmpty) {
-            return enumToList(this, addEmpty);
-        },
-        getName: function (value) {
-            return enumGetName(this, value);
-        },
-    },
     RUN_STATUS: {
         Idle: 0,
         ManualStart: 1,
@@ -1206,14 +1199,29 @@ const SYS_SERVER_TASK = {
 
             return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
-
     },
     LOG_TYPE: {
         INFO: 'info',
         WARN: 'warning',
         ERROR: 'ERROR',
         CRITICAL: 'IMPORTANT'
-    }
+    },
+    TASK_WORKER: {
+        Cx_Log_CleanUp: 1,
+        Cx_RawData_CleanUp: 2,
+        Whs_Document_Import: 100,
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, null, {
+                Cx_Log_CleanUp: { name: 'System Logs Clean-up', desc: 'deletes system logs older than the days specified.\n\nAllowed parameters:\ndays_old=N;\n\nwhere N must be greater than 180 and less than 999\ndefault is 365 days', params: '' },
+                Cx_RawData_CleanUp: { name: 'Raw data left-overs', desc: 'deletes raw data leftover by failed transmissions.', params: '' },
+                Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
+    },
+
 }
 
 

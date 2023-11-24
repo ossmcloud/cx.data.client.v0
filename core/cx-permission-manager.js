@@ -257,9 +257,9 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.sys_serverTask.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
-        permission.allowNew = false;
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
         permission.allowView = (role >= _cxConst.CX_ROLE.MANAGER);
-        permission.allowDelete = false;
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_ADMIN);
     }
     if (recordType == _cxSchema.sys_serverTaskRun.TBL_NAME) {
         permission.allowEdit = false;

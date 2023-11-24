@@ -62,7 +62,7 @@ class SysServerTaskRunLogRender extends RenderBase {
         //         { name: _cxSchema.sys_serverTaskRunLog.TASKNAME, label: 'task name', column: 2, readOnly: true },
         //     ]
         // });
-        // header.fields.push({ name: _cxSchema.sys_serverTaskRunLog.TASKDESCRIPTION, label: 'description', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 1 });
+        // header.fields.push({ name: _cxSchema.sys_serverTaskRunLog.TASKDESCRIPTION, label: 'description', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, , column: 1 });
 
 
         // header.fields.push({

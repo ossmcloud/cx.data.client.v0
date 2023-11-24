@@ -140,7 +140,7 @@ class SysServerTaskRender extends RenderBase {
 
     async getTaskRunListOptions() {
         var taskRuns = this.dataSource.cx.table(_cxSchema.sys_serverTaskRun);
-        await taskRuns.select({ taskId: this.options.query.id });
+        await taskRuns.select({ taskId: this.options.query.id || -1 });
 
         var taskRunsOptions = await this.listOptions(taskRuns, { listView: true });
         taskRunsOptions.quickSearch = true;
@@ -149,29 +149,33 @@ class SysServerTaskRender extends RenderBase {
     }
 
     async _record() {
+        var newRecord = this.dataSource.isNew();
+        var validation = '{ "mandatory": true  }';
+        
         this.options.fields = [];
         this.options.fields.push({ name: 'action', id: 'action', hidden: true })
 
 
-        var header = { group: 'head', title: 'server task info', columnCount: 4, styles: ['width: 450px', 'width: 450px', 'width: 450px'], fields: [] };
+        var header = { group: 'head', title: 'server task info', columnCount: 4, styles: ['width: 550px', 'width: 450px', 'width: 450px'], fields: [] };
         header.fields.push({
-            group: 'task_name', label: '', column: 1, columnCount: 2, styles: ['width: 100px', 'width: 350px'], fields: [
+            group: 'task_name', label: '', column: 1, columnCount: 3, styles: ['width: 110px', 'width: 190px', 'width: 250px'], fields: [
                 { name: _cxSchema.sys_serverTask.TASKTYPEID, label: 'type', column: 1, items: _cxConst.SYS_SERVER_TASK.TASK_TYPE.toList(), readOnly: true },
-                { name: _cxSchema.sys_serverTask.TASKNAME, label: 'task name', column: 2 },
+                { name: _cxSchema.sys_serverTask.WORKERTYPEID, label: 'worker', column: 2, lookUps: _cxConst.SYS_SERVER_TASK.TASK_WORKER.toList(newRecord), readOnly: !newRecord, validation: validation },
+                { name: _cxSchema.sys_serverTask.TASKNAME, label: 'task name', column: 3, validation: validation },
             ]
         });
-        header.fields.push({ name: _cxSchema.sys_serverTask.TASKDESCRIPTION, label: 'description', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 1 });
+        header.fields.push({ name: _cxSchema.sys_serverTask.TASKDESCRIPTION, label: 'description', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 10, column: 1 });
 
 
         header.fields.push({
             group: 'run_info', label: '', column: 2, columnCount: 4, styles: ['width: 150px', 'width: 100px', 'width: 100px', 'width: 100px'], fields: [
                 { name: _cxSchema.sys_serverTask.TASKSTATUSID, label: 'status', column: 1, items: _cxConst.SYS_SERVER_TASK.TASK_STATUS.toList() },
-                { name: _cxSchema.sys_serverTask.RUNTIME, label: 'run time', column: 2 },
+                { name: _cxSchema.sys_serverTask.RUNTIME, label: 'run time', column: 2, validation: validation },
                 { name: _cxSchema.sys_serverTask.RUNFREQUENCY, label: 'freq. (mins)', column: 3 },
                 { name: _cxSchema.sys_serverTask.RUNSEQUENCE, label: 'run seq.', column: 4 }
             ]
         });
-        header.fields.push({ name: _cxSchema.sys_serverTask.RUNPARAMETERS, label: 'run parameters', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 2 });
+        header.fields.push({ name: _cxSchema.sys_serverTask.RUNPARAMETERS, label: 'run parameters', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 10, column: 2 });
 
         header.fields.push({
             group: 'run_status', label: '', column: 3, columnCount: 2, styles: ['width: 150px', 'width: 350px'], fields: [
@@ -181,10 +185,11 @@ class SysServerTaskRender extends RenderBase {
         });
         header.fields.push({ name: _cxSchema.sys_serverTask.RUNSTATUSMESSAGE, label: 'status message', column: 3, readOnly: true });
 
-        var taskRunsOptions = await this.getTaskRunListOptions();
-
         this.options.fields.push(header);
-        this.options.fields.push({ group: 'runs', title: 'server runs', column: 1, fields: [taskRunsOptions] });
+        if (!this.dataSource.isNew()) {
+            var taskRunsOptions = await this.getTaskRunListOptions();
+            this.options.fields.push({ group: 'runs', title: 'server runs', column: 1, fields: [taskRunsOptions] });
+        }
 
         if (this.options.mode == 'view') {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR) {
