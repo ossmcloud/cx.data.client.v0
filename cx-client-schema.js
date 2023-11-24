@@ -1391,6 +1391,7 @@ module.exports = {
         EPOSTOTALGROSS: 'eposTotalGross',
         UPLOADDATE: 'uploadDate',
         CREATED: 'created',
+        SUPPLIERNAME: 'supplierName',
     },
 
     raw_cp_delivery_line: {
@@ -1438,6 +1439,8 @@ module.exports = {
         EPOSTOTALGROSS: 'eposTotalGross',
         UPLOADDATE: 'uploadDate',
         CREATED: 'created',
+        SURCHARGEVALUE: 'surchargeValue',
+        SUPPLIERNAME: 'supplierName',
     },
 
     raw_cp_invoice_line: {
@@ -1463,6 +1466,7 @@ module.exports = {
         EPOSLINEGROSS: 'eposLineGross',
         SYSINFO: 'sysInfo',
         CREATED: 'created',
+        ITEMBARCODEOUTER: 'itemBarcodeOuter',
     },
 
     raw_cp_product: {
