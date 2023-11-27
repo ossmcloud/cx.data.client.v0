@@ -1,6 +1,17 @@
 'use strict'
 
 module.exports = {
+    cp_deliveryNoLookUp: {
+        TBL_NAME: 'cp_deliveryNoLookUp',
+        DELIVERYNOLOOKUPID: 'deliveryNoLookUpId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        DOCUMENTNUMBER: 'documentNumber',
+        DOCKETNUMBER: 'docketNumber',
+        DOCKETDATE: 'docketDate',
+        CREATED: 'created',
+    },
+
     cp_deliveryReturn: {
         TBL_NAME: 'cp_deliveryReturn',
         DELRETID: 'delRetId',
@@ -751,6 +762,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         GLCONTRAENTRY: 'glContraEntry',
+        ROUNDNET: 'roundNet',
+        ROUNDTAX: 'roundTax',
     },
 
     cr_erp_transaction_tax: {
@@ -770,6 +783,8 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ROUNDNET: 'roundNet',
+        ROUNDTAX: 'roundTax',
     },
 
     cr_preference: {
@@ -1416,6 +1431,17 @@ module.exports = {
         EPOSLINEVAT: 'eposLineVat',
         EPOSLINEGROSS: 'eposLineGross',
         SYSINFO: 'sysInfo',
+        CREATED: 'created',
+    },
+
+    raw_cp_deliveryNoLookUp: {
+        TBL_NAME: 'raw_cp_deliveryNoLookUp',
+        RAWDELIVERYNOLOOKUPID: 'rawDeliveryNoLookUpId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        DOCUMENTNUMBER: 'documentNumber',
+        DOCKETNUMBER: 'docketNumber',
+        DOCKETDATE: 'docketDate',
         CREATED: 'created',
     },
 
