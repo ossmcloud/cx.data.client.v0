@@ -102,6 +102,10 @@ class CRCashBookRender extends RenderBase {
                 { name: _cxSchema.cr_transaction.SUBDEPARTMENT, label: 'sub-department', lookUps: subDepLookUp, column: 1 },
                 { name: _cxSchema.cr_transaction.CASHIERID, label: 'cashier id', column: 1 },
                 { name: _cxSchema.cr_transaction.TILLID, label: 'till id', column: 1 },
+                { name: _cxSchema.cr_transaction.ANALYSIS1, label: 'analysis 1', column: 1 },
+                { name: _cxSchema.cr_transaction.ANALYSIS2, label: 'analysis 2', column: 1 },
+                { name: _cxSchema.cr_transaction.ANALYSIS3, label: 'analysis 3', column: 1 },
+                
 
                 { name: _cxSchema.cr_transaction.VOIDED, label: 'voided', column: 2 },
                 { name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', readOnly: true, column: 2 },

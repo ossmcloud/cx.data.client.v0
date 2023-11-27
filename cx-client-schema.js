@@ -1,6 +1,17 @@
 'use strict'
 
 module.exports = {
+    cp_deliveryNoLookUp: {
+        TBL_NAME: 'cp_deliveryNoLookUp',
+        DELIVERYNOLOOKUPID: 'deliveryNoLookUpId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        DOCUMENTNUMBER: 'documentNumber',
+        DOCKETNUMBER: 'docketNumber',
+        DOCKETDATE: 'docketDate',
+        CREATED: 'created',
+    },
+
     cp_deliveryReturn: {
         TBL_NAME: 'cp_deliveryReturn',
         DELRETID: 'delRetId',
@@ -751,6 +762,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         GLCONTRAENTRY: 'glContraEntry',
+        ROUNDNET: 'roundNet',
+        ROUNDTAX: 'roundTax',
     },
 
     cr_erp_transaction_tax: {
@@ -770,6 +783,8 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ROUNDNET: 'roundNet',
+        ROUNDTAX: 'roundTax',
     },
 
     cr_preference: {
@@ -948,6 +963,9 @@ module.exports = {
         RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
         RAW_TAXCODE: 'raw_taxCode',
         RAW_TAXRATE: 'raw_taxRate',
+        ANALYSIS1: 'analysis1',
+        ANALYSIS2: 'analysis2',
+        ANALYSIS3: 'analysis3',
     },
 
     cx_login: {
@@ -1025,6 +1043,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISMANUAL: 'isManual',
     },
 
     cx_map_config_tax: {
@@ -1041,6 +1060,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
+        ISMANUAL: 'isManual',
     },
 
     cx_shop: {
@@ -1386,6 +1406,7 @@ module.exports = {
         EPOSTOTALGROSS: 'eposTotalGross',
         UPLOADDATE: 'uploadDate',
         CREATED: 'created',
+        SUPPLIERNAME: 'supplierName',
     },
 
     raw_cp_delivery_line: {
@@ -1413,6 +1434,17 @@ module.exports = {
         CREATED: 'created',
     },
 
+    raw_cp_deliveryNoLookUp: {
+        TBL_NAME: 'raw_cp_deliveryNoLookUp',
+        RAWDELIVERYNOLOOKUPID: 'rawDeliveryNoLookUpId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        DOCUMENTNUMBER: 'documentNumber',
+        DOCKETNUMBER: 'docketNumber',
+        DOCKETDATE: 'docketDate',
+        CREATED: 'created',
+    },
+
     raw_cp_invoice: {
         TBL_NAME: 'raw_cp_invoice',
         RAWINVOICEID: 'rawInvoiceId',
@@ -1433,6 +1465,8 @@ module.exports = {
         EPOSTOTALGROSS: 'eposTotalGross',
         UPLOADDATE: 'uploadDate',
         CREATED: 'created',
+        SURCHARGEVALUE: 'surchargeValue',
+        SUPPLIERNAME: 'supplierName',
     },
 
     raw_cp_invoice_line: {
@@ -1458,6 +1492,7 @@ module.exports = {
         EPOSLINEGROSS: 'eposLineGross',
         SYSINFO: 'sysInfo',
         CREATED: 'created',
+        ITEMBARCODEOUTER: 'itemBarcodeOuter',
     },
 
     raw_cp_product: {
@@ -1518,6 +1553,9 @@ module.exports = {
         VOIDED: 'voided',
         BUNKERED: 'bunkered',
         CREATED: 'created',
+        ANALYSIS1: 'analysis1',
+        ANALYSIS2: 'analysis2',
+        ANALYSIS3: 'analysis3',
     },
 
     raw_cx_department: {
@@ -1527,6 +1565,7 @@ module.exports = {
         SHOPID: 'shopId',
         DEPARTMENT: 'department',
         DEPARTMENTNAME: 'departmentName',
+        CREATED: 'created',
     },
 
     raw_cx_pluCost: {
@@ -1548,6 +1587,7 @@ module.exports = {
         DEPARTMENT: 'department',
         SUBDEPARTMENT: 'subDepartment',
         SUBDEPARTMENTNAME: 'subDepartmentName',
+        CREATED: 'created',
     },
 
     raw_cx_taxRate: {
@@ -1559,6 +1599,7 @@ module.exports = {
         TAXCODE: 'taxCode',
         TAXRATE: 'taxRate',
         TAXNAME: 'taxName',
+        CREATED: 'created',
     },
 
     raw_cx_traderAccount: {
@@ -1579,6 +1620,7 @@ module.exports = {
         PHONE: 'phone',
         ISWHOLESALER: 'isWholesaler',
         WHOLESALERCODE: 'wholesalerCode',
+        CREATED: 'created',
     },
 
     raw_erp_bankAccount: {
@@ -1590,6 +1632,7 @@ module.exports = {
         CURRENCYCODE: 'currencyCode',
         CODE: 'code',
         DESCRIPTION: 'description',
+        CREATED: 'created',
     },
 
     raw_erp_glAccount: {
@@ -1601,6 +1644,7 @@ module.exports = {
         SUBCODE1: 'subCode1',
         SUBCODE2: 'subCode2',
         DESCRIPTION: 'description',
+        CREATED: 'created',
     },
 
     raw_erp_taxRate: {
@@ -1614,6 +1658,7 @@ module.exports = {
         TAXRATE: 'taxRate',
         TAXNAME: 'taxName',
         TAXTYPE: 'taxType',
+        CREATED: 'created',
     },
 
     raw_erp_traderAccount: {
@@ -1633,6 +1678,7 @@ module.exports = {
         CONTACT: 'contact',
         PHONE: 'phone',
         CURRENCYCODE: 'currencyCode',
+        CREATED: 'created',
     },
 
     raw_getLog: {
@@ -1721,6 +1767,57 @@ module.exports = {
         NAME: 'name',
         ISCLOUD: 'isCloud',
         LOGOURL: 'logoUrl',
+    },
+
+    sys_serverTask: {
+        TBL_NAME: 'sys_serverTask',
+        TASKID: 'taskId',
+        TASKTYPEID: 'taskTypeId',
+        TASKSTATUSID: 'taskStatusId',
+        TASKNAME: 'taskName',
+        TASKDESCRIPTION: 'taskDescription',
+        WORKERTYPEID: 'workerTypeId',
+        RUNSTATUSID: 'runStatusId',
+        RUNSTATUSMESSAGE: 'runStatusMessage',
+        RUNTIME: 'runTime',
+        RUNFREQUENCY: 'runFrequency',
+        RUNPARAMETERS: 'runParameters',
+        RUNSEQUENCE: 'runSequence',
+        LASTRUNTIME: 'lastRunTime',
+        LASTRUNSTATUSID: 'lastRunStatusId',
+        LASTRUNSTATUSMESSAGE: 'lastRunStatusMessage',
+        LASTRUNPARAMETERS: 'lastRunParameters',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    sys_serverTaskRun: {
+        TBL_NAME: 'sys_serverTaskRun',
+        TASKRUNID: 'taskRunId',
+        TASKID: 'taskId',
+        RUNSTATUSID: 'runStatusId',
+        RUNSTATUSMESSAGE: 'runStatusMessage',
+        RUNPARAMETERS: 'runParameters',
+        TASKSTARTED: 'taskStarted',
+        TASKCOMPLETED: 'taskCompleted',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    sys_serverTaskRunLog: {
+        TBL_NAME: 'sys_serverTaskRunLog',
+        TASKRUNLOGID: 'taskRunLogId',
+        TASKRUNID: 'taskRunId',
+        TASKID: 'taskId',
+        LOGTYPE: 'logType',
+        LOGMESSAGE: 'logMessage',
+        LOGADDITIONALINFO: 'logAdditionalInfo',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
     }
 
 }

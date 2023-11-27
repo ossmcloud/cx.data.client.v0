@@ -73,6 +73,11 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             query.sql += ` and dep.${fieldName} ${fieldFilter}`;
         }
 
+        if (params.manual) {
+            query.sql += ` and isnull(${this.FieldNames.ISMANUAL}, 0) = @${this.FieldNames.ISMANUAL}`;
+            query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T' || params.manual == 'true') ? 1 : 0 });
+        }
+
         query.sql += ' order by eposDepartment, eposSubDepartment';
 
         if (!params.noPaging) {
@@ -284,7 +289,7 @@ class cx_map_config_dep extends _persistentTable.Record {
 
 
     async save() {
-
+        if (this.isNew() && this.cx.tUserId > 0) { this.isManual = true; }
         await super.save()
     }
 }

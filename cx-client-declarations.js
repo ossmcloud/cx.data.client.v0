@@ -1,6 +1,8 @@
 'use strict'
 
-function enumToList(obj, addEmpty, aliases) {
+const _core = require('cx-core');
+
+function enumToList(obj, addEmpty, aliases, dataObjects) {
     if (!aliases) { aliases = {}; }
 
     var enums = [];
@@ -18,10 +20,12 @@ function enumToList(obj, addEmpty, aliases) {
         if (key == 'CX_SUPPORT') { continue; }
         if (key == '_NAME') { continue; }
 
-
+        
+        var dataObject = (dataObjects) ? dataObjects[key] : null;
         enums.push({
             value: obj[key],
             text: (aliases[key]) ? aliases[key] : key.toLowerCase(),
+            object: (dataObject) ? _core.text.toBase64(JSON.stringify(dataObject)) : '',
         });
     }
     return enums;
@@ -98,6 +102,7 @@ const CX_SERVICES = {
     ERPS: 'erps',
     ERP: 'erp',
     MMS: 'mms',
+    SVR: 'server',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
@@ -154,9 +159,10 @@ const ERP_DTFS_CONFIGS = {
 const CX_WHS_PROVIDER = {
     BWG: 'bwg',
     SCP: 'scp',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP' }); },
+    NISA: 'nisa',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' }); },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -235,6 +241,8 @@ const CX_SYS_USERS = {
     SYSTEM: -1,
     DTFS: -2,
     ERPS: -3,
+    MMS: -4,
+    SVR: -5,
 }
 
 const CX_SHOP = {
@@ -620,7 +628,7 @@ const CP_DOCUMENT = {
         PostingError: 98,
         DeleteAndPull: 99,
         Delete: 100,
-       
+
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
@@ -957,6 +965,7 @@ const CP_QUERY_STATUS = {
 
 const CP_WHS_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
+    WHS_API_CONFIG: 'WhsAPIConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -966,6 +975,7 @@ const CP_WHS_CONFIG = {
 }
 const CP_WHS_SHOP_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
+    WHS_API_CONFIG: 'WhsAPIConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -1042,6 +1052,178 @@ const SYS_CUSTOM_SCRIPT = {
     }
 }
 
+const SYS_SERVER_TASK = {
+    TASK_TYPE: {
+        Server: 0,
+        Task: 1,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Server: 'Server Task',
+                Task: 'Worker Task'
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Server: 'Server Task',
+                Task: 'Worker Task'
+            });
+        },
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Server) {
+                color = '255,255,255';
+                bkgColor = '138,175,78';
+            } else if (status == this.Task) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+
+    },
+    TASK_STATUS: {
+        Disabled: 0,
+        NotScheduled: 1,
+        Scheduled: 2,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Disabled: 'Disabled',
+                NotScheduled: 'Not Scheduled',
+                Scheduled: 'Scheduled',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Disabled: 'Disabled',
+                NotScheduled: 'Not Scheduled',
+                Scheduled: 'Scheduled',
+            });
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.NotScheduled) {
+                color = '255,255,255';
+                bkgColor = '146,71,146';
+            } else if (status == this.Scheduled) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+    },
+    RUN_STATUS: {
+        Idle: 0,
+        ManualStart: 1,
+        Pending: 3,
+        Deferred: 5,
+        Running: 7,
+        Completed: 8,
+        ERROR: 9,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Idle: 'Idle',
+                ManualStart: 'Manual Start',
+                Pending: 'Pending',
+                Deferred: 'Deferred',
+                Running: 'Running',
+                Completed: 'Completed',
+                ERROR: 'ERROR',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Idle: 'Idle',
+                ManualStart: 'Manual Start',
+                Pending: 'Pending',
+                Deferred: 'Deferred',
+                Running: 'Running',
+                Completed: 'Completed',
+                ERROR: 'ERROR',
+            });
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Pending || status == this.ManualStart) {
+                color = '255,255,255';
+                bkgColor = '246,71,146';
+            } else if (status == this.Deferred) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Running) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else if (status == this.Completed) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.Idle) {
+                color = '100,0,0';
+                bkgColor = '128,128,128';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+    },
+    LOG_TYPE: {
+        INFO: 'info',
+        WARN: 'warning',
+        ERROR: 'ERROR',
+        CRITICAL: 'IMPORTANT'
+    },
+    TASK_WORKER: {
+        Cx_Log_CleanUp: 1,
+        Cx_RawData_CleanUp: 2,
+        Whs_Document_Import: 100,
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, null, {
+                Cx_Log_CleanUp: { name: 'System Logs Clean-up', desc: 'deletes system logs older than the days specified.\n\nAllowed parameters:\ndays_old=N;\n\nwhere N must be greater than 180 and less than 999\ndefault is 365 days', params: '' },
+                Cx_RawData_CleanUp: { name: 'Raw data left-overs', desc: 'deletes raw data leftover by failed transmissions.', params: '' },
+                Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value);
+        },
+    },
+
+}
+
 
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
@@ -1077,6 +1259,7 @@ module.exports = {
     ERP_TRAN_STATUS, ERP_TRAN_STATUS,
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     SYS_CUSTOM_SCRIPT: SYS_CUSTOM_SCRIPT,
+    SYS_SERVER_TASK: SYS_SERVER_TASK,
     RENDER: RENDER,
     SQL: SQL,
 }

@@ -14,32 +14,26 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cr_erp_transaction_gl';
+const _tableName = 'cr_erp_transaction_tax';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    GLTRANID: 'glTranId',
+    TAXTRANID: 'taxTranId',
     ERPTRANID: 'erpTranId',
-    GLACCOUNTSEG1: 'glAccountSeg1',
-    GLACCOUNTSEG2: 'glAccountSeg2',
-    GLACCOUNTSEG3: 'glAccountSeg3',
-    GLACCOUNTDESCRIPTION: 'glAccountDescription',
-    GLACCOUNTSEGFIXED: 'glAccountSegFixed',
-    NARRATIVE: 'narrative',
-    VALUENET: 'valueNet',
     TAXACCOUNT: 'taxAccount',
     TAXRATE: 'taxRate',
     TAXDESCRIPTION: 'taxDescription',
+    VALUENET: 'valueNet',
     VALUETAX: 'valueTax',
     VALUEGROSS: 'valueGross',
+    NARRATIVE: 'narrative',
     STATUS: 'status',
     STATUSMESSAGE: 'statusMessage',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    GLCONTRAENTRY: 'glContraEntry',
     ROUNDNET: 'roundNet',
     ROUNDTAX: 'roundTax',
 
@@ -48,27 +42,21 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    glTranId: { name: 'glTranId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    taxTranId: { name: 'taxTranId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     erpTranId: { name: 'erpTranId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    glAccountSeg1: { name: 'glAccountSeg1', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
-    glAccountSeg2: { name: 'glAccountSeg2', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    glAccountSeg3: { name: 'glAccountSeg3', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    glAccountDescription: { name: 'glAccountDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    glAccountSegFixed: { name: 'glAccountSegFixed', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
-    narrative: { name: 'narrative', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    valueNet: { name: 'valueNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    taxAccount: { name: 'taxAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    taxRate: { name: 'taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
+    taxAccount: { name: 'taxAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
+    taxRate: { name: 'taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: false },
     taxDescription: { name: 'taxDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    valueNet: { name: 'valueNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     valueTax: { name: 'valueTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     valueGross: { name: 'valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    narrative: { name: 'narrative', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     statusMessage: { name: 'statusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    glContraEntry: { name: 'glContraEntry', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     roundNet: { name: 'roundNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     roundTax: { name: 'roundTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
@@ -76,7 +64,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cr_erp_transaction_gl_Collection extends _cx_data.DBTable {
+class Persistent_cr_erp_transaction_tax_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -85,63 +73,21 @@ class Persistent_cr_erp_transaction_gl_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cr_erp_transaction_gl extends _cx_data.DBRecord {
+class Persistent_cr_erp_transaction_tax extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get glTranId() {
-        return super.getValue(_fieldNames.GLTRANID);
+    get taxTranId() {
+        return super.getValue(_fieldNames.TAXTRANID);
     }
 
     get erpTranId() {
         return super.getValue(_fieldNames.ERPTRANID);
     } set erpTranId(val) {
         super.setValue(_fieldNames.ERPTRANID, val);
-    }
-
-    get glAccountSeg1() {
-        return super.getValue(_fieldNames.GLACCOUNTSEG1);
-    } set glAccountSeg1(val) {
-        super.setValue(_fieldNames.GLACCOUNTSEG1, val);
-    }
-
-    get glAccountSeg2() {
-        return super.getValue(_fieldNames.GLACCOUNTSEG2);
-    } set glAccountSeg2(val) {
-        super.setValue(_fieldNames.GLACCOUNTSEG2, val);
-    }
-
-    get glAccountSeg3() {
-        return super.getValue(_fieldNames.GLACCOUNTSEG3);
-    } set glAccountSeg3(val) {
-        super.setValue(_fieldNames.GLACCOUNTSEG3, val);
-    }
-
-    get glAccountDescription() {
-        return super.getValue(_fieldNames.GLACCOUNTDESCRIPTION);
-    } set glAccountDescription(val) {
-        super.setValue(_fieldNames.GLACCOUNTDESCRIPTION, val);
-    }
-
-    get glAccountSegFixed() {
-        return super.getValue(_fieldNames.GLACCOUNTSEGFIXED);
-    } set glAccountSegFixed(val) {
-        super.setValue(_fieldNames.GLACCOUNTSEGFIXED, val);
-    }
-
-    get narrative() {
-        return super.getValue(_fieldNames.NARRATIVE);
-    } set narrative(val) {
-        super.setValue(_fieldNames.NARRATIVE, val);
-    }
-
-    get valueNet() {
-        return super.getValue(_fieldNames.VALUENET);
-    } set valueNet(val) {
-        super.setValue(_fieldNames.VALUENET, val);
     }
 
     get taxAccount() {
@@ -162,6 +108,12 @@ class Persistent_cr_erp_transaction_gl extends _cx_data.DBRecord {
         super.setValue(_fieldNames.TAXDESCRIPTION, val);
     }
 
+    get valueNet() {
+        return super.getValue(_fieldNames.VALUENET);
+    } set valueNet(val) {
+        super.setValue(_fieldNames.VALUENET, val);
+    }
+
     get valueTax() {
         return super.getValue(_fieldNames.VALUETAX);
     } set valueTax(val) {
@@ -172,6 +124,12 @@ class Persistent_cr_erp_transaction_gl extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.VALUEGROSS);
     } set valueGross(val) {
         super.setValue(_fieldNames.VALUEGROSS, val);
+    }
+
+    get narrative() {
+        return super.getValue(_fieldNames.NARRATIVE);
+    } set narrative(val) {
+        super.setValue(_fieldNames.NARRATIVE, val);
     }
 
     get status() {
@@ -210,12 +168,6 @@ class Persistent_cr_erp_transaction_gl extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    get glContraEntry() {
-        return super.getValue(_fieldNames.GLCONTRAENTRY);
-    } set glContraEntry(val) {
-        super.setValue(_fieldNames.GLCONTRAENTRY, val);
-    }
-
     get roundNet() {
         return super.getValue(_fieldNames.ROUNDNET);
     } set roundNet(val) {
@@ -234,6 +186,6 @@ class Persistent_cr_erp_transaction_gl extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cr_erp_transaction_gl_Collection,
-    Record: Persistent_cr_erp_transaction_gl,
+    Table: Persistent_cr_erp_transaction_tax_Collection,
+    Record: Persistent_cr_erp_transaction_tax,
 }

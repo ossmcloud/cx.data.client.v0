@@ -11,13 +11,19 @@ class CxMapConfigRender extends RenderBase {
     }
 
     async _record() {
+        this.options.allowDelete = this.dataSource.isManual && (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT);
 
         var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
 
-        var readOnly = !this.dataSource.isNew();
+        var readOnly = (this.dataSource.isManual)?false: !this.dataSource.isNew();
+        if (this.options.mode == 'view') { readOnly = true; }
+        if (this.dataSource.isManual) {
+            //this.options.tabTitle = this.op.title;
+            this.options.title = '<span style="color: var(--main-color-3);" title="record was added manually">&#x2699;</span> ' + this.options.title;
 
+        }
 
         this.options.fields = [
             {
@@ -74,6 +80,10 @@ class CxMapConfigRender extends RenderBase {
         this.options.paging = true;
         this.options.pageNo = (this.options.query) ? (this.options.query.page || 1) : 1;
 
+        var mapConfig = this.dataSource.cx.table(_cxSchema.cx_map_config);
+        mapConfig = await mapConfig.fetch(this.options.query.mid)
+        this.options.title = `${this.options.title} :: <b><i>${mapConfig.name}</i></b>`;
+
         var mismapLookUps = [
             { value: '', text: '- all -' },
 
@@ -100,6 +110,7 @@ class CxMapConfigRender extends RenderBase {
             { label: 'sub-department', fieldName: 'sub', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'description', fieldName: 'desc', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'mapping status', fieldName: 'mapped', name: 'mapped', lookUps: mismapLookUps },
+            { label: 'manual', fieldName: 'manual', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
 
         ];
         this.options.columns = [
@@ -161,6 +172,10 @@ class CxMapConfigRender extends RenderBase {
                 column: 'shopId', op: '=', value: shopColors[cx].shopId, style: 'background-color: rgba(' + shopColors[cx].shopColor + ', 0.5); ' + applyStoreColorStyle, columns: ['shopInfo']
             })
         }
+
+        this.options.highlights = [
+            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
+        ];
 
     }
 

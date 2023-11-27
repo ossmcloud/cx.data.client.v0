@@ -14,26 +14,14 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cr_transaction';
+const _tableName = 'raw_cr_transaction';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    TRANID: 'tranId',
-    CBTRANID: 'cbTranId',
+    RAWTRANSACTIONID: 'rawTransactionId',
+    TRANSMISSIONID: 'transmissionID',
     SHOPID: 'shopId',
-    TRANTYPECONFIGID: 'tranTypeConfigId',
-    DEPMAPCONFIGID: 'depMapConfigId',
-    TAXMAPCONFIGID: 'taxMapConfigId',
-    ERPCBACCOUNTID: 'erpCBAccountId',
-    ISMANUAL: 'isManual',
-    ISDUPLICATE: 'isDuplicate',
-    VALUEGROSS: 'valueGross',
-    VALUENET: 'valueNet',
-    VALUEDISCOUNT: 'valueDiscount',
-    VALUEDISCOUNTPROMO: 'valueDiscountPromo',
-    VALUETAX: 'valueTax',
-    IGNORED: 'ignored',
     EPOSTRANSACTIONID: 'eposTransactionId',
     EPOSTRANSACTIONNO: 'eposTransactionNo',
     TRANSACTIONDATE: 'transactionDate',
@@ -53,11 +41,11 @@ const _fieldNames = {
     QUANTITY: 'quantity',
     UNITCOST: 'unitCost',
     UNITPRICE: 'unitPrice',
-    RAW_VALUEGROSS: 'raw_valueGross',
-    RAW_VALUENET: 'raw_valueNet',
-    RAW_VALUEDISCOUNT: 'raw_valueDiscount',
-    RAW_VALUEDISCOUNTPROMO: 'raw_valueDiscountPromo',
-    RAW_VALUETAX: 'raw_valueTax',
+    VALUEGROSS: 'valueGross',
+    VALUENET: 'valueNet',
+    VALUEDISCOUNT: 'valueDiscount',
+    VALUEDISCOUNTPROMO: 'valueDiscountPromo',
+    VALUETAX: 'valueTax',
     TAXCODE: 'taxCode',
     TAXRATE: 'taxRate',
     CHANGE: 'change',
@@ -71,13 +59,6 @@ const _fieldNames = {
     VOIDED: 'voided',
     BUNKERED: 'bunkered',
     CREATED: 'created',
-    CREATEDBY: 'createdBy',
-    MODIFIED: 'modified',
-    MODIFIEDBY: 'modifiedBy',
-    ISEDITED: 'isEdited',
-    RAW_CUSTOMERACCOUNT: 'raw_customerAccount',
-    RAW_TAXCODE: 'raw_taxCode',
-    RAW_TAXRATE: 'raw_taxRate',
     ANALYSIS1: 'analysis1',
     ANALYSIS2: 'analysis2',
     ANALYSIS3: 'analysis3',
@@ -87,21 +68,9 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    tranId: { name: 'tranId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    cbTranId: { name: 'cbTranId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    rawTransactionId: { name: 'rawTransactionId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    tranTypeConfigId: { name: 'tranTypeConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
-    isDuplicate: { name: 'isDuplicate', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
-    valueGross: { name: 'valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    valueNet: { name: 'valueNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    valueDiscount: { name: 'valueDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    valueDiscountPromo: { name: 'valueDiscountPromo', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    valueTax: { name: 'valueTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    ignored: { name: 'ignored', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     eposTransactionId: { name: 'eposTransactionId', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     eposTransactionNo: { name: 'eposTransactionNo', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     transactionDate: { name: 'transactionDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
@@ -121,11 +90,11 @@ const _fields = {
     quantity: { name: 'quantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     unitCost: { name: 'unitCost', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    raw_valueGross: { name: 'raw_valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    raw_valueNet: { name: 'raw_valueNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    raw_valueDiscount: { name: 'raw_valueDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    raw_valueDiscountPromo: { name: 'raw_valueDiscountPromo', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    raw_valueTax: { name: 'raw_valueTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    valueGross: { name: 'valueGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    valueNet: { name: 'valueNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    valueDiscount: { name: 'valueDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    valueDiscountPromo: { name: 'valueDiscountPromo', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    valueTax: { name: 'valueTax', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     taxCode: { name: 'taxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
     taxRate: { name: 'taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     change: { name: 'change', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -139,13 +108,6 @@ const _fields = {
     voided: { name: 'voided', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     bunkered: { name: 'bunkered', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
-    createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
-    modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    isEdited: { name: 'isEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
-    raw_customerAccount: { name: 'raw_customerAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
-    raw_taxCode: { name: 'raw_taxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
-    raw_taxRate: { name: 'raw_taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     analysis1: { name: 'analysis1', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     analysis2: { name: 'analysis2', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     analysis3: { name: 'analysis3', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
@@ -154,7 +116,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cr_transaction_Collection extends _cx_data.DBTable {
+class Persistent_raw_cr_transaction_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -163,99 +125,27 @@ class Persistent_cr_transaction_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cr_transaction extends _cx_data.DBRecord {
+class Persistent_raw_cr_transaction extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get tranId() {
-        return super.getValue(_fieldNames.TRANID);
+    get rawTransactionId() {
+        return super.getValue(_fieldNames.RAWTRANSACTIONID);
     }
 
-    get cbTranId() {
-        return super.getValue(_fieldNames.CBTRANID);
-    } set cbTranId(val) {
-        super.setValue(_fieldNames.CBTRANID, val);
+    get transmissionID() {
+        return super.getValue(_fieldNames.TRANSMISSIONID);
+    } set transmissionID(val) {
+        super.setValue(_fieldNames.TRANSMISSIONID, val);
     }
 
     get shopId() {
         return super.getValue(_fieldNames.SHOPID);
     } set shopId(val) {
         super.setValue(_fieldNames.SHOPID, val);
-    }
-
-    get tranTypeConfigId() {
-        return super.getValue(_fieldNames.TRANTYPECONFIGID);
-    } set tranTypeConfigId(val) {
-        super.setValue(_fieldNames.TRANTYPECONFIGID, val);
-    }
-
-    get depMapConfigId() {
-        return super.getValue(_fieldNames.DEPMAPCONFIGID);
-    } set depMapConfigId(val) {
-        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
-    }
-
-    get taxMapConfigId() {
-        return super.getValue(_fieldNames.TAXMAPCONFIGID);
-    } set taxMapConfigId(val) {
-        super.setValue(_fieldNames.TAXMAPCONFIGID, val);
-    }
-
-    get erpCBAccountId() {
-        return super.getValue(_fieldNames.ERPCBACCOUNTID);
-    } set erpCBAccountId(val) {
-        super.setValue(_fieldNames.ERPCBACCOUNTID, val);
-    }
-
-    get isManual() {
-        return super.getValue(_fieldNames.ISMANUAL);
-    } set isManual(val) {
-        super.setValue(_fieldNames.ISMANUAL, val);
-    }
-
-    get isDuplicate() {
-        return super.getValue(_fieldNames.ISDUPLICATE);
-    } set isDuplicate(val) {
-        super.setValue(_fieldNames.ISDUPLICATE, val);
-    }
-
-    get valueGross() {
-        return super.getValue(_fieldNames.VALUEGROSS);
-    } set valueGross(val) {
-        super.setValue(_fieldNames.VALUEGROSS, val);
-    }
-
-    get valueNet() {
-        return super.getValue(_fieldNames.VALUENET);
-    } set valueNet(val) {
-        super.setValue(_fieldNames.VALUENET, val);
-    }
-
-    get valueDiscount() {
-        return super.getValue(_fieldNames.VALUEDISCOUNT);
-    } set valueDiscount(val) {
-        super.setValue(_fieldNames.VALUEDISCOUNT, val);
-    }
-
-    get valueDiscountPromo() {
-        return super.getValue(_fieldNames.VALUEDISCOUNTPROMO);
-    } set valueDiscountPromo(val) {
-        super.setValue(_fieldNames.VALUEDISCOUNTPROMO, val);
-    }
-
-    get valueTax() {
-        return super.getValue(_fieldNames.VALUETAX);
-    } set valueTax(val) {
-        super.setValue(_fieldNames.VALUETAX, val);
-    }
-
-    get ignored() {
-        return super.getValue(_fieldNames.IGNORED);
-    } set ignored(val) {
-        super.setValue(_fieldNames.IGNORED, val);
     }
 
     get eposTransactionId() {
@@ -372,34 +262,34 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         super.setValue(_fieldNames.UNITPRICE, val);
     }
 
-    get raw_valueGross() {
-        return super.getValue(_fieldNames.RAW_VALUEGROSS);
-    } set raw_valueGross(val) {
-        super.setValue(_fieldNames.RAW_VALUEGROSS, val);
+    get valueGross() {
+        return super.getValue(_fieldNames.VALUEGROSS);
+    } set valueGross(val) {
+        super.setValue(_fieldNames.VALUEGROSS, val);
     }
 
-    get raw_valueNet() {
-        return super.getValue(_fieldNames.RAW_VALUENET);
-    } set raw_valueNet(val) {
-        super.setValue(_fieldNames.RAW_VALUENET, val);
+    get valueNet() {
+        return super.getValue(_fieldNames.VALUENET);
+    } set valueNet(val) {
+        super.setValue(_fieldNames.VALUENET, val);
     }
 
-    get raw_valueDiscount() {
-        return super.getValue(_fieldNames.RAW_VALUEDISCOUNT);
-    } set raw_valueDiscount(val) {
-        super.setValue(_fieldNames.RAW_VALUEDISCOUNT, val);
+    get valueDiscount() {
+        return super.getValue(_fieldNames.VALUEDISCOUNT);
+    } set valueDiscount(val) {
+        super.setValue(_fieldNames.VALUEDISCOUNT, val);
     }
 
-    get raw_valueDiscountPromo() {
-        return super.getValue(_fieldNames.RAW_VALUEDISCOUNTPROMO);
-    } set raw_valueDiscountPromo(val) {
-        super.setValue(_fieldNames.RAW_VALUEDISCOUNTPROMO, val);
+    get valueDiscountPromo() {
+        return super.getValue(_fieldNames.VALUEDISCOUNTPROMO);
+    } set valueDiscountPromo(val) {
+        super.setValue(_fieldNames.VALUEDISCOUNTPROMO, val);
     }
 
-    get raw_valueTax() {
-        return super.getValue(_fieldNames.RAW_VALUETAX);
-    } set raw_valueTax(val) {
-        super.setValue(_fieldNames.RAW_VALUETAX, val);
+    get valueTax() {
+        return super.getValue(_fieldNames.VALUETAX);
+    } set valueTax(val) {
+        super.setValue(_fieldNames.VALUETAX, val);
     }
 
     get taxCode() {
@@ -480,48 +370,6 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
         super.setValue(_fieldNames.CREATED, val);
     }
 
-    get createdBy() {
-        return super.getValue(_fieldNames.CREATEDBY);
-    } set createdBy(val) {
-        super.setValue(_fieldNames.CREATEDBY, val);
-    }
-
-    get modified() {
-        return super.getValue(_fieldNames.MODIFIED);
-    } set modified(val) {
-        super.setValue(_fieldNames.MODIFIED, val);
-    }
-
-    get modifiedBy() {
-        return super.getValue(_fieldNames.MODIFIEDBY);
-    } set modifiedBy(val) {
-        super.setValue(_fieldNames.MODIFIEDBY, val);
-    }
-
-    get isEdited() {
-        return super.getValue(_fieldNames.ISEDITED);
-    } set isEdited(val) {
-        super.setValue(_fieldNames.ISEDITED, val);
-    }
-
-    get raw_customerAccount() {
-        return super.getValue(_fieldNames.RAW_CUSTOMERACCOUNT);
-    } set raw_customerAccount(val) {
-        super.setValue(_fieldNames.RAW_CUSTOMERACCOUNT, val);
-    }
-
-    get raw_taxCode() {
-        return super.getValue(_fieldNames.RAW_TAXCODE);
-    } set raw_taxCode(val) {
-        super.setValue(_fieldNames.RAW_TAXCODE, val);
-    }
-
-    get raw_taxRate() {
-        return super.getValue(_fieldNames.RAW_TAXRATE);
-    } set raw_taxRate(val) {
-        super.setValue(_fieldNames.RAW_TAXRATE, val);
-    }
-
     get analysis1() {
         return super.getValue(_fieldNames.ANALYSIS1);
     } set analysis1(val) {
@@ -546,6 +394,6 @@ class Persistent_cr_transaction extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cr_transaction_Collection,
-    Record: Persistent_cr_transaction,
+    Table: Persistent_raw_cr_transaction_Collection,
+    Record: Persistent_raw_cr_transaction,
 }
