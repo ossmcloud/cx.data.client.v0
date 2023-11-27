@@ -86,6 +86,21 @@ const CX_LOGIN_STATUS = {
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
+const CX_LOGIN_TOKEN_STATUS = {
+    INVALID: -1,
+    EXPIRED: 0,
+    ACTIVE: 1,
+
+     //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+const CX_LOGIN_TOKEN_TYPE = {
+    ERP: 'erp',
+    ONE: 'one',
+
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
 
 const CX_MODULE = {
     STATIC: 'static',
@@ -966,7 +981,9 @@ const CP_QUERY_STATUS = {
 const CP_WHS_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
     WHS_API_CONFIG: 'WhsAPIConfig',
+    ONE_DRIVE_CONFIG: 'OneDriveConfig',
     EMAIL_CONFIG: 'EmailConfig',
+
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
@@ -976,6 +993,7 @@ const CP_WHS_CONFIG = {
 const CP_WHS_SHOP_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
     WHS_API_CONFIG: 'WhsAPIConfig',
+    ONE_DRIVE_CONFIG: 'OneDriveConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -1229,6 +1247,8 @@ module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
     CX_LOGIN_STATUS: CX_LOGIN_STATUS,
+    CX_LOGIN_TOKEN_STATUS: CX_LOGIN_TOKEN_STATUS,
+    CX_LOGIN_TOKEN_TYPE: CX_LOGIN_TOKEN_TYPE,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
     CX_SERVICES: CX_SERVICES,

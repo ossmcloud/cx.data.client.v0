@@ -1011,6 +1011,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        LOGINTOKENID: 'loginTokenId',
     },
 
     cx_map_config: {
