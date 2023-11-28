@@ -46,6 +46,7 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
+        DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
     },
 
     cp_deliveryReturnLine: {
@@ -231,6 +232,7 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
+        DOCIMPID: 'docImpId',
     },
 
     cp_invoiceCreditLine: {

@@ -175,9 +175,10 @@ const CX_WHS_PROVIDER = {
     BWG: 'bwg',
     SCP: 'scp',
     NISA: 'nisa',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' }); },
+    MUS: 'mus',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves' }); },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves' });
     },
 }
 // @@TODO: this should come from sys_provider table
