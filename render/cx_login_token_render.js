@@ -60,6 +60,8 @@ class CXLoginToken extends RenderBase {
         this.options.title = 'login tokens';
         this.options.actionsShowFirst = true;
       
+        this.options.showButtons = [];
+        this.options.showButtons.push({ id: 'cx_login_token_new', text: 'One Drive', function: 'getOneDriveToken' });
     }
 
 
@@ -74,7 +76,7 @@ class CXLoginToken extends RenderBase {
         header.fields.push(
             { name: _cxSchema.cx_login_token.TYPE, label: 'type', items: _cxConst.CX_LOGIN_TOKEN_TYPE.toList(), readOnly: true },
             { name: 'loginName', label: 'user', readOnly: true },
-            { name: _cxSchema.cx_login_token.DTFSSETTINGID, label: 'settingId', readOnly: true },
+            { name: _cxSchema.cx_login_token.DTFSSETTINGID, label: 'settingId', formatMoney: 'N0', readOnly: true },
             { name: _cxSchema.cx_login_token.EXPIRYDATE, label: 'expiry date', readOnly: true },
             { name: _cxSchema.cx_login_token.STATEKEY, label: 'state key', readOnly: true },
             //{ name: _cxSchema.cx_login_token.TOKEN, label: 'token', readOnly: true },
@@ -84,6 +86,7 @@ class CXLoginToken extends RenderBase {
         this.options.fields.push(header);
 
         if (this.options.mode == 'view') {
+            this.options.buttons.push({ id: 'cx_login_token_new', text: 'Refresh this Token', function: 'getNewToken' });
             if (this.dataSource.type == 'one') {
                 this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
             }
