@@ -117,6 +117,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        REMOTELINK: 'remoteLink',
     },
 
     cp_erp_transaction: {

@@ -1229,11 +1229,13 @@ const SYS_SERVER_TASK = {
         Cx_Log_CleanUp: 1,
         Cx_RawData_CleanUp: 2,
         Whs_Document_Import: 100,
+        Drive_Document_Import: 101,
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, null, {
                 Cx_Log_CleanUp: { name: 'System Logs Clean-up', desc: 'deletes system logs older than the days specified.\n\nAllowed parameters:\ndays_old=N;\n\nwhere N must be greater than 180 and less than 999\ndefault is 365 days', params: '' },
                 Cx_RawData_CleanUp: { name: 'Raw data left-overs', desc: 'deletes raw data leftover by failed transmissions.', params: '' },
                 Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
+                Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;', params: 'provider=' } ,
             });
         },
         getName: function (value) {

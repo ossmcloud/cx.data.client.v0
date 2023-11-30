@@ -35,6 +35,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    REMOTELINK: 'remoteLink',
 
 }
 //
@@ -57,6 +58,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    remoteLink: { name: 'remoteLink', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
 
 }
 //
@@ -170,6 +172,12 @@ class Persistent_cp_documentImport extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get remoteLink() {
+        return super.getValue(_fieldNames.REMOTELINK);
+    } set remoteLink(val) {
+        super.setValue(_fieldNames.REMOTELINK, val);
     }
 
 
