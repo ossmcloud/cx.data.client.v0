@@ -13,7 +13,8 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
 
         if (params.s) {
             query.sql = `select	c.*, ct.code as cbTranType, 
-                            case when ett.tranName is null then et.tranName else et.tranName + ' / ' + ett.tranName end as erpTranType
+                            case when ett.tranName is null then et.tranName else et.tranName + ' / ' + ett.tranName end as erpTranType,
+                            (select count(*) from cr_tran_type_config_shop cfgShop where cfgShop.tranTypeConfigId = c.tranTypeConfigId) as shopConfigCount
                     from	cr_tran_type_config c
                     inner join      cx_shop             s   ON c.mapConfigId = s.tranTypeConfigId
                     left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
@@ -22,7 +23,8 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
                     where   1 = 1`;
         } else {
             query.sql = `select	c.*, ct.code as cbTranType,  
-                            case when ett.tranName is null then et.tranName else et.tranName + ' / ' + ett.tranName end as erpTranType
+                            case when ett.tranName is null then et.tranName else et.tranName + ' / ' + ett.tranName end as erpTranType,
+                            (select count(*) from cr_tran_type_config_shop cfgShop where cfgShop.tranTypeConfigId = c.tranTypeConfigId) as shopConfigCount
                     from	cr_tran_type_config c
                     left outer join cr_cb_tran_type     ct  ON c.cbTranTypeId = ct.cbTranTypeId
                     left outer join sys_erp_tran_type   et  ON c.erpTranTypeId = et.tranTypeId
@@ -179,16 +181,23 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
 class cr_tran_type_config extends _persistentTable.Record {
     #cbTranType = '';
     #erpTranType = '';
+    #shopConfigCount = 0;
     constructor(table, defaults) {
         super(table, defaults);
         if (defaults) {
             this.#cbTranType = defaults['cbTranType'] || '';
             this.#erpTranType = defaults['erpTranType'] || '';
+            this.#shopConfigCount = defaults['shopConfigCount'] || 0;
         }
     };
 
     get cbTranType() { return this.#cbTranType; }
     get erpTranType() { return this.#erpTranType; }
+    get shopConfigCountIcon() {
+        if (this.#shopConfigCount == 0) { return ''; }
+        //return this.#shopConfigCount;
+        return '<span style="background-color: var(--action-btn-bg-color); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;"></span>';
+    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

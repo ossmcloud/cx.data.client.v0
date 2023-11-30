@@ -22,7 +22,12 @@ class CrTranTypeShopConfigRender extends RenderBase {
                 group: 'mainOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'erp', title: 'erp configurations', column: 1, columnCount: 1, inline: true, fields: [
-                            { name: _cxSchema.cr_tran_type_config_shop.ERPTRANTYPEID, label: 'ERP Type', column: 1, lookUps: erpTranTypeLookUps },
+                            {
+                                group: 'tran_type', columnCount: 2, styles: ['display: inline-block; max-width: 90px;', 'display: inline-block; width: calc(100% - 95px);'], fields: [
+                                    { name: _cxSchema.cr_tran_type_config_shop.SKIPPOSTING, label: 'Skip Posting', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config_shop.ERPTRANTYPEID, label: 'ERP Type', column: 2, lookUps: erpTranTypeLookUps },
+                                ]
+                            },
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                                 id: _cxSchema.cr_tran_type_config_shop.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config_shop.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
                             }),
@@ -71,6 +76,7 @@ class CrTranTypeShopConfigRender extends RenderBase {
         this.options.columns = [
             { dataHidden: 'shop-id', name: 'shopId' },
             { title: 'shop', name: 'shopInfo', nullText: 'not set' },
+            { title: 'skip posting', name: 'skipPosting', nullText: '' },
             { title: 'erp tran type', name: 'tranInfo', nullText: 'not set' },
             { title: 'trader', name: 'traderInfo', nullText: 'not set' },
             { title: 'gl account', name: 'glAccount', nullText: 'not set' },
@@ -83,7 +89,7 @@ class CrTranTypeShopConfigRender extends RenderBase {
             { title: '2nd gl (contra) account', name: 'glAccountContra2', nullText: 'not set' },
             { title: '2nd bank account', name: 'bankAccount2', nullText: 'not set' },
             { title: '2nd tax account', name: 'taxAccount2', nullText: 'not set' },
-
+    
 
 
         ]

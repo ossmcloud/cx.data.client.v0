@@ -86,9 +86,11 @@ class CXLoginToken extends RenderBase {
         this.options.fields.push(header);
 
         if (this.options.mode == 'view') {
-            this.options.buttons.push({ id: 'cx_login_token_new', text: 'Refresh this Token', function: 'getNewToken' });
-            if (this.dataSource.type == 'one') {
-                this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
+            if (this.dataSource.createdBy == this.dataSource.cx.userId) {
+                this.options.buttons.push({ id: 'cx_login_token_new', text: 'Refresh this Token', function: 'getNewToken' });
+                if (this.dataSource.type == 'one') {
+                    this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
+                }
             }
         }
     }

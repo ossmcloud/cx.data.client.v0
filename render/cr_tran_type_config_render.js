@@ -22,7 +22,7 @@ class CrTranTypeConfigRender extends RenderBase {
         if (this.options.mode == 'view') {
             configListOptions.actionsShowFirst = true;
             if (this.options.allowEdit) {
-                
+
                 configListOptions.actions = [];
                 configListOptions.actions.push({ label: '&#x270E;', toolTip: 'edit...', funcName: 'editTranTypeConfig' });
                 configListOptions.actions.push({ label: '&#x29C9;', toolTip: 'clone...', funcName: 'copyTranTypeConfig' });
@@ -36,7 +36,7 @@ class CrTranTypeConfigRender extends RenderBase {
     }
 
     async _record() {
-        var configListOptions = null; 
+        var configListOptions = null;
         if (this.options.mode == 'new') {
             this.options.allowDelete = false;
         } else {
@@ -93,7 +93,7 @@ class CrTranTypeConfigRender extends RenderBase {
                             },
                             {
                                 group: 'cb1', column: 2, columnCount: 1, inline: true, fields: [
-                                    
+
                                     { name: _cxSchema.cr_tran_type_config.IGNORE, label: 'Ignore', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.INVERTSIGN, label: 'Invert Sign', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 1 },
@@ -103,8 +103,8 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.FORCETAXMAPCONFIGID, label: 'Force Tax Mapping', column: 1, lookUps: forceTaxMapLookUps },
                                 ]
                             },
-                            
-                            
+
+
 
 
                         ]
@@ -112,7 +112,13 @@ class CrTranTypeConfigRender extends RenderBase {
 
                     {
                         group: 'erp', title: 'erp configurations', column: 3, columnCount: 1, inline: true, fields: [
-                            { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 1, lookUps: erpTranTypeLookUps },
+                            {
+                                group: 'tran_type', columnCount: 2, styles: ['display: inline-block; max-width: 90px;', 'display: inline-block; width: calc(100% - 95px);'], fields: [
+                                    { name: _cxSchema.cr_tran_type_config.SKIPPOSTING, label: 'Skip Posting', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 2, lookUps: erpTranTypeLookUps },
+                                    
+                                ]
+                            },
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                                 id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
                             }),
@@ -132,7 +138,7 @@ class CrTranTypeConfigRender extends RenderBase {
                     },
 
                     {
-                        group: 'erp', title: 'erp configurations (secondary)', column: 4, columnCount: 1, inline: true, fields: [
+                        group: 'erp2', title: 'erp configurations (secondary)', column: 4, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.ERP2NDTRANTYPEID, label: 'ERP Type (secondary)', column: 1, lookUps: erpTranTypeLookUps },
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                                 id: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, name: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
@@ -186,7 +192,7 @@ class CrTranTypeConfigRender extends RenderBase {
 
 
         this.options.filters = [
-            
+
             { label: 'map type', fieldName: 'type', name: 'type', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true },
             { label: 'map id', fieldName: 'mid', name: _cxSchema.cr_tran_type_config.MAPCONFIGID, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true },
             { label: 'tran type', fieldName: 'e_tt', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
@@ -204,6 +210,7 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'epos tran. type', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
             { title: 'epos tran. sub-type', name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE },
             { title: ' ', name: 'exConditionIcon', unbound: true },
+            { title: ' ', name: 'shopConfigCountIcon' },
             { title: 'c/b tran. type', name: 'cbTranType', align: 'center' },
             { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), align: 'center', nullText: '' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING, nullText: '' },
@@ -219,9 +226,9 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'erp ignore<br />store gl', name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, align: 'center', nullText: '' },
             { title: 'cashbook<br />column', name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, align: 'center', nullText: '' },
             // 
-
+            { title: 'skip posting', name: _cxSchema.cr_tran_type_config.SKIPPOSTING, align: 'center', nullText: '' },
             { title: 'erp tran. type', name: 'erpTranType' },
-
+            
             { title: 'created', name: _cxSchema.cr_tran_type_config.CREATED },
             { title: 'by', name: _cxSchema.cr_tran_type_config.CREATEDBY },
             { title: 'modified', name: _cxSchema.cr_tran_type_config.MODIFIED },
@@ -230,6 +237,7 @@ class CrTranTypeConfigRender extends RenderBase {
 
         this.options.highlights = [
             { column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true, style: 'color: gray; font-style: italic;' },
+            { column: _cxSchema.cr_tran_type_config.SKIPPOSTING, op: '=', value: true, style: 'color: indianred; font-style: italic;' },
             { column: _cxSchema.cr_tran_type_config.CBTRANTYPEID, op: '<', value: 0, style: 'color: teal; font-style: italic;' }
         ];
 

@@ -881,6 +881,7 @@ module.exports = {
         SHOWINCASHBOOKLIST: 'showInCashBookList',
         CBREFERENCE: 'cbReference',
         FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
+        SKIPPOSTING: 'skipPosting',
     },
 
     cr_tran_type_config_shop: {
@@ -903,6 +904,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        SKIPPOSTING: 'skipPosting',
     },
 
     cr_transaction: {
