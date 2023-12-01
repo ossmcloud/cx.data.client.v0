@@ -26,6 +26,8 @@ class cx_login_Collection extends _persistentTable.Table {
             list.push({ value: _declarations.CX_SYS_USERS.ERPS, text: '<span style="font-style: italic; color: var(--element-color-disabled)">[erp service]</span>' });
             list.push({ value: _declarations.CX_SYS_USERS.DTFS, text: '<span style="font-style: italic; color: var(--element-color-disabled)">[epos service]</span>' });
             list.push({ value: _declarations.CX_SYS_USERS.SYSTEM, text: '<span style="font-style: italic; color: var(--element-color-disabled)">[system]</span>' });
+            list.push({ value: _declarations.CX_SYS_USERS.MMS, text: '<span style="font-style: italic; color: var(--element-color-disabled)">[matching service]</span>' });
+            list.push({ value: _declarations.CX_SYS_USERS.SVR, text: '<span style="font-style: italic; color: var(--element-color-disabled)">[server tasks]</span>' });
         }
         this.each(function (login) {
             list.push({
