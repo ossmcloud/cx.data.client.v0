@@ -23,25 +23,24 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
                         s.shopId, s.shopCode, s.shopName 
                         
             from		cx_map_config_dep dep
-            inner join  cx_map_config map on map.mapConfigId = dep.mapConfigId
-            inner join  cx_shop s on s.shopId = map.mapMasterShop
+            --inner join  cx_map_config map on map.mapConfigId = dep.mapConfigId
+            --inner join  cx_shop s on s.shopId = map.mapMasterShop
             left outer join erp_gl_account glSales ON glSales.erpGLAccountId = dep.saleAccountId
             left outer join erp_gl_account glPurch ON glPurch.erpGLAccountId = dep.purchaseAccountId
             left outer join erp_gl_account glWaste ON glWaste.erpGLAccountId = dep.wasteAccountId
             left outer join erp_gl_account glAccrual ON glAccrual.erpGLAccountId = dep.accrualAccountId
             left outer join erp_gl_account glCogs ON glAccrual.erpGLAccountId = dep.cogsAccountId
 
-            where		s.shopId in ${this.cx.shopList}
+            --where		s.shopId in ${this.cx.shopList}
         `;
 
 
         if (params.s) {
-            //query.sql += ' inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId'
-            //query.sql += ' where s.shopId = @shopId';
-            query.sql += ' and s.shopId = @shopId';
+            query.sql = ' inner join  cx_shop s on s.depMapConfigId = dep.mapConfigId';
+            query.sql += ' where s.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         } else {
-            // query.sql += ' where 1 = 1';
+            query.sql += ' where 1 = 1';
         }
 
         if (params.mid) {

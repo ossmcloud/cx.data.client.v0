@@ -35,6 +35,8 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     ERPTRANSMISSIONID: 'erpTransmissionId',
+    WARNLEVEL: 'warnLevel',
+    WARNMESSAGE: 'warnMessage',
 
 }
 //
@@ -57,6 +59,8 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    warnLevel: { name: 'warnLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
+    warnMessage: { name: 'warnMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
 
 }
 //
@@ -170,6 +174,18 @@ class Persistent_cr_cb_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPTRANSMISSIONID);
     } set erpTransmissionId(val) {
         super.setValue(_fieldNames.ERPTRANSMISSIONID, val);
+    }
+
+    get warnLevel() {
+        return super.getValue(_fieldNames.WARNLEVEL);
+    } set warnLevel(val) {
+        super.setValue(_fieldNames.WARNLEVEL, val);
+    }
+
+    get warnMessage() {
+        return super.getValue(_fieldNames.WARNMESSAGE);
+    } set warnMessage(val) {
+        super.setValue(_fieldNames.WARNMESSAGE, val);
     }
 
 

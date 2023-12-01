@@ -185,6 +185,16 @@ class cr_cb_transaction extends _persistentTable.Record {
     get transmissionIdText() { return this.transmissionId.toString(); }
     get dateStr() { return _core.date.format({ date: this.date }) }
 
+    get warnLevelIcon() {
+        if (!this.warnLevel) { return ''; }
+        if (this.warnLevel == 1) { return '&#9888;'; }     // warning
+        if (this.warnLevel == 2) { return '&#10071;'; }     // needs attention
+        if (this.warnLevel == 3) { return '&#10060;'; }     // error
+        if (this.warnLevel == 9) { return '&#10071;&#10060;'; }     // critical
+
+        return this.warnLevel;
+    }
+
     get canEdit() {
         return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status == _declarations.CR_CASH_BOOK.STATUS.Error)
     }

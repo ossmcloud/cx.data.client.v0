@@ -30,9 +30,9 @@ class CXLoginToken extends RenderBase {
             column.title = 'type';
             column.addTotals = false;
             column.align = 'center';
-            column.width = '100px';
+            column.width = '50px';
             //column.lookUps = _cxConst.CX_LOGIN_TOKEN_STATUS.CX_LOGIN_TOKEN_STATUS.toList();
-            column.hide = true;
+            column.hide = false;
         } else if (field.name == _cxSchema.cx_login_token.STATUS) {
             column.title = 'token status';
             column.addTotals = false;

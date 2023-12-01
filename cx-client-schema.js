@@ -703,6 +703,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ERPTRANSMISSIONID: 'erpTransmissionId',
+        WARNLEVEL: 'warnLevel',
+        WARNMESSAGE: 'warnMessage',
     },
 
     cr_cb_transactionAudit: {
