@@ -19,8 +19,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
                         glPurch.code as purch_code,     glPurch.costCentre as purch_cc,     glPurch.department as purch_dep,     glPurch.description as purch_desc,
                         glWaste.code as waste_code,     glWaste.costCentre as waste_cc,     glWaste.department as waste_dep,     glWaste.description as waste_desc,
                         glAccrual.code as accrual_code, glAccrual.costCentre as accrual_cc, glAccrual.department as accrual_dep, glAccrual.description as accrual_desc,
-                        glCogs.code as cogs_code,       glCogs.costCentre as cogs_cc,       glCogs.department as cogs_dep,       glCogs.description as cogs_desc,
-                        s.shopId, s.shopCode, s.shopName 
+                        glCogs.code as cogs_code,       glCogs.costCentre as cogs_cc,       glCogs.department as cogs_dep,       glCogs.description as cogs_desc
+                        --s.shopId, s.shopCode, s.shopName 
                         
             from		cx_map_config_dep dep
             --inner join  cx_map_config map on map.mapConfigId = dep.mapConfigId

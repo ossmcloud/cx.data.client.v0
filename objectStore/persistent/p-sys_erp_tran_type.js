@@ -26,6 +26,8 @@ const _fieldNames = {
     TRANLEDGER: 'tranLedger',
     OPPOSITETRANID: 'oppositeTranId',
     CSSSTYLE: 'cssStyle',
+    TRANSIGN: 'tranSign',
+    ISTAXABLE: 'isTaxable',
 
 }
 //
@@ -39,6 +41,8 @@ const _fields = {
     tranLedger: { name: 'tranLedger', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     oppositeTranId: { name: 'oppositeTranId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     cssStyle: { name: 'cssStyle', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    tranSign: { name: 'tranSign', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    isTaxable: { name: 'isTaxable', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -98,6 +102,18 @@ class Persistent_sys_erp_tran_type extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CSSSTYLE);
     } set cssStyle(val) {
         super.setValue(_fieldNames.CSSSTYLE, val);
+    }
+
+    get tranSign() {
+        return super.getValue(_fieldNames.TRANSIGN);
+    } set tranSign(val) {
+        super.setValue(_fieldNames.TRANSIGN, val);
+    }
+
+    get isTaxable() {
+        return super.getValue(_fieldNames.ISTAXABLE);
+    } set isTaxable(val) {
+        super.setValue(_fieldNames.ISTAXABLE, val);
     }
 
 

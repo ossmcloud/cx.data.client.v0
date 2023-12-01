@@ -1766,6 +1766,7 @@ module.exports = {
         OPPOSITETRANID: 'oppositeTranId',
         CSSSTYLE: 'cssStyle',
         TRANSIGN: 'tranSign',
+        ISTAXABLE: 'isTaxable',
     },
 
     sys_provider: {
