@@ -56,6 +56,7 @@ const _fieldNames = {
     ISUSEREDITED: 'isUserEdited',
     CREATEDFROM: 'createdFrom',
     CREATEDFROMTYPE: 'createdFromType',
+    DOCIMPID: 'docImpId',
 
 }
 //
@@ -99,6 +100,7 @@ const _fields = {
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     createdFrom: { name: 'createdFrom', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    docImpId: { name: 'docImpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -338,6 +340,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDFROMTYPE);
     } set createdFromType(val) {
         super.setValue(_fieldNames.CREATEDFROMTYPE, val);
+    }
+
+    get docImpId() {
+        return super.getValue(_fieldNames.DOCIMPID);
+    } set docImpId(val) {
+        super.setValue(_fieldNames.DOCIMPID, val);
     }
 
 

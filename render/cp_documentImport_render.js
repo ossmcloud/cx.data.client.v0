@@ -10,6 +10,15 @@ class CPDocumentImportRender extends RenderBase {
         super(dataSource, options);
     }
 
+    async getDocumentListOptions() {
+        var transactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
+        await transactions.select({ impid: this.options.query.id });
+
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank' });
+        transactionsOptions.quickSearch = true;
+        return transactionsOptions;
+    }
+
     async _record() {
 
         var wholesalers = this.dataSource.cx.table(_cxSchema.cp_wholesaler);
@@ -109,6 +118,12 @@ class CPDocumentImportRender extends RenderBase {
                     }
                 ]
             })
+
+            var transactionOptions = await this.getDocumentListOptions();
+            var subListsGroup = { group: 'sublists', columnCount: 1, fields: [] };
+            subListsGroup.fields.push({ group: 'documents', title: 'imported documents', column: 1, fields: [transactionOptions] })
+            this.options.fields.push(subListsGroup);
+
 
             if (this.dataSource.importStatus == _cxConst.CP_DOCUMENT.IMPORT_STATUS.Pending) {
                 this.options.buttons.push({ id: 'cp_documentImport_cancel', text: 'Cancel Import', function: 'cancelImport' });

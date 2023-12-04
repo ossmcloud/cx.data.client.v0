@@ -46,6 +46,7 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
+        DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
     },
 
     cp_deliveryReturnLine: {
@@ -116,6 +117,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        REMOTELINK: 'remoteLink',
     },
 
     cp_erp_transaction: {
@@ -231,6 +233,7 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
+        DOCIMPID: 'docImpId',
     },
 
     cp_invoiceCreditLine: {
@@ -700,6 +703,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ERPTRANSMISSIONID: 'erpTransmissionId',
+        WARNLEVEL: 'warnLevel',
+        WARNMESSAGE: 'warnMessage',
     },
 
     cr_cb_transactionAudit: {
@@ -878,6 +883,7 @@ module.exports = {
         SHOWINCASHBOOKLIST: 'showInCashBookList',
         CBREFERENCE: 'cbReference',
         FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
+        SKIPPOSTING: 'skipPosting',
     },
 
     cr_tran_type_config_shop: {
@@ -900,6 +906,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        SKIPPOSTING: 'skipPosting',
     },
 
     cr_transaction: {
@@ -1011,6 +1018,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        LOGINTOKENID: 'loginTokenId',
     },
 
     cx_map_config: {
@@ -1758,6 +1766,7 @@ module.exports = {
         OPPOSITETRANID: 'oppositeTranId',
         CSSSTYLE: 'cssStyle',
         TRANSIGN: 'tranSign',
+        ISTAXABLE: 'isTaxable',
     },
 
     sys_provider: {

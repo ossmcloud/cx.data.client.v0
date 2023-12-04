@@ -86,6 +86,21 @@ const CX_LOGIN_STATUS = {
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
+const CX_LOGIN_TOKEN_STATUS = {
+    INVALID: -1,
+    EXPIRED: 0,
+    ACTIVE: 1,
+
+     //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
+const CX_LOGIN_TOKEN_TYPE = {
+    ERP: 'erp',
+    ONE: 'one',
+
+    //
+    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+}
 
 const CX_MODULE = {
     STATIC: 'static',
@@ -130,6 +145,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
+    EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
@@ -160,9 +176,10 @@ const CX_WHS_PROVIDER = {
     BWG: 'bwg',
     SCP: 'scp',
     NISA: 'nisa',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' }); },
+    MUS: 'mus',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves' }); },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -966,7 +983,9 @@ const CP_QUERY_STATUS = {
 const CP_WHS_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
     WHS_API_CONFIG: 'WhsAPIConfig',
+    ONE_DRIVE_CONFIG: 'OneDriveConfig',
     EMAIL_CONFIG: 'EmailConfig',
+
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
@@ -976,6 +995,7 @@ const CP_WHS_CONFIG = {
 const CP_WHS_SHOP_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
     WHS_API_CONFIG: 'WhsAPIConfig',
+    ONE_DRIVE_CONFIG: 'OneDriveConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -1210,11 +1230,15 @@ const SYS_SERVER_TASK = {
         Cx_Log_CleanUp: 1,
         Cx_RawData_CleanUp: 2,
         Whs_Document_Import: 100,
+        Drive_Document_Import: 101,
+        Dtfs_Get_Request: 200,
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, null, {
                 Cx_Log_CleanUp: { name: 'System Logs Clean-up', desc: 'deletes system logs older than the days specified.\n\nAllowed parameters:\ndays_old=N;\n\nwhere N must be greater than 180 and less than 999\ndefault is 365 days', params: '' },
                 Cx_RawData_CleanUp: { name: 'Raw data left-overs', desc: 'deletes raw data leftover by failed transmissions.', params: '' },
                 Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
+                Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;', params: 'provider=' },
+                Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generated get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2]\nday_offset=[n]', params: 'svc=;module=;' },
             });
         },
         getName: function (value) {
@@ -1229,6 +1253,8 @@ module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
     CX_LOGIN_STATUS: CX_LOGIN_STATUS,
+    CX_LOGIN_TOKEN_STATUS: CX_LOGIN_TOKEN_STATUS,
+    CX_LOGIN_TOKEN_TYPE: CX_LOGIN_TOKEN_TYPE,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
     CX_SERVICES: CX_SERVICES,

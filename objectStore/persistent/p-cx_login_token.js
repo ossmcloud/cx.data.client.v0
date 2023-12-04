@@ -30,23 +30,25 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
+    LOGINTOKENID: 'loginTokenId',
 
 }
 //
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    type: { name: 'type', dataType: 'varchar', pk: true, identity: false, maxLength: 5, null: false },
-    loginId: { name: 'loginId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
-    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
+    type: { name: 'type', dataType: 'varchar', pk: false, identity: false, maxLength: 5, null: false },
+    loginId: { name: 'loginId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    dtfsSettingId: { name: 'dtfsSettingId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     stateKey: { name: 'stateKey', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
     status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
-    token: { name: 'token', dataType: 'varchar', pk: false, identity: false, maxLength: 4000, null: true },
+    token: { name: 'token', dataType: 'varchar', pk: false, identity: false, maxLength: 8000, null: true },
     expiryDate: { name: 'expiryDate', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    loginTokenId: { name: 'loginTokenId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
 
 }
 //
@@ -132,6 +134,10 @@ class Persistent_cx_login_token extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDBY);
     } set createdBy(val) {
         super.setValue(_fieldNames.CREATEDBY, val);
+    }
+
+    get loginTokenId() {
+        return super.getValue(_fieldNames.LOGINTOKENID);
     }
 
 

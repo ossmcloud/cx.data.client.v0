@@ -36,6 +36,13 @@ async function getPermission(recordType, role) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
         permission.allowDelete = (role >= _cxConst.CX_ROLE.ADMIN);
     }
+    if (recordType == _cxSchema.cx_login_token.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.ADMIN);
+        permission.allowNew = false;
+        //permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.ADMIN);
+    }
+
 
     
     if (recordType == _cxSchema.cr_tran_type_config.TBL_NAME) {

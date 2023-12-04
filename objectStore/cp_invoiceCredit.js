@@ -41,6 +41,10 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.invGrpId = @invGrpId';
             query.params.push({ name: 'invGrpId', value: params.gid });
         }
+        if (params.impid) {
+            query.sql += ' and d.docImpId = @docImpId';
+            query.params.push({ name: 'docImpId', value: params.impid });
+        }
         if (params.gno) {
             var noGrpInvoice = ['none', 'empty', 'no', 'blank', 'n', 'null'];
             if (noGrpInvoice.indexOf(params.gno.toLowerCase()) >= 0) {
