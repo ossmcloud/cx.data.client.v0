@@ -158,6 +158,7 @@ class CPDocumentImportRender extends RenderBase {
 
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: _cxSchema.cp_documentImport.IMPORTSTATUS, title: 'status', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.IMPORT_STATUS.toList() },
+                { name: _cxSchema.cp_documentImport.IMPORTSTATUSMESSAGE, title: 'status message' },
                 { name: _cxSchema.cp_documentImport.PROVIDERNAME, title: 'provider' },
                 { name: _cxSchema.cp_documentImport.FILETYPE, title: 'file type' },
                 { name: _cxSchema.cp_documentImport.FILENAME, title: 'file name' },
