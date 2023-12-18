@@ -23,9 +23,10 @@ class CrTranTypeShopConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp configurations', column: 1, columnCount: 1, inline: true, fields: [
                             {
-                                group: 'tran_type', columnCount: 2, styles: ['display: inline-block; max-width: 90px;', 'display: inline-block; width: calc(100% - 95px);'], fields: [
-                                    { name: _cxSchema.cr_tran_type_config_shop.SKIPPOSTING, label: 'Skip Posting', column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config_shop.ERPTRANTYPEID, label: 'ERP Type', column: 2, lookUps: erpTranTypeLookUps },
+                                group: 'tran_type', columnCount: 3, styles: ['display: inline-block; max-width: 95px;', 'display: inline-block; max-width: 90px;', 'display: inline-block; width: calc(100% - 195px);'], fields: [
+                                    { name: _cxSchema.cr_tran_type_config_shop.STOPPOSTING, label: 'STOP Posting', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config_shop.SKIPPOSTING, label: 'Skip Posting', column: 2 },
+                                    { name: _cxSchema.cr_tran_type_config_shop.ERPTRANTYPEID, label: 'ERP Type', column: 3, lookUps: erpTranTypeLookUps },
                                 ]
                             },
                             await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
@@ -76,7 +77,8 @@ class CrTranTypeShopConfigRender extends RenderBase {
         this.options.columns = [
             { dataHidden: 'shop-id', name: 'shopId' },
             { title: 'shop', name: 'shopInfo', nullText: 'not set' },
-            { title: 'skip posting', name: 'skipPosting', nullText: '' },
+            { title: 'skip posting', name: 'skipPosting', nullText: '', align: 'center' },
+            { title: 'STOP posting', name: 'stopPosting', nullText: '', align: 'center' },
             { title: 'erp tran type', name: 'tranInfo', nullText: 'not set' },
             { title: 'trader', name: 'traderInfo', nullText: 'not set' },
             { title: 'gl account', name: 'glAccount', nullText: 'not set' },

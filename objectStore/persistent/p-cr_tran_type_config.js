@@ -57,6 +57,7 @@ const _fieldNames = {
     CBREFERENCE: 'cbReference',
     FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
     SKIPPOSTING: 'skipPosting',
+    STOPPOSTING: 'stopPosting',
 
 }
 //
@@ -101,6 +102,7 @@ const _fields = {
     cbReference: { name: 'cbReference', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false, default: '' },
     forceTaxMapConfigId: { name: 'forceTaxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     skipPosting: { name: 'skipPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    stopPosting: { name: 'stopPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -346,6 +348,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SKIPPOSTING);
     } set skipPosting(val) {
         super.setValue(_fieldNames.SKIPPOSTING, val);
+    }
+
+    get stopPosting() {
+        return super.getValue(_fieldNames.STOPPOSTING);
+    } set stopPosting(val) {
+        super.setValue(_fieldNames.STOPPOSTING, val);
     }
 
 

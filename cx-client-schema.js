@@ -884,6 +884,7 @@ module.exports = {
         CBREFERENCE: 'cbReference',
         FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
         SKIPPOSTING: 'skipPosting',
+        STOPPOSTING: 'stopPosting',
     },
 
     cr_tran_type_config_shop: {
@@ -907,6 +908,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         SKIPPOSTING: 'skipPosting',
+        STOPPOSTING: 'stopPosting',
     },
 
     cr_transaction: {

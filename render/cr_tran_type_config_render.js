@@ -113,9 +113,10 @@ class CrTranTypeConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp configurations', column: 3, columnCount: 1, inline: true, fields: [
                             {
-                                group: 'tran_type', columnCount: 2, styles: ['display: inline-block; max-width: 90px;', 'display: inline-block; width: calc(100% - 95px);'], fields: [
-                                    { name: _cxSchema.cr_tran_type_config.SKIPPOSTING, label: 'Skip Posting', column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 2, lookUps: erpTranTypeLookUps },
+                                group: 'tran_type', columnCount: 3, styles: ['display: inline-block; max-width: 95px;', 'display: inline-block; max-width: 90px;', 'display: inline-block; width: calc(100% - 195px);'], fields: [
+                                    { name: _cxSchema.cr_tran_type_config.STOPPOSTING, label: 'STOP Posting', column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.SKIPPOSTING, label: 'Skip Posting', column: 2 },
+                                    { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 3, lookUps: erpTranTypeLookUps },
                                     
                                 ]
                             },
@@ -226,6 +227,7 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'erp ignore<br />store gl', name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, align: 'center', nullText: '' },
             { title: 'cashbook<br />column', name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, align: 'center', nullText: '' },
             // 
+            { title: 'STOP posting', name: _cxSchema.cr_tran_type_config.STOPPOSTING, align: 'center', nullText: '' },
             { title: 'skip posting', name: _cxSchema.cr_tran_type_config.SKIPPOSTING, align: 'center', nullText: '' },
             { title: 'erp tran. type', name: 'erpTranType' },
             
@@ -238,6 +240,7 @@ class CrTranTypeConfigRender extends RenderBase {
         this.options.highlights = [
             { column: _cxSchema.cr_tran_type_config.IGNORE, op: '=', value: true, style: 'color: gray; font-style: italic;' },
             { column: _cxSchema.cr_tran_type_config.SKIPPOSTING, op: '=', value: true, style: 'color: indianred; font-style: italic;' },
+            { column: _cxSchema.cr_tran_type_config.STOPPOSTING, op: '=', value: true, style: 'color: red; font-style: italic;' },
             { column: _cxSchema.cr_tran_type_config.CBTRANTYPEID, op: '<', value: 0, style: 'color: teal; font-style: italic;' }
         ];
 
