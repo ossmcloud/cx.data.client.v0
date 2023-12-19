@@ -184,12 +184,6 @@ class CPDeliveryReturnRender extends RenderBase {
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
 
-        var attachmentsOptions = await this.getAttachmentListOptions();
-        if (attachmentsOptions) {
-            subListsGroup.fields.push({ group: 'logs', title: 'attachments', column: 1, fields: [attachmentsOptions], collapsed: true });
-        }
-
-
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
 
@@ -198,8 +192,11 @@ class CPDeliveryReturnRender extends RenderBase {
             subListsGroup.fields.push({ group: 'logs', title: 'related documents', column: 1, fields: [relatedTransactionsOptions], collapsed: true });
         }
 
-       
 
+        var attachmentsOptions = await this.getAttachmentListOptions();
+        if (attachmentsOptions) {
+            subListsGroup.fields.push({ group: 'logs', title: 'attachments', column: 1, fields: [attachmentsOptions], collapsed: true });
+        }
 
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
@@ -277,6 +274,10 @@ class CPDeliveryReturnRender extends RenderBase {
                 var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
                 this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
+
+            //
+            this.options.columns.push({ name: 'attachCount', title: '&#x1f4ce;', nullText: '', align: 'center', width: '10px', headerToolTip: 'attachments count', toolTip: { valueField: 'attachCountDisplay', suppressText: true } });
+
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' });
             this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
@@ -338,6 +339,13 @@ class CPDeliveryReturnRender extends RenderBase {
                     value: 0,
                     style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
                     columns: ['queryCount']
+                })
+                this.options.cellHighlights.push({
+                    column: 'attachCount',
+                    op: '>',
+                    value: 0,
+                    style: 'background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                    columns: ['attachCount']
                 })
             }
 

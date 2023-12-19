@@ -28,7 +28,8 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         ) as supplierName,
                                         recoDoc.recoSessionId, reco.recoStatusId,
                                         ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId ) as queryCount,
-                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen
+                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen,
+                                        ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
@@ -153,6 +154,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #recoStatus = null;
     #queryCount = null;
     #queryCountOpen = null;
+    #attachCount = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -163,6 +165,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#recoStatus = defaults['recoStatusId'] || 0;
         this.#queryCount = defaults['queryCount'] || null;
         this.#queryCountOpen = defaults['queryCountOpen'] || null;
+        this.#attachCount = defaults['attachCount'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -204,6 +207,12 @@ class cp_deliveryReturn extends _persistentTable.Record {
             return `${this.queryCount} queries`;
         }
         return this.queryCount;
+    }
+
+    get attachCount() { return this.#attachCount; }
+    get attachCountDisplay() {
+        if (this.attachCount) { return `${this.attachCount} attachments`; }
+        return '';
     }
 
 
