@@ -20,7 +20,7 @@ function enumToList(obj, addEmpty, aliases, dataObjects) {
         if (key == 'CX_SUPPORT') { continue; }
         if (key == '_NAME') { continue; }
 
-        
+
         var dataObject = (dataObjects) ? dataObjects[key] : null;
         enums.push({
             value: obj[key],
@@ -91,12 +91,13 @@ const CX_LOGIN_TOKEN_STATUS = {
     EXPIRED: 0,
     ACTIVE: 1,
 
-     //
+    //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
 const CX_LOGIN_TOKEN_TYPE = {
     ERP: 'erp',
     ONE: 'one',
+    THEREFORE: 'there',
 
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
@@ -145,6 +146,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
+    THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
@@ -1232,6 +1234,7 @@ const SYS_SERVER_TASK = {
         Whs_Document_Import: 100,
         Drive_Document_Import: 101,
         Dtfs_Get_Request: 200,
+        Therefore_Service: 300,
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, null, {
                 Cx_Log_CleanUp: { name: 'System Logs Clean-up', desc: 'deletes system logs older than the days specified.\n\nAllowed parameters:\ndays_old=N;\n\nwhere N must be greater than 180 and less than 999\ndefault is 365 days', params: '' },
@@ -1239,6 +1242,7 @@ const SYS_SERVER_TASK = {
                 Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nshops=[shop1,shop2];\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generated get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
+                Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
             });
         },
         getName: function (value) {
@@ -1246,6 +1250,23 @@ const SYS_SERVER_TASK = {
         },
     },
 
+}
+
+const CX_ATTACHMENT = {
+    TYPE: {
+        None: 0,
+        Scanned: 10,
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Scanned: 'Scanned Document'
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Scanned: 'Scanned Document'
+            });
+        },
+    }
 }
 
 
@@ -1266,6 +1287,7 @@ module.exports = {
     CX_SHOP: CX_SHOP,
     CX_MAP_CONFIG_TYPE: CX_MAP_CONFIG_TYPE,
     CX_TRADER_TYPE: CX_TRADER_TYPE,
+    CX_ATTACHMENT: CX_ATTACHMENT,
     CR_CASH_BOOK: CR_CASH_BOOK,
     CR_PREFERENCE: CR_PREFERENCE,
     CP_PREFERENCE: CP_PREFERENCE,

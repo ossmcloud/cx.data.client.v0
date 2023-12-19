@@ -43,6 +43,17 @@ class CPDeliveryReturnRender extends RenderBase {
     }
 
 
+    async getAttachmentListOptions() {
+        var attachments = this.dataSource.cx.table(_cxSchema.cx_attachment);
+        await attachments.select({ shopId: this.dataSource.shopId, recordType: this.dataSource.type, recordId: this.options.query.id });
+        if (attachments.count() == 0) { return null; }
+
+        var attachmentsOptions = await this.listOptions(attachments, { listView: true });
+        //attachmentsOptions.columns.splice(1, 1);
+        return attachmentsOptions;
+    }
+
+
 
     async _record() {
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.id, true, true);
@@ -173,6 +184,12 @@ class CPDeliveryReturnRender extends RenderBase {
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
 
+        var attachmentsOptions = await this.getAttachmentListOptions();
+        if (attachmentsOptions) {
+            subListsGroup.fields.push({ group: 'logs', title: 'attachments', column: 1, fields: [attachmentsOptions], collapsed: true });
+        }
+
+
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
 
@@ -180,6 +197,8 @@ class CPDeliveryReturnRender extends RenderBase {
         if (relatedTransactionsOptions) {
             subListsGroup.fields.push({ group: 'logs', title: 'related documents', column: 1, fields: [relatedTransactionsOptions], collapsed: true });
         }
+
+       
 
 
         if (this.options.query.viewLogs == 'T') {

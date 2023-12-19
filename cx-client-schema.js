@@ -977,6 +977,27 @@ module.exports = {
         ANALYSIS3: 'analysis3',
     },
 
+    cx_attachment: {
+        TBL_NAME: 'cx_attachment',
+        ATTACHMENTID: 'attachmentId',
+        RECORDTYPE: 'recordType',
+        RECORDID: 'recordId',
+        SHOPID: 'shopId',
+        TYPEID: 'typeId',
+        SOURCE: 'source',
+        NAME: 'name',
+        DESCRIPTION: 'description',
+        EXTERNALREFERENCE: 'externalReference',
+        EXTERNALLINK: 'externalLink',
+        JSONOPTIONS: 'jsonOptions',
+        ERROR: 'error',
+        ERRORMESSAGE: 'errorMessage',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     cx_login: {
         TBL_NAME: 'cx_login',
         LOGINID: 'loginId',

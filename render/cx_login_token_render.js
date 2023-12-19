@@ -61,7 +61,8 @@ class CXLoginToken extends RenderBase {
         this.options.actionsShowFirst = true;
       
         this.options.showButtons = [];
-        this.options.showButtons.push({ id: 'cx_login_token_new', text: 'One Drive', function: 'getOneDriveToken' });
+        this.options.showButtons.push({ id: 'cx_login_token_new_onedrive', text: 'One Drive', function: 'getOneDriveToken' });
+        this.options.showButtons.push({ id: 'cx_login_token_new_therefore', text: 'Therefore', function: 'setThereforeToken' });
     }
 
 
@@ -86,12 +87,16 @@ class CXLoginToken extends RenderBase {
         this.options.fields.push(header);
 
         if (this.options.mode == 'view') {
-            if (this.dataSource.createdBy == this.dataSource.cx.userId) {
-                this.options.buttons.push({ id: 'cx_login_token_new', text: 'Refresh this Token', function: 'getNewToken' });
-                if (this.dataSource.type == 'one') {
-                    this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
+            if (this.dataSource.createdBy == this.dataSource.cx.userId) {   
+                if (this.dataSource.type != _cxConst.CX_LOGIN_TOKEN_TYPE.THEREFORE) {
+                    this.options.buttons.push({ id: 'cx_login_token_refresh', text: 'Refresh this Token', function: 'getNewToken' });
                 }
             }
+
+            if (this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.ONE) {
+                this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
+            }
+
         }
     }
 
