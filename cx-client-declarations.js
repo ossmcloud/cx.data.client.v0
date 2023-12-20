@@ -131,6 +131,7 @@ const CX_LOG_TYPE = {
 }
 
 
+
 const EPOS_DTFS_SETTING = {
     PAIRING_STATUS: {
         NOT_PAIRED: 0,
@@ -758,7 +759,7 @@ const CP_DOCUMENT = {
             var color = 'var(--main-color)'; var bkgColor = '';
             if (!status) { status == this.NotAnalyzed; }
             if (status == this.NotAnalyzed || status == this.NotReconciled) {
-                color = '255,255,255';
+                color = 'var(--main-color)';
                 bkgColor = 'var(--main-bg-color)';
             } else if (status == this.Pending) {
                 color = '175,0,0';
@@ -1256,14 +1257,43 @@ const CX_ATTACHMENT = {
     TYPE: {
         None: 0,
         Scanned: 10,
+        File: 20,
+        PDF: 21,
+        CVS: 32,
+        
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
-                Scanned: 'Scanned Document'
+                None: 'Unknown',
+                Scanned: 'Scanned',
+                File: 'File',
+                PDF: 'PDF',
+                CSV: 'CSV'
             });
         },
         getName: function (value) {
             return enumGetName(this, value, {
-                Scanned: 'Scanned Document'
+                None: 'Unknown',
+                Scanned: 'Scanned',
+                File: 'File',
+                PDF: 'PDF',
+                CSV: 'CSV'
+            });
+        },
+    },
+
+    SOURCE: {
+        Therefore: 'there',
+        OneDrive: 'one',
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                Therefore: 'Therefore',
+                OneDrive: 'One Drive',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                Therefore: 'Therefore',
+                OneDrive: 'One Drive',
             });
         },
     }

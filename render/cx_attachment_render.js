@@ -18,12 +18,15 @@ class CxAttachment extends RenderBase {
             this.autoLoadFields[_cxSchema.cx_attachment.RECORDTYPE] = null;
             this.autoLoadFields[_cxSchema.cx_attachment.SHOPID] = null;
         }
-        this.autoLoadFields[_cxSchema.cx_attachment.TYPEID] = null;
+        this.autoLoadFields['sourceIcon'] = { name: 'sourceIcon', width: '30px', align: 'center', title: 'src' };
         this.autoLoadFields[_cxSchema.cx_attachment.SOURCE] = null;
+        this.autoLoadFields[_cxSchema.cx_attachment.TYPEID] = null;
+        
+        
         this.autoLoadFields[_cxSchema.cx_attachment.NAME] = null;
         this.autoLoadFields[_cxSchema.cx_attachment.DESCRIPTION] = null;
         this.autoLoadFields[_cxSchema.cx_attachment.EXTERNALREFERENCE] = null;
-        
+
         this.autoLoadFields[_cxSchema.cx_attachment.ERROR] = null;
         this.autoLoadFields[_cxSchema.cx_attachment.CREATED] = null;
     }
@@ -37,7 +40,7 @@ class CxAttachment extends RenderBase {
         } else if (field.name == _cxSchema.cx_attachment.TYPEID) {
             column.lookUps = _cxConst.CX_ATTACHMENT.TYPE.toList();
             column.addTotals = false;
-            column.align = 'center';
+            column.align = 'left';
             column.width = '50px';
             column.title = 'type';
         } else if (field.name == _cxSchema.cx_attachment.SOURCE || field.name == _cxSchema.cx_attachment.ERROR) {
@@ -88,7 +91,7 @@ class CxAttachment extends RenderBase {
 
     async _list() {
         this.options.title = 'attachments';
-        
+
     }
 
 

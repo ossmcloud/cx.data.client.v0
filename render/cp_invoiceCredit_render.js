@@ -111,7 +111,7 @@ class CPInvoiceReturnRender extends RenderBase {
             var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
             this.options.title += `
                 <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-                    <img src="/public/images/puzzle_dark.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
+                    <img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
                     <span>${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}</span>
                 </div>
             `;
@@ -468,10 +468,10 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
             if (this.matchingEnabled) {
-                var matchIcon = '<img src="/public/images/puzzle_dark.png" style="width: 20px" />'
+                var matchIcon = `<img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
 
-                var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
+                var queryIcon = `<img src="/public/images/query_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });

@@ -88,7 +88,10 @@ class CXLoginToken extends RenderBase {
 
         if (this.options.mode == 'view') {
             if (this.dataSource.createdBy == this.dataSource.cx.userId) {   
-                if (this.dataSource.type != _cxConst.CX_LOGIN_TOKEN_TYPE.THEREFORE) {
+                if (this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.THEREFORE) {
+                    this.options.buttons.push({ id: 'cx_login_token_refresh', text: 'Refresh this Token', function: 'getNewToken_therefore' });
+                    this.options.buttons.push({ id: 'cx_login_token_get', text: 'Get Token for therefore', function: 'getToken_therefore' });
+                }else {
                     this.options.buttons.push({ id: 'cx_login_token_refresh', text: 'Refresh this Token', function: 'getNewToken' });
                 }
             }

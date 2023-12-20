@@ -29,7 +29,8 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         recoDoc.recoSessionId, reco.recoStatusId,
                                         ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId ) as queryCount,
                                         ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen,
-                                        ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount
+                                        ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount,
+                                        ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
@@ -80,8 +81,13 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         }
         if (params.tno) {
             query.sql += ' and d.documentNumber like @documentNumber';
-            query.params.push({ name: 'documentNumber', value: '%' + params.tno });
+            query.params.push({ name: 'documentNumber', value: params.tno + '%' });
         }
+        if (params.tref) {
+            query.sql += ' and (d.documentReference like @documentReference or d.documentSecondReference like @documentReference)';
+            query.params.push({ name: 'documentReference', value: params.tref + '%' });
+        }
+
         if (params.tt) {
             query.sql += ' and d.documentType = @documentType';
             query.params.push({ name: 'documentType', value: params.tt });
@@ -155,6 +161,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #queryCount = null;
     #queryCountOpen = null;
     #attachCount = null;
+    #attachFlag = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -166,6 +173,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#queryCount = defaults['queryCount'] || null;
         this.#queryCountOpen = defaults['queryCountOpen'] || null;
         this.#attachCount = defaults['attachCount'] || null;
+        this.#attachFlag = defaults['attachFlag'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -209,9 +217,25 @@ class cp_deliveryReturn extends _persistentTable.Record {
         return this.queryCount;
     }
 
-    get attachCount() { return this.#attachCount; }
+    get attachCount() {
+        //if (this.#attachFlag) { return this.#attachFlag; }
+        return this.#attachCount;
+    }
     get attachCountDisplay() {
         if (this.attachCount) { return `${this.attachCount} attachments`; }
+        return '';
+    }
+    get attachFlag() {
+        //if (this.#attachFlag) { return this.#attachFlag; }
+        return this.#attachFlag;
+    }
+
+    get attachIcon() {
+        if (this.#attachFlag && (this.#attachFlag[0] == '&' || this.#attachFlag[0] == '<')) { return this.#attachFlag; }
+        if (this.attachCount) {
+            return `<img src="/public/images/attach_${this.cx.theme}.png" style="width: 20px" />`;
+            //return '<span style="background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;"></span>';
+        }
         return '';
     }
 

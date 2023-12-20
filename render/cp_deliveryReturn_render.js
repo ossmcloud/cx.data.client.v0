@@ -47,10 +47,11 @@ class CPDeliveryReturnRender extends RenderBase {
         var attachments = this.dataSource.cx.table(_cxSchema.cx_attachment);
         await attachments.select({ shopId: this.dataSource.shopId, recordType: this.dataSource.type, recordId: this.options.query.id });
         if (attachments.count() == 0) { return null; }
-
         var attachmentsOptions = await this.listOptions(attachments, { listView: true });
-        //attachmentsOptions.columns.splice(1, 1);
-        return attachmentsOptions;
+        return {
+            options: attachmentsOptions,
+            shortList: attachments.toHtmlList(),
+        };
     }
 
 
@@ -101,7 +102,7 @@ class CPDeliveryReturnRender extends RenderBase {
             var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${this.dataSource.recoSessionId}');` : '';
             this.options.title += `
                 <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(this.dataSource.recoStatus)}${recoSessionLink}">
-                    <img src="/public/images/puzzle_dark.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
+                    <img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
                     <span>${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(this.dataSource.recoStatus)}</span>
                 </div>
             `;
@@ -109,77 +110,80 @@ class CPDeliveryReturnRender extends RenderBase {
 
         this.options.title += '</div>';
 
-        this.options.fields = [
-            {
-                group: 'main', title: '', columnCount: 4, fields: [
-                    {
-                        group: 'main1', title: 'main info', column: 1, columnCount: 3, fields: [
-                            {
-                                group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
-                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE + 'Name', label: 'document type' },
-                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTID, label: 'document epos id' },
-                                ]
-                            },
-                            {
-                                group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, label: 'supplier' },
-                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, label: 'date' },
-                                    { name: _cxSchema.cp_deliveryReturn.UPLOADDATE, label: 'upload date' },
-                                ]
-                            },
-                            {
-                                group: 'main1.col3', column: 3, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_deliveryReturn.CURRENCY, label: 'currency' },
-                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, label: 'document number' },
-                                ]
-                            },
-                        ]
-                    },
 
-                    {
-                        group: 'main_ref', title: 'document references', column: 2, columnCount: 1, fields: [
-                            { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, label: 'reference 1' },
-                            { name: _cxSchema.cp_deliveryReturn.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
-                            { name: _cxSchema.cp_deliveryReturn.DOCUMENTMEMO, label: 'memo' },
+        var fieldGroups = [];
+        fieldGroups.push({
+            group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 3, minWidth: '300px', fields: [
+                {
+                    group: 'main1.col1', column: 1, columnCount: 1, fields: [
+                        await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
+                        { name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE + 'Name', label: 'document type' },
+                        { name: _cxSchema.cp_deliveryReturn.DOCUMENTID, label: 'document epos id' },
+                    ]
+                },
+                {
+                    group: 'main1.col2', column: 2, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, label: 'supplier' },
+                        { name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, label: 'date' },
+                        { name: _cxSchema.cp_deliveryReturn.UPLOADDATE, label: 'upload date' },
+                    ]
+                },
+                {
+                    group: 'main1.col3', column: 3, columnCount: 1, fields: [
+                        { name: _cxSchema.cp_deliveryReturn.CURRENCY, label: 'currency' },
+                        { name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, label: 'document number' },
+                    ]
+                },
+            ]
+        })
 
-                        ]
-                    },
+        fieldGroups.push({
+            group: 'main_ref', title: 'document references', column: fieldGroups.length + 1, columnCount: 1, width: '250px', fields: [
+                { name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, label: 'reference 1' },
+                { name: _cxSchema.cp_deliveryReturn.DOCUMENTSECONDREFERENCE, label: 'reference 2' },
+                { name: _cxSchema.cp_deliveryReturn.DOCUMENTMEMO, label: 'memo' },
 
-                    {
-                        group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, width: '300px', fields: [
-                            { name: _cxSchema.cp_deliveryReturn.TOTALNET, label: 'total net', formatMoney: 'N2' },
-                            { name: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
-                            { name: _cxSchema.cp_deliveryReturn.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
-                            { name: _cxSchema.cp_deliveryReturn.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
-                        ]
-                    },
-                    {
-                        group: 'audit', title: 'audit info', column: 4, columnCount: 1, fields: [
-                            {
-                                group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUS, label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
-                                    { name: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUSMESSAGE, label: 'status message', column: 2, readOnly: true },
-                                ]
-                            },
-                            {
-                                group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: 'created', label: 'created', column: 1, readOnly: true },
-                                    { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
-                                ]
-                            },
-                            {
-                                group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
-                                    { name: 'modified', label: 'modified', column: 1, readOnly: true },
-                                    { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
-                                ]
-                            }
-                        ]
-                    }
-                ],
-            },
+            ]
+        })
 
-        ]
+        fieldGroups.push({
+            group: 'totals', title: 'totals', column: fieldGroups.length + 1, columnCount: 2, inline: true, width: '300px', fields: [
+                { name: _cxSchema.cp_deliveryReturn.TOTALNET, label: 'total net', formatMoney: 'N2' },
+                { name: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
+                { name: _cxSchema.cp_deliveryReturn.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
+                { name: _cxSchema.cp_deliveryReturn.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
+            ]
+        })
+
+        var attachmentOptions = await this.getAttachmentListOptions();
+        if (attachmentOptions) {
+            fieldGroups.push({ group: 'attach', title: 'attachments', column: fieldGroups.length + 1, width: '400px', fields: [{ html: attachmentOptions.shortList }] })
+        }
+
+        fieldGroups.push({
+            group: 'audit', title: 'audit info', column: fieldGroups.length + 1, columnCount: 1, width: '400px', fields: [
+                {
+                    group: 'audit0', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUS, label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
+                        { name: _cxSchema.cp_deliveryReturn.DOCUMENTSTATUSMESSAGE, label: 'status message', column: 2, readOnly: true },
+                    ]
+                },
+                {
+                    group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'created', label: 'created', column: 1, readOnly: true },
+                        { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                    ]
+                },
+                {
+                    group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                        { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                    ]
+                }
+            ]
+        })
+
+        this.options.fields = [{ group: 'main', title: '', columnCount: fieldGroups.length, fields: fieldGroups, }];
 
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
         this.options.fields.push(subListsGroup);
@@ -193,9 +197,8 @@ class CPDeliveryReturnRender extends RenderBase {
         }
 
 
-        var attachmentsOptions = await this.getAttachmentListOptions();
-        if (attachmentsOptions) {
-            subListsGroup.fields.push({ group: 'logs', title: 'attachments', column: 1, fields: [attachmentsOptions], collapsed: true });
+        if (attachmentOptions) {
+            subListsGroup.fields.push({ group: 'attachments_list', title: 'attachments', column: 1, fields: [attachmentOptions.options], collapsed: true });
         }
 
         if (this.options.query.viewLogs == 'T') {
@@ -250,6 +253,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 { label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') },
                 { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
                 { label: 'document no.', fieldName: 'tno', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
+                { label: 'document refs.', fieldName: 'tref', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
                 { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
                 { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
                 { label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE },
@@ -268,21 +272,24 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
 
             if (this.matchingEnabled) {
-                var matchIcon = '<img src="/public/images/puzzle_dark.png" style="width: 20px" />'
+                var matchIcon = `<img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
 
-                var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
+                var queryIcon = `<img src="/public/images/query_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
 
             //
-            this.options.columns.push({ name: 'attachCount', title: '&#x1f4ce;', nullText: '', align: 'center', width: '10px', headerToolTip: 'attachments count', toolTip: { valueField: 'attachCountDisplay', suppressText: true } });
+            var queryIcon = `<img src="/public/images/attach_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
+            this.options.columns.push({ name: 'attachIcon', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'attachments count', toolTip: { valueField: 'attachCountDisplay', suppressText: false } });
+            //this.options.columns.push({ name: 'attachIcon', title: queryIcon, nullText: '', align: 'center', width: '10px' });
 
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.SUPPLIERCODE, title: 'supplier' });
             this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' });
+            this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTSECONDREFERENCE, title: 'second reference' });
             this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
@@ -340,13 +347,13 @@ class CPDeliveryReturnRender extends RenderBase {
                     style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
                     columns: ['queryCount']
                 })
-                this.options.cellHighlights.push({
-                    column: 'attachCount',
-                    op: '>',
-                    value: 0,
-                    style: 'background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
-                    columns: ['attachCount']
-                })
+                // this.options.cellHighlights.push({
+                //     column: 'attachCount',
+                //     op: '>',
+                //     value: 0,
+                //     style: 'background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+                //     columns: ['attachCount']
+                // })
             }
 
 

@@ -36,6 +36,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    EXTERNALFLAGS: 'externalFlags',
 
 }
 //
@@ -51,7 +52,7 @@ const _fields = {
     name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
     description: { name: 'description', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
     externalReference: { name: 'externalReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    externalLink: { name: 'externalLink', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    externalLink: { name: 'externalLink', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: true },
     jsonOptions: { name: 'jsonOptions', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: true },
     error: { name: 'error', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     errorMessage: { name: 'errorMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
@@ -59,6 +60,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    externalFlags: { name: 'externalFlags', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -178,6 +180,12 @@ class Persistent_cx_attachment extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get externalFlags() {
+        return super.getValue(_fieldNames.EXTERNALFLAGS);
+    } set externalFlags(val) {
+        super.setValue(_fieldNames.EXTERNALFLAGS, val);
     }
 
 

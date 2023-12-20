@@ -996,6 +996,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        EXTERNALFLAGS: 'externalFlags',
     },
 
     cx_login: {

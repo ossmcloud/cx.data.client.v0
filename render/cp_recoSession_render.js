@@ -23,7 +23,7 @@ class CPRecoSessionRender extends RenderBase {
 
 
         this.autoLoadFields['documentType'] = { name: 'documentType', title: 'type', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList(), align: 'center', width: '70px' };
-        var queryIcon = '<img src="/public/images/query_dark.png" style="width: 20px" />'
+        var queryIcon = `<img src="/public/images/query_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
         this.autoLoadFields['queryCount'] = { name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } }
 
 
