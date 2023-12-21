@@ -193,6 +193,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
 
+    get editedIcon() {
+        if (this.isUserEdited) { return '&#x270E;'; }
+        return '';
+    }
 
     get totalNetSign() { return this.totalNet * this.#documentSign; }
     get totalVatSign() { return this.totalVat * this.#documentSign; }
