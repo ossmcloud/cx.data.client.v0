@@ -884,6 +884,7 @@ module.exports = {
         CBREFERENCE: 'cbReference',
         FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
         SKIPPOSTING: 'skipPosting',
+        STOPPOSTING: 'stopPosting',
     },
 
     cr_tran_type_config_shop: {
@@ -907,6 +908,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         SKIPPOSTING: 'skipPosting',
+        STOPPOSTING: 'stopPosting',
     },
 
     cr_transaction: {
@@ -973,6 +975,28 @@ module.exports = {
         ANALYSIS1: 'analysis1',
         ANALYSIS2: 'analysis2',
         ANALYSIS3: 'analysis3',
+    },
+
+    cx_attachment: {
+        TBL_NAME: 'cx_attachment',
+        ATTACHMENTID: 'attachmentId',
+        RECORDTYPE: 'recordType',
+        RECORDID: 'recordId',
+        SHOPID: 'shopId',
+        TYPEID: 'typeId',
+        SOURCE: 'source',
+        NAME: 'name',
+        DESCRIPTION: 'description',
+        EXTERNALREFERENCE: 'externalReference',
+        EXTERNALLINK: 'externalLink',
+        JSONOPTIONS: 'jsonOptions',
+        ERROR: 'error',
+        ERRORMESSAGE: 'errorMessage',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        EXTERNALFLAGS: 'externalFlags',
     },
 
     cx_login: {

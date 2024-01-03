@@ -58,7 +58,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
             if (s.shopId == 0 && s.wholesalerId == 0) { found = s; return false; }
         });
         if (found) { return found; }
-        return cp_recoSetting_Collection.createNew();
+        return this.createNew();
     }
 
 }
