@@ -940,13 +940,24 @@ const CP_QUERY_STATUS = {
     SUBMITTED: 1,
     WAITING_INFO: 2,
     IN_PROGRESS: 3,
+    RESOLVED_PENDING: 7,
     RESOLVED: 8,
     CLOSED: 10,
     ERROR: 9,
 
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { IN_PROGRESS: 'in progress' }); },
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            WAITING_INFO: 'waiting info from you',
+            IN_PROGRESS: 'in progress',
+            RESOLVED_PENDING: 'resolved, pending review',
+        });
+    },
     getName: function (value) {
-        return enumGetName(this, value, { IN_PROGRESS: 'in progress' });
+        return enumGetName(this, value, {
+            WAITING_INFO: 'waiting info from you',
+            IN_PROGRESS: 'in progress',
+            RESOLVED_PENDING: 'resolved, pending review',
+        });
     },
     getStyleInverted: function (status, returnObject) {
         var color = 'var(--main-color)'; var bkgColor = '';
@@ -957,12 +968,18 @@ const CP_QUERY_STATUS = {
         } else if (status == this.SUBMITTED) {
             color = '255,255,255';
             bkgColor = '25,130,196';
+        } else if (status == this.WAITING_INFO) {
+            color = '255,0,0';
+            bkgColor = '230,230,0';
         } else if (status == this.IN_PROGRESS) {
             color = '175,0,0';
             bkgColor = '230,230,0';
         } else if (status == this.ERROR) {
             color = '255,255,255';
             bkgColor = '234,30,37';
+        } else if (status == this.RESOLVED_PENDING) {
+            color = '25,42,196';
+            bkgColor = '30,201,133';
         } else if (status == this.RESOLVED) {
             color = '0,100,0';
             bkgColor = '138,201,38';
@@ -1246,7 +1263,7 @@ const SYS_SERVER_TASK = {
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generated get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
-                BWG_Service: { name: 'BWG Query Status Service', desc:'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\nlast_mod=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
+                BWG_Service: { name: 'BWG Query Status Service', desc:'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
             });
         },
         getName: function (value) {

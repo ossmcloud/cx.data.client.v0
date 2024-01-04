@@ -25,8 +25,8 @@ class cp_query_Collection extends _persistentTable.Table {
                 from	    cp_query                     q
                 inner join  cx_shop                      s ON s.shopId = q.shopId
                 inner join  cp_queryType                qt ON qt.queryTypeId = q.queryTypeId
-                left outer  join cp_deliveryReturn          del ON del.delRetId = q.delRetId
-                left outer  join cp_invoiceCredit           doc ON doc.invCreId = q.invCreId
+                left outer  join cp_deliveryReturn     del ON del.delRetId = q.delRetId
+                left outer  join cp_invoiceCredit      doc ON doc.invCreId = q.invCreId
                 left outer  join cp_invoiceGroup       grp ON grp.invGrpId = doc.invGrpId
                 left outer  join cp_wholesaler           w ON w.wholesalerId = grp.wholesalerId
                 left outer  join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
@@ -219,6 +219,12 @@ class cp_query extends _persistentTable.Record {
     get documentNet() { return this.#documentNet; }
     get documentVat() { return this.#documentVat; }
     get documentGross() { return this.#documentGross; }
+
+    get docNumber() { return this.#documentNumber || this.#docketNumber; }
+    get docDate() { return this.#documentDate || this.#docketDate; }
+    get docNet() { return this.#documentNet || this.#docketNet; }
+    get docVat() { return this.#documentVat || this.#docketVat; }
+    get docGross() { return this.#documentGross || this.#docketGross; }
 
     get groupInvoice() { return this.#groupInvoice; }
     get groupInvoiceDate() { return this.#groupInvoiceDate; }

@@ -6,6 +6,7 @@ const RenderBase = require('./render_base');
 
 class CPQueryRender extends RenderBase {
     #allQueryTypes = null;
+    #allResolutionTypes = null;
     constructor(dataSource, options) {
         super(dataSource, options);
         this.title = 'document query';
@@ -23,10 +24,12 @@ class CPQueryRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_query.DISPUTEDAMOUNT] = null;
 
         this.autoLoadFields[_cxSchema.cp_query.QUERYREFERENCE] = null;
-        this.autoLoadFields[_cxSchema.cp_query.NOTES] = null;
+        //this.autoLoadFields[_cxSchema.cp_query.NOTES] = null;
         this.autoLoadFields[_cxSchema.cp_query.SUBMITDATE] = null;
+        this.autoLoadFields[_cxSchema.cp_query.RESOLUTIONTYPEID] = null;
         this.autoLoadFields[_cxSchema.cp_query.RESOLUTIONDATE] = null;
-        this.autoLoadFields[_cxSchema.cp_query.CREATED] = null;
+
+        //this.autoLoadFields[_cxSchema.cp_query.CREATED] = null;
 
 
 
@@ -35,6 +38,9 @@ class CPQueryRender extends RenderBase {
     async initColumn(field, column) {
         if (!this.#allQueryTypes) {
             this.#allQueryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(null, '- all -');
+        }
+        if (!this.#allResolutionTypes) {
+            this.#allResolutionTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(null, '- all -');
         }
 
         // if (field.name == _cxSchema.cp_query.WHOLESALERID) {
@@ -63,15 +69,21 @@ class CPQueryRender extends RenderBase {
         } else if (field.name == _cxSchema.cp_query.QUERYTYPEID) {
             column.title = 'query type';
             column.addTotals = false;
-            column.align = 'left';
+            column.align = 'center';
             column.lookUps = this.#allQueryTypes;
+        } else if (field.name == _cxSchema.cp_query.RESOLUTIONTYPEID) {
+            column.title = 'resolution type';
+            column.addTotals = false;
+            column.align = 'center';
+            column.lookUps = this.#allResolutionTypes;
+            column.nullText = '';
         } else if (field.name == _cxSchema.cp_query.STATUSID) {
             column.title = 'status';
             column.addTotals = false;
-            column.align = 'left';
+            column.align = 'center';
             column.lookUps = _cxConst.CP_QUERY_STATUS.toList();
             column.width = '75px';
-        } else if (field.name == _cxSchema.cp_query.DISPUTEDAMOUNT) {
+        } else if (field.name == _cxSchema.cp_query.DISPUTEDAMOUNT || field.name == _cxSchema.cp_query.RESOLUTIONDATE) {
             column.nullText = '';
         }
     }
@@ -94,7 +106,7 @@ class CPQueryRender extends RenderBase {
         } else if (field.name == _cxSchema.cp_query.DELRETID) {
             filter.replace = { label: 'docket number', fieldName: 'del.documentNumber' }
             filter.hide = false;
-        
+
         } else if (field.name == _cxSchema.cp_query.DISPUTEDAMOUNT || field.name == _cxSchema.cp_query.STATUSMESSAGE || field.name == _cxSchema.cp_query.CREATED) {
             filter.hide = true;
         }
@@ -149,14 +161,14 @@ class CPQueryRender extends RenderBase {
         } else {
             this.options.title += `<td>${this.dataSource.supplierInfo} - query</td>`;
         }
-        
+
         this.options.title += `
             <td>
                 <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">
                     ${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}
                 </span>
             </td>`;
-        
+
         if (this.dataSource.invCreId) {
             this.options.title += `
             <td style="padding-left: 17px;">
@@ -212,7 +224,8 @@ class CPQueryRender extends RenderBase {
         var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(this.dataSource.wholesalerId, true);
         var queryResTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(this.dataSource.wholesalerId, true);
 
-        var header = { group: 'head', title: 'query info', columnCount: 5, styles: ['width: 200px', 'width: 200px', 'width: 200px', 'width: calc(50% - 600px)', 'width: calc(50% - 600px)'], fields: [] };
+        var columnCount = (!this.dataSource.isNew() && !this.options.dialog) ? 7 : 6;
+        var header = { group: 'head', title: 'query info', columnCount: columnCount, styles: ['width: 200px', 'width: 200px', 'width: 200px', 'width: calc(100% - 1400px)', 'width: 300px', 'width: 200px', 'width: 300px'], fields: [] };
         header.fields = [
             // NOTE: we need these fields on the form as we need the values to merge the query message template without having to make a server call
             { name: 'shopCode', hidden: true },
@@ -227,6 +240,11 @@ class CPQueryRender extends RenderBase {
             { name: 'docketNet', hidden: true },
             { name: 'docketVat', hidden: true },
             { name: 'docketGross', hidden: true },
+            { name: 'docNumber', hidden: true },
+            { name: 'docDate', hidden: true },
+            { name: 'docNet', hidden: true },
+            { name: 'docVat', hidden: true },
+            { name: 'docGross', hidden: true },
             { name: 'groupInvoice', hidden: true },
             { name: 'groupInvoiceDate', hidden: true },
             //
@@ -252,13 +270,41 @@ class CPQueryRender extends RenderBase {
             { name: _cxSchema.cp_query.RESOLUTIONMESSAGE, label: 'resolution message', column: 5, readOnly: !canResolve },
             { name: _cxSchema.cp_query.RESOLUTIONDATE, label: 'resolution date', column: 5, readOnly: true },
 
+            { name: _cxSchema.cp_query.CREDITAPPLIED, label: 'credit applied:', column: 6, disabled: !canResolve },
+            { name: _cxSchema.cp_query.CREDITNOTENUMBER, label: 'credit note number', column: 6, readOnly: !canResolve },
+            { name: _cxSchema.cp_query.CREDITTOTAL, label: 'credit total', column: 6, readOnly: !canResolve },
+
+
+
         ]
+        if (!this.dataSource.isNew() && !this.options.dialog) {
+            header.fields.push({
+                group: 'audit', title: '', column: 7, columnCount: 1, fields: [
+                    {
+                        group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: 'created', label: 'created', column: 1, readOnly: true },
+                            { name: 'createdBy', label: 'created by', column: 2, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                            { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                        ]
+                    }
+                ]
+            }
+            )
+        }
+
+
         this.options.fields.push(header);
 
         var body = { group: 'body', title: 'query messages', columnCount: 1, fields: [] };
         body.fields = [
             { name: _cxSchema.cp_query.QUERYMESSAGE, label: 'query message', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 1, readOnly: readOnly, validation: '{"mandatory": true}' },
-            { name: _cxSchema.cp_query.NOTES, label: 'internal notes', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 3, column: 1, readOnly: readOnly }
+            { name: _cxSchema.cp_query.NOTES, label: 'internal notes', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 3, column: 1, readOnly: readOnly },
+
         ]
         this.options.fields.push(body);
 
@@ -275,14 +321,21 @@ class CPQueryRender extends RenderBase {
                     if (bwgShopOptions) {
                         this.options.buttons.push({ id: 'cp_check_status', text: 'Check BWG Status', function: 'checkQueryStatus' });
                     }
-                } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED) {
+                } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
+                    if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
+                        this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
+                    }
                     this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
+
                 }
 
         } else {
             if (!this.dataSource.isNew()) {
                 if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.PENDING) {
                     this.options.buttons.push({ id: 'cp_submit_query', text: 'Mark as submitted', function: 'submitQuery' });
+                }
+                if (this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.CLOSED && this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.RESOLVED) {
+                    this.options.buttons.push({ id: 'cp_close_query', text: 'Mark as closed', function: 'closeQuery' });
                 }
             }
         }
