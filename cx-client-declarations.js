@@ -938,7 +938,8 @@ const CP_QUERY_TYPE_REQ_DISPUTED = {
 const CP_QUERY_STATUS = {
     PENDING: 0,
     SUBMITTED: 1,
-    IN_PROGRESS: 2,
+    WAITING_INFO: 2,
+    IN_PROGRESS: 3,
     RESOLVED: 8,
     CLOSED: 10,
     ERROR: 9,
@@ -1245,7 +1246,7 @@ const SYS_SERVER_TASK = {
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generated get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
-                BWG_Service: { name: 'BWG Query Status Service', desc:'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
+                BWG_Service: { name: 'BWG Query Status Service', desc:'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\nlast_mod=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
             });
         },
         getName: function (value) {

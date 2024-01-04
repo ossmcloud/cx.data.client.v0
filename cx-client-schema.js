@@ -468,6 +468,7 @@ module.exports = {
         DELRETID: 'delRetId',
         CREDITAPPLIED: 'creditApplied',
         CREDITNOTENUMBER: 'creditNoteNumber',
+        CREDITTOTAL: 'creditTotal',
     },
 
     cp_queryLog: {
