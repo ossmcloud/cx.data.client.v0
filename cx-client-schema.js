@@ -469,6 +469,7 @@ module.exports = {
         CREDITAPPLIED: 'creditApplied',
         CREDITNOTENUMBER: 'creditNoteNumber',
         CREDITTOTAL: 'creditTotal',
+        WHOLESALERID: 'wholesalerId',
     },
 
     cp_queryLog: {

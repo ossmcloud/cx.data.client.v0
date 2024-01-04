@@ -42,6 +42,7 @@ const _fieldNames = {
     CREDITAPPLIED: 'creditApplied',
     CREDITNOTENUMBER: 'creditNoteNumber',
     CREDITTOTAL: 'creditTotal',
+    WHOLESALERID: 'wholesalerId',
 
 }
 //
@@ -71,6 +72,7 @@ const _fields = {
     creditApplied: { name: 'creditApplied', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     creditNoteNumber: { name: 'creditNoteNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     creditTotal: { name: 'creditTotal', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
 
 }
 //
@@ -226,6 +228,12 @@ class Persistent_cp_query extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREDITTOTAL);
     } set creditTotal(val) {
         super.setValue(_fieldNames.CREDITTOTAL, val);
+    }
+
+    get wholesalerId() {
+        return super.getValue(_fieldNames.WHOLESALERID);
+    } set wholesalerId(val) {
+        super.setValue(_fieldNames.WHOLESALERID, val);
     }
 
 
