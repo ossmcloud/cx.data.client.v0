@@ -75,6 +75,7 @@ class CrTranTypeConfigRender extends RenderBase {
                             { name: _cxSchema.cr_tran_type_config.EPOSTRANSUBTYPE, label: 'Sub Type', readOnly: readOnlyIfNotNew, column: 1 },
                             { name: _cxSchema.cr_tran_type_config.EXCONDITION, label: 'Extra Conditions', column: 1 },
                             { name: _cxSchema.cr_tran_type_config.DESCRIPTION, label: 'Description', column: 1 },
+                            { name: _cxSchema.cr_tran_type_config.NOTES, label: 'Notes', column: 1 },
                             { name: _cxSchema.cr_tran_type_config.MAPCONFIGID, label: 'MapConfig', hidden: true, column: 1 },
                         ]
                     },

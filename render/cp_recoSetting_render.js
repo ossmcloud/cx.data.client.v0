@@ -144,14 +144,15 @@ class CPRecoSettingRender extends RenderBase {
             }
         ];
 
-        var supplierConfigs = await this.getSupplierSettingsListOptions();
-        var listsSuppliers = {
-            group: 'listsOuter', title: '', columnCount: 1, fields: [
-                { group: 'config', title: 'supplier specific configurations', column: 1, fields: [supplierConfigs] }
-            ]
+        if (!this.dataSource.isNew()) {
+            var supplierConfigs = await this.getSupplierSettingsListOptions();
+            var listsSuppliers = {
+                group: 'listsOuter', title: '', columnCount: 1, fields: [
+                    { group: 'config', title: 'supplier specific configurations', column: 1, fields: [supplierConfigs] }
+                ]
+            }
+            this.options.fields.push(listsSuppliers);
         }
-        this.options.fields.push(listsSuppliers);
-
 
     }
 

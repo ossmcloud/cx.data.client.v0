@@ -887,6 +887,7 @@ module.exports = {
         FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
         SKIPPOSTING: 'skipPosting',
         STOPPOSTING: 'stopPosting',
+        NOTES: 'notes',
     },
 
     cr_tran_type_config_shop: {
