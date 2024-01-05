@@ -17,7 +17,7 @@ class cp_query_Collection extends _persistentTable.Table {
                 select	    q.*, 
                             qt.code as queryType, qt.name as queryTypeName,
                             s.shopCode, s.shopName,
-                            w.wholesalerId, w.code as wholesalerCode, w.name as wholesalerName,
+                            w.code as wholesalerCode, w.name as wholesalerName,
                             supp.traderAccountId, supp.traderCode as supplierCode, supp.traderName as supplierName,
                             del.documentNumber as docketNumber, del.documentDate as docketDate, del.totalNet as docketNet, del.totalVat as docketVat, del.totalGross as docketGross,
                             doc.documentNumber, doc.documentDate, doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross,
@@ -25,11 +25,11 @@ class cp_query_Collection extends _persistentTable.Table {
                 from	    cp_query                     q
                 inner join  cx_shop                      s ON s.shopId = q.shopId
                 inner join  cp_queryType                qt ON qt.queryTypeId = q.queryTypeId
-                left outer  join cp_deliveryReturn          del ON del.delRetId = q.delRetId
-                left outer  join cp_invoiceCredit           doc ON doc.invCreId = q.invCreId
+                left outer  join cp_deliveryReturn     del ON del.delRetId = q.delRetId
+                left outer  join cp_invoiceCredit      doc ON doc.invCreId = q.invCreId
                 left outer  join cp_invoiceGroup       grp ON grp.invGrpId = doc.invGrpId
-                left outer  join cp_wholesaler           w ON w.wholesalerId = grp.wholesalerId
-                left outer  join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
+                left outer  join cp_wholesaler           w ON w.wholesalerId = q.wholesalerId
+                left outer  join cx_traderAccount     supp ON supp.traderAccountId = isnull(doc.traderAccountId, del.traderAccountId)
                 where       q.${this.FieldNames.SHOPID} in ${this.cx.shopList}
                 `
         };
@@ -57,8 +57,8 @@ class cp_query_Collection extends _persistentTable.Table {
                 left outer  join cp_deliveryReturn     del ON del.delRetId = q.delRetId
                 left outer  join cp_invoiceCredit      doc ON doc.invCreId = q.invCreId
                 left outer  join cp_invoiceGroup       grp ON grp.invGrpId = doc.invGrpId
-                left outer  join cp_wholesaler           w ON w.wholesalerId = grp.wholesalerId
-                left outer  join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
+                left outer  join cp_wholesaler           w ON w.wholesalerId = q.wholesalerId
+                left outer  join cx_traderAccount     supp ON supp.traderAccountId = isnull(doc.traderAccountId, del.traderAccountId)
                 where       q.${this.FieldNames.SHOPID} in ${this.cx.shopList}`
         };
 
@@ -102,14 +102,17 @@ class cp_query_Collection extends _persistentTable.Table {
         } else {
             docInfoSql = `
                     select          doc.shopId, doc.invCreId, whs.wholesalerId,  whs.code as wholesalerCode, whs.name as wholesalerName,
-                                    doc.supplierCode, doc.documentNumber, doc.documentDate, doc.docketNumber, doc.docketDate,
+                                    doc.supplierCode, supp.traderName as supplierName, doc.documentNumber, doc.documentDate, doc.docketNumber, doc.docketDate,
                                     doc.totalNet as documentNet, doc.totalVat as documentVat, doc.totalGross as documentGross, 
                                     grp.documentNumber as groupInvoice, grp.documentDate as groupInvoiceDate, 
                                     s.shopCode, s.shopName
                     from            cp_invoiceCredit doc
                     inner join      cx_shop            s ON s.shopId            = doc.shopId
+                    left outer join cx_traderAccount supp ON supp.traderAccountId = doc.traderAccountId
                     left outer join cp_invoiceGroup  grp ON grp.invGrpId        = doc.invGrpId
-                    left outer join cp_wholesaler    whs ON whs.wholesalerId    = grp.wholesalerId
+                    left outer join cp_wholesalerShop whsShop ON whsShop.shopId = doc.shopId
+                    left outer join cp_wholesaler    whs ON whs.wholesalerId    = isnull(grp.wholesalerId, whsShop.wholesalerId)
+                    
                     where           doc.invCreId = ${docId}
                 `;
         }
@@ -132,7 +135,7 @@ class cp_query extends _persistentTable.Record {
     #queryName = '';
     #shopCode = '';
     #shopName = '';
-    #wholesalerId = null;
+    // #wholesalerId = null;
     #wholesalerCode = '';
     #wholesalerName = '';
     #traderAccountId = null;
@@ -156,7 +159,7 @@ class cp_query extends _persistentTable.Record {
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
-        this.#wholesalerId = defaults['wholesalerId'] || null;
+        //this.#wholesalerId = defaults['wholesalerId'] || null;
         this.#wholesalerCode = defaults['wholesalerCode'] || '';
         this.#wholesalerName = defaults['wholesalerName'] || '';
 
@@ -189,7 +192,7 @@ class cp_query extends _persistentTable.Record {
         this.#queryType = defaults['queryType'] || null;
     };
 
-    get wholesalerId() { return this.#wholesalerId; }
+    //get wholesalerId() { return this.#wholesalerId; }
     get wholesalerCode() { return this.#wholesalerCode; }
     get wholesalerName() { return this.#wholesalerName; }
     get wholesalerInfo() { return `[${this.#wholesalerCode}] ${this.#wholesalerName}`; }
@@ -219,6 +222,12 @@ class cp_query extends _persistentTable.Record {
     get documentNet() { return this.#documentNet; }
     get documentVat() { return this.#documentVat; }
     get documentGross() { return this.#documentGross; }
+
+    get docNumber() { return this.#documentNumber || this.#docketNumber; }
+    get docDate() { return this.#documentDate || this.#docketDate; }
+    get docNet() { return this.#documentNet || this.#docketNet; }
+    get docVat() { return this.#documentVat || this.#docketVat; }
+    get docGross() { return this.#documentGross || this.#docketGross; }
 
     get groupInvoice() { return this.#groupInvoice; }
     get groupInvoiceDate() { return this.#groupInvoiceDate; }

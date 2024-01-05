@@ -58,6 +58,7 @@ const _fieldNames = {
     FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
     SKIPPOSTING: 'skipPosting',
     STOPPOSTING: 'stopPosting',
+    NOTES: 'notes',
 
 }
 //
@@ -80,29 +81,30 @@ const _fields = {
     ignore: { name: 'ignore', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     duplicateAs: { name: 'duplicateAs', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     traderAccount: { name: 'traderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpGLAccountId: { name: 'erpGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpGLAccountId: { name: 'erpGLAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpTaxAccountId: { name: 'erpTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpTaxAccountId: { name: 'erpTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     exCondition: { name: 'exCondition', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     erp2ndTranTypeId: { name: 'erp2ndTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     sortIndex: { name: 'sortIndex', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erpSplitByReference: { name: 'erpSplitByReference', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     erpIgnoreStoreGLSegments: { name: 'erpIgnoreStoreGLSegments', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     erp2ndTraderAccount: { name: 'erp2ndTraderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erp2ndGLAccountId: { name: 'erp2ndGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndGLAccountId: { name: 'erp2ndGLAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erp2ndCBAccountId: { name: 'erp2ndCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erp2ndTaxAccountId: { name: 'erp2ndTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndTaxAccountId: { name: 'erp2ndTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     showInCashBookList: { name: 'showInCashBookList', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     cbReference: { name: 'cbReference', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false, default: '' },
     forceTaxMapConfigId: { name: 'forceTaxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     skipPosting: { name: 'skipPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     stopPosting: { name: 'stopPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    notes: { name: 'notes', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
 
 }
 //
@@ -354,6 +356,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.STOPPOSTING);
     } set stopPosting(val) {
         super.setValue(_fieldNames.STOPPOSTING, val);
+    }
+
+    get notes() {
+        return super.getValue(_fieldNames.NOTES);
+    } set notes(val) {
+        super.setValue(_fieldNames.NOTES, val);
     }
 
 

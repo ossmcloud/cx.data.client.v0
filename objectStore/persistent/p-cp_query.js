@@ -41,6 +41,8 @@ const _fieldNames = {
     DELRETID: 'delRetId',
     CREDITAPPLIED: 'creditApplied',
     CREDITNOTENUMBER: 'creditNoteNumber',
+    CREDITTOTAL: 'creditTotal',
+    WHOLESALERID: 'wholesalerId',
 
 }
 //
@@ -69,6 +71,8 @@ const _fields = {
     delRetId: { name: 'delRetId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     creditApplied: { name: 'creditApplied', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     creditNoteNumber: { name: 'creditNoteNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    creditTotal: { name: 'creditTotal', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
 
 }
 //
@@ -218,6 +222,18 @@ class Persistent_cp_query extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREDITNOTENUMBER);
     } set creditNoteNumber(val) {
         super.setValue(_fieldNames.CREDITNOTENUMBER, val);
+    }
+
+    get creditTotal() {
+        return super.getValue(_fieldNames.CREDITTOTAL);
+    } set creditTotal(val) {
+        super.setValue(_fieldNames.CREDITTOTAL, val);
+    }
+
+    get wholesalerId() {
+        return super.getValue(_fieldNames.WHOLESALERID);
+    } set wholesalerId(val) {
+        super.setValue(_fieldNames.WHOLESALERID, val);
     }
 
 

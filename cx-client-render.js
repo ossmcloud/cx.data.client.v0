@@ -28,7 +28,7 @@ async function setLoginLookUpColumns(dataSource, options) {
 }
 
 async function setLoginLookUpFields(dataSource, fields, users) {
-    if (!users) { users = await dataSource.cx.table(_cxSchema.cx_login).selectList(); }
+    if (!users) { users = await dataSource.cx.table(_cxSchema.cx_login).selectList(true); }
 
     if (fields) {
         fields.forEach(field => {

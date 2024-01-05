@@ -468,6 +468,8 @@ module.exports = {
         DELRETID: 'delRetId',
         CREDITAPPLIED: 'creditApplied',
         CREDITNOTENUMBER: 'creditNoteNumber',
+        CREDITTOTAL: 'creditTotal',
+        WHOLESALERID: 'wholesalerId',
     },
 
     cp_queryLog: {
@@ -885,6 +887,7 @@ module.exports = {
         FORCETAXMAPCONFIGID: 'forceTaxMapConfigId',
         SKIPPOSTING: 'skipPosting',
         STOPPOSTING: 'stopPosting',
+        NOTES: 'notes',
     },
 
     cr_tran_type_config_shop: {
