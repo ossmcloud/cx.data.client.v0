@@ -63,6 +63,8 @@ class CXLoginToken extends RenderBase {
         this.options.showButtons = [];
         this.options.showButtons.push({ id: 'cx_login_token_new_onedrive', text: 'One Drive', function: 'getOneDriveToken' });
         this.options.showButtons.push({ id: 'cx_login_token_new_therefore', text: 'Therefore', function: 'setThereforeToken' });
+
+      
     }
 
 
@@ -73,17 +75,25 @@ class CXLoginToken extends RenderBase {
 
         this.options.fields = [];
 
-        var header = { group: 'head', title: 'token info', columnCount: 2, styles: ['width: 300px',''], fields: [] };
+        var header = { group: 'head', title: 'token info', columnCount: 3, styles: ['width: 300px', 'width: 300px', ''], fields: [] };
         header.fields.push(
             { name: _cxSchema.cx_login_token.TYPE, label: 'type', items: _cxConst.CX_LOGIN_TOKEN_TYPE.toList(), readOnly: true },
             { name: 'loginName', label: 'user', readOnly: true },
             { name: _cxSchema.cx_login_token.DTFSSETTINGID, label: 'settingId', formatMoney: 'N0', readOnly: true },
             { name: _cxSchema.cx_login_token.EXPIRYDATE, label: 'expiry date', readOnly: true },
-            { name: _cxSchema.cx_login_token.STATEKEY, label: 'state key', readOnly: true },
-            //{ name: _cxSchema.cx_login_token.TOKEN, label: 'token', readOnly: true },
+            { name: _cxSchema.cx_login_token.STATEKEY, label: 'state key', disabled: true },
         );
-        
 
+
+        if (this.options.mode != 'view') {
+            if (this.dataSource.userName !== undefined) {
+                header.fields.push({ name: 'userName', label: 'user name', validation: validation, column: 2 });
+                header.fields.push({ name: 'userPassword', label: 'password', type: _cxConst.RENDER.CTRL_TYPE.PASSWORD, validation: validation, column: 2 });
+                header.fields.push({ name: 'stateKeyInfo', hidden: true});
+                //
+            }
+        }
+        
         this.options.fields.push(header);
 
         if (this.options.mode == 'view') {

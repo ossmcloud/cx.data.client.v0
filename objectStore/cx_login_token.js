@@ -98,6 +98,8 @@ class cx_login_token extends _persistentTable.Record {
 
     get loginName() {
         return this.#loginName;
+    } set loginName(val) {
+        this.#loginName = val;
     }
     get masterLoginId() {
         return this.#masterLoginId;

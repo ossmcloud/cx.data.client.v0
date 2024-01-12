@@ -170,6 +170,7 @@ const ERP_DTFS_CONFIGS = {
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
         if (configName == this.API_AUTH_CONFIG) { return true; }
+        if (configName == this.API_CONFIG) { return true; }
         return false;
     }
 }
@@ -190,7 +191,12 @@ const CX_ERP_PROVIDER = {
     SG200: 'sage200',
     SG200STD: 'sage200std',
     SAGE50: 'sage50',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts' }); }
+    SAGEINT: 'sageIntacct',
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct'
+        });
+    }
 }
 // @@TODO: this should come from sys_provider table
 const CX_EPOS_PROVIDER = {
@@ -509,6 +515,7 @@ const RENDER = {
         FORM: 'form',
         GROUP: 'controlGroup',
         HIDDEN: 'inputHidden',
+        PASSWORD: 'password',
     }
 }
 
