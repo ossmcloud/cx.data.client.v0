@@ -26,6 +26,10 @@ class EposDtfsSettingRender extends RenderBase {
                 configListOptions.actions.push({ label: 'edit', funcName: 'editDtfsConfig' });
                 configListOptions.actions.push({ label: 'delete', funcName: 'deleteDtfsConfig' });
                 configListOptions.showButtons = [{ id: 'epos_dtfs_configs_add', text: 'Add Configuration', function: 'addDtfsConfig' }];
+
+                // @@TODO: check if iscloud for the provider
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) { configListOptions.showButtons.push({ id: 'epos_dtfs_oauth', text: 'Get Token', function: 'getEPoSToken'  }); }
+
             } else {
                 configListOptions.actions = [{ label: 'view', funcName: 'viewDtfsConfig' }];
             }
@@ -139,6 +143,7 @@ class EposDtfsSettingRender extends RenderBase {
             this.options.buttons.push({ id: 'epos_dtfs_view_transmission', text: 'Transmissions', link: '../epos/transmissions?s=' + this.dataSource.id });
             this.options.buttons.push({ id: 'epos_dtfs_view_upgrades', text: 'Upgrades Audit', link: '../epos/upgradeAudits?s=' + this.dataSource.id });
 
+            
         }
     }
 

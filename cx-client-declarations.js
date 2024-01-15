@@ -96,6 +96,7 @@ const CX_LOGIN_TOKEN_STATUS = {
 }
 const CX_LOGIN_TOKEN_TYPE = {
     ERP: 'erp',
+    EPOS: 'epos',
     ONE: 'one',
     THEREFORE: 'there',
 
@@ -149,9 +150,13 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
+    API_AUTH_CONFIG: 'EPOSApiAuthConfig',
+    API_CONFIG: 'EPOSApiConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
+        if (configName == this.API_AUTH_CONFIG) { return true; }
+        if (configName == this.API_CONFIG) { return true; }
         return false;
     }
 }
@@ -205,8 +210,9 @@ const CX_EPOS_PROVIDER = {
     EDGE: 'EDGE',
     MRDN: 'MRDN',
     VME: 'VME',
+    EVOPOS:'EVOPOS',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail' }); }
 }
 
 
@@ -246,6 +252,12 @@ const CX_EPOS_PROVIDERS = {
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.EVOPOS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
             ]
         }
     ],
