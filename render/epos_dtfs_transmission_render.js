@@ -53,7 +53,7 @@ class EposTransmissionRender extends RenderBase {
             { name: 'created', title: 'created', align: 'center', width: '130px' },
         ];
         this.options.highlights = [
-            { column: 'status', op: '=', value: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.ERROR, style: 'color: rgb(255,202,58); background-color: var(--element-bg-color);' },
+            { column: 'status', op: '=', value: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.ERROR, style: 'color: red; background-color: var(--element-bg-color);' },
             { column: 'status', op: '=', value: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING, style: 'color: #FFCD00; background-color: var(--element-bg-color);' }
         ];
     }

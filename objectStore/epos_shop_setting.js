@@ -82,7 +82,16 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
         return super.populate(record);
     }
 
-
+    async isCloud(shopId) {
+        var query = {
+            sql: `select p.isCloud from epos_shop_setting s inner join sys_provider p ON p.code = s.eposProvider where  s.shopId = @shopId`,
+            params: [{ name: 'shopId', value: shopId }],
+            returnFirst: true,
+        };
+        var queryRes = await this.cx.exec(query);
+        if (!queryRes) { return false; }
+        return queryRes.isCloud;
+    }
    
 }
 //
@@ -125,6 +134,9 @@ class epos_shop_setting extends _persistentTable.Record {
         if (this.getDelayCP == null) { return false; }
         return true;
     }
+
+   
+
 
     async save() {
         var newSettings = this.isNew();
