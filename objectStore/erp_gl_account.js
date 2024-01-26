@@ -87,10 +87,10 @@ class erp_gl_account_Collection extends _persistentTable.Table {
             });   
         } else {
             await super.select({
-                sql: 'select code, description from erp_gl_account where shopId = @shopId and costCentre = @costCentre order by code',
+                sql: 'select code, description from erp_gl_account where shopId = @shopId group by code, description order by code',
                 params: [
                     { name: 'shopId', value: shopId },
-                    { name: 'costCentre', value: fixedGlSeg2 }
+                    //{ name: 'costCentre', value: fixedGlSeg2 }
                 ],
                 noPaging: true,
             });

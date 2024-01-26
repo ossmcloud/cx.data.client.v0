@@ -1,5 +1,6 @@
 'use script';
 //
+const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
@@ -19,9 +20,25 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLines.forceReadOnly = this.options.query.line != 'T';
+        }
+
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
+        if (transactionLines.forceReadOnly) {
+            transactionLinesOptions.showButtons = [{ id: 'cx_edit_tran_line', text: 'edit lines', function: 'editTransactionLines' }];
+        } else {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
+
+            var taxAccounts = await this.dataSource.cx.table(_cxSchema.cx_map_config_tax).toLookUpList(this.dataSource.shopId, true);
+            // transactionLinesOptions.lookupLists[_cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID] = taxAccounts;
+            var col=_core.list.findInArray(transactionLinesOptions.columns, 'name', _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID);
+            col.input.options = taxAccounts;
+        }
+
         return transactionLinesOptions;
     }
 
@@ -38,6 +55,10 @@ class CPInvoiceReturnRender extends RenderBase {
     async getErpGLListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ id: this.options.query.id });
+
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLines.forceReadOnly = this.options.query.line == 'T';
+        }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
         transactionLinesOptions.quickSearch = true;
@@ -62,6 +83,10 @@ class CPInvoiceReturnRender extends RenderBase {
     async getErpTaxListOptions() {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_tax);
         await transactionLines.select({ id: this.options.query.id });
+
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLines.forceReadOnly = this.options.query.line == 'T';
+        }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
@@ -287,14 +312,16 @@ class CPInvoiceReturnRender extends RenderBase {
         var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetchOrNew(this.dataSource.shopId);
         var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
 
-        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
-        this.options.fields.push(erpSubListsGroup);
+        if (this.options.query.line != 'T') {
+            var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
+            this.options.fields.push(erpSubListsGroup);
 
-        var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
-        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] });
-        if (!erpSett.mergeGLAndTax) {
-            var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
-            erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] });
+            var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
+            erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] });
+            if (!erpSett.mergeGLAndTax) {
+                var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
+                erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] });
+            }
         }
 
         var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
