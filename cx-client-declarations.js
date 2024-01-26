@@ -161,6 +161,16 @@ const EPOS_DTFS_CONFIGS = {
     }
 }
 
+const ERP_DTFS_SETTING = {
+    PAIRING_STATUS: {
+        NOT_PAIRED: 0,
+        PAIRED: 1,
+        INACTIVE: 9,
+        //
+        toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    }
+}
+
 const ERP_DTFS_CONFIGS = {
     ERP_DATASOURCE_CONFIG: 'ERPDataSourceConfig',
     ERP_CP_POST_PREFIX: "ERPCpPostPrefix",
@@ -1372,6 +1382,7 @@ module.exports = {
     EPOS_DTFS_SETTING: EPOS_DTFS_SETTING,
     EPOS_DTFS_TRANSMISSION: EPOS_DTFS_TRANSMISSION,
     EPOS_DTFS_UPGRADE_AUDIT: EPOS_DTFS_UPGRADE_AUDIT,
+    ERP_DTFS_SETTING: ERP_DTFS_SETTING,
     ERP_DTFS_CONFIGS: ERP_DTFS_CONFIGS,
     ERP_TRAN_STATUS, ERP_TRAN_STATUS,
     RAW_GET_REQUEST: RAW_GET_REQUEST,

@@ -35,6 +35,11 @@ class ErpTraderAccount extends RenderBase {
     async _record() {
         var newRecord = (this.options.mode == 'new');
 
+        var allowEditStatus = false;
+        if (this.options.mode == 'edit' && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+            allowEditStatus = true;
+        }
+
         this.options.fields = [
             {
                 group: 'settingOuter', title: '', columnCount: 3, fields: [
@@ -42,7 +47,7 @@ class ErpTraderAccount extends RenderBase {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'erpProvider', label: 'erp provider', column: 2, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), validation: '{ "mandatory": true }', readOnly: !newRecord },
                             { name: 'dtfsSettingName', label: 'settings name', column: 1 },
-                            { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
+                            { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: !allowEditStatus, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
                             { name: 'dtfsPairingCode', label: 'pairing code', column: 2 },
                             { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 1, readOnly: true },
                             { name: 'dtfsPairedMachineOS', label: 'paired machine os', column: 2, readOnly: true },
@@ -90,6 +95,13 @@ class ErpTraderAccount extends RenderBase {
             var prefListOptions = await this.getPreferenceListOptions();
             sublists.fields.push({ group: 'preferences', title: 'preferences', column: 1, fields: [prefListOptions] });
 
+            // if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+            //     if (this.dataSource.dtfsPairingStatus != _cxConst.ERP_DTFS_SETTING.PAIRING_STATUS.PAIRED) {
+            //         this.options.buttons.push({ id: 'cx_set_as_paired', text: 'Activate', function: 'setStatusPaired' });
+            //     } else {
+            //         this.options.buttons.push({ id: 'cx_set_as_inactive', text: 'Set as Inactive', function: 'setStatusInactive' });
+            //     }
+            // }
         }
     }
 
