@@ -10,13 +10,15 @@ class CPInvoiceReturnLineRender extends RenderBase {
     }
 
     async _list() {
-        var textInput = null; var textInputReadOnly = null; var numberInput = null; var moneyInput = null; var selectInput = null;
+        var textInput = null; var vatRetInputReadOnly = null; var numberInput = null; var moneyInput = null; var selectInput = null; var moneyInputReadOnly = null; var prodInput = null;
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, inputStyle: 'min-width: 150px' };
-            textInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true };
+            vatRetInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true, inputStyle: 'text-align: right' };
             numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N0', inputStyle: 'width: 50px' };
             moneyInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N2', inputStyle: 'width: 50px' };
+            moneyInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N2', readOnlyEx: true, inputStyle: 'width: 50px' };
             selectInput = { type: _cxConst.RENDER.CTRL_TYPE.SELECT, inputStyle: 'min-width: 150px' };
+            prodInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, fieldName: _cxSchema.cp_invoiceCreditLine.PRODUCTID, hidden: true }
 
             this.options.listActions = true;
             this.options.rowTemplate = this.dataSource.createNew();
@@ -26,9 +28,9 @@ class CPInvoiceReturnLineRender extends RenderBase {
         this.options.columns = [];
         //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.PRODUCTID, dataHidden: 'product-id' });
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', nullText: ''});
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' });
-        this.options.columns.push({ title: ' ', name: 'productIcon', width: '10px', unbound: true });
+        this.options.columns.push({ title: ' ', name: 'productIcon', width: '10px', unbound: true, input: prodInput });
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { onclick: 'changeLineItem', valueField: 'invCreLineId', paramName: 'line' } });
         } else {
@@ -45,12 +47,9 @@ class CPInvoiceReturnLineRender extends RenderBase {
         
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID, title: 'tax', width: '50px', input: selectInput });
-
-            
-
         }
 
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'left', width: '50px', formatPercent: true });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'right', width: '50px', formatPercent: true, input: vatRetInputReadOnly });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
 

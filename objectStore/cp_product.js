@@ -36,6 +36,15 @@ class cp_product_Collection extends _persistentTable.Table {
             query.sql += ' and prod.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
+
+        if (params.code) {
+            query.sql += ` and (
+                    prod.itemCode like @code OR prod.supplierItemCode like @code OR prod.raw_eposCode like @code OR
+                    prod.itemBarcode like @code OR prod.raw_eposBarcode like @code OR 
+                    prod.itemDescription like @code OR prod.supplierItemDescription like @code OR prod.raw_eposDescription like @code
+                )`;
+            query.params.push({ name: 'code', value: params.code + '%' });
+        }
         if (params.ic) {
             query.sql += ' and (prod.itemCode like @itemCode OR prod.supplierItemCode like @itemCode OR prod.raw_eposCode like @itemCode)';
             query.params.push({ name: 'itemCode', value: params.ic + '%' });
