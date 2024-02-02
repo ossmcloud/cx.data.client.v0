@@ -7,6 +7,7 @@ const RenderBase = require('./render_base');
 
 class CPInvoiceReturnRender extends RenderBase {
     matchingEnabled = false;
+    invoiceEditMode = 0;
     constructor(dataSource, options) {
         super(dataSource, options);
         if (!options.path) { options.path = '../cp/invoice'; }
@@ -17,6 +18,9 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
     async getDocumentLineListOptions() {
+
+       
+        
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
@@ -28,7 +32,9 @@ class CPInvoiceReturnRender extends RenderBase {
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
         if (transactionLines.forceReadOnly) {
-            transactionLinesOptions.showButtons = [{ id: 'cx_edit_tran_line', text: 'edit lines', function: 'editTransactionLines' }];
+            if (this.invoiceEditMode != _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.VALUES.GL_ONLY) {
+                transactionLinesOptions.showButtons = [{ id: 'cx_edit_tran_line', text: 'edit lines', function: 'editTransactionLines' }];
+            }
         } else {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
@@ -60,12 +66,15 @@ class CPInvoiceReturnRender extends RenderBase {
         if (this.options.allowEdit && this.options.mode == 'edit') {
             transactionLines.forceReadOnly = this.options.query.line == 'T';
         }
+        if (this.invoiceEditMode == _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.VALUES.ITEM_ONLY) {
+            transactionLines.forceReadOnly = true;
+        }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
 
-        if (this.options.allowEdit && this.options.mode == 'edit') {
+        if (!transactionLines.forceReadOnly) {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
@@ -402,6 +411,12 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _record() {
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
+
+        var prefContext = {
+            pref: _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.ID,
+            records: [{ recordType: _cxSchema.cx_shop.TBL_NAME, recordId: this.dataSource.shopId },]
+        }
+        this.invoiceEditMode = await this.dataSource.cx.cpPref.get(prefContext);    
 
         if (this.options.allowEdit) {
             if (this.dataSource.invGrpId) {

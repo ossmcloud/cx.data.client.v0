@@ -220,7 +220,7 @@ const CX_EPOS_PROVIDER = {
     EDGE: 'EDGE',
     MRDN: 'MRDN',
     VME: 'VME',
-    EVOPOS:'EVOPOS',
+    EVOPOS: 'EVOPOS',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail' }); }
 }
@@ -562,6 +562,14 @@ const CR_PREFERENCE = {
 const CP_PREFERENCE = {
     USER_LANDING_PAGE: 10,
     INV_REQUIRES_REVIEW: 100,
+    INVOICE_EDIT_MODE: {
+        ID: 200,
+        VALUES: {
+            BOTH: 0,
+            GL_ONLY: 1,
+            ITEM_ONLY: 2
+        }
+    }
 }
 
 const CP_PRODUCT = {
@@ -1292,7 +1300,7 @@ const SYS_SERVER_TASK = {
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generated get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
-                BWG_Service: { name: 'BWG Query Status Service', desc:'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
+                BWG_Service: { name: 'BWG Query Status Service', desc: 'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
             });
         },
         getName: function (value) {
@@ -1309,7 +1317,7 @@ const CX_ATTACHMENT = {
         File: 20,
         PDF: 21,
         CVS: 32,
-        
+
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 None: 'Unknown',
