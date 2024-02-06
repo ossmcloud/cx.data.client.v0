@@ -108,9 +108,13 @@ class erp_shop_setting extends _persistentTable.Record {
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
+    // @@REVIEW: this is something that never changes so it is ok to hard code
+    //           however this property exists in both c# and node.js respective business object
     get mergeGLAndTax() {
         if (!this.erpProvider) { return false; }
-        return this.erpProvider.toLowerCase() == "sage50";
+        if (this.erpProvider.toLowerCase() == "sage50") { return true; }
+        if (this.erpProvider.toLowerCase() == "sageintacct") { return true; }
+        return false;
     }
 
     isSet() {

@@ -10,36 +10,49 @@ class CPInvoiceReturnLineRender extends RenderBase {
     }
 
     async _list() {
-        // if (this.options.query) {
-        //     this.options.paging = true;
-        //     this.options.pageNo = (this.options.query.page || 1);
-        // }
+        var textInput = null; var vatRetInputReadOnly = null; var numberInput = null; var moneyInput = null; var selectInput = null; var moneyInputReadOnly = null; var prodInput = null;
+        if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
+            textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, inputStyle: 'min-width: 150px' };
+            vatRetInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true, inputStyle: 'text-align: right' };
+            numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N0', inputStyle: 'width: 50px' };
+            moneyInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N2', inputStyle: 'width: 50px' };
+            moneyInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N2', readOnlyEx: true, inputStyle: 'width: 50px' };
+            selectInput = { type: _cxConst.RENDER.CTRL_TYPE.SELECT, inputStyle: 'min-width: 150px' };
+            prodInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, fieldName: _cxSchema.cp_invoiceCreditLine.PRODUCTID, hidden: true }
 
-        // this.options.filters = [
-        //     { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-        // ];
+            this.options.listActions = true;
+            this.options.rowTemplate = this.dataSource.createNew();
 
-        this.options.columns = [
-            //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
+        }
 
-            { name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
-            { name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
-            { title: ' ', name: 'productIcon', width: '10px', unbound: true},
-            { name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } },
-            { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' },
-            { name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)', nullText: '' },
-            { name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' },
-            { name: _cxSchema.cp_invoiceCreditLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' },
-            { name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px' },
-            { name: _cxSchema.cp_invoiceCreditLine.UNITPRICE, title: 'unit cost', align: 'right', width: '60px', formatMoney: 'N2' },
-            { name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', nullText: '' },
-            { name: _cxSchema.cp_invoiceCreditLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-            { name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'left', width: '50px', formatPercent: true },
-            { name: _cxSchema.cp_invoiceCreditLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-            { name: _cxSchema.cp_invoiceCreditLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
+        this.options.columns = [];
+        //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.PRODUCTID, dataHidden: 'product-id' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', nullText: ''});
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' });
+        this.options.columns.push({ title: ' ', name: 'productIcon', width: '10px', unbound: true, input: prodInput });
+        if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { onclick: 'changeLineItem', valueField: 'invCreLineId', paramName: 'line' } });
+        } else {
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } });
+        }
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)', nullText: '' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px', input: numberInput });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.UNITPRICE, title: 'unit cost', align: 'right', width: '60px', formatMoney: 'N2', input: moneyInput });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', input: moneyInput, nullText: '' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        
+        if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID, title: 'tax', width: '50px', input: selectInput });
+        }
 
-            //{ name: 'created', title: 'created', align: 'center', width: '130px' },
-        ];
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'right', width: '50px', formatPercent: true, input: vatRetInputReadOnly });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+
 
         this.options.highlights = [
             { column: _cxSchema.cp_invoiceCreditLine.LINEGROSS, op: '=', value: 0, style: 'color: green; font-style: italic;' },

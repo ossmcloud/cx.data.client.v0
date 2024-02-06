@@ -58,10 +58,10 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
     }
 
 
-    async toLookUpList(shopId) {
+    async toLookUpList(shopId, idAsValue) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
         query.sql = `
-            select	eposTaxCode, eposTaxRate, eposDescription
+            select	tax.taxMapConfigId, eposTaxCode, eposTaxRate, eposDescription
                 
             from	cx_map_config_tax tax
             inner join cx_shop s on tax.mapConfigId = s.taxMapConfigId
@@ -73,7 +73,7 @@ class cx_map_config_tax_Collection extends _persistentTable.Table {
         for (var rx = 0; rx < result.rows.length; rx++) {
             var row = result.rows[rx];
             lookUpValues.push({
-                value: row.eposTaxCode,
+                value: (idAsValue) ? row.taxMapConfigId: row.eposTaxCode,
                 text: row.eposDescription,
                 object: JSON.stringify(row),
             })
