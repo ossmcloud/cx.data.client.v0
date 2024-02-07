@@ -569,7 +569,8 @@ const CP_PREFERENCE = {
             GL_ONLY: 1,
             ITEM_ONLY: 2
         }
-    }
+    },
+    MAP_PROD_DO_NOT_USE_MASTER: 300
 }
 
 const CP_PRODUCT = {

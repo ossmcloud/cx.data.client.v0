@@ -74,18 +74,11 @@ class cp_product_Collection extends _persistentTable.Table {
             query.params.push({ name: 'sourceId', value: params.src });
         }
         if (params.map) {
-            // if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.MAPPED) {
-            //     query.sql += ' and (prod.depMapConfigId is not null or prod.taxMapConfigId is not null)';
-            // } else
-            // if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED) {
-            //     query.sql += ' and (prod.depMapConfigId is null or prod.taxMapConfigId is null)';
-            // } else
             if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_DEP) {
                 query.sql += ' and prod.depMapConfigId is null and prod.aliasId is null';
             } else if (params.map == _declarations.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_TAX) {
                 query.sql += ' and prod.taxMapConfigId is null and prod.aliasId is null';
             }
-
         }
         query.sql += ' order by prod.itemDescription';
         query.paging = {
