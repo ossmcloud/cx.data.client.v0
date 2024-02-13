@@ -38,6 +38,7 @@ const _fieldNames = {
     UPLOADDATE: 'uploadDate',
     CREATED: 'created',
     SUPPLIERNAME: 'supplierName',
+    TOTALDRS: 'totalDRS',
 
 }
 //
@@ -63,6 +64,7 @@ const _fields = {
     uploadDate: { name: 'uploadDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     supplierName: { name: 'supplierName', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -194,6 +196,12 @@ class Persistent_raw_cp_delivery extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SUPPLIERNAME);
     } set supplierName(val) {
         super.setValue(_fieldNames.SUPPLIERNAME, val);
+    }
+
+    get totalDRS() {
+        return super.getValue(_fieldNames.TOTALDRS);
+    } set totalDRS(val) {
+        super.setValue(_fieldNames.TOTALDRS, val);
     }
 
 

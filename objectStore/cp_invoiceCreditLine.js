@@ -50,6 +50,15 @@ class cp_invoiceCreditLine extends _persistentTable.Record {
         return this.lineStatus
     }
 
+    get lineDRSAmountInfo() {
+        if (!this.lineDRSQuantity || !this.lineDRSUnitCharge) { return ''; }
+        return `${this.lineDRSQuantity} * ${this.lineDRSUnitCharge}`;
+    }
+    get lineDRSAmountDisplay() {
+        if (!this.lineDRSAmount) { return ''; }
+        return this.lineDRSAmount;
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

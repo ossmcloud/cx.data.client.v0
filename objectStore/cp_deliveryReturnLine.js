@@ -39,6 +39,15 @@ class cp_deliveryReturnLine extends _persistentTable.Record {
         super(table, defaults);
     };
 
+    get lineDRSAmountInfo() {
+        if (!this.lineDRSQuantity || !this.lineDRSUnitCharge) { return ''; }
+        return `${this.lineDRSQuantity} * ${this.lineDRSUnitCharge}`;
+    }
+    get lineDRSAmountDisplay() {
+        if (!this.lineDRSAmount) { return ''; }
+        return this.lineDRSAmount;
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

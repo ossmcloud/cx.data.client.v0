@@ -48,6 +48,11 @@ class RenderBase {
     get dataSourceColumns() { return this.#dataSourceColumns; }
     get dataSourceFilters() { return this.#dataSourceFilters; }
 
+    get cx() {
+        if (!this.dataSource) { throw new Error('no data source'); }
+        return this.dataSource.cx;
+    }
+
     hasModule(module) {
         return this.dataSource.cx.dbInfo.modules.indexOf((module || '').toLowerCase()) >= 0;
     }

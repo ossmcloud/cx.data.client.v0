@@ -14,25 +14,23 @@ const _cx_data = require('cx-data');
 // 
 // TABLE NAME
 //
-const _tableName = 'cp_invoiceCreditLine';
+const _tableName = 'raw_cp_delivery_line';
 //
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
-    INVCRELINEID: 'invCreLineId',
-    INVCREID: 'invCreId',
+    RAWDELIVERYLINEID: 'rawDeliveryLineId',
+    TRANSMISSIONID: 'transmissionID',
+    SHOPID: 'shopId',
     DOCUMENTID: 'documentId',
-    LINESTATUS: 'lineStatus',
-    LINESTATUSMESSAGE: 'lineStatusMessage',
     LINENUMBER: 'lineNumber',
-    ITEMCODE: 'itemCode',
-    ITEMBARCODE: 'itemBarcode',
-    ITEMBARCODEOUTER: 'itemBarcodeOuter',
-    ITEMDESCRIPTION: 'itemDescription',
+    EPOSCODE: 'eposCode',
+    EPOSBARCODE: 'eposBarcode',
+    EPOSDESCRIPTION: 'eposDescription',
     EPOSDEPARTMENT: 'eposDepartment',
     EPOSSUBDEPARTMENT: 'eposSubDepartment',
     LINEQUANTITY: 'lineQuantity',
-    UNITPRICE: 'unitPrice',
+    UNITCOST: 'unitCost',
     PACKSIZE: 'packSize',
     VATRATE: 'vatRate',
     VATCODE: 'vatCode',
@@ -40,20 +38,8 @@ const _fieldNames = {
     EPOSLINENET: 'eposLineNet',
     EPOSLINEVAT: 'eposLineVat',
     EPOSLINEGROSS: 'eposLineGross',
-    LINEDISCOUNT: 'lineDiscount',
-    LINENET: 'lineNet',
-    LINEVAT: 'lineVat',
-    LINEGROSS: 'lineGross',
     SYSINFO: 'sysInfo',
     CREATED: 'created',
-    CREATEDBY: 'createdBy',
-    MODIFIED: 'modified',
-    MODIFIEDBY: 'modifiedBy',
-    DEPMAPCONFIGID: 'depMapConfigId',
-    TAXMAPCONFIGID: 'taxMapConfigId',
-    ISUSEREDITED: 'isUserEdited',
-    PRODUCTID: 'productId',
-    ALIASID: 'aliasId',
     LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
     LINEDRSQUANTITY: 'lineDRSQuantity',
     LINEDRSAMOUNT: 'lineDRSAmount',
@@ -63,20 +49,18 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    invCreLineId: { name: 'invCreLineId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
-    invCreId: { name: 'invCreId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    rawDeliveryLineId: { name: 'rawDeliveryLineId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     documentId: { name: 'documentId', dataType: 'varchar', pk: false, identity: false, maxLength: 200, null: false },
-    lineStatus: { name: 'lineStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
-    lineStatusMessage: { name: 'lineStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     lineNumber: { name: 'lineNumber', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
-    itemCode: { name: 'itemCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    itemBarcode: { name: 'itemBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    itemBarcodeOuter: { name: 'itemBarcodeOuter', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    itemDescription: { name: 'itemDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    eposCode: { name: 'eposCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    eposBarcode: { name: 'eposBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
+    eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     lineQuantity: { name: 'lineQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
-    unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    unitCost: { name: 'unitCost', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     packSize: { name: 'packSize', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     vatRate: { name: 'vatRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     vatCode: { name: 'vatCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
@@ -84,20 +68,8 @@ const _fields = {
     eposLineNet: { name: 'eposLineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposLineVat: { name: 'eposLineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     eposLineGross: { name: 'eposLineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    lineDiscount: { name: 'lineDiscount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    lineNet: { name: 'lineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    lineVat: { name: 'lineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
-    lineGross: { name: 'lineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     sysInfo: { name: 'sysInfo', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
-    createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
-    modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    taxMapConfigId: { name: 'taxMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
-    productId: { name: 'productId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    aliasId: { name: 'aliasId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     lineDRSUnitCharge: { name: 'lineDRSUnitCharge', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineDRSQuantity: { name: 'lineDRSQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     lineDRSAmount: { name: 'lineDRSAmount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -106,7 +78,7 @@ const _fields = {
 //
 // PERSISTENT TABLE OBJECT (THIS REPRESENTS A COLLECTION OF RECORDS)
 //
-class Persistent_cp_invoiceCreditLine_Collection extends _cx_data.DBTable {
+class Persistent_raw_cp_delivery_line_Collection extends _cx_data.DBTable {
     constructor() {
         super(_tableName, _fields);
     }
@@ -115,21 +87,27 @@ class Persistent_cp_invoiceCreditLine_Collection extends _cx_data.DBTable {
 //
 // PERSISTENT RECORD OBJECT (THIS REPRESENT A RECORD )
 //
-class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
+class Persistent_raw_cp_delivery_line extends _cx_data.DBRecord {
     constructor(table, defaults) {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
-    get invCreLineId() {
-        return super.getValue(_fieldNames.INVCRELINEID);
+    get rawDeliveryLineId() {
+        return super.getValue(_fieldNames.RAWDELIVERYLINEID);
     }
 
-    get invCreId() {
-        return super.getValue(_fieldNames.INVCREID);
-    } set invCreId(val) {
-        super.setValue(_fieldNames.INVCREID, val);
+    get transmissionID() {
+        return super.getValue(_fieldNames.TRANSMISSIONID);
+    } set transmissionID(val) {
+        super.setValue(_fieldNames.TRANSMISSIONID, val);
+    }
+
+    get shopId() {
+        return super.getValue(_fieldNames.SHOPID);
+    } set shopId(val) {
+        super.setValue(_fieldNames.SHOPID, val);
     }
 
     get documentId() {
@@ -138,46 +116,28 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.DOCUMENTID, val);
     }
 
-    get lineStatus() {
-        return super.getValue(_fieldNames.LINESTATUS);
-    } set lineStatus(val) {
-        super.setValue(_fieldNames.LINESTATUS, val);
-    }
-
-    get lineStatusMessage() {
-        return super.getValue(_fieldNames.LINESTATUSMESSAGE);
-    } set lineStatusMessage(val) {
-        super.setValue(_fieldNames.LINESTATUSMESSAGE, val);
-    }
-
     get lineNumber() {
         return super.getValue(_fieldNames.LINENUMBER);
     } set lineNumber(val) {
         super.setValue(_fieldNames.LINENUMBER, val);
     }
 
-    get itemCode() {
-        return super.getValue(_fieldNames.ITEMCODE);
-    } set itemCode(val) {
-        super.setValue(_fieldNames.ITEMCODE, val);
+    get eposCode() {
+        return super.getValue(_fieldNames.EPOSCODE);
+    } set eposCode(val) {
+        super.setValue(_fieldNames.EPOSCODE, val);
     }
 
-    get itemBarcode() {
-        return super.getValue(_fieldNames.ITEMBARCODE);
-    } set itemBarcode(val) {
-        super.setValue(_fieldNames.ITEMBARCODE, val);
+    get eposBarcode() {
+        return super.getValue(_fieldNames.EPOSBARCODE);
+    } set eposBarcode(val) {
+        super.setValue(_fieldNames.EPOSBARCODE, val);
     }
 
-    get itemBarcodeOuter() {
-        return super.getValue(_fieldNames.ITEMBARCODEOUTER);
-    } set itemBarcodeOuter(val) {
-        super.setValue(_fieldNames.ITEMBARCODEOUTER, val);
-    }
-
-    get itemDescription() {
-        return super.getValue(_fieldNames.ITEMDESCRIPTION);
-    } set itemDescription(val) {
-        super.setValue(_fieldNames.ITEMDESCRIPTION, val);
+    get eposDescription() {
+        return super.getValue(_fieldNames.EPOSDESCRIPTION);
+    } set eposDescription(val) {
+        super.setValue(_fieldNames.EPOSDESCRIPTION, val);
     }
 
     get eposDepartment() {
@@ -198,10 +158,10 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.LINEQUANTITY, val);
     }
 
-    get unitPrice() {
-        return super.getValue(_fieldNames.UNITPRICE);
-    } set unitPrice(val) {
-        super.setValue(_fieldNames.UNITPRICE, val);
+    get unitCost() {
+        return super.getValue(_fieldNames.UNITCOST);
+    } set unitCost(val) {
+        super.setValue(_fieldNames.UNITCOST, val);
     }
 
     get packSize() {
@@ -246,30 +206,6 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.EPOSLINEGROSS, val);
     }
 
-    get lineDiscount() {
-        return super.getValue(_fieldNames.LINEDISCOUNT);
-    } set lineDiscount(val) {
-        super.setValue(_fieldNames.LINEDISCOUNT, val);
-    }
-
-    get lineNet() {
-        return super.getValue(_fieldNames.LINENET);
-    } set lineNet(val) {
-        super.setValue(_fieldNames.LINENET, val);
-    }
-
-    get lineVat() {
-        return super.getValue(_fieldNames.LINEVAT);
-    } set lineVat(val) {
-        super.setValue(_fieldNames.LINEVAT, val);
-    }
-
-    get lineGross() {
-        return super.getValue(_fieldNames.LINEGROSS);
-    } set lineGross(val) {
-        super.setValue(_fieldNames.LINEGROSS, val);
-    }
-
     get sysInfo() {
         return super.getValue(_fieldNames.SYSINFO);
     } set sysInfo(val) {
@@ -280,54 +216,6 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
         super.setValue(_fieldNames.CREATED, val);
-    }
-
-    get createdBy() {
-        return super.getValue(_fieldNames.CREATEDBY);
-    } set createdBy(val) {
-        super.setValue(_fieldNames.CREATEDBY, val);
-    }
-
-    get modified() {
-        return super.getValue(_fieldNames.MODIFIED);
-    } set modified(val) {
-        super.setValue(_fieldNames.MODIFIED, val);
-    }
-
-    get modifiedBy() {
-        return super.getValue(_fieldNames.MODIFIEDBY);
-    } set modifiedBy(val) {
-        super.setValue(_fieldNames.MODIFIEDBY, val);
-    }
-
-    get depMapConfigId() {
-        return super.getValue(_fieldNames.DEPMAPCONFIGID);
-    } set depMapConfigId(val) {
-        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
-    }
-
-    get taxMapConfigId() {
-        return super.getValue(_fieldNames.TAXMAPCONFIGID);
-    } set taxMapConfigId(val) {
-        super.setValue(_fieldNames.TAXMAPCONFIGID, val);
-    }
-
-    get isUserEdited() {
-        return super.getValue(_fieldNames.ISUSEREDITED);
-    } set isUserEdited(val) {
-        super.setValue(_fieldNames.ISUSEREDITED, val);
-    }
-
-    get productId() {
-        return super.getValue(_fieldNames.PRODUCTID);
-    } set productId(val) {
-        super.setValue(_fieldNames.PRODUCTID, val);
-    }
-
-    get aliasId() {
-        return super.getValue(_fieldNames.ALIASID);
-    } set aliasId(val) {
-        super.setValue(_fieldNames.ALIASID, val);
     }
 
     get lineDRSUnitCharge() {
@@ -354,6 +242,6 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
 //  MODULE EXPORTS
 //
 module.exports = {
-    Table: Persistent_cp_invoiceCreditLine_Collection,
-    Record: Persistent_cp_invoiceCreditLine,
+    Table: Persistent_raw_cp_delivery_line_Collection,
+    Record: Persistent_raw_cp_delivery_line,
 }

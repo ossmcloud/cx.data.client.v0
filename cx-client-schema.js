@@ -47,6 +47,7 @@ module.exports = {
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
         DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
+        TOTALDRS: 'totalDRS',
     },
 
     cp_deliveryReturnLine: {
@@ -84,6 +85,9 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         PRODUCTID: 'productId',
         ALIASID: 'aliasId',
+        LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
+        LINEDRSQUANTITY: 'lineDRSQuantity',
+        LINEDRSAMOUNT: 'lineDRSAmount',
     },
 
     cp_deliveryReturnLog: {
@@ -234,6 +238,7 @@ module.exports = {
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
         DOCIMPID: 'docImpId',
+        TOTALDRS: 'totalDRS',
     },
 
     cp_invoiceCreditLine: {
@@ -273,6 +278,9 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         PRODUCTID: 'productId',
         ALIASID: 'aliasId',
+        LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
+        LINEDRSQUANTITY: 'lineDRSQuantity',
+        LINEDRSAMOUNT: 'lineDRSAmount',
     },
 
     cp_invoiceCreditLog: {
@@ -314,6 +322,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        TOTALDRS: 'totalDRS',
     },
 
     cp_invoiceGroupLog: {
@@ -1442,6 +1451,7 @@ module.exports = {
         UPLOADDATE: 'uploadDate',
         CREATED: 'created',
         SUPPLIERNAME: 'supplierName',
+        TOTALDRS: 'totalDRS',
     },
 
     raw_cp_delivery_line: {
@@ -1467,6 +1477,9 @@ module.exports = {
         EPOSLINEGROSS: 'eposLineGross',
         SYSINFO: 'sysInfo',
         CREATED: 'created',
+        LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
+        LINEDRSQUANTITY: 'lineDRSQuantity',
+        LINEDRSAMOUNT: 'lineDRSAmount',
     },
 
     raw_cp_deliveryNoLookUp: {
@@ -1502,6 +1515,7 @@ module.exports = {
         CREATED: 'created',
         SURCHARGEVALUE: 'surchargeValue',
         SUPPLIERNAME: 'supplierName',
+        TOTALDRS: 'totalDRS',
     },
 
     raw_cp_invoice_line: {
@@ -1528,6 +1542,9 @@ module.exports = {
         SYSINFO: 'sysInfo',
         CREATED: 'created',
         ITEMBARCODEOUTER: 'itemBarcodeOuter',
+        LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
+        LINEDRSQUANTITY: 'lineDRSQuantity',
+        LINEDRSAMOUNT: 'lineDRSAmount',
     },
 
     raw_cp_product: {

@@ -57,6 +57,7 @@ const _fieldNames = {
     CREATEDFROM: 'createdFrom',
     CREATEDFROMTYPE: 'createdFromType',
     DOCIMPID: 'docImpId',
+    TOTALDRS: 'totalDRS',
 
 }
 //
@@ -101,6 +102,7 @@ const _fields = {
     createdFrom: { name: 'createdFrom', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     docImpId: { name: 'docImpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -346,6 +348,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DOCIMPID);
     } set docImpId(val) {
         super.setValue(_fieldNames.DOCIMPID, val);
+    }
+
+    get totalDRS() {
+        return super.getValue(_fieldNames.TOTALDRS);
+    } set totalDRS(val) {
+        super.setValue(_fieldNames.TOTALDRS, val);
     }
 
 

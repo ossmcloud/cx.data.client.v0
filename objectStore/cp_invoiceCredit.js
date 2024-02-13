@@ -270,6 +270,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get totalVatSign() { return this.totalVat * this.#documentSign; }
     get totalGrossSign() { return this.totalGross * this.#documentSign; }
     get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
+    get totalDRSSign() {
+        if (!this.totalDRS) { return ''; }
+        return this.totalDRS * this.#documentSign;
+    }
 
     get groupDocumentNumber() { return this.#groupDocumentNumber; }
 
@@ -302,7 +306,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
     }
 
     async save() {
-        this.totalGross = this.totalNet + this.totalVat;
+        this.totalGross = (this.totalNet + this.totalVat + this.totalDRS);
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }

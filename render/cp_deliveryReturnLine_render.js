@@ -35,17 +35,28 @@ class CPDeliveryReturnLineRender extends RenderBase {
             { name: _cxSchema.cp_deliveryReturnLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
             { name: _cxSchema.cp_deliveryReturnLine.VATRATE, title: 'tax rate', align: 'left', width: '50px', formatPercent: true },
             { name: _cxSchema.cp_deliveryReturnLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-            { name: _cxSchema.cp_deliveryReturnLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-
-            //{ name: 'created', title: 'created', align: 'center', width: '130px' },
         ];
+
+        if (this.cx.accountCountry == 'IE') {
+            // DRS Scheme - only in Ireland
+            var addValuesStyle = 'border-top: 1px dotted rgb(97,97,97); color: gray; font-size: 10px;';
+            var addValuesStyleTitle = `<br /><span style="${addValuesStyle}">`;
+            this.options.columns.push({
+                name: 'lineDRSAmountDisplay',
+                title: `drs amount${addValuesStyleTitle}qty * drs unit</span>`,
+                align: 'right', width: '90px',
+                formatMoney: 'N2', addTotals: true, nullText: '',
+                addValues: [{ name: "lineDRSAmountInfo", style: addValuesStyle }]
+            });
+        }
+
+        this.options.columns.push({ name: _cxSchema.cp_deliveryReturnLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+
 
         this.options.highlights = [
             { column: _cxSchema.cp_deliveryReturnLine.LINEGROSS, op: '=', value: 0, style: 'color: green; font-style: italic;' },
             { column: _cxSchema.cp_deliveryReturnLine.LINEQUANTITY, op: '=', value: 0, style: 'color: rgb(75,75,75); font-style: italic;' },
         ];
-
-
         this.options.cellHighlights = [];
         this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturnLine.VATRATE, op: '!=', value: '-', style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturnLine.VATRATE] });
         this.options.cellHighlights.push({ column: _cxSchema.cp_deliveryReturnLine.EPOSLINEDISCOUNT, op: '=', value: 0, style: 'color: gray;', columns: [_cxSchema.cp_deliveryReturnLine.EPOSLINEDISCOUNT] });
