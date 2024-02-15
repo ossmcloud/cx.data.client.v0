@@ -42,7 +42,7 @@ class CPInvoiceReturnLineRender extends RenderBase {
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px', input: numberInput });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.UNITPRICE, title: 'unit cost', align: 'right', width: '60px', formatMoney: 'N2', input: moneyInput });
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', input: moneyInput, nullText: '' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true, input: moneyInput, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
@@ -51,6 +51,20 @@ class CPInvoiceReturnLineRender extends RenderBase {
 
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'right', width: '50px', formatPercent: true, input: vatRetInputReadOnly });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+
+        if (this.cx.accountCountry == 'IE') {
+            // DRS Scheme - only in Ireland
+            var addValuesStyle = 'border-top: 1px dotted rgb(97,97,97); color: gray; font-size: 10px;';
+            var addValuesStyleTitle = `<br /><span style="${addValuesStyle}">`;
+            this.options.columns.push({
+                name: 'lineDRSAmountDisplay',
+                title: `drs amount${addValuesStyleTitle}qty * drs unit</span>`,
+                align: 'right', width: '90px',
+                formatMoney: 'N2', addTotals: true, nullText: '',
+                addValues: [{ name: "lineDRSAmountInfo", style: addValuesStyle }]
+            });
+        }
+
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
 
 

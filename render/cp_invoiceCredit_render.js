@@ -19,8 +19,8 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async getDocumentLineListOptions() {
 
-       
-        
+
+
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
@@ -102,7 +102,7 @@ class CPInvoiceReturnRender extends RenderBase {
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp tax transactions</span>';
 
-        if (this.options.allowEdit && this.options.mode == 'edit') {
+        if (!transactionLines.forceReadOnly) {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
@@ -256,6 +256,11 @@ class CPInvoiceReturnRender extends RenderBase {
                 { name: _cxSchema.cp_invoiceCredit.TOTALVAT, label: 'total vat', formatMoney: 'N2', readOnly: true },
                 { name: _cxSchema.cp_invoiceCredit.TOTALGROSS, label: 'total gross', formatMoney: 'N2', readOnly: true },
             ]
+        }
+
+        if (this.cx.accountCountry == 'IE') {
+            // DRS Scheme - only in Ireland
+            fieldGroup_totals.fields.unshift({ name: _cxSchema.cp_invoiceCredit.TOTALDRS, label: 'DRS', column: 2, formatMoney: 'N2', readOnly: true });
         }
 
         fieldGroupStyles.push('width: 350px; min-width: 200px;');
@@ -416,7 +421,7 @@ class CPInvoiceReturnRender extends RenderBase {
             pref: _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.ID,
             records: [{ recordType: _cxSchema.cx_shop.TBL_NAME, recordId: this.dataSource.shopId },]
         }
-        this.invoiceEditMode = await this.dataSource.cx.cpPref.get(prefContext);    
+        this.invoiceEditMode = await this.dataSource.cx.cpPref.get(prefContext);
 
         if (this.options.allowEdit) {
             if (this.dataSource.invGrpId) {
@@ -503,6 +508,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
                 Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
+                DRS: _cxSchema.cp_invoiceCredit.TOTALDRS + 'Sign'
             }
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' });
@@ -530,6 +536,10 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            if (this.cx.accountCountry == 'IE') {
+                // DRS Scheme - only in Ireland
+                this.options.columns.push({ name: signedCols.DRS, title: 'drs', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            }
             this.options.columns.push({ name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' });

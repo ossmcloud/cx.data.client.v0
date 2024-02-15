@@ -175,6 +175,7 @@ const ERP_DTFS_CONFIGS = {
     ERP_DATASOURCE_CONFIG: 'ERPDataSourceConfig',
     ERP_CP_POST_PREFIX: "ERPCpPostPrefix",
     ERP_CP_POST_POSTFIX: "ERPCpPostPostfix",
+    ERP_CP_DRS_CONFIG: "ERPCpDRSConfig",
 
     API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',

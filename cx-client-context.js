@@ -20,6 +20,8 @@ class CXClientContext extends _cx_data.DBContext {
     #cxSvc = false;
     #cxSvcInfo = null;
     #accountId = null;
+    #accountCurrency = null;
+    #accountCountry = null;
     #crPrefEngine = null;
     #cpPrefEngine = null;
     #dbInfo = null;
@@ -28,6 +30,8 @@ class CXClientContext extends _cx_data.DBContext {
     }
 
     get accountId() { return this.#accountId; }
+    get accountCountry() { return this.#accountCountry; }
+    get accountCurrency() { return this.#accountCurrency; }
     get theme() { return this.#theme; }
     get shops() { return this.#shops };
     get shopList() { return this.#shopList; }
@@ -77,6 +81,8 @@ class CXClientContext extends _cx_data.DBContext {
             //
             if (!options.accountId) { throw new Error('No Account ID provided!'); }
             this.#accountId = options.accountId;
+            this.#accountCountry = options.accountCountry;
+            this.#accountCurrency = options.accountCurrency;
 
             var queryDbInfo = { sql: 'select * from sys_dbInfo', returnFirst: true };
             var dbInfo = await this.exec(queryDbInfo);

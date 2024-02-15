@@ -52,6 +52,9 @@ const _fieldNames = {
     ISUSEREDITED: 'isUserEdited',
     PRODUCTID: 'productId',
     ALIASID: 'aliasId',
+    LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
+    LINEDRSQUANTITY: 'lineDRSQuantity',
+    LINEDRSAMOUNT: 'lineDRSAmount',
 
 }
 //
@@ -91,6 +94,9 @@ const _fields = {
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     productId: { name: 'productId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     aliasId: { name: 'aliasId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    lineDRSUnitCharge: { name: 'lineDRSUnitCharge', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    lineDRSQuantity: { name: 'lineDRSQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
+    lineDRSAmount: { name: 'lineDRSAmount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -306,6 +312,24 @@ class Persistent_cp_deliveryReturnLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ALIASID);
     } set aliasId(val) {
         super.setValue(_fieldNames.ALIASID, val);
+    }
+
+    get lineDRSUnitCharge() {
+        return super.getValue(_fieldNames.LINEDRSUNITCHARGE);
+    } set lineDRSUnitCharge(val) {
+        super.setValue(_fieldNames.LINEDRSUNITCHARGE, val);
+    }
+
+    get lineDRSQuantity() {
+        return super.getValue(_fieldNames.LINEDRSQUANTITY);
+    } set lineDRSQuantity(val) {
+        super.setValue(_fieldNames.LINEDRSQUANTITY, val);
+    }
+
+    get lineDRSAmount() {
+        return super.getValue(_fieldNames.LINEDRSAMOUNT);
+    } set lineDRSAmount(val) {
+        super.setValue(_fieldNames.LINEDRSAMOUNT, val);
     }
 
 

@@ -51,6 +51,8 @@ const _fieldNames = {
     ISUSEREDITED: 'isUserEdited',
     CREATEDFROM: 'createdFrom',
     CREATEDFROMTYPE: 'createdFromType',
+    DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
+    TOTALDRS: 'totalDRS',
 
 }
 //
@@ -89,6 +91,8 @@ const _fields = {
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     createdFrom: { name: 'createdFrom', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    docketNumberLookedUp: { name: 'docketNumberLookedUp', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -298,6 +302,18 @@ class Persistent_cp_deliveryReturn extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDFROMTYPE);
     } set createdFromType(val) {
         super.setValue(_fieldNames.CREATEDFROMTYPE, val);
+    }
+
+    get docketNumberLookedUp() {
+        return super.getValue(_fieldNames.DOCKETNUMBERLOOKEDUP);
+    } set docketNumberLookedUp(val) {
+        super.setValue(_fieldNames.DOCKETNUMBERLOOKEDUP, val);
+    }
+
+    get totalDRS() {
+        return super.getValue(_fieldNames.TOTALDRS);
+    } set totalDRS(val) {
+        super.setValue(_fieldNames.TOTALDRS, val);
     }
 
 

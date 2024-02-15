@@ -41,6 +41,9 @@ const _fieldNames = {
     SYSINFO: 'sysInfo',
     CREATED: 'created',
     ITEMBARCODEOUTER: 'itemBarcodeOuter',
+    LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
+    LINEDRSQUANTITY: 'lineDRSQuantity',
+    LINEDRSAMOUNT: 'lineDRSAmount',
 
 }
 //
@@ -69,6 +72,9 @@ const _fields = {
     sysInfo: { name: 'sysInfo', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     itemBarcodeOuter: { name: 'itemBarcodeOuter', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    lineDRSUnitCharge: { name: 'lineDRSUnitCharge', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    lineDRSQuantity: { name: 'lineDRSQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
+    lineDRSAmount: { name: 'lineDRSAmount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -218,6 +224,24 @@ class Persistent_raw_cp_invoice_line extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ITEMBARCODEOUTER);
     } set itemBarcodeOuter(val) {
         super.setValue(_fieldNames.ITEMBARCODEOUTER, val);
+    }
+
+    get lineDRSUnitCharge() {
+        return super.getValue(_fieldNames.LINEDRSUNITCHARGE);
+    } set lineDRSUnitCharge(val) {
+        super.setValue(_fieldNames.LINEDRSUNITCHARGE, val);
+    }
+
+    get lineDRSQuantity() {
+        return super.getValue(_fieldNames.LINEDRSQUANTITY);
+    } set lineDRSQuantity(val) {
+        super.setValue(_fieldNames.LINEDRSQUANTITY, val);
+    }
+
+    get lineDRSAmount() {
+        return super.getValue(_fieldNames.LINEDRSAMOUNT);
+    } set lineDRSAmount(val) {
+        super.setValue(_fieldNames.LINEDRSAMOUNT, val);
     }
 
 

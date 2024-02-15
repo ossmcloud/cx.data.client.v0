@@ -252,6 +252,19 @@ class CPInvoiceGroupRender extends RenderBase {
         await this.setRecordTitle();
         //this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber}]`;
 
+        var fieldGroup_totals = {
+            group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, fields: [
+                { name: _cxSchema.cp_invoiceGroup.TOTALNET, label: 'total net', formatMoney: 'N2', readOnly: true },
+                { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2', readOnly: true },
+                { name: _cxSchema.cp_invoiceGroup.TOTALVAT, label: 'total vat', formatMoney: 'N2', readOnly: true },
+                { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, label: 'total gross', formatMoney: 'N2', readOnly: true },
+            ]
+        };
+        if (this.cx.accountCountry == 'IE') {
+            // DRS Scheme - only in Ireland
+            fieldGroup_totals.fields.unshift({ name: _cxSchema.cp_invoiceGroup.TOTALDRS, label: 'DRS', column: 2, formatMoney: 'N2', readOnly: true });
+        }
+
         this.options.fields = [
             {
                 group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 250px', 'min-width: 350px'], fields: [
@@ -283,14 +296,8 @@ class CPInvoiceGroupRender extends RenderBase {
                         ]
                     },
 
-                    {
-                        group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, fields: [
-                            { name: _cxSchema.cp_invoiceGroup.TOTALNET, label: 'total net', formatMoney: 'N2', readOnly: true },
-                            { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2', readOnly: true },
-                            { name: _cxSchema.cp_invoiceGroup.TOTALVAT, label: 'total vat', formatMoney: 'N2', readOnly: true },
-                            { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, label: 'total gross', formatMoney: 'N2', readOnly: true },
-                        ]
-                    },
+                    fieldGroup_totals,
+
                     {
                         group: 'audit', title: 'audit info', column: 4, columnCount: 1, fields: [
                             {
@@ -351,7 +358,6 @@ class CPInvoiceGroupRender extends RenderBase {
 
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceGroup.INVGRPID, title: ' ', align: 'center' },
-
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTSTATUS, title: 'status', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
@@ -359,16 +365,19 @@ class CPInvoiceGroupRender extends RenderBase {
                 { name: 'wholesalerInfo', title: 'wholesaler' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTNUMBER, title: 'document number' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTREFERENCE, title: 'document reference' },
-
                 { name: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
                 { name: _cxSchema.cp_invoiceGroup.TOTALNET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
                 { name: _cxSchema.cp_invoiceGroup.TOTALVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-                { name: _cxSchema.cp_invoiceGroup.TOTALGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
-
-                { name: _cxSchema.cp_invoiceGroup.CREATED, title: 'created', align: 'center', width: '130px' },
-                { name: 'importedFile', title: 'from file' },
-
             ];
+
+            if (this.cx.accountCountry == 'IE') {
+                // DRS Scheme - only in Ireland
+                this.options.columns.push({ name: _cxSchema.cp_invoiceGroup.TOTALDRS, title: 'drs', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true, nullText: '' });
+            }
+
+            this.options.columns.push({ name: _cxSchema.cp_invoiceGroup.TOTALGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceGroup.CREATED, title: 'created', align: 'center', width: '130px' });
+            this.options.columns.push({ name: 'importedFile', title: 'from file' });
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: _cxSchema.cp_invoiceGroup.TOTALDISCOUNT, op: '=', value: '0', style: 'color: gray;', columns: [_cxSchema.cp_invoiceGroup.TOTALDISCOUNT] });

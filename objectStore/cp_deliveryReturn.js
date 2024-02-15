@@ -202,6 +202,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get totalVatSign() { return this.totalVat * this.#documentSign; }
     get totalGrossSign() { return this.totalGross * this.#documentSign; }
     get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
+    get totalDRSSign() {
+        if (!this.totalDRS) { return ''; }
+        return this.totalDRS * this.#documentSign;
+    }
 
 
     get recoSessionId() { return this.#recoSessionId; }

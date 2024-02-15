@@ -146,14 +146,20 @@ class CPDeliveryReturnRender extends RenderBase {
             ]
         })
 
-        fieldGroups.push({
+        var fieldGroups_totals = {
             group: 'totals', title: 'totals', column: fieldGroups.length + 1, columnCount: 2, inline: true, width: '300px', fields: [
                 { name: _cxSchema.cp_deliveryReturn.TOTALNET, label: 'total net', formatMoney: 'N2' },
                 { name: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT, label: 'discount', column: 2, formatMoney: 'N2' },
                 { name: _cxSchema.cp_deliveryReturn.TOTALVAT, label: 'total vat', formatMoney: 'N2' },
                 { name: _cxSchema.cp_deliveryReturn.TOTALGROSS, label: 'total gross', formatMoney: 'N2' },
             ]
-        })
+        };
+        fieldGroups.push(fieldGroups_totals);
+
+        if (this.cx.accountCountry == 'IE') {
+            // DRS Scheme - only in Ireland
+            fieldGroups_totals.fields.unshift({ name: _cxSchema.cp_deliveryReturn.TOTALDRS, label: 'DRS', column: 2, formatMoney: 'N2', readOnly: true });
+        }
 
         var attachmentOptions = await this.getAttachmentListOptions();
         if (attachmentOptions) {
@@ -264,6 +270,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 Vat: _cxSchema.cp_deliveryReturn.TOTALVAT + 'Sign',
                 Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS + 'Sign',
                 Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT + 'Sign',
+                DRS: _cxSchema.cp_deliveryReturn.TOTALDRS + 'Sign',
             }
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' });
@@ -294,6 +301,10 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            if (this.cx.accountCountry == 'IE') {
+                // DRS Scheme - only in Ireland
+                this.options.columns.push({ name: signedCols.DRS, title: 'drs', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            }
             this.options.columns.push({ name: signedCols.Gross, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.CREATED, title: 'created', align: 'center', width: '130px' });

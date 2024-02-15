@@ -39,6 +39,7 @@ const _fieldNames = {
     CREATED: 'created',
     SURCHARGEVALUE: 'surchargeValue',
     SUPPLIERNAME: 'supplierName',
+    TOTALDRS: 'totalDRS',
 
 }
 //
@@ -65,6 +66,7 @@ const _fields = {
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     surchargeValue: { name: 'surchargeValue', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     supplierName: { name: 'supplierName', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -202,6 +204,12 @@ class Persistent_raw_cp_invoice extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SUPPLIERNAME);
     } set supplierName(val) {
         super.setValue(_fieldNames.SUPPLIERNAME, val);
+    }
+
+    get totalDRS() {
+        return super.getValue(_fieldNames.TOTALDRS);
+    } set totalDRS(val) {
+        super.setValue(_fieldNames.TOTALDRS, val);
     }
 
 
