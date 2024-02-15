@@ -102,7 +102,7 @@ class CPInvoiceReturnRender extends RenderBase {
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp tax transactions</span>';
 
-        if (this.options.allowEdit && this.options.mode == 'edit') {
+        if (!transactionLines.forceReadOnly) {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
