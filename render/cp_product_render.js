@@ -16,8 +16,10 @@ class CPProductRender extends RenderBase {
 
         var aliasField = { name: 'aliasInfo', label: 'alias', readOnly: true };
         var depMapConfigField = { name: 'depMapInfo', label: 'dep. config', readOnly: true };
+        var depMapGLinfoField = { name: 'glInfo', label: 'gl information', readOnly: true };
         var taxMapConfigField = { name: 'taxMapInfo', label: 'tax config', readOnly: true };
         var traderAccountField = { name: 'traderInfo', label: 'trader account', readOnly: true };
+
         if (this.options.mode != 'view') {
             depMapConfigField = await this.fieldDropDownOptions(_cxSchema.cx_map_config_dep, {
                 id: _cxSchema.cp_product.DEPMAPCONFIGID, name: _cxSchema.cp_product.DEPMAPCONFIGID, column: 1, width: '100%', dropDownSelectOptions: { s: this.dataSource.shopId }
@@ -69,6 +71,7 @@ class CPProductRender extends RenderBase {
                     group: 'main2.col1', column: 1, columnCount: 1, fields: [
                         aliasField,
                         depMapConfigField,
+                        depMapGLinfoField,
                         taxMapConfigField,
                         traderAccountField,
                     ]
@@ -187,9 +190,9 @@ class CPProductRender extends RenderBase {
                 { name: 'itemCode', title: 'item code' },
                 { name: 'itemBarcode', title: 'item bar code' },
                 { name: 'itemDescription', title: 'description' },
-                { name: 'depMapInfo', title: 'dep. config' },
-                { name: 'supplierCode', title: 'supplier' },
-                { name: 'traderName', title: 'supplier name', nullText: '[supplier does not exist]' },
+                { name: 'depMapInfo', title: 'dep. config', addValues: [{ name: 'glInfo', style: 'border-top: 1px dotted rgb(97,97,97); color: gray;' }] },
+                //{ name: 'supplierCode', title: 'supplier' },
+                { name: 'supplierCode', title: 'supplier', nullText: '[supplier does not exist]', addValues: [{ name: 'traderName', style: 'border-top: 1px dotted rgb(97,97,97); color: gray;' }] },
                 { name: 'itemCostPrice', title: 'cost price', align: 'right', width: '90px', formatMoney: 'N2' },
                 { name: 'aliasInfo', title: 'alias', nullText: '[not set]', link: { url: '/cp/config/product-alias?id={alias}', valueField: 'aliasId', paramName: 'alias' } },
                 { name: 'modified', title: 'modified', align: 'center', width: '130px' },

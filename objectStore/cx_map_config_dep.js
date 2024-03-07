@@ -92,9 +92,18 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
     async toLookupFullList(shopId) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
         query.sql = `
-            select	    dep.depMapConfigId as value, eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']' as text
-            from	    cx_map_config_dep dep
-            inner join  cx_shop s on dep.mapConfigId = s.depMapConfigId
+            select	            dep.depMapConfigId as value,
+                                eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']' as text,
+                                (
+                                    '<span class="jx-table-drop-down-item-title">' + eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']</span>'
+                                    + case when sgl.code is null then '' else  '<br />' + sgl.code + ' [' + sgl.description + ']' end
+                                    + case when pgl.code is null then '' else  ' / ' + pgl.code + ' [' + pgl.description + ']' end
+                                ) as textHtml
+
+            from	            cx_map_config_dep dep
+            inner join          cx_shop s on dep.mapConfigId = s.depMapConfigId
+            left outer join     erp_gl_account sgl ON sgl.erpGLAccountId = dep.saleAccountId
+            left outer join     erp_gl_account pgl ON pgl.erpGLAccountId = dep.purchaseAccountId
             where	    s.shopId = @shopId
             order by    eposDepartment, eposSubDepartment
         `;
@@ -105,6 +114,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             lookUpValues.push({
                 value: row.value,
                 text: row.text,
+                textHtml: row.textHtml,
             })
         }
         return lookUpValues;
