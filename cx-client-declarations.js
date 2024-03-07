@@ -558,6 +558,7 @@ const CR_PREFERENCE = {
     CB_SHOW_REFRESH: 112,
     CB_SHOW_ADD: 113,
     CB_SHOW_EXPAND: 114,
+    CB_SALES_VALIDATION: 200    // NOTE: this is really only available for CBE, but we maybe able to implement it for some other EPoS
 }
 
 const CP_PREFERENCE = {
