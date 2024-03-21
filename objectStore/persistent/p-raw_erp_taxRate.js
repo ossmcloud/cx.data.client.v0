@@ -28,6 +28,7 @@ const _fieldNames = {
     TAXRATE: 'taxRate',
     TAXNAME: 'taxName',
     TAXTYPE: 'taxType',
+    CREATED: 'created',
 
 }
 //
@@ -39,10 +40,11 @@ const _fields = {
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     countryCode: { name: 'countryCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: false },
     currencyCode: { name: 'currencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
-    taxCode: { name: 'taxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
+    taxCode: { name: 'taxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     taxRate: { name: 'taxRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     taxName: { name: 'taxName', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
     taxType: { name: 'taxType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
 
 }
 //
@@ -114,6 +116,12 @@ class Persistent_raw_erp_taxRate extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TAXTYPE);
     } set taxType(val) {
         super.setValue(_fieldNames.TAXTYPE, val);
+    }
+
+    get created() {
+        return super.getValue(_fieldNames.CREATED);
+    } set created(val) {
+        super.setValue(_fieldNames.CREATED, val);
     }
 
 
