@@ -44,6 +44,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     TOTALDRS: 'totalDRS',
+    ERPTRANSMISSIONID: 'erpTransmissionId',
 
 }
 //
@@ -75,6 +76,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -242,6 +244,12 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TOTALDRS);
     } set totalDRS(val) {
         super.setValue(_fieldNames.TOTALDRS, val);
+    }
+
+    get erpTransmissionId() {
+        return super.getValue(_fieldNames.ERPTRANSMISSIONID);
+    } set erpTransmissionId(val) {
+        super.setValue(_fieldNames.ERPTRANSMISSIONID, val);
     }
 
 

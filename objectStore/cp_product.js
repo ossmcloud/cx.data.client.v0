@@ -16,7 +16,9 @@ class cp_product_Collection extends _persistentTable.Table {
                             dep.eposDepartment, dep.eposSubDepartment, dep.eposDescription,
                             tax.eposTaxCode, tax.eposTaxRate, tax.eposDescription as eposTaxDescription,
                             trad.traderCode, trad.traderName,
-                            alias.itemCode as aliasCode, alias.itemDescription as aliasDescription
+                            alias.itemCode as aliasCode, alias.itemDescription as aliasDescription,
+                            sgl.code as glSale, sgl.description glSaleDescr,
+							pgl.code as glPurch, pgl.description glPurchDescr
 
             from            ${this.type} prod 
             inner join      cx_shop s               ON s.shopId = prod.shopId
@@ -24,6 +26,8 @@ class cp_product_Collection extends _persistentTable.Table {
             left outer join cx_map_config_dep dep   ON dep.depMapConfigId = prod.depMapConfigId
             left outer join cx_map_config_tax tax   ON tax.taxMapConfigId = prod.taxMapConfigId
             left outer join cx_traderAccount trad   ON trad.traderAccountId = prod.traderAccountId
+            left outer join erp_gl_account sgl      ON sgl.erpGLAccountId = dep.saleAccountId
+            left outer join erp_gl_account pgl      ON pgl.erpGLAccountId = dep.purchaseAccountId
 
             where           prod.${this.FieldNames.SHOPID} in ${this.cx.shopList}
         `;
@@ -114,6 +118,10 @@ class cp_product extends _persistentTable.Record {
     #traderName = '';
     #aliasCode = '';
     #aliasDescription = '';
+    #glSale = '';
+    #glSaleDescr = '';
+    #glPurch = '';
+    #glPurchDescr = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -133,6 +141,12 @@ class cp_product extends _persistentTable.Record {
 
         this.#aliasCode = defaults['aliasCode'];
         this.#aliasDescription = defaults['aliasDescription'];
+
+        this.#glSale = defaults['glSale'];
+        this.#glSaleDescr = defaults['glSaleDescr'];
+
+        this.#glPurch = defaults['glPurch'];
+        this.#glPurchDescr = defaults['glPurchDescr'];
     };
 
     get shopName() { return this.#shopName; }
@@ -192,8 +206,22 @@ class cp_product extends _persistentTable.Record {
     //     }
     // }
 
+    get glSale() { return this.#glSale; }
+    get glSaleDescr() { return this.#glSaleDescr; }
+  
+    get glPurch() { return this.#glPurch; }
+    get glPurchDescr() { return this.#glPurchDescr; }
 
+    get glInfo() {
+        var glInfo = '';
+        if (this.glSale) { glInfo += `${this.glSale} [${this.glSaleDescr}]`; }
+        if (glInfo) { glInfo += '<br />'; }
+        if (this.glPurch) { glInfo += `${this.glPurch} [${this.glPurchDescr}]`; }
 
+        if (!glInfo) { return 'not mapped'; }
+
+        return glInfo;
+    }
 
 
     async save() {

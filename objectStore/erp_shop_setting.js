@@ -112,9 +112,9 @@ class erp_shop_setting extends _persistentTable.Record {
     //           however this property exists in both c# and node.js respective business object
     get mergeGLAndTax() {
         if (!this.erpProvider) { return false; }
-        if (this.erpProvider.toLowerCase() == "sage50") { return true; }
-        if (this.erpProvider.toLowerCase() == "sageintacct") { return true; }
-        return false;
+        if (this.erpProvider.toLowerCase() == "sage200") { return false; }
+        if (this.erpProvider.toLowerCase() == "sage200std") { return false; }
+        return true;
     }
 
     isSet() {

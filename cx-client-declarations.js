@@ -208,9 +208,10 @@ const CX_ERP_PROVIDER = {
     SG200STD: 'sage200std',
     SAGE50: 'sage50',
     SAGEINT: 'sageIntacct',
+    SAGEACC: 'sageAccount',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct'
+            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting'
         });
     }
 }
@@ -558,6 +559,7 @@ const CR_PREFERENCE = {
     CB_SHOW_REFRESH: 112,
     CB_SHOW_ADD: 113,
     CB_SHOW_EXPAND: 114,
+    CB_SALES_VALIDATION: 200    // NOTE: this is really only available for CBE, but we maybe able to implement it for some other EPoS
 }
 
 const CP_PREFERENCE = {
