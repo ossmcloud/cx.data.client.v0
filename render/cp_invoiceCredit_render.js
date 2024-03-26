@@ -447,9 +447,8 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-
+            var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
             if (this.options.allowEdit == true) {
-                var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
                 this.options.allowEditCondition = function (object) {
                     if (object.invGrpId) { return isCxRole; }
                     return (
@@ -484,7 +483,13 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
             if (isBatchProcessing && !batchActionSelected) {
-                this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList('- all -') });
+                var batchActions = _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList('- all -');
+                if (!isCxRole) {
+                    // if not cx role remove reset and un-post
+                    batchActions.splice(3, 2);
+                }
+
+                this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: batchActions });
             } else {
                 if (isBatchProcessing) { this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList(), disabled: true }); }
                 this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }));
