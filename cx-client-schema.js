@@ -323,6 +323,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         TOTALDRS: 'totalDRS',
+        ERPTRANSMISSIONID: 'erpTransmissionId',
     },
 
     cp_invoiceGroupLog: {
