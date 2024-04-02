@@ -223,8 +223,9 @@ const CX_EPOS_PROVIDER = {
     MRDN: 'MRDN',
     VME: 'VME',
     EVOPOS: 'EVOPOS',
+    LEADERS: 'LEADERS',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders' }); }
 }
 
 
@@ -264,6 +265,13 @@ const CX_EPOS_PROVIDERS = {
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.LEADERS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "sam4windb001",   "user": "sa",   "pass": ""  }' },
             ]
         },
         {
