@@ -162,10 +162,10 @@ class CPInvoiceReturnRender extends RenderBase {
         }
         if (this.dataSource.invGrpId) {
             this.options.title += `
-            <div style="${applyStoreColorStyle} background-color: var(--element-bg-color); cursor: pointer;" onclick="window.open('&#47;cp&#47;invoice-group?id=${this.dataSource.invGrpId}');">
-                grouped
-            </div>
-        `;
+                <div style="${applyStoreColorStyle} background-color: var(--element-bg-color); cursor: pointer;" onclick="window.open('&#47;cp&#47;invoice-group?id=${this.dataSource.invGrpId}');">
+                    grouped
+                </div>
+            `;
         }
 
         if (this.dataSource.createdFrom) {

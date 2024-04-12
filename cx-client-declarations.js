@@ -843,6 +843,7 @@ const CP_DOCUMENT = {
         Cancelled: 7,
         Completed: 8,
         ERROR: 9,
+        Deleting: 98,
         Deleted: 99,
 
         toList: function (addEmpty) {
