@@ -39,6 +39,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     ERPTRADERACCOUNTID: 'erpTraderAccountId',
+    ISMANUAL: 'isManual',
 
 }
 //
@@ -65,6 +66,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTraderAccountId: { name: 'erpTraderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
 
 }
 //
@@ -202,6 +204,12 @@ class Persistent_cx_traderAccount extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPTRADERACCOUNTID);
     } set erpTraderAccountId(val) {
         super.setValue(_fieldNames.ERPTRADERACCOUNTID, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 
