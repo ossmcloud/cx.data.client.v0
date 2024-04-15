@@ -143,6 +143,11 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.params.push({ name: 'createdFrom', value: params.from });
         }
 
+        if (params.mstatus) {
+            query.sql += ' and reco.recoStatusId = @recoStatusId';
+            query.params.push({ name: 'recoStatusId', value: params.mstatus });
+        }
+
         query.sql += ' order by d.documentDate desc';
 
         query.paging = {
