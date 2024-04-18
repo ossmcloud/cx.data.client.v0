@@ -81,6 +81,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.New);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.Ready);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingReady);
+                validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PendingReview);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.NEED_ATTENTION);
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.ERROR);
                 query.sql += ' and isnull(d.isUserEdited, 0) = 0';
