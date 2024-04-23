@@ -1432,6 +1432,17 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    raw_cp_attachment: {
+        TBL_NAME: 'raw_cp_attachment',
+        ATTACHMENTID: 'attachmentId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        NAME: 'name',
+        EXTERNALREFERENCE: 'externalReference',
+        EXTERNALLINK: 'externalLink',
+        CREATED: 'created',
+    },
+
     raw_cp_delivery: {
         TBL_NAME: 'raw_cp_delivery',
         RAWDELIVERYID: 'rawDeliveryId',

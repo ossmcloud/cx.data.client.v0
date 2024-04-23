@@ -108,6 +108,7 @@ const CX_MODULE = {
     STATIC: 'static',
     RETAIL: 'retail',
     PURCHASE: 'purchase',
+    THEREFORE: 'therefore',
 
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
@@ -224,8 +225,9 @@ const CX_EPOS_PROVIDER = {
     VME: 'VME',
     EVOPOS: 'EVOPOS',
     LEADERS: 'LEADERS',
+    THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', THERE: 'Therefore' }); }
 }
 
 
@@ -279,7 +281,14 @@ const CX_EPOS_PROVIDERS = {
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
             ]
-        }
+        },
+        {
+            type: CX_EPOS_PROVIDER.THERE,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "Therefore",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
     ],
     get: function (eposCode) {
         for (var px = 0; px < this.supported.length; px++) {

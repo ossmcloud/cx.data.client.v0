@@ -58,7 +58,7 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
         return await super.select(query);
     }
 
-    async fetch(id, returnNull) {
+    async fetch(id, returnNull, dtfs) {
         var query = {
             sql: `  select  sr.*, sx.shopCode, sx.shopName, sg.groupCode, sg.groupName, ds.dtfsSettingName, prv.logoUrl
                     from    epos_shop_setting sr
@@ -72,6 +72,12 @@ class epos_shop_setting_Collection extends _persistentTable.Table {
             noResult: 'null',
             returnFirst: true,
         }
+
+        if (dtfs) {
+            query.sql += ' and  ds.dtfsSettingId = @dtfsSettingId';
+            query.params.push({ name: 'dtfsSettingId', value: dtfs })
+        }
+
 
         var record = await this.db.exec(query);
         if (!record) {
