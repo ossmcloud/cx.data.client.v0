@@ -23,8 +23,12 @@ const _fieldNames = {
     TRANSMISSIONID: 'transmissionID',
     SHOPID: 'shopId',
     NAME: 'name',
+    DESCRIPTION: 'description',
+    VERSION: 'version',
     EXTERNALREFERENCE: 'externalReference',
     EXTERNALLINK: 'externalLink',
+    EXTERNALFLAGS: 'externalFlags',
+    JSONOPTIONS: 'jsonOptions',
     CREATED: 'created',
 
 }
@@ -36,8 +40,12 @@ const _fields = {
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    description: { name: 'description', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
+    version: { name: 'version', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     externalReference: { name: 'externalReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     externalLink: { name: 'externalLink', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: true },
+    externalFlags: { name: 'externalFlags', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    jsonOptions: { name: 'jsonOptions', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
 
 }
@@ -82,6 +90,18 @@ class Persistent_raw_cp_attachment extends _cx_data.DBRecord {
         super.setValue(_fieldNames.NAME, val);
     }
 
+    get description() {
+        return super.getValue(_fieldNames.DESCRIPTION);
+    } set description(val) {
+        super.setValue(_fieldNames.DESCRIPTION, val);
+    }
+
+    get version() {
+        return super.getValue(_fieldNames.VERSION);
+    } set version(val) {
+        super.setValue(_fieldNames.VERSION, val);
+    }
+
     get externalReference() {
         return super.getValue(_fieldNames.EXTERNALREFERENCE);
     } set externalReference(val) {
@@ -92,6 +112,18 @@ class Persistent_raw_cp_attachment extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EXTERNALLINK);
     } set externalLink(val) {
         super.setValue(_fieldNames.EXTERNALLINK, val);
+    }
+
+    get externalFlags() {
+        return super.getValue(_fieldNames.EXTERNALFLAGS);
+    } set externalFlags(val) {
+        super.setValue(_fieldNames.EXTERNALFLAGS, val);
+    }
+
+    get jsonOptions() {
+        return super.getValue(_fieldNames.JSONOPTIONS);
+    } set jsonOptions(val) {
+        super.setValue(_fieldNames.JSONOPTIONS, val);
     }
 
     get created() {

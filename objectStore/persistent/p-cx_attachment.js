@@ -37,6 +37,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     EXTERNALFLAGS: 'externalFlags',
+    FILEVERSION: 'fileVersion',
 
 }
 //
@@ -61,6 +62,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     externalFlags: { name: 'externalFlags', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    fileVersion: { name: 'fileVersion', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -186,6 +188,12 @@ class Persistent_cx_attachment extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.EXTERNALFLAGS);
     } set externalFlags(val) {
         super.setValue(_fieldNames.EXTERNALFLAGS, val);
+    }
+
+    get fileVersion() {
+        return super.getValue(_fieldNames.FILEVERSION);
+    } set fileVersion(val) {
+        super.setValue(_fieldNames.FILEVERSION, val);
     }
 
 

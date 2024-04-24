@@ -1010,6 +1010,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         EXTERNALFLAGS: 'externalFlags',
+        FILEVERSION: 'fileVersion',
     },
 
     cx_login: {
@@ -1438,8 +1439,12 @@ module.exports = {
         TRANSMISSIONID: 'transmissionID',
         SHOPID: 'shopId',
         NAME: 'name',
+        DESCRIPTION: 'description',
+        VERSION: 'version',
         EXTERNALREFERENCE: 'externalReference',
         EXTERNALLINK: 'externalLink',
+        EXTERNALFLAGS: 'externalFlags',
+        JSONOPTIONS: 'jsonOptions',
         CREATED: 'created',
     },
 

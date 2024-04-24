@@ -16,7 +16,7 @@ class cx_attachment_Collection extends _persistentTable.Table {
             query = params;
 
         } else {
-            
+
             query.sql = `
             select  a.*, s.shopCode, s.shopName
             from    cx_attachment a
@@ -29,7 +29,7 @@ class cx_attachment_Collection extends _persistentTable.Table {
             query.sql += ' order by a.name';
         }
 
-        
+
 
         return await super.select(query);
     }
@@ -86,11 +86,11 @@ class cx_attachment extends _persistentTable.Record {
 
     get type() {
         return _declarations.CX_ATTACHMENT.TYPE.getName(this.typeId);
-    }   
+    }
 
     get sourceIcon() {
 
-        if (this.source == _declarations.CX_ATTACHMENT.SOURCE.Therefore) {
+        if (this.source.indexOf(_declarations.CX_ATTACHMENT.SOURCE.Therefore) == 0) {
             return `<img src="/public/images/therefore.ico" style="width: 16px" title="Therefore ${this.type}" />`;
         } else if (this.source == _declarations.CX_ATTACHMENT.SOURCE.OneDrive) {
             return `<img src="/public/images/onedrive.ico" style="width: 16px" title="One Drive ${this.type}" />`;
