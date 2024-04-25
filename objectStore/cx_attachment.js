@@ -52,7 +52,7 @@ class cx_attachment_Collection extends _persistentTable.Table {
         this.each(att => {
             var extLink = att.externalLink;
             if (extLink) { extLink = `<a class="jx-list-view-link" href="${extLink}" target="_blank">&#128279;</a>`; }
-            shortList += `<tr>
+            shortList += `<tr${((att.externalFlags) ? ' class="jx-flashy-background"' : '')}>
                 <td>${att.sourceIcon}</td>
                 <td>${extLink}</td>
                 <td>${att.type}</td>
