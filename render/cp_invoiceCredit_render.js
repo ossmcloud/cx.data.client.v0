@@ -494,7 +494,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 if (isBatchProcessing) { this.options.filters.push({ label: 'ACTION', fieldName: 'action', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.BATCH_ACTIONS.toList(), disabled: true }); }
                 this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }));
                 this.options.filters.push({ label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') });
-
+                this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_INV.toList('- all -'), });
                 if (this.matchingEnabled) {
                     this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                     this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') });
@@ -507,10 +507,10 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'ref (erp)', fieldName: 'tref', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 this.options.filters.push({ label: 'ref (cx)', fieldName: 'tref2', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 if (!isBatchProcessing) { this.options.filters.push({ label: 'group invoice', fieldName: 'gno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT }); }
-                this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE });
-                this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
-                this.options.filters.push({ label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
-                this.options.filters.push({ label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
+                this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+                this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+                this.options.filters.push({ label: 'uploaded (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+                this.options.filters.push({ label: 'uploaded (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 //this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
                 
             }
