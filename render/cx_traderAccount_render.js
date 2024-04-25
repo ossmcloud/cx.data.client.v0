@@ -24,6 +24,7 @@ class CXTraderAccount extends RenderBase {
             shopField = await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }', label: 'store' });
         }
 
+        //
         if (this.dataSource.isNew() && (!this.options.query.s || !this.options.query.tt)) {
             this.dataSource.note = '<span style="color: var(--main-color-4)">select store and trader type</span>';
             this.options.fields = [
@@ -41,6 +42,11 @@ class CXTraderAccount extends RenderBase {
             ];
         } else {
             shopField.readOnly = true;
+
+            if (this.options.mode == 'edit') {
+                readOnly = !this.dataSource.isManual;
+            }
+            
             this.options.fields = [
                 {
                     group: 'traderOuter', title: '', columnCount: 3, fields: [
@@ -48,7 +54,7 @@ class CXTraderAccount extends RenderBase {
                             group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                                 shopField,
                                 { name: 'traderType', label: 'type', column: 2, readOnly: true, items: [{ value: '', text: '' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }], validation: validationMandatory },
-                                { name: 'traderCode', label: 'Code', column: 1, readOnly: readOnly, validation: validationMandatory },
+                                { name: 'traderCode', label: 'Code', column: 1, readOnly: !this.dataSource.isNew(), validation: validationMandatory },
                                 { name: 'traderName', label: 'Name', column: 2, readOnly: readOnly },
                                 { name: 'contact', label: 'contact', column: 1, readOnly: readOnly },
                                 { name: 'phone', label: 'phone', column: 2, readOnly: readOnly },
@@ -146,6 +152,11 @@ class CXTraderAccount extends RenderBase {
             style: 'background-color: #1982c4; color: white; ' + appendStyle,
         })
         //'#1982c4'
+
+        this.options.highlights = [
+            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
+        ];
+
 
     }
 

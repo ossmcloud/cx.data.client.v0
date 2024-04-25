@@ -108,6 +108,7 @@ const CX_MODULE = {
     STATIC: 'static',
     RETAIL: 'retail',
     PURCHASE: 'purchase',
+    THEREFORE: 'therefore',
 
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
@@ -223,8 +224,10 @@ const CX_EPOS_PROVIDER = {
     MRDN: 'MRDN',
     VME: 'VME',
     EVOPOS: 'EVOPOS',
+    LEADERS: 'LEADERS',
+    THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', THERE: 'Therefore' }); }
 }
 
 
@@ -267,11 +270,25 @@ const CX_EPOS_PROVIDERS = {
             ]
         },
         {
+            type: CX_EPOS_PROVIDER.LEADERS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "sam4windb001",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
+        {
             type: CX_EPOS_PROVIDER.EVOPOS,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
             ]
-        }
+        },
+        {
+            type: CX_EPOS_PROVIDER.THERE,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "Therefore",   "user": "sa",   "pass": ""  }' },
+            ]
+        },
     ],
     get: function (eposCode) {
         for (var px = 0; px < this.supported.length; px++) {
@@ -669,27 +686,43 @@ const CP_DOCUMENT = {
         }
 
     },
-
+    STATE_INV: {
+        Pending: [-1, 0, 3, 4],
+        Processing: [1, 2, 99, 100],
+        PendingPost: [5],
+        ProcessingPost: [6, 7],
+        Posted: [8],
+        Error: [97, 98],
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                PendingPost: 'pending posting',
+                ProcessingPost: 'posting running',
+            });
+        },
+    },
+    STATE_DEL: {
+        Pending: [-1, 0, 3, 4],
+        Processing: [1, 2, 99, 100],
+        Error: [97, 98],
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty);
+        },
+    },
     STATUS: {
-        New: -1,
+        New: -1,    
         Ready: 0,
         Generating: 1,
         REFRESH: 2,
-
         NEED_ATTENTION: 3,         // can't post to ERP
-
         PendingReview: 4,
-
         PostingReady: 5,           //
         Posting: 6,                // erps.exe is to pick up the stuff to post
         PostingRunning: 7,         // erps.exe has picked up the stuff to post
         Posted: 8,                 // posted successfully
-
         ERROR: 97,
         PostingError: 98,
         DeleteAndPull: 99,
         Delete: 100,
-
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
@@ -835,6 +868,7 @@ const CP_DOCUMENT = {
         Cancelled: 7,
         Completed: 8,
         ERROR: 9,
+        Deleting: 98,
         Deleted: 99,
 
         toList: function (addEmpty) {

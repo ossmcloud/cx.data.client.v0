@@ -30,7 +30,8 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId ) as queryCount,
                                         ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen,
                                         ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount,
-                                        ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag
+                                        ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag,
+                                        ( select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId ) as invoiceCount
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
@@ -75,6 +76,9 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: params.st });
         }
+        if (params.sta) {
+            query.sql += ' and d.documentStatus in (' + params.sta + ')';
+        }
         if (params.su) {
             query.sql += ' and (d.supplierCode like @supplierCode or supp.traderName like @supplierCode)';
             query.params.push({ name: 'supplierCode', value: '%' + params.su + '%' });
@@ -111,6 +115,18 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and isnull(supp.traderName, supp2.traderName) like @supplierName'
             query.params.push({ name: 'supplierName', value: '%' + params.whsn + '%' });
         }
+
+        if (params.mstatus) {
+            query.sql += ' and reco.recoStatusId = @recoStatusId';
+            query.params.push({ name: 'recoStatusId', value: params.mstatus });
+        }
+
+        if (params.inv === 'true') {
+            query.sql += ' and (select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId) > 0 '
+        } else if (params.inv === 'false') {
+            query.sql += ' and (select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId) = 0 '
+        }
+        
         query.sql += ' order by d.documentDate desc';
 
         if (params.paging) {
@@ -162,6 +178,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #queryCountOpen = null;
     #attachCount = null;
     #attachFlag = '';
+    #invoiceCount = 0;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -174,6 +191,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#queryCountOpen = defaults['queryCountOpen'] || null;
         this.#attachCount = defaults['attachCount'] || null;
         this.#attachFlag = defaults['attachFlag'] || null;
+        this.#invoiceCount = defaults['invoiceCount'] || 0;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -194,6 +212,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     }
 
     get editedIcon() {
+        if (this.#invoiceCount > 0) { return '&#x2699;'; }
         if (this.isUserEdited) { return '&#x270E;'; }
         return '';
     }
@@ -244,6 +263,14 @@ class cp_deliveryReturn extends _persistentTable.Record {
             return `<img src="/public/images/attach_${this.cx.theme}.png" style="width: 20px" />`;
             //return '<span style="background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;"></span>';
         }
+        return '';
+    }
+
+    get invoiceCount() {
+        return this.#invoiceCount;
+    }
+    get invoiceCountIcon() {
+        if (this.#invoiceCount > 0) { return '&#x2699;'; }
         return '';
     }
 

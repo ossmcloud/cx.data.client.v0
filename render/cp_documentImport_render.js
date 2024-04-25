@@ -31,8 +31,6 @@ class CPDocumentImportRender extends RenderBase {
 
         var mainGroupColumnCount = (this.options.mode == 'view') ? 2 : 1;
 
-
-
         this.options.fields = [
             //
             {
@@ -77,7 +75,7 @@ class CPDocumentImportRender extends RenderBase {
                     { name: 'documentMemo', label: 'document memo', column: 1, width: '425px', validation: '{ "max": 500  }' },
                 ]
             })
-            
+
             this.options.fields[0].fields[0].fields.push({
                 group: 'main1_4', title: '', columnCount: 2, fields: [
                     { name: _cxSchema.cp_documentImport.FILETYPE + 'View', label: 'file type', column: 1, width: '69px', disabled: true },
@@ -91,7 +89,7 @@ class CPDocumentImportRender extends RenderBase {
             this.options.fields.unshift({ name: _cxSchema.cp_documentImport.FILETYPE, hidden: true });
 
             this.options.buttons.push({ id: 'cp_documentImport_pick_file', text: 'Pick File', function: 'pickFile' });
-        
+
         } else if (this.options.mode == 'view') {
             this.options.fields[0].fields[0].fields.push({
                 group: 'main1_4', title: '', columnCount: 2, fields: [
@@ -132,9 +130,35 @@ class CPDocumentImportRender extends RenderBase {
                 if (elapsedMinutes > process.env.CP_ALLOW_ABORT_AFTER_MINS && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
                     this.options.buttons.push({ id: 'cp_documentImport_cancel', text: 'Abort Import', function: 'abortImport' });
                 }
+            } else {
+                var grpInv = this.dataSource.cx.table(_cxSchema.cp_invoiceGroup);
+                await grpInv.select({ impid: this.dataSource.documentImportId });
+                if (grpInv.records.length == 0) {
+                    if (transactionOptions.records.length > 0) {
+                        var anyPosted = false;
+                        for (var dx = 0; dx < transactionOptions.records.length; dx++) {
+                            var doc = transactionOptions.records[dx];
+                            if (doc.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Posted || doc.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Posting || doc.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingRunning) {
+                                anyPosted = true;
+                                break;
+                            }
+                        }
+                        if (!anyPosted) {
+                            this.options.buttons.push({ id: 'cp_documentImport_delete', text: 'Delete all documents', function: 'deleteImport' });
+                        }
+                    }
+                } else {
+                    var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: inline-block; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
+                    this.options.title += `
+                        <span style="${applyStoreColorStyle} background-color: var(--element-bg-color); cursor: pointer;" onclick="window.open('&#47;cp&#47;invoice-group?id=${grpInv.records[0].invGrpId}');">
+                            group invoice: ${grpInv.records[0].documentNumber}
+                        </span>
+                    `;
+                }
+
             }
-            
-        } 
+
+        }
     }
 
 

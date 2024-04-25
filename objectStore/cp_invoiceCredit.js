@@ -110,6 +110,9 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: params.st });
         }
+        if (params.sta) {
+            query.sql += ' and d.documentStatus in (' + params.sta + ')';
+        }
 
         if (params.su) {
             query.sql += ' and (d.supplierCode like @supplierCode or supp.traderName like @supplierCode)';
@@ -142,6 +145,11 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         if (params.from) {
             query.sql += ' and d.createdFrom = @createdFrom';
             query.params.push({ name: 'createdFrom', value: params.from });
+        }
+
+        if (params.mstatus) {
+            query.sql += ' and reco.recoStatusId = @recoStatusId';
+            query.params.push({ name: 'recoStatusId', value: params.mstatus });
         }
 
         query.sql += ' order by d.documentDate desc';

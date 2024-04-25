@@ -59,6 +59,10 @@ class cp_invoiceGroup_Collection extends _persistentTable.Table {
         if (params.imp == 'true') {
             query.sql += ' and d.documentImportId is not null';
         }
+        if (params.impid) {
+            query.sql += ' and d.documentImportId = @documentImportId';
+            query.params.push({ name: 'documentImportId', value: params.impid });
+        }
         query.sql += ' order by d.documentDate desc';
 
         query.paging = {

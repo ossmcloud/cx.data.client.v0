@@ -253,18 +253,25 @@ class CPDeliveryReturnRender extends RenderBase {
                 this.options.pageNo = (this.options.query.page || 1);
             }
 
-            this.options.filters = [
-                await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
-                { label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_DR.toList('- all -') },
-                { label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') },
-                { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-                { label: 'document no.', fieldName: 'tno', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-                { label: 'document refs.', fieldName: 'tref', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-                { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-                { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-                { label: 'upload date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-                { label: 'upload date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
-            ];
+            this.options.filters = [];
+            this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }));
+            this.options.filters.push({ label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_DR.toList('- all -') });
+            this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_DEL.toList('- all -'), });
+            if (this.matchingEnabled) {
+                //this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
+                this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') });
+            } else {
+                //this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
+            }
+            this.options.filters.push({ label: 'invoiced', fieldName: 'inv', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
+            this.options.filters.push({ label: 'supplier', fieldName: 'su', width: '125px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+            this.options.filters.push({ label: 'doc #.', fieldName: 'tno', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+            this.options.filters.push({ label: 'document refs.', fieldName: 'tref', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+            this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+            this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+            this.options.filters.push({ label: 'uploaded (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+            this.options.filters.push({ label: 'uploaded (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+
             var signedCols = {
                 Net: _cxSchema.cp_deliveryReturn.TOTALNET + 'Sign',
                 Vat: _cxSchema.cp_deliveryReturn.TOTALVAT + 'Sign',
@@ -275,6 +282,8 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' });
             this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+            //this.options.columns.push({ name: 'invoiceCountIcon', title: '&#x2699;', align: 'center', width: '10px', headerToolTip: 'invoice generated' });
+
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
