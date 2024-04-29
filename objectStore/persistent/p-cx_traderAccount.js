@@ -66,7 +66,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTraderAccountId: { name: 'erpTraderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
