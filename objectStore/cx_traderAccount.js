@@ -125,6 +125,11 @@ class cx_traderAccount extends _persistentTable.Record {
         return `[${this.#erpTraderCode}] ${this.#erpTraderName}`;
     }
 
+    get isManualIcon() {
+        if (this.isManual) { return '&#9997;'; }
+        return '';
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

@@ -37,6 +37,15 @@ class ErpTraderAccount extends RenderBase {
         var newRecord = (this.options.mode == 'new');
         var dtfsSettingsLookUps = await this.dataSource.cx.table(_cxSchema.erp_dtfs_setting).toLookUpList(true);
 
+        var dtfsSettingDropDown = await this.fieldDropDownOptions(_cxSchema.erp_dtfs_setting, {
+            id: _cxSchema.erp_dtfs_setting.DTFSSETTINGID,
+            name: _cxSchema.erp_dtfs_setting.DTFSSETTINGID,
+            validation: '{ "mandatory": true }',
+            //readOnly: !newRecord,
+            column: 1,
+        });
+
+
         this.options.fields = [
             //{ name: 'shopId', hidden: true },
             {
@@ -44,8 +53,9 @@ class ErpTraderAccount extends RenderBase {
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                             { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
-                            { name: 'dtfsSettingId', label: 'ERPS Settings', column: 1, lookUps: dtfsSettingsLookUps, validation: '{ "mandatory": true }' },
-                            { name: 'erpProvider', label: 'erp provider', column: 1, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), validation: '{ "mandatory": true }' },
+                            dtfsSettingDropDown,
+                            //{ name: 'dtfsSettingId', label: 'ERPS Settings', column: 1, lookUps: dtfsSettingsLookUps, validation: '{ "mandatory": true }' },
+                            { name: 'erpProvider', label: 'erp provider', column: 1, lookUps: _cxConst.CX_ERP_PROVIDER.toList(true), disabled: true },
                             { name: 'erpCompanyName', label: 'erp company name', column: 1, validation: '{ "mandatory": true }' },
                             { name: 'erpCustomerAccount', label: 'erp EPoS account code', column: 2, validation: '{ "mandatory": true }' },
                             { name: 'erpCustomerAccountName', label: 'erp EPoS Account name', column: 2, validation: '{ "mandatory": true }' },

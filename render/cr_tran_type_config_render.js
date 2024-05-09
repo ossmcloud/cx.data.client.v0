@@ -118,12 +118,17 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.STOPPOSTING, label: 'STOP Posting', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.SKIPPOSTING, label: 'Skip Posting', column: 2 },
                                     { name: _cxSchema.cr_tran_type_config.ERPTRANTYPEID, label: 'ERP Type', column: 3, lookUps: erpTranTypeLookUps },
-                                    
+
                                 ]
                             },
-                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
-                                id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
-                            }),
+                            {
+                                group: 'trader_account', columnCount: 2, styles: ['display: inline-block; width: calc(100% - 95px);', 'display: inline-block; max-width: 90px;'], fields: [
+                                    await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                                        id: _cxSchema.cr_tran_type_config.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
+                                    }),
+                                    { name: _cxSchema.cr_tran_type_config.ERPIGNORECUSTOMER, label: 'Ignore Cust', column: 2 },
+                                ]
+                            },
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 id: _cxSchema.cr_tran_type_config.ERPGLACCOUNTID, name: _cxSchema.cr_tran_type_config.ERPGLACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
@@ -142,9 +147,14 @@ class CrTranTypeConfigRender extends RenderBase {
                     {
                         group: 'erp2', title: 'erp configurations (secondary)', column: 4, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config.ERP2NDTRANTYPEID, label: 'ERP Type (secondary)', column: 1, lookUps: erpTranTypeLookUps },
-                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
-                                id: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, name: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
-                            }),
+                            {
+                                group: 'trader_account_2', columnCount: 2, styles: ['display: inline-block; width: calc(100% - 95px);', 'display: inline-block; max-width: 90px;'], fields: [
+                                    await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                                        id: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, name: _cxSchema.cr_tran_type_config.ERP2NDTRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
+                                    }),
+                                    { name: _cxSchema.cr_tran_type_config.ERP2NDIGNORECUSTOMER, label: 'Ignore Cust', column: 2 },
+                                ]
+                            },
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 id: _cxSchema.cr_tran_type_config.ERP2NDGLACCOUNTID, name: _cxSchema.cr_tran_type_config.ERP2NDGLACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
@@ -231,7 +241,7 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: 'STOP posting', name: _cxSchema.cr_tran_type_config.STOPPOSTING, align: 'center', nullText: '' },
             { title: 'skip posting', name: _cxSchema.cr_tran_type_config.SKIPPOSTING, align: 'center', nullText: '' },
             { title: 'erp tran. type', name: 'erpTranType' },
-            
+
             { title: 'created', name: _cxSchema.cr_tran_type_config.CREATED },
             { title: 'by', name: _cxSchema.cr_tran_type_config.CREATEDBY },
             { title: 'modified', name: _cxSchema.cr_tran_type_config.MODIFIED },

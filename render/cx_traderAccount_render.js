@@ -42,11 +42,17 @@ class CXTraderAccount extends RenderBase {
             ];
         } else {
             shopField.readOnly = true;
-
             if (this.options.mode == 'edit') {
                 readOnly = !this.dataSource.isManual;
+                if (this.dataSource.isManual) {
+                    this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                }
             }
             
+            if (this.dataSource.isManual) {
+                this.options.title += ' &#9997;';
+            }
+
             this.options.fields = [
                 {
                     group: 'traderOuter', title: '', columnCount: 3, fields: [
@@ -100,9 +106,7 @@ class CXTraderAccount extends RenderBase {
                 }
             ];
         }
-        // if (this.dataSource.status == _cxConst.RAW_GET_REQUEST.STATUS.PENDING && this.options.allowNew && !this.dataSource.isNew()) {
-        //     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord' });
-        // }
+       
     }
 
     async _list() {
@@ -121,6 +125,7 @@ class CXTraderAccount extends RenderBase {
         this.options.columns = [
             { name: 'traderAccountId', title: ' ', align: 'center' },
             { name: 'shopInfo', title: 'store', width: '200px' },
+            { name: 'isManualIcon', title: '&#9997;', width: '10px' },
             { name: 'traderType', title: 'type' },
             { name: 'traderCode', title: 'trader code' },
             { name: 'traderName', title: 'trader name' },

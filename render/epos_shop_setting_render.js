@@ -50,7 +50,7 @@ class EposShopSettingRender extends RenderBase {
             name: _cxSchema.epos_dtfs_setting.DTFSSETTINGID,
             validation: mandatoryValidation,
             //readOnly: !newRecord,
-            column: 2,
+            column: 1,
         });
 
         this.options.fields = [
@@ -64,12 +64,12 @@ class EposShopSettingRender extends RenderBase {
                     },
                     {
                         group: 'epos', title: 'epos info', column: 1, columnCount: 2, fields: [
-                            { name: 'eposProvider', label: 'epos provider', column: 1, lookUps: _cxConst.CX_EPOS_PROVIDER.toList(true), validation: '{ "mandatory": true }' },
+                            dtfsSettingDropDown,
+
                             { name: 'eposShopCode', label: 'epos code', column: 1, validation: '{ "mandatory": true }' },
                             { name: 'eposShopName', label: 'epos name', column: 1, validation: '{ "mandatory": true }' },
 
-                            dtfsSettingDropDown,
-
+                            { name: 'eposProvider', label: 'epos provider', column: 2, lookUps: _cxConst.CX_EPOS_PROVIDER.toList(true), disabled: true },
                             { name: 'startDate', label: 'start date', column: 2, validation: '{ "mandatory": true }' },
                             { name: 'getDelayCR', label: 'get data delay (retail)', column: 2, validation: '{ "mandatory": true }' },
                             { name: 'getDelayCP', label: 'get data delay (purchase)', column: 2, validation: '{ "mandatory": true }' },

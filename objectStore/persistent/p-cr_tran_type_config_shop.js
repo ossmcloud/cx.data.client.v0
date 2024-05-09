@@ -39,6 +39,8 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     SKIPPOSTING: 'skipPosting',
     STOPPOSTING: 'stopPosting',
+    ERPIGNORECUSTOMER: 'erpIgnoreCustomer',
+    ERP2NDIGNORECUSTOMER: 'erp2ndIgnoreCustomer',
 
 }
 //
@@ -49,22 +51,24 @@ const _fields = {
     shopId: { name: 'shopId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
     erpTranTypeId: { name: 'erpTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     traderAccount: { name: 'traderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpGLAccountId: { name: 'erpGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpGLAccountId: { name: 'erpGLAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    erpGLContraAccountId: { name: 'erpGLContraAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erpCBAccountId: { name: 'erpCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erpTaxAccountId: { name: 'erpTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpTaxAccountId: { name: 'erpTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erp2ndTranTypeId: { name: 'erp2ndTranTypeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erp2ndTraderAccount: { name: 'erp2ndTraderAccount', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erp2ndGLAccountId: { name: 'erp2ndGLAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndGLAccountId: { name: 'erp2ndGLAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    erp2ndGLContraAccountId: { name: 'erp2ndGLContraAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     erp2ndCBAccountId: { name: 'erp2ndCBAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    erp2ndTaxAccountId: { name: 'erp2ndTaxAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erp2ndTaxAccountId: { name: 'erp2ndTaxAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     skipPosting: { name: 'skipPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     stopPosting: { name: 'stopPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    erpIgnoreCustomer: { name: 'erpIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    erp2ndIgnoreCustomer: { name: 'erp2ndIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -204,6 +208,18 @@ class Persistent_cr_tran_type_config_shop extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.STOPPOSTING);
     } set stopPosting(val) {
         super.setValue(_fieldNames.STOPPOSTING, val);
+    }
+
+    get erpIgnoreCustomer() {
+        return super.getValue(_fieldNames.ERPIGNORECUSTOMER);
+    } set erpIgnoreCustomer(val) {
+        super.setValue(_fieldNames.ERPIGNORECUSTOMER, val);
+    }
+
+    get erp2ndIgnoreCustomer() {
+        return super.getValue(_fieldNames.ERP2NDIGNORECUSTOMER);
+    } set erp2ndIgnoreCustomer(val) {
+        super.setValue(_fieldNames.ERP2NDIGNORECUSTOMER, val);
     }
 
 

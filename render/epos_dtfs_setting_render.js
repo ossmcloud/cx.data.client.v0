@@ -201,6 +201,7 @@ class EposDtfsSettingRender extends RenderBase {
             dropDownItems.push({
                 value: record.dtfsSettingId,
                 text: record.dtfsSettingName,
+                object: { eposProvider: record.eposProvider }
             });
         });
         this.options.items = dropDownItems;
