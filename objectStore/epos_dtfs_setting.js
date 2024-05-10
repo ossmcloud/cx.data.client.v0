@@ -9,8 +9,15 @@ class epos_dtfs_setting_Collection extends _persistentTable.Table {
         return new epos_dtfs_setting(this, defaults);
     }
 
-    async select() {
-        await super.select();
+    async select(params) {
+        if (params) {
+            var query = { sql: 'select * from epos_dtfs_setting where 1 = 1' }
+            this.queryFromParams(query, params);
+
+            return await super.select(query);
+        } else {
+            await super.select();
+        }
     }
 
     // async select(params) {

@@ -2,6 +2,7 @@
 //
 const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
+const _declarations = require('../cx-client-declarations');
 const _persistentTable = require('./persistent/p-cx_login_token');
 //
 class cx_login_token_Collection extends _persistentTable.Table {
@@ -105,6 +106,17 @@ class cx_login_token extends _persistentTable.Record {
         return this.#masterLoginId;
     }
 
+    async hasCxRole() {
+        if (this.roleId >= _declarations.CX_ROLE.CX_SUPPORT) { return true; }
+        var roles = this.cx.table(_cxSchema.cx_login_roles);
+        await roles.selectByUser(this.loginId);
+        roles.each(r => {
+            if (r.roleId >= _declarations.CX_ROLE.CX_SUPPORT) {
+                return true;
+            }
+        });
+        return false;
+    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

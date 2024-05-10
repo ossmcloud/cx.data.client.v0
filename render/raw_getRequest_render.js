@@ -8,10 +8,31 @@ class RawGetRequest extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
         this.title = 'get request';
-        
+
     }
 
     async _record() {
+
+        var svcReadOnly = false; 
+        var modules = _cxConst.CX_MODULE.toList(true);
+        if (this.options.query.svc == 'erps') {
+            modules = modules.slice(1, 2);
+            svcReadOnly = true;
+            
+        } else {
+            svcReadOnly = (this.options.query.svc);
+            var params = {};
+            params[_cxSchema.epos_dtfs_setting.EPOSPROVIDER] = _cxConst.CX_EPOS_PROVIDER.THERE;
+            var eposSett = this.cx.table(_cxSchema.epos_dtfs_setting);
+            var hasThereforeLegacy = await eposSett.select(params);
+
+            if (!hasThereforeLegacy) { modules.pop(); }
+        }
+
+
+
+
+
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 4, fields: [
@@ -25,8 +46,8 @@ class RawGetRequest extends RenderBase {
             {
                 group: 'get', title: 'get info', columnCount: 4, fields: [
                     { name: 'getDate', label: 'date', align: 'center', type: 'inputDate', column: 1, validation: '{ "mandatory": true }' },
-                    { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.CX_MODULE.toList(true), },
-                    { name: 'svcName', label: 'service', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.SERVICES.toList(true)  },
+                    { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: modules },
+                    { name: 'svcName', label: 'service', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.SERVICES.toList(true), readOnly: svcReadOnly },
                     { name: 'getReference', label: 'message', column: 2, readOnly: true },
                     { name: 'status', label: 'status', column: 2, lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList(), readOnly: true },
                 ]
@@ -66,16 +87,16 @@ class RawGetRequest extends RenderBase {
             { name: 'svcName', title: 'service', align: 'center', width: '9px' },
             { name: 'getModule', title: 'module', align: 'center', width: '70px' },
             { name: 'getReference', title: 'message' },
-            { name: 'status', title: 'status', lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList()  },
+            { name: 'status', title: 'status', lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList() },
             { name: 'created', title: 'created', align: 'center', width: '130px' },
-            { name: 'createdBy', title: 'by', align: 'left', width: '130px'},
+            { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
         this.options.highlights = [
             { column: _cxSchema.raw_getRequest.STATUS, op: '=', value: _cxConst.RAW_GET_REQUEST.STATUS.ERROR, style: 'color: red;' },
             { column: _cxSchema.raw_getRequest.STATUS, op: '=', value: _cxConst.RAW_GET_REQUEST.STATUS.PROCESSING, style: 'color: #FFCD00;' },
             { column: _cxSchema.raw_getRequest.STATUS, op: '=', value: _cxConst.RAW_GET_REQUEST.STATUS.PENDING, style: 'color: blue;' },
         ];
-        
+
     }
 }
 

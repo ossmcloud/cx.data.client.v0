@@ -29,9 +29,14 @@ class CrTranTypeShopConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config_shop.ERPTRANTYPEID, label: 'ERP Type', column: 3, lookUps: erpTranTypeLookUps },
                                 ]
                             },
-                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
-                                id: _cxSchema.cr_tran_type_config_shop.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config_shop.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
-                            }),
+                            {
+                                group: 'trader_account', columnCount: 2, styles: ['display: inline-block; width: calc(100% - 95px);', 'display: inline-block; max-width: 90px;'], fields: [
+                                    await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                                        id: _cxSchema.cr_tran_type_config_shop.TRADERACCOUNT, name: _cxSchema.cr_tran_type_config_shop.TRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
+                                    }),
+                                    { name: _cxSchema.cr_tran_type_config_shop.ERPIGNORECUSTOMER, label: 'Ignore Cust', column: 2 },
+                                ]
+                            },
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 id: _cxSchema.cr_tran_type_config_shop.ERPGLACCOUNTID, name: _cxSchema.cr_tran_type_config_shop.ERPGLACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
@@ -50,9 +55,14 @@ class CrTranTypeShopConfigRender extends RenderBase {
                     {
                         group: 'erp', title: 'erp configurations (secondary)', column: 2, columnCount: 1, inline: true, fields: [
                             { name: _cxSchema.cr_tran_type_config_shop.ERP2NDTRANTYPEID, label: 'ERP Type (secondary)', column: 1, lookUps: erpTranTypeLookUps },
-                            await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
-                                id: _cxSchema.cr_tran_type_config_shop.ERP2NDTRADERACCOUNT, name: _cxSchema.cr_tran_type_config_shop.ERP2NDTRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
-                            }),
+                            {
+                                group: 'trader_account_2', columnCount: 2, styles: ['display: inline-block; width: calc(100% - 95px);', 'display: inline-block; max-width: 90px;'], fields: [
+                                    await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                                        id: _cxSchema.cr_tran_type_config_shop.ERP2NDTRADERACCOUNT, name: _cxSchema.cr_tran_type_config_shop.ERP2NDTRADERACCOUNT, column: 1, dropDownSelectOptions: { s: shopId, tt: 'C' }
+                                    }),
+                                    { name: _cxSchema.cr_tran_type_config_shop.ERP2NDIGNORECUSTOMER, label: 'Ignore Cust', column: 2 },
+                                ]
+                            },
                             await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
                                 id: _cxSchema.cr_tran_type_config_shop.ERP2NDGLACCOUNTID, name: _cxSchema.cr_tran_type_config_shop.ERP2NDGLACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
@@ -91,7 +101,7 @@ class CrTranTypeShopConfigRender extends RenderBase {
             { title: '2nd gl (contra) account', name: 'glAccountContra2', nullText: 'not set' },
             { title: '2nd bank account', name: 'bankAccount2', nullText: 'not set' },
             { title: '2nd tax account', name: 'taxAccount2', nullText: 'not set' },
-    
+
 
 
         ]

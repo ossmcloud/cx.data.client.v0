@@ -59,6 +59,8 @@ const _fieldNames = {
     SKIPPOSTING: 'skipPosting',
     STOPPOSTING: 'stopPosting',
     NOTES: 'notes',
+    ERPIGNORECUSTOMER: 'erpIgnoreCustomer',
+    ERP2NDIGNORECUSTOMER: 'erp2ndIgnoreCustomer',
 
 }
 //
@@ -105,6 +107,8 @@ const _fields = {
     skipPosting: { name: 'skipPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     stopPosting: { name: 'stopPosting', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     notes: { name: 'notes', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    erpIgnoreCustomer: { name: 'erpIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    erp2ndIgnoreCustomer: { name: 'erp2ndIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -362,6 +366,18 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.NOTES);
     } set notes(val) {
         super.setValue(_fieldNames.NOTES, val);
+    }
+
+    get erpIgnoreCustomer() {
+        return super.getValue(_fieldNames.ERPIGNORECUSTOMER);
+    } set erpIgnoreCustomer(val) {
+        super.setValue(_fieldNames.ERPIGNORECUSTOMER, val);
+    }
+
+    get erp2ndIgnoreCustomer() {
+        return super.getValue(_fieldNames.ERP2NDIGNORECUSTOMER);
+    } set erp2ndIgnoreCustomer(val) {
+        super.setValue(_fieldNames.ERP2NDIGNORECUSTOMER, val);
     }
 
 

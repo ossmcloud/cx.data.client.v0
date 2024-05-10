@@ -151,6 +151,7 @@ class ErpTraderAccount extends RenderBase {
             dropDownItems.push({
                 value: record.dtfsSettingId,
                 text: record.dtfsSettingName,
+                object: { erpProvider: record.erpProvider }
             });
         });
         this.options.items = dropDownItems;

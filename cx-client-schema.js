@@ -898,6 +898,8 @@ module.exports = {
         SKIPPOSTING: 'skipPosting',
         STOPPOSTING: 'stopPosting',
         NOTES: 'notes',
+        ERPIGNORECUSTOMER: 'erpIgnoreCustomer',
+        ERP2NDIGNORECUSTOMER: 'erp2ndIgnoreCustomer',
     },
 
     cr_tran_type_config_shop: {
@@ -922,6 +924,8 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         SKIPPOSTING: 'skipPosting',
         STOPPOSTING: 'stopPosting',
+        ERPIGNORECUSTOMER: 'erpIgnoreCustomer',
+        ERP2NDIGNORECUSTOMER: 'erp2ndIgnoreCustomer',
     },
 
     cr_transaction: {
