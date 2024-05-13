@@ -76,7 +76,7 @@ const _fields = {
     eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     lineQuantity: { name: 'lineQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
-    unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    unitPrice: { name: 'unitPrice', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     packSize: { name: 'packSize', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     vatRate: { name: 'vatRate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     vatCode: { name: 'vatCode', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
