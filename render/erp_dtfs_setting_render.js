@@ -35,10 +35,8 @@ class ErpTraderAccount extends RenderBase {
     async _record() {
         var newRecord = (this.options.mode == 'new');
 
-        var allowEditStatus = false;
-        if (this.options.mode == 'edit' && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
-            allowEditStatus = true;
-        }
+        var allowEditStatus = (this.options.mode == 'edit' && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN);
+  
 
         this.options.fields = [
             {
