@@ -34,6 +34,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     ISMANUAL: 'isManual',
+    WHOLESALERID: 'wholesalerId',
 
 }
 //
@@ -55,6 +56,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -162,6 +164,12 @@ class Persistent_cx_map_config_dep extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISMANUAL);
     } set isManual(val) {
         super.setValue(_fieldNames.ISMANUAL, val);
+    }
+
+    get wholesalerId() {
+        return super.getValue(_fieldNames.WHOLESALERID);
+    } set wholesalerId(val) {
+        super.setValue(_fieldNames.WHOLESALERID, val);
     }
 
 

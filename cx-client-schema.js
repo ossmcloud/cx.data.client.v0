@@ -281,6 +281,7 @@ module.exports = {
         LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
         LINEDRSQUANTITY: 'lineDRSQuantity',
         LINEDRSAMOUNT: 'lineDRSAmount',
+        DEPMAPNOOVERWRITE: 'depMapNoOverwrite',
     },
 
     cp_invoiceCreditLog: {
@@ -1094,6 +1095,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ISMANUAL: 'isManual',
+        WHOLESALERID: 'wholesalerId',
     },
 
     cx_map_config_tax: {

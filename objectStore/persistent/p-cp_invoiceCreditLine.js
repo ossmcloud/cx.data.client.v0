@@ -57,6 +57,7 @@ const _fieldNames = {
     LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
     LINEDRSQUANTITY: 'lineDRSQuantity',
     LINEDRSAMOUNT: 'lineDRSAmount',
+    DEPMAPNOOVERWRITE: 'depMapNoOverwrite',
 
 }
 //
@@ -101,6 +102,7 @@ const _fields = {
     lineDRSUnitCharge: { name: 'lineDRSUnitCharge', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineDRSQuantity: { name: 'lineDRSQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     lineDRSAmount: { name: 'lineDRSAmount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    depMapNoOverwrite: { name: 'depMapNoOverwrite', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -346,6 +348,12 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.LINEDRSAMOUNT);
     } set lineDRSAmount(val) {
         super.setValue(_fieldNames.LINEDRSAMOUNT, val);
+    }
+
+    get depMapNoOverwrite() {
+        return super.getValue(_fieldNames.DEPMAPNOOVERWRITE);
+    } set depMapNoOverwrite(val) {
+        super.setValue(_fieldNames.DEPMAPNOOVERWRITE, val);
     }
 
 
