@@ -34,7 +34,7 @@ class CPInvoiceReturnLineRender extends RenderBase {
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { onclick: 'changeLineItem', valueField: 'invCreLineId', paramName: 'line' } });
         } else {
-            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMCODE, title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } });
+            this.options.columns.push({ name: 'itemCodeDisplay', title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } });
         }
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODE, title: 'item barcode' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)', nullText: '' });

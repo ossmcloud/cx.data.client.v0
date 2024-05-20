@@ -1328,6 +1328,7 @@ const SYS_SERVER_TASK = {
         Whs_Document_Import: 100,
         Drive_Document_Import: 101,
         Dtfs_Get_Request: 200,
+        EPoS_Api_Service: 201,
         Therefore_Service: 300,
         BWG_Service: 310,
         toList: function (addEmpty) {
@@ -1336,7 +1337,8 @@ const SYS_SERVER_TASK = {
                 Cx_RawData_CleanUp: { name: 'Raw data left-overs', desc: 'deletes raw data leftover by failed transmissions.', params: '' },
                 Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nshops=[shop1,shop2];\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
-                Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generated get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
+                Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generates get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
+                EPoS_Api_Service: { name: 'EPoS API Service', desc: 'cloud EPoS Service.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 BWG_Service: { name: 'BWG Query Status Service', desc: 'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
             });

@@ -59,6 +59,11 @@ class cp_invoiceCreditLine extends _persistentTable.Record {
         return this.lineDRSAmount;
     }
 
+    get itemCodeDisplay() {
+        if (this.aliasId) { return `${this.itemCode} &#x2604;` };
+        return this.itemCode;
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

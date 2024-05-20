@@ -77,6 +77,8 @@ class EposDtfsSettingRender extends RenderBase {
             shopListOptions = await this.getEposShopListOptions();
         }
 
+        var allowEditStatus = (this.options.mode == 'edit' && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN);
+       
         this.options.fields = [];
         var mainGroup = {
             group: 'eposOuter', title: '', columnCount: 3, fields: [
@@ -90,7 +92,7 @@ class EposDtfsSettingRender extends RenderBase {
                 {
                     group: 'pair', title: 'pairing info', column: 2, columnCount: 2, fields: [
                         { name: 'dtfsPairingCode', label: 'pairing code', column: 1, readOnly: !newRecord, validation: '{ "mandatory": true }' },
-                        { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: true, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
+                        { name: 'dtfsPairingStatus', label: 'pairing status', column: 1, readOnly: !allowEditStatus, lookUps: _cxConst.EPOS_DTFS_SETTING.PAIRING_STATUS.toList() },
                         { name: 'dtfsPairedVersion', label: 'dtfs version', column: 1, readOnly: true },
                         { name: 'dtfsPairedMachineName', label: 'paired machine name', column: 2, readOnly: true },
                         { name: 'dtfsPairedMachineOS', label: 'paired machine OS', column: 2, readOnly: true },

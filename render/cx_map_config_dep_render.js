@@ -17,7 +17,7 @@ class CxMapConfigRender extends RenderBase {
         mapConfig = await mapConfig.fetch(this.dataSource.mapConfigId)
         var shopId = mapConfig.mapMasterShop;
 
-        var readOnly = (this.dataSource.isManual)?false: !this.dataSource.isNew();
+        var readOnly = (this.dataSource.isManual) ? false : !this.dataSource.isNew();
         if (this.options.mode == 'view') { readOnly = true; }
         if (this.dataSource.isManual) {
             //this.options.tabTitle = this.op.title;
@@ -111,29 +111,28 @@ class CxMapConfigRender extends RenderBase {
             { label: 'description', fieldName: 'desc', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'mapping status', fieldName: 'mapped', name: 'mapped', lookUps: mismapLookUps },
             { label: 'manual', fieldName: 'manual', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
-
         ];
-        this.options.columns = [
-            { title: ' ', name: _cxSchema.cx_map_config_dep.DEPMAPCONFIGID },
-            //{ name: 'shopInfo', title: 'store', width: '200px' },
-            //{ title: 'map id', name: _cxSchema.cx_map_config_dep.MAPCONFIGID },
-            { title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' },
-            { title: 'p', name: 'status_p', unbound: true, align: 'center', width: '15px' },
-            { title: 'department', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, width: '75px' },
-            { title: 'sub-department', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, width: '75px' },
-            { title: 'description', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION },
 
-            { title: 'sales account', name: 'salesSpec', addValues: [{ name: 'salesDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
-            { title: 'purchase account', name: 'purchSpec', addValues: [{ name: 'purchDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
-            { title: 'waste account', name: 'wasteSpec', addValues: [{ name: 'wasteDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
-            { title: 'accrual account', name: 'accrualSpec', addValues: [{ name: 'accrualDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
-            { title: 'cogs account', name: 'cogsSpec', addValues: [{ name: 'cogsDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] },
+        if (this.hasModule('cp')) {
+            this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' }));
+        }
 
-            // { title: 'created', name: _cxSchema.cx_map_config_dep.CREATED },
-            // { title: 'by', name: _cxSchema.cx_map_config_dep.CREATEDBY },
-            // { title: 'modified', name: _cxSchema.cx_map_config_dep.MODIFIED },
-            // { title: 'by', name: _cxSchema.cx_map_config_dep.MODIFIEDBY },
-        ];
+        //this.hasModule('cm');
+        this.options.columns = [];
+        this.options.columns.push({ title: ' ', name: _cxSchema.cx_map_config_dep.DEPMAPCONFIGID });
+        this.options.columns.push({ title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' });
+        this.options.columns.push({ title: 'p', name: 'status_p', unbound: true, align: 'center', width: '15px' });
+        this.options.columns.push({ title: 'department', name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, width: '75px' });
+        this.options.columns.push({ title: 'sub-department', name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, width: '75px' });
+        this.options.columns.push({ title: 'description', name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION });
+        this.options.columns.push({ title: 'sales account', name: 'salesSpec', addValues: [{ name: 'salesDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        this.options.columns.push({ title: 'purchase account', name: 'purchSpec', addValues: [{ name: 'purchDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        this.options.columns.push({ title: 'waste account', name: 'wasteSpec', addValues: [{ name: 'wasteDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        this.options.columns.push({ title: 'accrual account', name: 'accrualSpec', addValues: [{ name: 'accrualDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        this.options.columns.push({ title: 'cogs account', name: 'cogsSpec', addValues: [{ name: 'cogsDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        if (this.hasModule('cp')) {
+            this.options.columns.push({ title: 'wholesaler', name: 'whsInfo' });
+        }
 
         var appendStyle = 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;';
         this.options.cellHighlights = [];

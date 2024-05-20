@@ -19,19 +19,15 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
                         glPurch.code as purch_code,     glPurch.costCentre as purch_cc,     glPurch.department as purch_dep,     glPurch.description as purch_desc,
                         glWaste.code as waste_code,     glWaste.costCentre as waste_cc,     glWaste.department as waste_dep,     glWaste.description as waste_desc,
                         glAccrual.code as accrual_code, glAccrual.costCentre as accrual_cc, glAccrual.department as accrual_dep, glAccrual.description as accrual_desc,
-                        glCogs.code as cogs_code,       glCogs.costCentre as cogs_cc,       glCogs.department as cogs_dep,       glCogs.description as cogs_desc
-                        --s.shopId, s.shopCode, s.shopName 
-                        
+                        glCogs.code as cogs_code,       glCogs.costCentre as cogs_cc,       glCogs.department as cogs_dep,       glCogs.description as cogs_desc,
+                        whs.code as whs_code,           whs.name as whs_name
             from		cx_map_config_dep dep
-            --inner join  cx_map_config map on map.mapConfigId = dep.mapConfigId
-            --inner join  cx_shop s on s.shopId = map.mapMasterShop
             left outer join erp_gl_account glSales ON glSales.erpGLAccountId = dep.saleAccountId
             left outer join erp_gl_account glPurch ON glPurch.erpGLAccountId = dep.purchaseAccountId
             left outer join erp_gl_account glWaste ON glWaste.erpGLAccountId = dep.wasteAccountId
             left outer join erp_gl_account glAccrual ON glAccrual.erpGLAccountId = dep.accrualAccountId
             left outer join erp_gl_account glCogs ON glAccrual.erpGLAccountId = dep.cogsAccountId
-
-            --where		s.shopId in ${this.cx.shopList}
+            left outer join cp_wholesaler whs ON whs.wholesalerId = dep.wholesalerId
         `;
 
 
@@ -75,6 +71,11 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         if (params.manual) {
             query.sql += ` and isnull(${this.FieldNames.ISMANUAL}, 0) = @${this.FieldNames.ISMANUAL}`;
             query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T' || params.manual == 'true') ? 1 : 0 });
+        }
+
+        if (params.wholesalerId) {
+            query.sql += ` and dep.${this.FieldNames.WHOLESALERID} = @${this.FieldNames.WHOLESALERID}`;
+            query.params.push({ name: this.FieldNames.WHOLESALERID, value: params.wholesalerId });
         }
 
         query.sql += ' order by eposDepartment, eposSubDepartment';
@@ -200,6 +201,9 @@ class cx_map_config_dep extends _persistentTable.Record {
     #cogs_dep = '';
     #cogs_desc = '';
 
+    #whs_code = '';
+    #whs_name = '';
+
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -231,6 +235,9 @@ class cx_map_config_dep extends _persistentTable.Record {
         this.#cogs_cc = defaults['cogs_cc'] || '';
         this.#cogs_dep = defaults['cogs_dep'] || '';
         this.#cogs_desc = defaults['cogs_desc'] || '';
+
+        this.#whs_code = defaults['whs_code'] || '';
+        this.#whs_name = defaults['whs_name'] || '';
 
 
     };
@@ -295,6 +302,12 @@ class cx_map_config_dep extends _persistentTable.Record {
         return spec;
     }
 
+    get whsCode() { return this.#whs_code; }
+    get whsName() { return this.#whs_name; }
+    get whsInfo() {
+        if (!this.whsCode) { return ''; }
+        return `[${this.whsCode}] ${this.whsName}`;
+    }
 
 
     async save() {

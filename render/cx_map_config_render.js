@@ -66,16 +66,17 @@ class CxMapConfig extends RenderBase {
             },
             { id: 'cx_map_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'mn', label: 'map config name' },
         ];
-        this.options.columns = [
-            { name: 'mapConfigId', title: '', align: 'center' },
-            { name: 'name', title: 'name' },
-            { name: 'mapTypeId', title: 'map type', width: '200px', lookUps: _cxConst.CX_MAP_CONFIG_TYPE.toList() },
-            { name: 'mapMasterShop', title: 'map master shop' },
-            { name: 'eposProvider', title: 'epos provider' },
-            { name: 'erpProvider', title: 'erp provider' },
-            { name: 'created', title: 'created', align: 'center', width: '130px' },
-            { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
-        ];
+
+        this.options.columns = [];
+        this.options.columns.push({ name: 'mapConfigId', title: '', align: 'center' });
+        this.options.columns.push({ name: 'name', title: 'name' });
+        this.options.columns.push({ name: 'mapTypeId', title: 'map type', width: '200px', lookUps: _cxConst.CX_MAP_CONFIG_TYPE.toList() });
+        this.options.columns.push({ name: 'mapMasterShop', title: 'map master shop' });
+        this.options.columns.push({ name: 'eposProvider', title: 'epos provider' });
+        this.options.columns.push({ name: 'erpProvider', title: 'erp provider' });
+        this.options.columns.push({ name: 'created', title: 'created', align: 'center', width: '130px' });
+        this.options.columns.push({ name: 'createdBy', title: 'by', align: 'left', width: '130px' });
+        
 
         this.options.actions = [
             //{ label: 'configs', link: '/cr/config/' + this.dataSource.type.replaceAll('_', '-') + 's?id=', target: '_blank'},

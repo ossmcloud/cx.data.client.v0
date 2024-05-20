@@ -17,10 +17,10 @@ class RawGetRequest extends RenderBase {
         var modules = _cxConst.CX_MODULE.toList(true);
         if (this.options.query.svc == 'erps') {
             modules = modules.slice(1, 2);
-            // svcReadOnly = true;
+            //svcReadOnly = true;
             
         } else {
-            // svcReadOnly = (this.options.query.svc);
+            //svcReadOnly = (this.options.query.svc);
             var params = {};
             params[_cxSchema.epos_dtfs_setting.EPOSPROVIDER] = _cxConst.CX_EPOS_PROVIDER.THERE;
             var eposSett = this.cx.table(_cxSchema.epos_dtfs_setting);
