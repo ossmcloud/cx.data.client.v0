@@ -412,7 +412,7 @@ class CPInvoiceGroupRender extends RenderBase {
                 })
             }
 
-            var applyStoreColorStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
+            var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
             var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
             for (var cx = 0; cx < shopColors.length; cx++) {
                 if (!shopColors[cx].shopColor) { continue; }
