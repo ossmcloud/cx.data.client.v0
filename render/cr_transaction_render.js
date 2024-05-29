@@ -58,7 +58,7 @@ class CRCashBookRender extends RenderBase {
 
         if (!tranTypeCfg || showAllFields) {
             fgMainInfo.fields = [
-                { name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 },
+                { name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1, noFormat: true },
                 { name: 'shopInfo', label: 'store', readOnly: true, column: 1 },
                 { name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1 },
                 { name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 },
@@ -124,7 +124,7 @@ class CRCashBookRender extends RenderBase {
 
         } else {
 
-            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1 });
+            fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.CBTRANID, label: 'cb tran id', readOnly: true, column: 1, noFormat: true });
             fgMainInfo.fields.push({ name: 'shopInfo', label: 'store', readOnly: true, column: 1 });
             fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.TRANSACTIONDATE, label: 'tran date', column: 1, validation: '{ "mandatory": true }' });
             fgMainInfo.fields.push({ name: _cxSchema.cr_transaction.TRANSACTIONDATETIME, label: 'tran date/tme', column: 1 });
