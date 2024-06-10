@@ -3,7 +3,6 @@
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
-const { cx_traderAccount } = require('../cx-client-schema');
 
 class CXTraderAccount extends RenderBase {
     constructor(dataSource, options) {
@@ -55,7 +54,7 @@ class CXTraderAccount extends RenderBase {
 
             this.options.fields = [
                 {
-                    group: 'traderOuter', title: '', columnCount: 3, fields: [
+                    group: 'traderOuter', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 200px', 'min-width: 250px', 'min-width: 400px'], fields: [
                         {
                             group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
                                 shopField,
@@ -75,7 +74,14 @@ class CXTraderAccount extends RenderBase {
                             ]
                         },
                         {
-                            group: 'mapping', title: 'erp mapping', column: 2, columnCount: 1, fields: [
+                            group: 'analysis', title: 'analysis codes', column: 2, columnCount: 1, fields: [
+                                { name: 'analysis1', label: 'analysis 1', column: 1 },
+                                { name: 'analysis2', label: 'analysis 2', column: 1 },
+                                { name: 'analysis3', label: 'analysis 3', column: 1 },
+                            ]
+                        },
+                        {
+                            group: 'mapping', title: 'erp mapping', column: 3, columnCount: 1, fields: [
                                 await this.fieldDropDownOptions(_cxSchema.erp_traderAccount, {
                                     id: 'erpTraderAccountId', name: 'erpTraderAccountId', column: 1, dropDownSelectOptions: {
                                         s: this.dataSource.shopId || 0,
@@ -87,7 +93,7 @@ class CXTraderAccount extends RenderBase {
                             ]
                         },
                         {
-                            group: 'audit', title: 'audit info', column: 3, columnCount: 2, fields: [
+                            group: 'audit', title: 'audit info', column: 4, columnCount: 2, fields: [
                                 {
                                     group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
                                         { name: 'created', label: 'created', column: 1, readOnly: true },

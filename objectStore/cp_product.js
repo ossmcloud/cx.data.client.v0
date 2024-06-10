@@ -15,19 +15,22 @@ class cp_product_Collection extends _persistentTable.Table {
             select          prod.*, s.shopCode, s.shopName, 
                             dep.eposDepartment, dep.eposSubDepartment, dep.eposDescription,
                             tax.eposTaxCode, tax.eposTaxRate, tax.eposDescription as eposTaxDescription,
-                            trad.traderCode, trad.traderName,
+                            supp.traderCode,
+                            isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as traderName,
                             alias.itemCode as aliasCode, alias.itemDescription as aliasDescription,
                             sgl.code as glSale, sgl.description glSaleDescr,
 							pgl.code as glPurch, pgl.description glPurchDescr
 
             from            ${this.type} prod 
-            inner join      cx_shop s               ON s.shopId = prod.shopId
-            left outer join cp_productAlias alias   ON alias.aliasId = prod.aliasId
-            left outer join cx_map_config_dep dep   ON dep.depMapConfigId = prod.depMapConfigId
-            left outer join cx_map_config_tax tax   ON tax.taxMapConfigId = prod.taxMapConfigId
-            left outer join cx_traderAccount trad   ON trad.traderAccountId = prod.traderAccountId
-            left outer join erp_gl_account sgl      ON sgl.erpGLAccountId = dep.saleAccountId
-            left outer join erp_gl_account pgl      ON pgl.erpGLAccountId = dep.purchaseAccountId
+            inner join      cx_shop s                       ON s.shopId = prod.shopId
+            left outer join cp_productAlias alias           ON alias.aliasId = prod.aliasId
+            left outer join cx_map_config_dep dep           ON dep.depMapConfigId = prod.depMapConfigId
+            left outer join cx_map_config_tax tax           ON tax.taxMapConfigId = prod.taxMapConfigId
+            left outer join cx_traderAccount supp           ON supp.traderAccountId = prod.traderAccountId
+            left outer join cx_traderAccount supp2          ON supp2.shopId = prod.shopId AND supp2.traderCode = prod.supplierCode AND supp2.traderType = 'S' 
+            left outer join cx_traderNameLookUp suppName    ON suppName.shopId = prod.shopId AND suppName.traderCode = prod.supplierCode AND suppName.traderType = 'S' 
+            left outer join erp_gl_account sgl              ON sgl.erpGLAccountId = dep.saleAccountId
+            left outer join erp_gl_account pgl              ON pgl.erpGLAccountId = dep.purchaseAccountId
 
             where           prod.${this.FieldNames.SHOPID} in ${this.cx.shopList}
         `;

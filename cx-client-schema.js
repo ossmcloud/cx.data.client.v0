@@ -1168,6 +1168,10 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ERPTRADERACCOUNTID: 'erpTraderAccountId',
+        ANALYSIS1: 'analysis1',
+        ANALYSIS2: 'analysis2',
+        ANALYSIS3: 'analysis3',
+        ISMANUAL: 'isManual',
     },
 
     cx_traderNameLookUp: {
