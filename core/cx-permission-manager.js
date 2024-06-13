@@ -18,7 +18,8 @@ async function getPermission(recordType, role) {
         permission.allowView = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     } 
     if (recordType == _cxSchema.raw_getRequest.TBL_NAME) {
-        permission.allowNew = (role >= _cxConst.CX_ROLE.MANAGER);
+        permission.allowView = true;
+        permission.allowNew = (role >= _cxConst.CX_ROLE.USER);
     }
 
     if (recordType == _cxSchema.cx_shop.TBL_NAME) {

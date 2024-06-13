@@ -31,6 +31,7 @@ const _fieldNames = {
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     LOGINTOKENID: 'loginTokenId',
+    CODEVERIFIER: 'codeVerifier',
 
 }
 //
@@ -49,6 +50,7 @@ const _fields = {
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     loginTokenId: { name: 'loginTokenId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    codeVerifier: { name: 'codeVerifier', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
 
 }
 //
@@ -138,6 +140,12 @@ class Persistent_cx_login_token extends _cx_data.DBRecord {
 
     get loginTokenId() {
         return super.getValue(_fieldNames.LOGINTOKENID);
+    }
+
+    get codeVerifier() {
+        return super.getValue(_fieldNames.CODEVERIFIER);
+    } set codeVerifier(val) {
+        super.setValue(_fieldNames.CODEVERIFIER, val);
     }
 
 

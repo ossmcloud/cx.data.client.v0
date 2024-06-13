@@ -39,6 +39,9 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     ERPTRADERACCOUNTID: 'erpTraderAccountId',
+    ANALYSIS1: 'analysis1',
+    ANALYSIS2: 'analysis2',
+    ANALYSIS3: 'analysis3',
     ISMANUAL: 'isManual',
 
 }
@@ -66,6 +69,9 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     erpTraderAccountId: { name: 'erpTraderAccountId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    analysis1: { name: 'analysis1', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    analysis2: { name: 'analysis2', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    analysis3: { name: 'analysis3', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
@@ -86,7 +92,7 @@ class Persistent_cx_traderAccount extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get traderAccountId() {
         return super.getValue(_fieldNames.TRADERACCOUNTID);
@@ -204,6 +210,24 @@ class Persistent_cx_traderAccount extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPTRADERACCOUNTID);
     } set erpTraderAccountId(val) {
         super.setValue(_fieldNames.ERPTRADERACCOUNTID, val);
+    }
+
+    get analysis1() {
+        return super.getValue(_fieldNames.ANALYSIS1);
+    } set analysis1(val) {
+        super.setValue(_fieldNames.ANALYSIS1, val);
+    }
+
+    get analysis2() {
+        return super.getValue(_fieldNames.ANALYSIS2);
+    } set analysis2(val) {
+        super.setValue(_fieldNames.ANALYSIS2, val);
+    }
+
+    get analysis3() {
+        return super.getValue(_fieldNames.ANALYSIS3);
+    } set analysis3(val) {
+        super.setValue(_fieldNames.ANALYSIS3, val);
     }
 
     get isManual() {
