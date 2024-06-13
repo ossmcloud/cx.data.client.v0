@@ -40,7 +40,7 @@ class CPInvoiceReturnLineRender extends RenderBase {
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMBARCODEOUTER, title: 'item barcode (outer)', nullText: '' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.ITEMDESCRIPTION, title: 'item description' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' });
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px', input: numberInput });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px', input: numberInput, addTotals: true });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.UNITPRICE, title: 'unit cost', align: 'right', width: '60px', formatMoney: 'N2', input: moneyInput });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true, input: moneyInput, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });

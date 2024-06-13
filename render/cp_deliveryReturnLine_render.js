@@ -29,7 +29,7 @@ class CPDeliveryReturnLineRender extends RenderBase {
             { name: _cxSchema.cp_deliveryReturnLine.EPOSBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSDESCRIPTION, title: 'item description' },
             { name: _cxSchema.cp_deliveryReturnLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' },
-            { name: _cxSchema.cp_deliveryReturnLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px' },
+            { name: _cxSchema.cp_deliveryReturnLine.LINEQUANTITY, title: 'qty', align: 'right', width: '30px', addTotals: true },
             { name: _cxSchema.cp_deliveryReturnLine.UNITCOST, title: 'unit cost', align: 'right', width: '60px', formatMoney: 'N2' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSLINEDISCOUNT, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2' },
             { name: _cxSchema.cp_deliveryReturnLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true },
