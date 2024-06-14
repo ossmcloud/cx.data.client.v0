@@ -47,7 +47,7 @@ class CXTraderAccount extends RenderBase {
                     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord', style: 'color: white; background-color: rgba(230,0,0,1);' });
                 }
             }
-            
+
             if (this.dataSource.isManual) {
                 this.options.title += ' &#9997;';
             }
@@ -112,7 +112,7 @@ class CXTraderAccount extends RenderBase {
                 }
             ];
         }
-       
+
     }
 
     async _list() {
@@ -127,6 +127,9 @@ class CXTraderAccount extends RenderBase {
             { id: 'cx_trader_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tc', label: 'trader code' },
             { id: 'cx_trader_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'tn', label: 'trader name' },
             { id: 'cx_trader_whs', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'whs', label: 'wholesaler code' },
+            { id: 'analysis_1', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'a1', label: 'analysis 1' },
+            { id: 'analysis_2', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'a2', label: 'analysis 2' },
+            { id: 'analysis_3', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'a3', label: 'analysis 3' },
         ];
         this.options.columns = [
             { name: 'traderAccountId', title: ' ', align: 'center' },
@@ -135,9 +138,12 @@ class CXTraderAccount extends RenderBase {
             { name: 'traderType', title: 'type' },
             { name: 'traderCode', title: 'trader code' },
             { name: 'traderName', title: 'trader name' },
-            { name: 'isWholesaler', title: 'is wholesaler' },
-            { name: 'wholesalerCode', title: 'wholesaler code' },
+            { name: 'isWholesaler', title: 'is wholesaler', nullText: '' },
+            { name: 'wholesalerCode', title: 'wholesaler code', nullText: '' },
             { name: 'erpTraderInfo', title: 'erp trader account' },
+            { name: 'analysis1', title: 'analysis 1', nullText: '' },
+            { name: 'analysis2', title: 'analysis 2', nullText: '' },
+            { name: 'analysis3', title: 'analysis 3', nullText: '' },
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
