@@ -48,6 +48,19 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
             query.params.push({ name: 'wholesalerCode', value: params.whs + '%' });
         }
 
+        if (params.a1) {
+            query.sql += ' and t.analysis1 like @analysis1';
+            query.params.push({ name: 'analysis1', value: params.a1 + '%' });
+        }
+        if (params.a2) {
+            query.sql += ' and t.analysis2 like @analysis2';
+            query.params.push({ name: 'analysis2', value: params.a2 + '%' });
+        }
+        if (params.a3) {
+            query.sql += ' and t.analysis3 like @analysis3';
+            query.params.push({ name: 'analysis3', value: params.a3 + '%' });
+        }
+
         query.sql += ' order by s.shopCode, t.traderCode';
 
         if (!params.noPaging) {
