@@ -227,9 +227,10 @@ const CX_EPOS_PROVIDER = {
     VME: 'VME',
     EVOPOS: 'EVOPOS',
     LEADERS: 'LEADERS',
+    CAPTIVA: 'CAPTIVA',
     THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', THERE: 'Therefore' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', THERE: 'Therefore' }); }
 }
 
 
@@ -280,6 +281,12 @@ const CX_EPOS_PROVIDERS = {
         },
         {
             type: CX_EPOS_PROVIDER.EVOPOS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.CAPTIVA,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
             ]
