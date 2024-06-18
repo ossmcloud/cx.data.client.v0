@@ -55,6 +55,7 @@ const _fieldNames = {
     LINEDRSUNITCHARGE: 'lineDRSUnitCharge',
     LINEDRSQUANTITY: 'lineDRSQuantity',
     LINEDRSAMOUNT: 'lineDRSAmount',
+    DEPMAPNOOVERWRITE: 'depMapNoOverwrite',
 
 }
 //
@@ -70,7 +71,7 @@ const _fields = {
     eposCode: { name: 'eposCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     eposBarcode: { name: 'eposBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
-    eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     lineQuantity: { name: 'lineQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     unitCost: { name: 'unitCost', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
@@ -97,6 +98,7 @@ const _fields = {
     lineDRSUnitCharge: { name: 'lineDRSUnitCharge', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineDRSQuantity: { name: 'lineDRSQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     lineDRSAmount: { name: 'lineDRSAmount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    depMapNoOverwrite: { name: 'depMapNoOverwrite', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -330,6 +332,12 @@ class Persistent_cp_deliveryReturnLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.LINEDRSAMOUNT);
     } set lineDRSAmount(val) {
         super.setValue(_fieldNames.LINEDRSAMOUNT, val);
+    }
+
+    get depMapNoOverwrite() {
+        return super.getValue(_fieldNames.DEPMAPNOOVERWRITE);
+    } set depMapNoOverwrite(val) {
+        super.setValue(_fieldNames.DEPMAPNOOVERWRITE, val);
     }
 
 

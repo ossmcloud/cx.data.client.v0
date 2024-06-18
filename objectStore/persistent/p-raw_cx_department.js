@@ -24,6 +24,7 @@ const _fieldNames = {
     SHOPID: 'shopId',
     DEPARTMENT: 'department',
     DEPARTMENTNAME: 'departmentName',
+    CREATED: 'created',
 
 }
 //
@@ -33,8 +34,9 @@ const _fields = {
     depId: { name: 'depId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     departmentName: { name: 'departmentName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
 
 }
 //
@@ -82,6 +84,12 @@ class Persistent_raw_cx_department extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DEPARTMENTNAME);
     } set departmentName(val) {
         super.setValue(_fieldNames.DEPARTMENTNAME, val);
+    }
+
+    get created() {
+        return super.getValue(_fieldNames.CREATED);
+    } set created(val) {
+        super.setValue(_fieldNames.CREATED, val);
     }
 
 

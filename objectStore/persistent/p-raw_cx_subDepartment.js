@@ -25,6 +25,7 @@ const _fieldNames = {
     DEPARTMENT: 'department',
     SUBDEPARTMENT: 'subDepartment',
     SUBDEPARTMENTNAME: 'subDepartmentName',
+    CREATED: 'created',
 
 }
 //
@@ -34,9 +35,10 @@ const _fields = {
     subDepId: { name: 'subDepId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     transmissionID: { name: 'transmissionID', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     subDepartment: { name: 'subDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     subDepartmentName: { name: 'subDepartmentName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true, default: 'now' },
 
 }
 //
@@ -90,6 +92,12 @@ class Persistent_raw_cx_subDepartment extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SUBDEPARTMENTNAME);
     } set subDepartmentName(val) {
         super.setValue(_fieldNames.SUBDEPARTMENTNAME, val);
+    }
+
+    get created() {
+        return super.getValue(_fieldNames.CREATED);
+    } set created(val) {
+        super.setValue(_fieldNames.CREATED, val);
     }
 
 

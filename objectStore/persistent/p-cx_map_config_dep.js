@@ -43,7 +43,7 @@ const _fieldNames = {
 const _fields = {
     depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     mapConfigId: { name: 'mapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
-    eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
+    eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     saleAccountId: { name: 'saleAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },

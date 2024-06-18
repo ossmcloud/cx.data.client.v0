@@ -1,5 +1,6 @@
 'use script';
 
+const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
@@ -30,6 +31,22 @@ class RawGetRequest extends RenderBase {
         }
 
 
+        if (!this.hasModule('cr')) {
+            for (var mx = 0; mx < modules.length; mx++) {
+                if (modules[mx].value == 'retail') {
+                    modules.splice(mx, 1);
+                    break;
+                }
+            }
+        }
+        if (!this.hasModule('cp')) {
+            for (var mx = 0; mx < modules.length; mx++) {
+                if (modules[mx].value == 'purchase') {
+                    modules.splice(mx, 1);
+                    break;
+                }
+            }
+        }
 
 
 
