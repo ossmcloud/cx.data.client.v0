@@ -599,6 +599,15 @@ const CP_PREFERENCE = {
             ITEM_ONLY: 2
         }
     },
+    GRP_INVOICE_EDIT_MODE: {
+        ID: 210,
+        VALUES: {
+            NONE: 0,
+            GRP: 1,             // only group invoice GL list
+            DOCS: 2,            // only individual documents
+            GRP_AND_DOCS: 3,    // both
+        }
+    },
     MAP_PROD_DO_NOT_USE_MASTER: 300
 }
 

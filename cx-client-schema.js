@@ -240,6 +240,7 @@ module.exports = {
         CREATEDFROMTYPE: 'createdFromType',
         DOCIMPID: 'docImpId',
         TOTALDRS: 'totalDRS',
+        ISUSEREDITLOCKED: 'isUserEditLocked',
     },
 
     cp_invoiceCreditLine: {
