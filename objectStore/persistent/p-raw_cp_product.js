@@ -44,7 +44,7 @@ const _fields = {
     eposCode: { name: 'eposCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     eposDescription: { name: 'eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     eposBarcode: { name: 'eposBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
-    eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    eposDepartment: { name: 'eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     eposSubDepartment: { name: 'eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     costPrice: { name: 'costPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     itemSize: { name: 'itemSize', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },

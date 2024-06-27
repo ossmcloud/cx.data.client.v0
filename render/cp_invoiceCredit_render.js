@@ -8,6 +8,7 @@ const RenderBase = require('./render_base');
 class CPInvoiceReturnRender extends RenderBase {
     matchingEnabled = false;
     invoiceEditMode = 0;
+    invoiceEditModeGrp = 0;
     constructor(dataSource, options) {
         super(dataSource, options);
         if (!options.path) { options.path = '../cp/invoice'; }
@@ -154,8 +155,9 @@ class CPInvoiceReturnRender extends RenderBase {
 
         if (this.dataSource.isUserEdited) {
             this.options.title += `
-                <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited">
+                <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited${(this.dataSource.isUserEditLocked) ? ' and edits are locked' : ''}">
                     &#x270E;
+                    ${(this.dataSource.isUserEditLocked) ? '&#x1F512;' : ''}
                 </div>
             `;
             this.options.tabTitle = '\u270E ' + this.options.tabTitle;
@@ -176,6 +178,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 </div>
             `;
         }
+
+
 
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
@@ -208,6 +212,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id', readOnly: true },
+                        
                     ]
                 },
                 {
@@ -232,12 +237,17 @@ class CPInvoiceReturnRender extends RenderBase {
                     group: 'main1.col4', column: 4, columnCount: 1, fields: [
                         { name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, label: 'docket number' },
                         { name: _cxSchema.cp_invoiceCredit.DOCKETDATE, column: 1, label: 'docket date' },
+                        
 
                     ]
                 },
             ]
         };
 
+        if (this.options.mode == 'edit') {
+            fieldGroup_main.fields[fieldGroup_main.fields.length - 1].fields.push({ name: _cxSchema.cp_invoiceCredit.ISUSEREDITLOCKED, label: 'edits locked' })
+        }
+        
         fieldGroupStyles.push('width: 200px; min-width: 150px;');
         var fieldGroup_docReferences = {
             group: 'main_ref', title: 'references', column: fieldGroupIdx++, columnCount: 1, fields: [
@@ -425,7 +435,11 @@ class CPInvoiceReturnRender extends RenderBase {
 
         if (this.options.allowEdit) {
             if (this.dataSource.invGrpId) {
-                this.options.allowEdit = (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT)
+                // check the group invoices edit mode, if it is > _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP than user can edit
+                prefContext.pref = _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.ID;
+                this.invoiceEditModeGrp = await this.dataSource.cx.cpPref.get(prefContext);
+
+                this.options.allowEdit = (this.invoiceEditModeGrp > _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP) || (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT);
             } else {
                 this.options.allowEdit = (
                     this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
@@ -499,7 +513,7 @@ class CPInvoiceReturnRender extends RenderBase {
                     this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                     this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') });
                 } else {
-                    this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });    
+                    this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                 }
                 this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
                 this.options.filters.push({ label: 'supplier', fieldName: 'su', width: '125px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
@@ -512,7 +526,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'uploaded (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 this.options.filters.push({ label: 'uploaded (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 //this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
-                
+
             }
 
             var signedCols = {

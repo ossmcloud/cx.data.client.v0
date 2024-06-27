@@ -85,7 +85,7 @@ const _fields = {
     pluCode: { name: 'pluCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     itemBarCode: { name: 'itemBarCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     itemDescription: { name: 'itemDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    department: { name: 'department', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     subDepartment: { name: 'subDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     quantity: { name: 'quantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     unitCost: { name: 'unitCost', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },

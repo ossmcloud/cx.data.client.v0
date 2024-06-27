@@ -58,6 +58,7 @@ const _fieldNames = {
     CREATEDFROMTYPE: 'createdFromType',
     DOCIMPID: 'docImpId',
     TOTALDRS: 'totalDRS',
+    ISUSEREDITLOCKED: 'isUserEditLocked',
 
 }
 //
@@ -103,6 +104,7 @@ const _fields = {
     createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     docImpId: { name: 'docImpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    isUserEditLocked: { name: 'isUserEditLocked', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -354,6 +356,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TOTALDRS);
     } set totalDRS(val) {
         super.setValue(_fieldNames.TOTALDRS, val);
+    }
+
+    get isUserEditLocked() {
+        return super.getValue(_fieldNames.ISUSEREDITLOCKED);
+    } set isUserEditLocked(val) {
+        super.setValue(_fieldNames.ISUSEREDITLOCKED, val);
     }
 
 

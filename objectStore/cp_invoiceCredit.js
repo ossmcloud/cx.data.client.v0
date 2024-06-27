@@ -287,9 +287,11 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get groupDocumentNumber() { return this.#groupDocumentNumber; }
 
     get editedIcon() {
-        if (this.createdFrom) { return '&#x2699;'; }
-        if (this.isUserEdited) { return '&#x270E;'; }
-        return '';
+        var icons = '';
+        if (this.createdFrom) { icons += '&#x2699;'; }
+        if (this.isUserEdited) { icons += '&#x270E;'; }
+        if (this.isUserEditLocked) { icons += '&#x1F512;'; }
+        return icons;
     }
 
     get recoSessionId() { return this.#recoSessionId; }

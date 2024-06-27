@@ -238,6 +238,14 @@ class CPInvoiceGroupRender extends RenderBase {
                 }
             }
 
+            // in case something went wrong and we need to reset
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
+                    
+                    this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
+                }
+            }
+
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
         }

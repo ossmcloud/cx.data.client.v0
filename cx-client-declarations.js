@@ -199,9 +199,10 @@ const CX_WHS_PROVIDER = {
     NISA: 'nisa',
     MUS: 'mus',
     VAL: 'val',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero' }); },
+    BAR: 'bar',
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd' }); },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -227,9 +228,10 @@ const CX_EPOS_PROVIDER = {
     VME: 'VME',
     EVOPOS: 'EVOPOS',
     LEADERS: 'LEADERS',
+    CAPTIVA: 'CAPTIVA',
     THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', THERE: 'Therefore' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', THERE: 'Therefore' }); }
 }
 
 
@@ -280,6 +282,12 @@ const CX_EPOS_PROVIDERS = {
         },
         {
             type: CX_EPOS_PROVIDER.EVOPOS,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.CAPTIVA,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
             ]
@@ -590,6 +598,15 @@ const CP_PREFERENCE = {
             BOTH: 0,
             GL_ONLY: 1,
             ITEM_ONLY: 2
+        }
+    },
+    GRP_INVOICE_EDIT_MODE: {
+        ID: 210,
+        VALUES: {
+            NONE: 0,
+            GRP: 1,             // only group invoice GL list
+            DOCS: 2,            // only individual documents
+            GRP_AND_DOCS: 3,    // both
         }
     },
     MAP_PROD_DO_NOT_USE_MASTER: 300

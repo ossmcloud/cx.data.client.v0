@@ -72,7 +72,7 @@ const _fields = {
     raw_eposCode: { name: 'raw_eposCode', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     raw_eposDescription: { name: 'raw_eposDescription', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     raw_eposBarcode: { name: 'raw_eposBarcode', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
-    raw_eposDepartment: { name: 'raw_eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    raw_eposDepartment: { name: 'raw_eposDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 32, null: true },
     raw_eposSubDepartment: { name: 'raw_eposSubDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     raw_costPrice: { name: 'raw_costPrice', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     raw_itemSize: { name: 'raw_itemSize', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
