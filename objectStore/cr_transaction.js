@@ -45,10 +45,10 @@ class cr_transaction_Collection extends _persistentTable.Table {
         if (params.cb_h) {
             query.sql += ' and tranType.cbHeading = @cbHeading';
             if (params.cb_h.indexOf('A/C') == 0) {
-                query.sql += ' and t.customerAccount is not null';
+                query.sql += " and isnull(t.customerAccount, '') != '' ";
                 query.params.push({ name: 'cbHeading', value: params.cb_h.substring(4) });
             } else {
-                query.sql += ' and t.customerAccount is null';
+                query.sql += " and isnull(t.customerAccount, '') = '' ";
                 query.params.push({ name: 'cbHeading', value: params.cb_h });
             }
         }

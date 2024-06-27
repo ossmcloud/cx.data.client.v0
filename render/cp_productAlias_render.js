@@ -19,7 +19,9 @@ class CPProductAliasRender extends RenderBase {
         transactionLinesOptions.path = '/cp/config/product';
         transactionLinesOptions.title = ' ';    //'<span style="padding-right: 17px;">the products below are associated with this alias</span>';
         transactionLinesOptions.actions = [{ label: 'remove', funcName: 'detachProduct' }];
-        transactionLinesOptions.showButtons = [{ id: 'cr_products_add', text: 'Attach Products', function: 'attachProducts' }];
+
+        // transactionLinesOptions.showButtons = [{ id: 'cr_products_add', text: 'Attach Products', function: 'attachProducts' }];
+        
         return transactionLinesOptions;
     }
 
