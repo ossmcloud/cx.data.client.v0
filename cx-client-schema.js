@@ -242,7 +242,7 @@ module.exports = {
         TOTALDRS: 'totalDRS',
         ISUSEREDITLOCKED: 'isUserEditLocked',
     },
-
+  
     cp_invoiceCreditLine: {
         TBL_NAME: 'cp_invoiceCreditLine',
         INVCRELINEID: 'invCreLineId',
@@ -1443,6 +1443,21 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+    },
+
+    raw_cp_attachment: {
+        TBL_NAME: 'raw_cp_attachment',
+        ATTACHMENTID: 'attachmentId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        NAME: 'name',
+        DESCRIPTION: 'description',
+        VERSION: 'version',
+        EXTERNALREFERENCE: 'externalReference',
+        EXTERNALLINK: 'externalLink',
+        EXTERNALFLAGS: 'externalFlags',
+        JSONOPTIONS: 'jsonOptions',
+        CREATED: 'created',
     },
 
     raw_cp_attachment: {

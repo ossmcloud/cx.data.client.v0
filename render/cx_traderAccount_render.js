@@ -47,7 +47,7 @@ class CXTraderAccount extends RenderBase {
                     this.options.buttons.push({ id: 'cr_rawGetRequest_delete', text: 'Delete', function: 'deleteRecord', style: 'color: white; background-color: rgba(230,0,0,1);' });
                 }
             }
-            
+
             if (this.dataSource.isManual) {
                 this.options.title += ' &#9997;';
             }
@@ -112,7 +112,7 @@ class CXTraderAccount extends RenderBase {
                 }
             ];
         }
-       
+
     }
 
     async _list() {
