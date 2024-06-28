@@ -42,7 +42,7 @@ class CPPreferenceEngine {
         if (!_core.list.findInArray(options.records, 'recordType', 'cx_login')) {
             options.records.push({
                 recordType: _cxSchema.cx_login.TBL_NAME,
-                recordId: this.#cx.userId
+                recordId: this.#cx.tUserId
             })
         }
 

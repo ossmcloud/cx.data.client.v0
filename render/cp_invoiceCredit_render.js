@@ -438,16 +438,17 @@ class CPInvoiceReturnRender extends RenderBase {
                 // check the group invoices edit mode, if it is > _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP than user can edit
                 prefContext.pref = _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.ID;
                 this.invoiceEditModeGrp = await this.dataSource.cx.cpPref.get(prefContext);
-
                 this.options.allowEdit = (this.invoiceEditModeGrp > _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP) || (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT);
-            } else {
-                this.options.allowEdit = (
-                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
-                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
-                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
-                    this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
-                );
-            }
+            } 
+        }
+
+        if (this.options.allowEdit) {
+            this.options.allowEdit = (
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
+            );
         }
         //
         await this.setRecordTitle(query);
