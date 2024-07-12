@@ -61,6 +61,7 @@ const _fieldNames = {
     NOTES: 'notes',
     ERPIGNORECUSTOMER: 'erpIgnoreCustomer',
     ERP2NDIGNORECUSTOMER: 'erp2ndIgnoreCustomer',
+    HIDEFROMDECLARATIONS: 'hideFromDeclarations',
 
 }
 //
@@ -109,6 +110,7 @@ const _fields = {
     notes: { name: 'notes', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     erpIgnoreCustomer: { name: 'erpIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     erp2ndIgnoreCustomer: { name: 'erp2ndIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    hideFromDeclarations: { name: 'hideFromDeclarations', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -378,6 +380,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERP2NDIGNORECUSTOMER);
     } set erp2ndIgnoreCustomer(val) {
         super.setValue(_fieldNames.ERP2NDIGNORECUSTOMER, val);
+    }
+
+    get hideFromDeclarations() {
+        return super.getValue(_fieldNames.HIDEFROMDECLARATIONS);
+    } set hideFromDeclarations(val) {
+        super.setValue(_fieldNames.HIDEFROMDECLARATIONS, val);
     }
 
 
