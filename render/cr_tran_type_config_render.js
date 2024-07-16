@@ -89,6 +89,7 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.CBREFERENCE, label: 'CB Reference', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 1, width: '100px' },
                                     { name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, label: 'Declarations', lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), column: 1 },
+                                    { name: _cxSchema.cr_tran_type_config.HIDEFROMDECLARATIONS, label: 'Hide from Declaration Dialog', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.DUPLICATEAS, label: 'Duplicate As', column: 1, lookUps: duplicateAsLookUps },
                                 ]
                             },
@@ -225,6 +226,7 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: ' ', name: 'shopConfigCountIcon' },
             { title: 'c/b tran. type', name: 'cbTranType', align: 'center' },
             { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), align: 'center', nullText: '' },
+            { title: 'hide on<br />dialo', name: _cxSchema.cr_tran_type_config.HIDEFROMDECLARATIONS, align: 'center', nullText: '' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING, nullText: '' },
             { title: 'c/b reference', name: _cxSchema.cr_tran_type_config.CBREFERENCE },
             { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },
