@@ -519,8 +519,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
                 this.options.filters.push({ label: 'supplier', fieldName: 'su', width: '125px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 this.options.filters.push({ label: 'doc #', fieldName: 'tno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
-                this.options.filters.push({ label: 'ref (erp)', fieldName: 'tref', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
-                this.options.filters.push({ label: 'ref (cx)', fieldName: 'tref2', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+                this.options.filters.push({ label: 'document refs.', fieldName: 'tref', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 if (!isBatchProcessing) { this.options.filters.push({ label: 'group invoice', fieldName: 'gno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT }); }
                 this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
@@ -554,6 +553,7 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
             this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, title: 'docket #' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
             if (!this.options.listView) {
