@@ -74,6 +74,10 @@ class cp_erp_transaction_gl extends _persistentTable.Record {
         if (this.isUserEdited) { return '&#x270E;'; }
         return '';
     }
+
+    get filterItemsIcon() {
+        return `<span class="icon_filter_lines" title="filter items by this gl code" data-gl-code="${this.glAccountSeg1}" data-gl-code-2="${this.glAccountSeg2}" data-gl-code-3="${this.glAccountSeg3}">&#x25BC;</span>`;
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

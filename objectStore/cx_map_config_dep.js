@@ -90,16 +90,20 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
-    async toLookupFullList(shopId) {
+    async toLookupFullList(shopId, showErp) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
         query.sql = `
             select	            dep.depMapConfigId as value,
                                 eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']' as text,
+                                sgl.code + '/' + sgl.costCentre + '/' + sgl.description +  ' ['+ eposDescription + ']' as text_sl,
+                                pgl.code + '/' + pgl.costCentre + '/' + pgl.description +  ' ['+ eposDescription + ']' as text_pl,
                                 (
                                     '<span class="jx-table-drop-down-item-title">' + eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']</span>'
                                     + case when sgl.code is null then '' else  '<br />' + sgl.code + ' [' + sgl.description + ']' end
                                     + case when pgl.code is null then '' else  ' / ' + pgl.code + ' [' + pgl.description + ']' end
-                                ) as textHtml
+                                ) as textHtml,
+                                sgl.code as SL_code, sgl.costCentre as SL_costCentre, sgl.department as SL_department,
+                                pgl.code as PL_code, pgl.costCentre as PL_costCentre, pgl.department as PL_department
 
             from	            cx_map_config_dep dep
             inner join          cx_shop s on dep.mapConfigId = s.depMapConfigId
@@ -112,10 +116,20 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         var result = await this.db.exec(query);
         for (var rx = 0; rx < result.rows.length; rx++) {
             var row = result.rows[rx];
+            var text = row.text;
+            if (showErp == 'SL') { text = row.text_sl; }
+            if (showErp == 'PL') { text = row.text_pl; }
+            var obj = {};
+            if (showErp) {
+                obj.code = row[`${showErp}_code`];
+                obj.costCentre = row[`${showErp}_costCentre`];
+                obj.department = row[`${showErp}_department`];
+            }
             lookUpValues.push({
                 value: row.value,
-                text: row.text,
+                text: text,
                 textHtml: row.textHtml,
+                object: JSON.stringify(obj),
             })
         }
         return lookUpValues;

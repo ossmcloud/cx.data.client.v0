@@ -284,6 +284,11 @@ module.exports = {
         LINEDRSQUANTITY: 'lineDRSQuantity',
         LINEDRSAMOUNT: 'lineDRSAmount',
         DEPMAPNOOVERWRITE: 'depMapNoOverwrite',
+        GLSEGMENT1: 'glSegment1',
+        GLSEGMENT2: 'glSegment2',
+        GLSEGMENT3: 'glSegment3',
+        GLSEGMENTDESCR: 'glSegmentDescr',
+        GLTAXCODE: 'glTaxCode',
     },
 
     cp_invoiceCreditLog: {

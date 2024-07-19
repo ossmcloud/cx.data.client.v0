@@ -39,12 +39,16 @@ class CPErpTransactionGLRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXDESCRIPTION, title: 'Description', input: textInputReadOnly });
         }
 
+        
         var signedPostfix = (this.options.editMode) ? '' : 'Signed';
 
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput });
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUENET + signedPostfix, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUETAX + signedPostfix, title: 'Vat', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUEGROSS + signedPostfix, title: 'Gross', align: 'right', width: '90px', formatMoney: true, addTotals: true });
+
+        this.options.columns.push({ name: 'filterItemsIcon', title: '<span class="icon_filter_lines_clear" title="clear filtered items">&#x1F5D9;</span>', sortable: false, align: 'center', width: '10px' });
+
 
         this.options.cellHighlights = [];
         var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';

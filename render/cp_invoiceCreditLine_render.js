@@ -10,14 +10,15 @@ class CPInvoiceReturnLineRender extends RenderBase {
     }
 
     async _list() {
-        var textInput = null; var vatRetInputReadOnly = null; var numberInput = null; var moneyInput = null; var selectInput = null; var moneyInputReadOnly = null; var prodInput = null;
+        var textInput = null; var vatRetInputReadOnly = null; var numberInput = null; var moneyInput = null; var selectTaxInput = null; var selectDepInput = null; var moneyInputReadOnly = null; var prodInput = null;
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             textInput = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, inputStyle: 'min-width: 150px' };
             vatRetInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.TEXT, readOnlyEx: true, inputStyle: 'text-align: right' };
             numberInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N0', inputStyle: 'width: 50px' };
             moneyInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N2', inputStyle: 'width: 50px' };
             moneyInputReadOnly = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, formatMoney: 'N2', readOnlyEx: true, inputStyle: 'width: 50px' };
-            selectInput = { type: _cxConst.RENDER.CTRL_TYPE.SELECT, inputStyle: 'min-width: 150px' };
+            selectTaxInput = { type: _cxConst.RENDER.CTRL_TYPE.SELECT, inputStyle: 'min-width: 150px' };
+            selectDepInput = { type: _cxConst.RENDER.CTRL_TYPE.SELECT, inputStyle: 'min-width: 150px' };
             prodInput = { type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, fieldName: _cxSchema.cp_invoiceCreditLine.PRODUCTID, hidden: true }
 
             this.options.listActions = true;
@@ -27,6 +28,7 @@ class CPInvoiceReturnLineRender extends RenderBase {
 
         this.options.columns = [];
         //{ name: _cxSchema.cp_invoiceCreditLine.DELRETID, title: ' ', align: 'center', hidden: true },
+        this.options.columns.push({ name: 'editedIcon', title: ' ', align: 'center', width: '10px' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.PRODUCTID, dataHidden: 'product-id' });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENUMBER, title: 'line', align: 'right', width: '30px', nullText: ''});
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINESTATUS + 'Msg', title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' });
@@ -46,11 +48,13 @@ class CPInvoiceReturnLineRender extends RenderBase {
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINENET, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
-            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID, title: 'tax', width: '50px', input: selectInput });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID, title: 'tax', width: '50px', input: selectTaxInput });
         }
 
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.VATRATE, title: 'tax rate', align: 'right', width: '50px', formatPercent: true, input: vatRetInputReadOnly });
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEVAT, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+
+
 
         if (this.cx.accountCountry == 'IE') {
             // DRS Scheme - only in Ireland
@@ -66,6 +70,13 @@ class CPInvoiceReturnLineRender extends RenderBase {
         }
 
         this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.LINEGROSS, title: 'gross', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+
+        if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.DEPMAPCONFIGID, title: 'dep', width: '150px', input: selectDepInput });
+        }
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, title: 'GL Code' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT2, title: 'GL Code 2' });
+        //this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT3, title: 'GL Code 3' });
 
 
         this.options.highlights = [

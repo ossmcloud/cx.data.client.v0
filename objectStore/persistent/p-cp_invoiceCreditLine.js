@@ -58,6 +58,11 @@ const _fieldNames = {
     LINEDRSQUANTITY: 'lineDRSQuantity',
     LINEDRSAMOUNT: 'lineDRSAmount',
     DEPMAPNOOVERWRITE: 'depMapNoOverwrite',
+    GLSEGMENT1: 'glSegment1',
+    GLSEGMENT2: 'glSegment2',
+    GLSEGMENT3: 'glSegment3',
+    GLSEGMENTDESCR: 'glSegmentDescr',
+    GLTAXCODE: 'glTaxCode',
 
 }
 //
@@ -103,6 +108,11 @@ const _fields = {
     lineDRSQuantity: { name: 'lineDRSQuantity', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     lineDRSAmount: { name: 'lineDRSAmount', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     depMapNoOverwrite: { name: 'depMapNoOverwrite', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    glSegment1: { name: 'glSegment1', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    glSegment2: { name: 'glSegment2', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    glSegment3: { name: 'glSegment3', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    glSegmentDescr: { name: 'glSegmentDescr', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    glTaxCode: { name: 'glTaxCode', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
 
 }
 //
@@ -354,6 +364,36 @@ class Persistent_cp_invoiceCreditLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DEPMAPNOOVERWRITE);
     } set depMapNoOverwrite(val) {
         super.setValue(_fieldNames.DEPMAPNOOVERWRITE, val);
+    }
+
+    get glSegment1() {
+        return super.getValue(_fieldNames.GLSEGMENT1);
+    } set glSegment1(val) {
+        super.setValue(_fieldNames.GLSEGMENT1, val);
+    }
+
+    get glSegment2() {
+        return super.getValue(_fieldNames.GLSEGMENT2);
+    } set glSegment2(val) {
+        super.setValue(_fieldNames.GLSEGMENT2, val);
+    }
+
+    get glSegment3() {
+        return super.getValue(_fieldNames.GLSEGMENT3);
+    } set glSegment3(val) {
+        super.setValue(_fieldNames.GLSEGMENT3, val);
+    }
+
+    get glSegmentDescr() {
+        return super.getValue(_fieldNames.GLSEGMENTDESCR);
+    } set glSegmentDescr(val) {
+        super.setValue(_fieldNames.GLSEGMENTDESCR, val);
+    }
+
+    get glTaxCode() {
+        return super.getValue(_fieldNames.GLTAXCODE);
+    } set glTaxCode(val) {
+        super.setValue(_fieldNames.GLTAXCODE, val);
     }
 
 

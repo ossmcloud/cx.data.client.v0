@@ -64,6 +64,11 @@ class cp_invoiceCreditLine extends _persistentTable.Record {
         return this.itemCode;
     }
 
+    get editedIcon() {
+        if (this.isUserEdited) { return '&#x270E;'; }
+        return '';
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()

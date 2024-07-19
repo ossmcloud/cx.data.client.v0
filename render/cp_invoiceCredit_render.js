@@ -42,9 +42,16 @@ class CPInvoiceReturnRender extends RenderBase {
 
             var taxAccounts = await this.dataSource.cx.table(_cxSchema.cx_map_config_tax).toLookUpList(this.dataSource.shopId, true);
             taxAccounts.shift();
-            // transactionLinesOptions.lookupLists[_cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID] = taxAccounts;
+
             var col = _core.list.findInArray(transactionLinesOptions.columns, 'name', _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID);
             if (col) { col.input.options = taxAccounts; }
+
+
+            var depAccounts = await this.dataSource.cx.table(_cxSchema.cx_map_config_dep).toLookupFullList(this.dataSource.shopId, 'PL');
+            depAccounts.shift();
+
+            var col = _core.list.findInArray(transactionLinesOptions.columns, 'name', _cxSchema.cp_invoiceCreditLine.DEPMAPCONFIGID);
+            if (col) { col.input.options = depAccounts; }
         }
 
         return transactionLinesOptions;
