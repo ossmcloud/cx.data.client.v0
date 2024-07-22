@@ -313,6 +313,8 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#logs = logs;
     }
 
+   
+
     async save() {
         this.totalGross = (this.totalNet + this.totalVat + this.totalDRS);
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

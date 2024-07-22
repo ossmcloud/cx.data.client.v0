@@ -241,6 +241,7 @@ module.exports = {
         DOCIMPID: 'docImpId',
         TOTALDRS: 'totalDRS',
         ISUSEREDITLOCKED: 'isUserEditLocked',
+        ISUSEREDITEDGL: 'isUserEditedGL',
     },
 
     cp_invoiceCreditLine: {

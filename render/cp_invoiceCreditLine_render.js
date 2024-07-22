@@ -74,9 +74,17 @@ class CPInvoiceReturnLineRender extends RenderBase {
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.DEPMAPCONFIGID, title: 'dep', width: '150px', input: selectDepInput });
         }
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, title: 'GL Code' });
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT2, title: 'GL Code 2' });
-        //this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT3, title: 'GL Code 3' });
+        if (this.options.mode == 'view' && this.dataSource.allowEditHeader) {
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, dataHidden: 'gl-code' });
+            this.options.columns.push({ name: 'glSegment1Edit', title: 'GL Code' });
+        } else {
+            
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, title: 'GL Code', data: 'gl-code' });
+        }
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT2, title: 'GL Code 2', data: 'gl-code-2' });
+        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLTAXCODE, dataHidden: 'gl-tax' });
+
+
 
 
         this.options.highlights = [

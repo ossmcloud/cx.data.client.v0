@@ -90,7 +90,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         await super.select(query);
     }
 
-    async toLookupFullList(shopId, showErp) {
+    async toLookupFullList(shopId, showErp, returnResults) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
         query.sql = `
             select	            dep.depMapConfigId as value,
@@ -102,8 +102,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
                                     + case when sgl.code is null then '' else  '<br />' + sgl.code + ' [' + sgl.description + ']' end
                                     + case when pgl.code is null then '' else  ' / ' + pgl.code + ' [' + pgl.description + ']' end
                                 ) as textHtml,
-                                sgl.code as SL_code, sgl.costCentre as SL_costCentre, sgl.department as SL_department,
-                                pgl.code as PL_code, pgl.costCentre as PL_costCentre, pgl.department as PL_department
+                                sgl.code as SL_code, sgl.costCentre as SL_costCentre, sgl.department as SL_department, sgl.description as SL_description,
+                                pgl.code as PL_code, pgl.costCentre as PL_costCentre, pgl.department as PL_department, pgl.description as PL_description
 
             from	            cx_map_config_dep dep
             inner join          cx_shop s on dep.mapConfigId = s.depMapConfigId
@@ -114,6 +114,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         `;
         var lookUpValues = [{ value: '', text: '' }];
         var result = await this.db.exec(query);
+        if (returnResults) { return result.rows; }
         for (var rx = 0; rx < result.rows.length; rx++) {
             var row = result.rows[rx];
             var text = row.text;

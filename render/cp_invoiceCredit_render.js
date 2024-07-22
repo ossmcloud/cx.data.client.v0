@@ -25,6 +25,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
+        transactionLines.allowEditHeader = this.options.allowEdit;
         if (this.options.allowEdit && this.options.mode == 'edit') {
             transactionLines.forceReadOnly = this.options.query.line != 'T';
         }
@@ -145,7 +146,7 @@ class CPInvoiceReturnRender extends RenderBase {
             </div>
         `;
         this.options.title += `
-            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
+            <div id="jx_page_title_doc_status" style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
@@ -432,6 +433,7 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
+        
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
 
         var prefContext = {

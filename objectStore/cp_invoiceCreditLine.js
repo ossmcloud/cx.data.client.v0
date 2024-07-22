@@ -69,6 +69,10 @@ class cp_invoiceCreditLine extends _persistentTable.Record {
         return '';
     }
 
+    get glSegment1Edit() {
+        return `<span class="edit_icon"><span>${this.glSegment1}</span><span class="edit_icon_gl">&#x270E;</span></span>`;
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
