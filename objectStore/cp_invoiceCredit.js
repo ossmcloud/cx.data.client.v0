@@ -150,11 +150,16 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         }
 
         query.sql += ' order by d.documentDate desc';
-
-        query.paging = {
-            page: params.page || 1,
-            pageSize: _declarations.SQL.PAGE_SIZE
+      
+        if (params.paging) {
+            query.paging = params.paging;
+        } else {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
         }
+
 
         return await super.select(query);
     }

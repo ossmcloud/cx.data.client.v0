@@ -174,7 +174,7 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.cp_invoiceGroup.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
-        permission.allowNew = false;
+        permission.allowNew = true;
         permission.allowDelete = false;
     }
     if (recordType == _cxSchema.cp_invoiceCredit.TBL_NAME) {

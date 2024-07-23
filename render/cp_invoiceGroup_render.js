@@ -207,6 +207,13 @@ class CPInvoiceGroupRender extends RenderBase {
     buildFormActions(erpName) {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
+
+            if (this.dataSource.isManual) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
+                    this.options.buttons.push({ id: 'cp_add_invoices', text: 'Add Invoices', function: 'addDocument' });
+                }
+            }
+
             // 
             if (s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
                 this.options.buttons.push({ id: 'cp_view_missmapped', text: 'View Mis-mapped Products', function: 'viewMisMappedProds' });
@@ -363,7 +370,7 @@ class CPInvoiceGroupRender extends RenderBase {
                 { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             ];
             if (this.options.query.imp == 'true') {
-                this.options.title = 'epos imported group invoices';
+                this.options.title = 'imported group invoices';
                 this.options.filters.push({ label: 'created date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'created date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
             }
