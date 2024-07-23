@@ -195,6 +195,7 @@ class cr_cb_transaction extends _persistentTable.Record {
         return this.warnLevel;
     }
 
+    
     get canEdit() {
         return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status == _declarations.CR_CASH_BOOK.STATUS.Error)
     }

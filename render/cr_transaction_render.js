@@ -105,7 +105,7 @@ class CRCashBookRender extends RenderBase {
                 { name: _cxSchema.cr_transaction.ANALYSIS1, label: 'analysis 1', column: 1 },
                 { name: _cxSchema.cr_transaction.ANALYSIS2, label: 'analysis 2', column: 1 },
                 { name: _cxSchema.cr_transaction.ANALYSIS3, label: 'analysis 3', column: 1 },
-                
+
 
                 { name: _cxSchema.cr_transaction.VOIDED, label: 'voided', column: 2 },
                 { name: _cxSchema.cr_transaction.ISMANUAL, label: 'manual', readOnly: true, column: 2 },
@@ -239,9 +239,9 @@ class CRCashBookRender extends RenderBase {
             { label: 'gl code', fieldName: 'erp_code', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'gl sub code', fieldName: 'erp_scode', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
             { label: 'gl description', fieldName: 'erp_coded', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '350px' },
-
             { label: 'epos tax code', fieldName: 'epos_tax', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '100px' },
             { label: 'gl tax code', fieldName: 'erp_tax', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '100px' },
+            { label: 'analysis codes', fieldName: 'a123', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '150px' },
         ];
 
         var addValuesStyle = 'border-top: 1px dotted rgb(97,97,97); color: gray;';
@@ -269,6 +269,8 @@ class CRCashBookRender extends RenderBase {
         this.options.columns.push({ name: _cxSchema.cr_transaction.VALUEDISCOUNTPROMO, title: 'promo', align: 'right', width: '90px', addTotals: true, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.CHANGE, title: 'change', align: 'right', width: '90px', addTotals: true, nullText: '' });
         this.options.columns.push({ name: _cxSchema.cr_transaction.CASHBACK, title: 'cashback', align: 'right', width: '90px', addTotals: true, nullText: '' });
+        this.options.columns.push({ name: 'analysisInfo', title: `analysis codes` });
+
 
         this.options.highlights = [
             { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' },

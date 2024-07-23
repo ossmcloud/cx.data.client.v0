@@ -177,6 +177,11 @@ class cr_transaction_Collection extends _persistentTable.Table {
             query.params.push({ name: 'erpTaxCode', value: params.erp_tax });
         }
 
+        if (params.a123) {
+            query.sql += ` and (t.analysis1 like @analysisCode or t.analysis2 like @analysisCode or t.analysis3 like @analysisCode)`;
+            query.params.push({ name: 'analysisCode', value: `%${params.a123}%` });
+        }
+
         query.sql += ' order by ' + this.FieldNames.TRANSACTIONDATETIME;
 
         query.paging = {
@@ -363,6 +368,14 @@ class cr_transaction extends _persistentTable.Record {
         if (this.isDuplicate) { icon += '&#x29C9;'; }
         return icon;
     }
+
+    get analysisInfo() {
+        var info = this.analysis1;
+        if (this.analysis2) { info += ` / ${this.analysis2}`; }
+        if (this.analysis3) { info += ` / ${this.analysis3}`; }
+        return info || '';
+    }
+
 
 
     async save() {
