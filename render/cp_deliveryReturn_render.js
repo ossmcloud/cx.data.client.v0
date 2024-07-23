@@ -209,7 +209,11 @@ class CPDeliveryReturnRender extends RenderBase {
 
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
-            subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true });
+            this.options.fields.push({
+                group: 'sublists_logs', columnCount: 1, fields: [
+                    { group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
+            });
+            //subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true });
         }
 
 
@@ -290,10 +294,10 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
 
             if (this.matchingEnabled) {
-                var matchIcon = `<img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
+                var matchIcon = `<img src="/public/images/puzzle_dark.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
 
-                var queryIcon = `<img src="/public/images/query_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
+                var queryIcon = `<img src="/public/images/query_dark.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
 

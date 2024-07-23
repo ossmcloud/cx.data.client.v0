@@ -45,6 +45,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     TOTALDRS: 'totalDRS',
     ERPTRANSMISSIONID: 'erpTransmissionId',
+    ISMANUAL: 'isManual',
 
 }
 //
@@ -77,6 +78,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -250,6 +252,12 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPTRANSMISSIONID);
     } set erpTransmissionId(val) {
         super.setValue(_fieldNames.ERPTRANSMISSIONID, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 

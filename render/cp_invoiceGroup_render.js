@@ -273,6 +273,8 @@ class CPInvoiceGroupRender extends RenderBase {
             fieldGroup_totals.fields.unshift({ name: _cxSchema.cp_invoiceGroup.TOTALDRS, label: 'DRS', column: 2, formatMoney: 'N2', readOnly: true });
         }
 
+        var newDoc = this.dataSource.isNew();
+       
         this.options.fields = [
             {
                 group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 250px', 'min-width: 350px'], fields: [
@@ -280,14 +282,15 @@ class CPInvoiceGroupRender extends RenderBase {
                         group: 'main1', title: 'main info', column: 1, columnCount: 2, fields: [
                             {
                                 group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
-                                    { name: _cxSchema.cp_invoiceGroup.SUPPLIERCODE, label: 'supplier', readOnly: true },
+                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: !newDoc, validation: '{ "mandatory": true }' }),
+                                    await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', readOnly: !newDoc, validation: '{ "mandatory": true }' }),
+                                    //{ name: 'wholesalerInfo', label: 'supplier', readOnly: true },
                                     { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                                 ]
                             },
                             {
                                 group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTDATE, label: 'date', width: '100%' },
+                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTDATE, label: 'date', width: '100%', validation: '{ "mandatory": true }' },
                                     { name: _cxSchema.cp_invoiceGroup.DOCUMENTNUMBER, label: 'document number', width: '100%', validation: '{ "mandatory": true, "max": 20  }' },
                                     { name: _cxSchema.cp_invoiceGroup.CURRENCY, label: 'currency', readOnly: true },
                                 ]
@@ -333,7 +336,9 @@ class CPInvoiceGroupRender extends RenderBase {
 
         ]
 
-        await this.buildFormLists();
+        if (!this.dataSource.isNew()) {
+            await this.buildFormLists();
+        }
 
         var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
         var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
@@ -366,6 +371,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceGroup.INVGRPID, title: ' ', align: 'center' },
+                { name: _cxSchema.cp_invoiceGroup.ISMANUAL + 'Icon', title: '<span title="manual document">&#x2699;</span>', width: '30px', align: 'center' },
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTSTATUS, title: 'status', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
