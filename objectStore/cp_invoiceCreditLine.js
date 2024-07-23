@@ -70,7 +70,9 @@ class cp_invoiceCreditLine extends _persistentTable.Record {
     }
 
     get glSegment1Edit() {
-        return `<span class="edit_icon"><span>${this.glSegment1}</span><span class="edit_icon_gl">&#x270E;</span></span>`;
+        var val = this.glSegment1;
+        if (val == null) { val = '<span style="font-style: italic; color: var(--element-color-disabled)">[NULL]</span>'; }
+        return `<span class="edit_icon"><span>${val}</span><span class="edit_icon_gl">&#x270E;</span></span>`;
     }
 
     async save() {
