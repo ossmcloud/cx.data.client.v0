@@ -38,8 +38,12 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.params.push({ name: 'shopId', value: params.s });
         }
         if (params.gid) {
-            query.sql += ' and d.invGrpId = @invGrpId';
-            query.params.push({ name: 'invGrpId', value: params.gid });
+            if (params.gid == 'none') {
+                query.sql += ' and d.invGrpId is null';   
+            } else {
+                query.sql += ' and d.invGrpId = @invGrpId';
+                query.params.push({ name: 'invGrpId', value: params.gid });
+            }
         }
         if (params.impid) {
             query.sql += ' and d.docImpId = @docImpId';
@@ -147,6 +151,15 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         if (params.mstatus) {
             query.sql += ' and reco.recoStatusId = @recoStatusId';
             query.params.push({ name: 'recoStatusId', value: params.mstatus });
+        }
+
+        if (params.whs) {
+            query.sql += ' and (isnull(d.supplierCode, isnull(supp.traderCode, supp2.traderCode)) = @wholesalerCode OR isnull(supp.wholesalerCode, supp2.wholesalerCode) = @wholesalerCode)'
+            query.params.push({ name: 'wholesalerCode', value: params.whs });
+        }
+        if (params.whsn) {
+            query.sql += ' and isnull(supp.traderName, supp2.traderName) like @supplierName'
+            query.params.push({ name: 'supplierName', value: '%' + params.whsn + '%' });
         }
 
         query.sql += ' order by d.documentDate desc';

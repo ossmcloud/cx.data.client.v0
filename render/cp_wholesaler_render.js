@@ -20,14 +20,17 @@ class Wholesaler extends RenderBase {
     }
 
     async initColumn(field, column) { }
-    
+
     async initFilter(field, filter) {
         if (field.name == _cxSchema.cp_wholesaler.MODIFIED || field.name == _cxSchema.cp_wholesaler.CREATED) {
             return false;
         }
     }
 
-    async _list() { }
+    async _list() {
+        this.options.filters.push({ fieldName: 'showNone', label: 'show dummy', type: _cxConst.RENDER.CTRL_TYPE.CHECK })
+
+    }
 
 
     async getShopsListOptions() {

@@ -220,7 +220,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id', readOnly: true },
-                        
+
                     ]
                 },
                 {
@@ -245,7 +245,7 @@ class CPInvoiceReturnRender extends RenderBase {
                     group: 'main1.col4', column: 4, columnCount: 1, fields: [
                         { name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, label: 'docket number' },
                         { name: _cxSchema.cp_invoiceCredit.DOCKETDATE, column: 1, label: 'docket date' },
-                        
+
 
                     ]
                 },
@@ -255,7 +255,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (this.options.mode == 'edit') {
             fieldGroup_main.fields[fieldGroup_main.fields.length - 1].fields.push({ name: _cxSchema.cp_invoiceCredit.ISUSEREDITLOCKED, label: 'edits locked' })
         }
-        
+
         fieldGroupStyles.push('width: 200px; min-width: 150px;');
         var fieldGroup_docReferences = {
             group: 'main_ref', title: 'references', column: fieldGroupIdx++, columnCount: 1, fields: [
@@ -437,7 +437,7 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
-        
+
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
 
         var prefContext = {
@@ -452,7 +452,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 prefContext.pref = _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.ID;
                 this.invoiceEditModeGrp = await this.dataSource.cx.cpPref.get(prefContext);
                 this.options.allowEdit = (this.invoiceEditModeGrp > _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP) || (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT);
-            } 
+            }
         }
 
         if (this.options.allowEdit) {
@@ -552,6 +552,11 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' });
             this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+
+            if (this.options.canDetachDocuments) {
+                this.options.columns.push({ name: 'detach', link: { text: 'detach', valueField: 'invCreId', onclick: 'detachDocument' } });
+            }
+
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
@@ -584,6 +589,8 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' });
 
+
+           
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
 
 
