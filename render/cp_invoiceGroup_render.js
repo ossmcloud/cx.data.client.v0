@@ -404,7 +404,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceGroup.INVGRPID, title: ' ', align: 'center' },
-                { name: _cxSchema.cp_invoiceGroup.ISMANUAL + 'Icon', title: '<span title="manual document">&#x2699;</span>', width: '30px', align: 'center' },
+                { name: _cxSchema.cp_invoiceGroup.ISMANUAL + 'Icon', title: '<span title="manual document">&#x1F590;</span>', width: '30px', align: 'center' },
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTSTATUS, title: 'status', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },

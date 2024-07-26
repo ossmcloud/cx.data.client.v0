@@ -132,7 +132,7 @@ class cp_invoiceGroup extends _persistentTable.Record {
     }
 
     get isManualIcon() {
-        if (this.isManual) { return '&#x2699;' }
+        if (this.isManual) { return '&#x1F590;' }
         return '';
     }
 
