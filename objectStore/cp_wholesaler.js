@@ -31,7 +31,7 @@ class cp_wholesaler_Collection extends _persistentTable.Table {
         } else {
             var showNone = params.showNone;
             var query = { sql: 'select * from cp_wholesaler where 1=1' }
-            if (showNone && showNone != 'true') { query.sql += " and whsProvider != 'none' "; };
+            if (showNone != 'true') { query.sql += " and whsProvider != 'none' "; };
             delete params.showNone;
 
             this.queryFromParams(query, params);

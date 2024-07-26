@@ -300,7 +300,11 @@ class CPInvoiceGroupRender extends RenderBase {
                 width: '100%', readOnly: !newDoc
             })
         } else {
-            wholesalerDropDown = await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', readOnly: true });
+            wholesalerDropDown = await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, {
+                id: 'wholesalerId', name: 'wholesalerId',
+                dropDownSelectOptions: { showNone: 'true' },
+                readOnly: true
+            });
         }
 
 

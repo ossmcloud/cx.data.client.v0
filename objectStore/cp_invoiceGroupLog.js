@@ -34,7 +34,7 @@ class cp_invoiceGroupLog_Collection extends _persistentTable.Table {
     async log(invCreId, type, message, info) {
         try {
             var log = this.createNew();
-            log.invCreId = invCreId;
+            log.invGrpId = invCreId;
             log.logType = type || 'NONE';
             log.logMessage = message || 'no log message';
             log.logInfo = info || '';

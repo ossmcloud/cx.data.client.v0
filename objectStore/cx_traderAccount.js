@@ -95,6 +95,7 @@ class cx_traderAccount_Collection extends _persistentTable.Table {
     }
 
     async toLookUpList(params) {
+        params.noPaging = true;
         await this.select(params);
 
         var _this = this;
@@ -130,6 +131,8 @@ class cx_traderAccount extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
+
+    get traderInfo() { return `[${this.traderCode}] ${this.traderName}`; }
 
     get erpTraderName() { return this.#erpTraderName; }
     get erpTraderCode() { return this.#erpTraderCode; }
