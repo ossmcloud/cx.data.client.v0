@@ -241,6 +241,7 @@ module.exports = {
         DOCIMPID: 'docImpId',
         TOTALDRS: 'totalDRS',
         ISUSEREDITLOCKED: 'isUserEditLocked',
+        ISUSEREDITEDGL: 'isUserEditedGL',
     },
 
     cp_invoiceCreditLine: {
@@ -284,6 +285,11 @@ module.exports = {
         LINEDRSQUANTITY: 'lineDRSQuantity',
         LINEDRSAMOUNT: 'lineDRSAmount',
         DEPMAPNOOVERWRITE: 'depMapNoOverwrite',
+        GLSEGMENT1: 'glSegment1',
+        GLSEGMENT2: 'glSegment2',
+        GLSEGMENT3: 'glSegment3',
+        GLSEGMENTDESCR: 'glSegmentDescr',
+        GLTAXCODE: 'glTaxCode',
     },
 
     cp_invoiceCreditLog: {
@@ -327,6 +333,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         TOTALDRS: 'totalDRS',
         ERPTRANSMISSIONID: 'erpTransmissionId',
+        ISMANUAL: 'isManual',
     },
 
     cp_invoiceGroupLog: {

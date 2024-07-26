@@ -31,6 +31,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen,
                                         ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount,
                                         ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag,
+                                        ( select top 1 a.externalLink from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachLink,
                                         ( select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId ) as invoiceCount
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
@@ -126,6 +127,12 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         } else if (params.inv === 'false') {
             query.sql += ' and (select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId) = 0 '
         }
+
+        if (params.attach == 'true') {
+            query.sql += " and ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) > 0";
+        } else if (params.attach == 'false') {
+            query.sql += " and ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) = 0";
+        }
         
         query.sql += ' order by d.documentDate desc';
 
@@ -178,6 +185,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #queryCountOpen = null;
     #attachCount = null;
     #attachFlag = '';
+    #attachLink = null;
     #invoiceCount = 0;
     constructor(table, defaults) {
         super(table, defaults);
@@ -191,6 +199,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#queryCountOpen = defaults['queryCountOpen'] || null;
         this.#attachCount = defaults['attachCount'] || null;
         this.#attachFlag = defaults['attachFlag'] || null;
+        this.#attachLink = defaults['attachLink'] || null;
         this.#invoiceCount = defaults['invoiceCount'] || 0;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
@@ -258,10 +267,14 @@ class cp_deliveryReturn extends _persistentTable.Record {
     }
 
     get attachIcon() {
-        if (this.#attachFlag && (this.#attachFlag[0] == '&' || this.#attachFlag[0] == '<')) { return this.#attachFlag; }
-        if (this.attachCount) {
-            return `<img src="/public/images/attach_${this.cx.theme}.png" style="width: 20px" />`;
-            //return '<span style="background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;"></span>';
+        var attachIcon = '';
+        if (this.#attachFlag && (this.#attachFlag[0] == '&' || this.#attachFlag[0] == '<')) {
+            attachIcon = this.#attachFlag;
+        } else if (this.attachCount) {
+            attachIcon = `<img src="/public/images/attach_${this.cx.theme}.png" style="width: 20px" />`;
+        }
+        if (attachIcon) {
+            return `<a class="jx-list-view-link" href="${this.#attachLink}" target="_blank">${attachIcon}</a>`;
         }
         return '';
     }

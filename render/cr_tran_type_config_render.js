@@ -226,7 +226,7 @@ class CrTranTypeConfigRender extends RenderBase {
             { title: ' ', name: 'shopConfigCountIcon' },
             { title: 'c/b tran. type', name: 'cbTranType', align: 'center' },
             { title: 'declarations', name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), align: 'center', nullText: '' },
-            { title: 'hide on<br />dialo', name: _cxSchema.cr_tran_type_config.HIDEFROMDECLARATIONS, align: 'center', nullText: '' },
+            { title: 'hide on<br />dialog', name: _cxSchema.cr_tran_type_config.HIDEFROMDECLARATIONS, align: 'center', nullText: '' },
             { title: 'c/b heading', name: _cxSchema.cr_tran_type_config.CBHEADING, nullText: '' },
             { title: 'c/b reference', name: _cxSchema.cr_tran_type_config.CBREFERENCE },
             { title: 'description', name: _cxSchema.cr_tran_type_config.DESCRIPTION },

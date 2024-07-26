@@ -25,6 +25,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
+        transactionLines.allowEditHeader = this.options.allowEdit;
         if (this.options.allowEdit && this.options.mode == 'edit') {
             transactionLines.forceReadOnly = this.options.query.line != 'T';
         }
@@ -42,9 +43,16 @@ class CPInvoiceReturnRender extends RenderBase {
 
             var taxAccounts = await this.dataSource.cx.table(_cxSchema.cx_map_config_tax).toLookUpList(this.dataSource.shopId, true);
             taxAccounts.shift();
-            // transactionLinesOptions.lookupLists[_cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID] = taxAccounts;
+
             var col = _core.list.findInArray(transactionLinesOptions.columns, 'name', _cxSchema.cp_invoiceCreditLine.TAXMAPCONFIGID);
             if (col) { col.input.options = taxAccounts; }
+
+
+            var depAccounts = await this.dataSource.cx.table(_cxSchema.cx_map_config_dep).toLookupFullList(this.dataSource.shopId, 'PL');
+            depAccounts.shift();
+
+            var col = _core.list.findInArray(transactionLinesOptions.columns, 'name', _cxSchema.cp_invoiceCreditLine.DEPMAPCONFIGID);
+            if (col) { col.input.options = depAccounts; }
         }
 
         return transactionLinesOptions;
@@ -138,7 +146,7 @@ class CPInvoiceReturnRender extends RenderBase {
             </div>
         `;
         this.options.title += `
-            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
+            <div id="jx_page_title_doc_status" style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
             </div>
         `;
@@ -212,7 +220,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id', readOnly: true },
-                        
+
                     ]
                 },
                 {
@@ -237,7 +245,7 @@ class CPInvoiceReturnRender extends RenderBase {
                     group: 'main1.col4', column: 4, columnCount: 1, fields: [
                         { name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, label: 'docket number' },
                         { name: _cxSchema.cp_invoiceCredit.DOCKETDATE, column: 1, label: 'docket date' },
-                        
+
 
                     ]
                 },
@@ -247,7 +255,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (this.options.mode == 'edit') {
             fieldGroup_main.fields[fieldGroup_main.fields.length - 1].fields.push({ name: _cxSchema.cp_invoiceCredit.ISUSEREDITLOCKED, label: 'edits locked' })
         }
-        
+
         fieldGroupStyles.push('width: 200px; min-width: 150px;');
         var fieldGroup_docReferences = {
             group: 'main_ref', title: 'references', column: fieldGroupIdx++, columnCount: 1, fields: [
@@ -349,14 +357,18 @@ class CPInvoiceReturnRender extends RenderBase {
             }
         }
 
-        var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
+        var subListsGroup = { group: 'sublists', columnCount: 1, fields: [] };
         this.options.fields.push(subListsGroup);
 
         var transactionLineOptions = await this.getDocumentLineListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
         if (this.options.query.viewLogs == 'T') {
+
             var transactionLogOptions = await this.getDocumentLogListOptions();
-            subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true });
+            this.options.fields.push({
+                group: 'sublists_logs', columnCount: 1, fields: [
+                    { group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
+            });
         }
 
     }
@@ -425,6 +437,7 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async _record() {
+
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
 
         var prefContext = {
@@ -439,7 +452,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 prefContext.pref = _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.ID;
                 this.invoiceEditModeGrp = await this.dataSource.cx.cpPref.get(prefContext);
                 this.options.allowEdit = (this.invoiceEditModeGrp > _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP) || (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT);
-            } 
+            }
         }
 
         if (this.options.allowEdit) {
@@ -519,8 +532,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
                 this.options.filters.push({ label: 'supplier', fieldName: 'su', width: '125px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 this.options.filters.push({ label: 'doc #', fieldName: 'tno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
-                this.options.filters.push({ label: 'ref (erp)', fieldName: 'tref', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
-                this.options.filters.push({ label: 'ref (cx)', fieldName: 'tref2', width: '75px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
+                this.options.filters.push({ label: 'document refs.', fieldName: 'tref', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
                 if (!isBatchProcessing) { this.options.filters.push({ label: 'group invoice', fieldName: 'gno', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.TEXT }); }
                 this.options.filters.push({ label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 this.options.filters.push({ label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
@@ -540,20 +552,26 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' });
             this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+
+            if (this.options.canDetachDocuments) {
+                this.options.columns.push({ name: 'detach', link: { text: 'detach', valueField: 'invCreId', onclick: 'detachDocument' } });
+            }
+
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
             if (this.matchingEnabled) {
-                var matchIcon = `<img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
+                var matchIcon = `<img src="/public/images/puzzle_dark.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'recoStatus', title: matchIcon, align: 'center', width: '10px', headerToolTip: 'matching status', toolTip: { valueField: 'recoStatusName', suppressText: true } });
 
-                var queryIcon = `<img src="/public/images/query_${this.dataSource.cx.theme}.png" style="width: 20px" />`;
+                var queryIcon = `<img src="/public/images/query_dark.png" style="width: 20px" />`;
                 this.options.columns.push({ name: 'queryCount', title: queryIcon, nullText: '', align: 'center', width: '10px', headerToolTip: 'query count', toolTip: { valueField: 'queryCountDisplay', suppressText: true } });
             }
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
             this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, title: 'docket #' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
             if (!this.options.listView) {
@@ -571,6 +589,8 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.UPLOADDATE, title: 'upload date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' });
 
+
+           
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
 
 

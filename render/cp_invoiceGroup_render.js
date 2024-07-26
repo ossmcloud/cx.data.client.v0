@@ -4,6 +4,7 @@ const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
+const { setDefaultHighWaterMark } = require('nodemailer/lib/xoauth2');
 
 class CPInvoiceGroupRender extends RenderBase {
     matchingEnabled = false;
@@ -13,10 +14,18 @@ class CPInvoiceGroupRender extends RenderBase {
     }
 
     async getDocumentListOptions() {
+        var canDetachDocuments = false;
+        var s = this.dataSource.documentStatus;
+        if (this.dataSource.isManual) {
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+                canDetachDocuments = true;
+            }
+        }
+
         var transactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
         await transactions.select({ gid: this.options.query.id });
 
-        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank' });
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments });
         transactionsOptions.quickSearch = true;
         return transactionsOptions;
     }
@@ -129,7 +138,7 @@ class CPInvoiceGroupRender extends RenderBase {
             pieToolTip += (tooltip2 + '\n');
         });
         matchSummary.html += '</div>';
-        
+
         matchSummary.htmlPie = '<canvas title="' + pieToolTip + '" id="matching_status" style="margin-bottom: -7px; margin-left: 7px" width="40" height="40" data-matching="' + _core.text.toBase64(JSON.stringify(matchSummary.splits)) + '" />';
 
         return matchSummary;
@@ -207,6 +216,13 @@ class CPInvoiceGroupRender extends RenderBase {
     buildFormActions(erpName) {
         if (this.options.mode == 'view') {
             var s = this.dataSource.documentStatus;
+
+            if (this.dataSource.isManual) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+                    this.options.buttons.push({ id: 'cp_add_invoices', text: 'Add Invoices', function: 'addDocument' });
+                }
+            }
+
             // 
             if (s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
                 this.options.buttons.push({ id: 'cp_view_missmapped', text: 'View Mis-mapped Products', function: 'viewMisMappedProds' });
@@ -234,14 +250,15 @@ class CPInvoiceGroupRender extends RenderBase {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
                     && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH && s != _cxConst.CP_DOCUMENT.STATUS.Generating) {
-                    this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+
+                    this.options.buttons.push({ id: 'cp_delete_document', text: (this.dataSource.isManual) ? 'Dissolve' : 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
                 }
             }
 
             // in case something went wrong and we need to reset
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
-                    
+
                     this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
                 }
             }
@@ -273,6 +290,24 @@ class CPInvoiceGroupRender extends RenderBase {
             fieldGroup_totals.fields.unshift({ name: _cxSchema.cp_invoiceGroup.TOTALDRS, label: 'DRS', column: 2, formatMoney: 'N2', readOnly: true });
         }
 
+        var newDoc = this.dataSource.isNew();
+        var wholesalerDropDown = null;
+        if (newDoc) {
+            var shopId = this.dataSource.shopId;
+            wholesalerDropDown = await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
+                id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
+                dropDownSelectOptions: { tt: 'S', s: shopId },
+                width: '100%', readOnly: !newDoc
+            })
+        } else {
+            wholesalerDropDown = await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, {
+                id: 'wholesalerId', name: 'wholesalerId',
+                dropDownSelectOptions: { showNone: 'true' },
+                readOnly: true
+            });
+        }
+
+
         this.options.fields = [
             {
                 group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 250px', 'min-width: 350px'], fields: [
@@ -280,14 +315,15 @@ class CPInvoiceGroupRender extends RenderBase {
                         group: 'main1', title: 'main info', column: 1, columnCount: 2, fields: [
                             {
                                 group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
-                                    { name: _cxSchema.cp_invoiceGroup.SUPPLIERCODE, label: 'supplier', readOnly: true },
+                                    await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: !newDoc, validation: '{ "mandatory": true }' }),
+                                    wholesalerDropDown,
+                                    //{ name: 'wholesalerInfo', label: 'supplier', readOnly: true },
                                     { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                                 ]
                             },
                             {
                                 group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTDATE, label: 'date', width: '100%' },
+                                    { name: _cxSchema.cp_invoiceGroup.DOCUMENTDATE, label: 'date', width: '100%', validation: '{ "mandatory": true }' },
                                     { name: _cxSchema.cp_invoiceGroup.DOCUMENTNUMBER, label: 'document number', width: '100%', validation: '{ "mandatory": true, "max": 20  }' },
                                     { name: _cxSchema.cp_invoiceGroup.CURRENCY, label: 'currency', readOnly: true },
                                 ]
@@ -333,7 +369,9 @@ class CPInvoiceGroupRender extends RenderBase {
 
         ]
 
-        await this.buildFormLists();
+        if (!this.dataSource.isNew()) {
+            await this.buildFormLists();
+        }
 
         var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
         var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
@@ -358,7 +396,7 @@ class CPInvoiceGroupRender extends RenderBase {
                 { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             ];
             if (this.options.query.imp == 'true') {
-                this.options.title = 'epos imported group invoices';
+                this.options.title = 'imported group invoices';
                 this.options.filters.push({ label: 'created date (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE });
                 this.options.filters.push({ label: 'created date (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE });
             }
@@ -366,6 +404,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
             this.options.columns = [
                 { name: _cxSchema.cp_invoiceGroup.INVGRPID, title: ' ', align: 'center' },
+                { name: _cxSchema.cp_invoiceGroup.ISMANUAL + 'Icon', title: '<span title="manual document">&#x1F590;</span>', width: '30px', align: 'center' },
                 { name: 'shopInfo', title: 'store', width: '200px' },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTSTATUS, title: 'status', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
                 { name: _cxSchema.cp_invoiceGroup.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },

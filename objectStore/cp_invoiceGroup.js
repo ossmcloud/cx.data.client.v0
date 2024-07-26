@@ -72,6 +72,27 @@ class cp_invoiceGroup_Collection extends _persistentTable.Table {
 
         return await super.select(query);
     }
+
+    async fetch(id, returnNull) {
+        var query = { sql: '', params: [{ name: 'invGrpId', value: id }] };
+
+        query.sql = `
+            select  d.*, s.shopCode, s.shopName, i.fileName, whs.code, whs.name
+            from    ${this.type} d
+            inner join cx_shop s ON s.shopId = d.shopId
+            inner join cp_wholesaler whs ON whs.wholesalerId = d.wholesalerId
+            left outer join cp_documentImport i ON i.documentImportId = d.documentImportId
+            where   d.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+            and     d.invGrpId = @invGrpId
+        `
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rec = await this.db.exec(query);
+        if (!rec) { return rec; }
+
+        return super.populate(rec);
+    }
 }
 //
 // ----------------------------------------------------------------------------------------
@@ -108,6 +129,11 @@ class cp_invoiceGroup extends _persistentTable.Record {
         return this.#logs;
     } set logs(logs) {
         this.#logs = logs;
+    }
+
+    get isManualIcon() {
+        if (this.isManual) { return '&#x1F590;' }
+        return '';
     }
 
     

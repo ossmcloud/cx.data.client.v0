@@ -59,6 +59,7 @@ const _fieldNames = {
     DOCIMPID: 'docImpId',
     TOTALDRS: 'totalDRS',
     ISUSEREDITLOCKED: 'isUserEditLocked',
+    ISUSEREDITEDGL: 'isUserEditedGL',
 
 }
 //
@@ -105,6 +106,7 @@ const _fields = {
     docImpId: { name: 'docImpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     isUserEditLocked: { name: 'isUserEditLocked', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    isUserEditedGL: { name: 'isUserEditedGL', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -362,6 +364,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISUSEREDITLOCKED);
     } set isUserEditLocked(val) {
         super.setValue(_fieldNames.ISUSEREDITLOCKED, val);
+    }
+
+    get isUserEditedGL() {
+        return super.getValue(_fieldNames.ISUSEREDITEDGL);
+    } set isUserEditedGL(val) {
+        super.setValue(_fieldNames.ISUSEREDITEDGL, val);
     }
 
 
