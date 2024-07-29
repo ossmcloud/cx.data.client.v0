@@ -200,9 +200,13 @@ const CX_WHS_PROVIDER = {
     MUS: 'mus',
     VAL: 'val',
     BAR: 'bar',
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd' }); },
+    BUNZL: 'bunzl',
+    SYSCO: 'sysco',
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland' }); },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland' });
     },
 }
 // @@TODO: this should come from sys_provider table
