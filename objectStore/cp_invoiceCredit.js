@@ -18,7 +18,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         var query = { sql: '', params: [] };
         query.sql = ` select    d.*, s.shopCode, s.shopName, 
-                                isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as supplierName,        
+                                isnull(supp.traderName, isnull(supp2.traderName, isnull(supp3.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end))) as supplierName,
                                 grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
@@ -26,6 +26,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2          ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cx_traderAccount supp3          ON supp3.shopId = d.shopId AND supp3.wholesalerCode = d.supplierCode AND supp3.traderType = 'S' 
                       left outer join   cx_traderNameLookUp suppName    ON suppName.shopId = d.shopId AND suppName.traderCode = d.supplierCode AND suppName.traderType = 'S' 
 
                       left outer join   cp_invoiceGroup  grp            ON grp.invGrpId = d.invGrpId 
@@ -164,12 +165,14 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         query.sql += ' order by d.documentDate desc';
       
-        if (params.paging) {
-            query.paging = params.paging;
-        } else {
-            query.paging = {
-                page: params.page || 1,
-                pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            if (params.paging) {
+                query.paging = params.paging;
+            } else {
+                query.paging = {
+                    page: params.page || 1,
+                    pageSize: _declarations.SQL.PAGE_SIZE
+                }
             }
         }
 

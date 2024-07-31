@@ -23,7 +23,7 @@ class CPInvoiceGroupRender extends RenderBase {
         }
 
         var transactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
-        await transactions.select({ gid: this.options.query.id });
+        await transactions.select({ gid: this.options.query.id, noPaging: true });
 
         var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments });
         transactionsOptions.quickSearch = true;
@@ -146,11 +146,11 @@ class CPInvoiceGroupRender extends RenderBase {
 
     async setRecordTitle() {
         // SET TAB TITLE
-        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber}]`;
+        this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber || 'new'}]`;
         // SET DOCUMENT TILE WITH DOC TYPE, STATUS AND EDITED BUBBLES
         var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
         this.options.title = `<div style="display: table;">`;
-        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentNumber}</div>`;
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentNumber || 'new group invoice'}</div>`;
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
                 ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()} group
