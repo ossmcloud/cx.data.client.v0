@@ -27,7 +27,8 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                 left outer join     cp_invoiceGroup         grp     ON grp.invGrpId = doc.invGrpId
 
                 left outer join	    cx_traderAccount supp           ON supp.traderAccountId = doc.traderAccountId
-                left outer join     cx_traderAccount supp2          ON supp2.shopId = doc.shopId AND supp2.traderCode = doc.supplierCode AND supp2.traderType = 'S' 
+                left outer join     cx_traderAccount supp2          ON supp2.shopId = doc.shopId AND supp2.traderCode = doc.supplierCode AND supp2.traderType = 'S'
+                left outer join     cx_traderAccount supp3          ON supp3.shopId = doc.shopId AND supp3.wholesalerCode = doc.supplierCode AND supp3.traderType = 'S'
                 left outer join     cx_traderNameLookUp suppName    ON suppName.shopId = doc.shopId AND suppName.traderCode = doc.supplierCode AND suppName.traderType = 'S' 
                 
                 inner join          cx_shop s ON s.shopId = reco.shopId

@@ -23,7 +23,7 @@ class CPInvoiceGroupRender extends RenderBase {
         }
 
         var transactions = this.dataSource.cx.table(_cxSchema.cp_invoiceCredit);
-        await transactions.select({ gid: this.options.query.id });
+        await transactions.select({ gid: this.options.query.id, noPaging: true });
 
         var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments });
         transactionsOptions.quickSearch = true;
