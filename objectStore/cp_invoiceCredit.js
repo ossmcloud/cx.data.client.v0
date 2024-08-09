@@ -306,8 +306,12 @@ class cp_invoiceCredit extends _persistentTable.Record {
 
     get editedIcon() {
         var icons = '';
-        if (this.createdFrom) { icons += '&#x2699;'; }
-        if (this.isUserEdited) { icons += '&#x270E;'; }
+        if (this.isManual) {
+            icons += '&#x1F590;';
+        } else {
+            if (this.createdFrom) { icons += '&#x2699;'; }
+            if (this.isUserEdited) { icons += '&#x270E;'; }
+        }
         if (this.isUserEditLocked) { icons += '&#x1F512;'; }
         return icons;
     }

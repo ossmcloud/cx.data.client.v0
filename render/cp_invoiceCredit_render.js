@@ -34,7 +34,7 @@ class CPInvoiceReturnRender extends RenderBase {
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
         if (transactionLines.forceReadOnly) {
-            if (this.invoiceEditMode != _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.VALUES.GL_ONLY) {
+            if (this.invoiceEditMode != _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.VALUES.GL_ONLY || this.dataSource.isManual) {
                 transactionLinesOptions.showButtons = [{ id: 'cx_edit_tran_line', text: 'edit lines', function: 'editTransactionLines' }];
             }
         } else {
@@ -123,13 +123,22 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async setRecordTitle(query) {
+        var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
 
+        if (this.dataSource.isNew()) {
+            this.options.title = `
+                <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.TYPE.getStyleInverted(this.dataSource.documentType)}">
+                    ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)} ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
+                </div>
+            `;
+            return;
+        }
+        
 
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
         // SET DOCUMENT TILE WITH DOC TYPE, STATUS AND EDITED BUBBLES
-        var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
         this.options.title = `<div style="display: table;">`;
         this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
         if (query) {
@@ -164,7 +173,7 @@ class CPInvoiceReturnRender extends RenderBase {
         if (this.dataSource.isUserEdited) {
             this.options.title += `
                 <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited${(this.dataSource.isUserEditLocked) ? ' and edits are locked' : ''}">
-                    &#x270E;
+                    ${(this.dataSource.isManual) ? '&#x1F590;' : '&#x270E;'}
                     ${(this.dataSource.isUserEditLocked) ? '&#x1F512;' : ''}
                 </div>
             `;
@@ -210,6 +219,8 @@ class CPInvoiceReturnRender extends RenderBase {
     }
 
     async buildFormBody() {
+        var newDoc = this.dataSource.isNew();
+        var newDocMandatory = (newDoc) ? '{ "mandatory": true, "max": 20  }' : '';
         var fieldGroupIdx = 1; var fieldGroupStyles = [];
 
         fieldGroupStyles.push('min-width: 500px;');
@@ -217,7 +228,7 @@ class CPInvoiceReturnRender extends RenderBase {
             group: 'main1', title: 'main info', column: fieldGroupIdx++, columnCount: 4, fields: [
                 {
                     group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                        await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
+                        await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: !newDoc, validation: newDocMandatory }),
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE + 'Name', label: 'document type', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTID, label: 'document id', readOnly: true },
 
@@ -228,7 +239,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         await this.fieldDropDownOptions(_cxSchema.cx_traderAccount, {
                             id: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID, name: _cxSchema.cp_invoiceCredit.TRADERACCOUNTID,
                             dropDownSelectOptions: { tt: 'S', s: this.dataSource.shopId },
-                            width: '100%', disabled: (this.dataSource.invGrpId)
+                            width: '100%', disabled: (this.dataSource.invGrpId), validation: newDocMandatory
                         }),
                         { name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, label: 'supplier (epos)', readOnly: true },
                         { name: _cxSchema.cp_invoiceCredit.CURRENCY, label: 'currency', readOnly: true },
@@ -237,7 +248,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 {
                     group: 'main1.col3', column: 3, columnCount: 1, fields: [
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number', validation: '{ "mandatory": true, "max": 20  }' },
-                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, column: 1, label: 'date' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, column: 1, label: 'date', validation: newDocMandatory },
                         { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
                     ]
                 },
@@ -438,6 +449,17 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _record() {
 
+        var newDoc = this.dataSource.isNew();
+        if (this.dataSource.isManual) {
+            this.options.allowEdit = (
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.New ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
+                this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
+            )
+        }
+
         var query = await this.dataSource.cx.table(_cxSchema.cp_query).fetchOpenQuery(this.dataSource.invCreId, false, true);
 
         var prefContext = {
@@ -468,13 +490,16 @@ class CPInvoiceReturnRender extends RenderBase {
         // 
         await this.buildFormBody();
         // 
-        await this.buildFormLists();
+        if (!newDoc) { await this.buildFormLists(); }
         //
         await this.buildFormActions(query);
     }
 
     async _list() {
         try {
+            this.options.showButtons = [];
+            this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
+
             var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
             if (this.options.allowEdit == true) {
                 this.options.allowEditCondition = function (object) {
@@ -501,7 +526,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
                 if (batchActionSelected) {
-                    this.options.showButtons = [];
+                    
                     this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                     this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });

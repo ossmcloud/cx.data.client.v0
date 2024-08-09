@@ -78,12 +78,14 @@ class CPInvoiceReturnLineRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, dataHidden: 'gl-code' });
             this.options.columns.push({ name: 'glSegment1Edit', title: 'GL Code' });
         } else {
-            
-            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, title: 'GL Code', data: 'gl-code' });
+            if (this.options.mode == 'view') {
+                this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT1, title: 'GL Code', data: 'gl-code' });
+            }
         }
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT2, title: 'GL Code 2', data: 'gl-code-2' });
-        this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLTAXCODE, dataHidden: 'gl-tax' });
-
+        if (this.options.mode == 'view') {
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLSEGMENT2, title: 'GL Code 2', data: 'gl-code-2' });
+            this.options.columns.push({ name: _cxSchema.cp_invoiceCreditLine.GLTAXCODE, dataHidden: 'gl-tax' });
+        }
 
 
 

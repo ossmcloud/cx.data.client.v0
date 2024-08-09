@@ -243,6 +243,7 @@ module.exports = {
         TOTALDRS: 'totalDRS',
         ISUSEREDITLOCKED: 'isUserEditLocked',
         ISUSEREDITEDGL: 'isUserEditedGL',
+        ISMANUAL: 'isManual',
     },
 
     cp_invoiceCreditLine: {
