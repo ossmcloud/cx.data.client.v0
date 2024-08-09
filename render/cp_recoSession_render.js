@@ -12,7 +12,7 @@ class CPRecoSessionRender extends RenderBase {
 
         this.autoLoadFields = {};
         //this.autoLoadFields[_cxSchema.cp_recoSession.RECOSESSIONID] = null;
-        this.autoLoadFields['action'] = { name: 'action', title: ' ', align: 'center', link: { valueField: _cxSchema.cp_recoSession.RECOSESSIONID, text: '&#x270E;', onclick: 'openSession' } };
+        this.autoLoadFields['action'] = { name: 'action', title: ' ', align: 'center', link: { valueField: _cxSchema.cp_recoSession.RECOSESSIONID, text: '&#x1F9E9;', onclick: 'openSession' } };
         this.autoLoadFields['recoMatchLevel'] = { name: 'recoMatchLevel', title: ' ', toolTip: { valueField: 'recoMatchLevel', suppressText: true } };
 
 
