@@ -30,6 +30,22 @@ class CPInvoiceGroupRender extends RenderBase {
         return transactionsOptions;
     }
 
+    async getDeliveryListOptions() {
+        var canDetachDocuments = false;
+        var s = this.dataSource.documentStatus;
+        if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+            canDetachDocuments = true;
+        }
+
+        var transactions = this.dataSource.cx.table(_cxSchema.cp_deliveryReturn);
+        await transactions.select({ gid: this.options.query.id, noPaging: true });
+
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments });
+        transactionsOptions.quickSearch = true;
+        return transactionsOptions;
+    }
+
+
     async getDocumentLogListOptions() {
         var transactionLogs = this.dataSource.cx.table(_cxSchema.cp_invoiceGroupLog);
         await transactionLogs.select({ pid: this.options.query.id });
@@ -205,6 +221,20 @@ class CPInvoiceGroupRender extends RenderBase {
         var transactionOptions = await this.getDocumentListOptions();
         subListsGroup.fields.push({ group: 'lines', title: 'documents', column: 1, fields: [transactionOptions] })
 
+        if (this.dataSource.isManual) {
+            var deliveriesOptions = await this.getDeliveryListOptions();
+            
+            if (deliveriesOptions.records.length > 0) {
+
+                subListsGroup.fields.push({ group: 'lines', title: 'deliveries', column: 1, fields: [deliveriesOptions] })
+                var s = this.dataSource.documentStatus;
+                if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+                    this.options.buttons.push({ id: 'cp_generate_invoices', text: 'Generate Invoices', function: 'generateInvoices' });
+                }
+                
+            }
+        }
+
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
@@ -220,6 +250,7 @@ class CPInvoiceGroupRender extends RenderBase {
             if (this.dataSource.isManual) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
                     this.options.buttons.push({ id: 'cp_add_invoices', text: 'Add Invoices', function: 'addDocument' });
+                    this.options.buttons.push({ id: 'cp_add_deliveries', text: 'Add Deliveries', function: 'addDelivery' });
                 }
             }
 

@@ -48,6 +48,7 @@ module.exports = {
         CREATEDFROMTYPE: 'createdFromType',
         DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
         TOTALDRS: 'totalDRS',
+        INVGRPID: 'invGrpId',
     },
 
     cp_deliveryReturnLine: {

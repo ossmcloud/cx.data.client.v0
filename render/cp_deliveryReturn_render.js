@@ -303,6 +303,10 @@ class CPDeliveryReturnRender extends RenderBase {
             if (isGenerateInvoice) { this.options.columns.push({ name: 'check', title: 'select', width: '30px', type: 'check' }); }
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' });
             this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+
+            if (this.options.canDetachDocuments) {
+                this.options.columns.push({ name: 'detach', link: { text: 'detach', valueField: 'delRetId', onclick: 'detachDocument' } });
+            }
             //this.options.columns.push({ name: 'invoiceCountIcon', title: '&#x2699;', align: 'center', width: '10px', headerToolTip: 'invoice generated' });
 
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });

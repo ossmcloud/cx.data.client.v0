@@ -61,6 +61,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
+        if (params.gid) {
+            if (params.gid == 'none') {
+                query.sql += ' and d.invGrpId is null';
+            } else {
+                query.sql += ' and d.invGrpId = @invGrpId';
+                query.params.push({ name: 'invGrpId', value: params.gid });
+            }
+        }
         if (params.tr) {
             query.sql += ' and d.transmissionId like @transmissionId';
             query.params.push({ name: 'transmissionId', value: ('%' + params.tr + '%') });
