@@ -16,6 +16,16 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
 
         if (!params) { params = {}; }
 
+        if (params.sql) {
+            return await super.select(params);
+        }
+
+        var invoiceJoin = '';
+        var isGenerateInvoice = (params.generate == 'T' || params.generate == 'true');
+        if (isGenerateInvoice) {
+            invoiceJoin = 'left join cp_invoiceCredit inv on inv.createdFrom = d.delRetId'
+        }
+
         var query = { sql: '', params: [] };
         query.sql = ` select            distinct d.*, s.shopCode, s.shopName, 
                                         isnull(supp.traderName, (
@@ -39,8 +49,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
+                      ${invoiceJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
+        if (isGenerateInvoice) {
+            query.sql += ' and d.documentStatus = @documentStatus';
+            query.params.push({ name: 'documentStatus', value: _declarations.CP_DOCUMENT.STATUS.Ready });
+        }
+        
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
@@ -132,6 +148,10 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += " and ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) > 0";
         } else if (params.attach == 'false') {
             query.sql += " and ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) = 0";
+        }
+
+        if (isGenerateInvoice) {
+            query.sql += " and inv.invCreId is null"
         }
         
         query.sql += ' order by d.documentDate desc';
@@ -294,7 +314,6 @@ class cp_deliveryReturn extends _persistentTable.Record {
     }
 
     async generate() {
-
         var doc = this.cx.table(_schema.cp_invoiceCredit).createNew();
         doc.populate(this.toObject());
         doc.transmissionID = -1;

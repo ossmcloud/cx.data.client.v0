@@ -591,7 +591,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
            
-            if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'post', width: '30px', type: 'check' }); }
+            if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'select', width: '30px', type: 'check' }); }
 
 
             this.options.cellHighlights = [];
