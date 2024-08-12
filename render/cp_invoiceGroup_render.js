@@ -8,6 +8,7 @@ const { setDefaultHighWaterMark } = require('nodemailer/lib/xoauth2');
 
 class CPInvoiceGroupRender extends RenderBase {
     matchingEnabled = false;
+    manualHelpMessage = '';
     constructor(dataSource, options) {
         super(dataSource, options);
         this.matchingEnabled = this.hasModule('cm');
@@ -191,7 +192,7 @@ class CPInvoiceGroupRender extends RenderBase {
             // this.options.title += matchSummary.html;
             this.options.title += matchSummary.htmlPie;
         }
-
+      
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
@@ -223,15 +224,44 @@ class CPInvoiceGroupRender extends RenderBase {
 
         if (this.dataSource.isManual) {
             var deliveriesOptions = await this.getDeliveryListOptions();
-            
+
             if (deliveriesOptions.records.length > 0) {
 
                 subListsGroup.fields.push({ group: 'lines', title: 'deliveries', column: 1, fields: [deliveriesOptions] })
                 var s = this.dataSource.documentStatus;
                 if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
-                    this.options.buttons.push({ id: 'cp_generate_invoices', text: 'Generate Invoices', function: 'generateInvoices' });
+                    if (transactionOptions.records.length < deliveriesOptions.records.length) {
+                        this.options.buttons.push({ id: 'cp_generate_invoices', text: 'Generate Invoices', function: 'generateInvoices' });
+                        this.manualHelpMessage = "if all deliveries have been added the group invoice, please click on the 'generate invoices' button above";
+                    } else {
+                        if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
+                            this.manualHelpMessage = "all is good, the group invoice is ready for posting";
+                        } else {
+                            
+                            for (var tx = 0; tx < transactionOptions.records.length; tx++) {
+                                var s = transactionOptions.records[tx].documentStatus;
+                                if (s == _cxConst.CP_DOCUMENT.STATUS.Generating || s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
+                                    this.manualHelpMessage = "documents are being generated, refresh the page in few moments";
+                                    break;
+                                }
+                            }
+                            if (!this.manualHelpMessage) {
+                                var readyToRefresh = true;
+                                for (var tx = 0; tx < transactionOptions.records.length; tx++) {
+                                    var s = transactionOptions.records[tx].documentStatus;
+                                    if (s != _cxConst.CP_DOCUMENT.STATUS.PostingReady) { readyToRefresh = false; break; }
+                                }
+                                if (readyToRefresh) {
+                                    this.manualHelpMessage = "click on the 'refresh data' button and choose to refresh erp data to prepare the invoice for posting";
+                                } else {
+                                    this.manualHelpMessage = "some documents are not ready for posting, please address the issues then click on the 'refresh data' button and choose to refresh erp data to prepare the invoice for posting";
+                                }
+                            }
+                            
+                        }
+                    }
                 }
-                
+
             }
         }
 
@@ -289,7 +319,6 @@ class CPInvoiceGroupRender extends RenderBase {
             // in case something went wrong and we need to reset
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
-
                     this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
                 }
             }
@@ -400,14 +429,16 @@ class CPInvoiceGroupRender extends RenderBase {
 
         ]
 
-        if (!this.dataSource.isNew()) {
-            await this.buildFormLists();
-        }
+        if (!this.dataSource.isNew()) { await this.buildFormLists(); }
 
         var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
         var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
 
         this.buildFormActions(erpName);
+
+        if (this.dataSource.isManual && this.manualHelpMessage) {
+            this.options.formBanner = `<span style="font-size: 30px; color: var(--main-color-4); float: left; margin-top: -10px; margin-left: -7px; margin-right: 7px;">&#x1F6C8;</span> ${this.manualHelpMessage}`;
+        }
     }
 
     async _list() {

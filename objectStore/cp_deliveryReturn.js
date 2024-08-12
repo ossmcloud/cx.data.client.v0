@@ -49,6 +49,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
+                      left outer join   cp_invoiceCredit       inv      ON inv.createdFrom = d.delRetId
                       ${invoiceJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
@@ -61,6 +62,11 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
+
+        if (params.grp == 'T') {
+            query.sql += ' and isnull(inv.documentStatus, -1) in (' + _declarations.CP_DOCUMENT.STATE_INV.Pending.join(',') + ',' + _declarations.CP_DOCUMENT.STATE_INV.PendingPost.join(',') + ')';
+        }
+
         if (params.gid) {
             if (params.gid == 'none') {
                 query.sql += ' and d.invGrpId is null';
