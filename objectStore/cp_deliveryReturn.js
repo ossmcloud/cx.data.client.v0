@@ -21,7 +21,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         }
 
         var invoiceJoin = '';
-        var isGenerateInvoice = (params.generate == 'T' || params.generate == 'true');
+        var isGenerateInvoice = (params.generate == 'T' || params.generate == 'true' || params.grp == 'T');
         if (isGenerateInvoice) {
             invoiceJoin = 'left join cp_invoiceCredit inv on inv.createdFrom = d.delRetId'
         }
@@ -49,7 +49,6 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
-                      left outer join   cp_invoiceCredit       inv      ON inv.createdFrom = d.delRetId
                       ${invoiceJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
