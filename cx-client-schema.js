@@ -48,6 +48,7 @@ module.exports = {
         CREATEDFROMTYPE: 'createdFromType',
         DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
         TOTALDRS: 'totalDRS',
+        INVGRPID: 'invGrpId',
     },
 
     cp_deliveryReturnLine: {
@@ -242,6 +243,7 @@ module.exports = {
         TOTALDRS: 'totalDRS',
         ISUSEREDITLOCKED: 'isUserEditLocked',
         ISUSEREDITEDGL: 'isUserEditedGL',
+        ISMANUAL: 'isManual',
     },
 
     cp_invoiceCreditLine: {

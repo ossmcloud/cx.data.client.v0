@@ -20,6 +20,8 @@ function enumToList(obj, addEmpty, aliases, dataObjects) {
         if (key == 'CX_SUPPORT') { continue; }
         if (key == '_NAME') { continue; }
 
+        if (key[0] == '_') { continue; }
+
 
         var dataObject = (dataObjects) ? dataObjects[key] : null;
         enums.push({
@@ -649,7 +651,11 @@ const CP_DOCUMENT = {
         POST: 2,
         RESET: 3,
         UNPOST: 9,
-        toList: function (addEmpty) { return enumToList(this, addEmpty); },
+        _GENERATE: 10,
+        toList: function (addEmpty) {
+
+            return enumToList(this, addEmpty);
+        },
         getName: function (value) { return enumGetName(this, value); },
     },
 

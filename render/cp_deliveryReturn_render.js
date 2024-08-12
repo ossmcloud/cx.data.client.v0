@@ -252,6 +252,8 @@ class CPDeliveryReturnRender extends RenderBase {
 
     async _list() {
         try {
+            var isGenerateInvoice = (this.options.query && (this.options.query.generate == 'T' || this.options.query.generate == 'true'));
+
             if (this.options.query) {
                 this.options.paging = true;
                 this.options.pageNo = (this.options.query.page || 1);
@@ -260,7 +262,9 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.filters = [];
             this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }));
             this.options.filters.push({ label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_DR.toList('- all -') });
-            this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_DEL.toList('- all -'), });
+            if (!isGenerateInvoice) {
+                this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_DEL.toList('- all -'), });
+            }
             if (this.matchingEnabled) {
                 //this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                 this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') });
@@ -277,6 +281,17 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.filters.push({ label: 'uploaded (from)', fieldName: 'udf', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
             this.options.filters.push({ label: 'uploaded (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
 
+            if (isGenerateInvoice) {
+                this.options.title = 'generate invoices/credits';
+                
+                this.options.showButtons = [];
+                this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
+                this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
+                this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for invoice generation', function: 'submitForBatchProcessing' });
+
+                this.options.filters.push({ label: 'generate', fieldName: 'generate', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '30px' });
+            }
+
             var signedCols = {
                 Net: _cxSchema.cp_deliveryReturn.TOTALNET + 'Sign',
                 Vat: _cxSchema.cp_deliveryReturn.TOTALVAT + 'Sign',
@@ -285,8 +300,13 @@ class CPDeliveryReturnRender extends RenderBase {
                 DRS: _cxSchema.cp_deliveryReturn.TOTALDRS + 'Sign',
             }
             this.options.columns = [];
+            if (isGenerateInvoice) { this.options.columns.push({ name: 'check', title: 'select', width: '30px', type: 'check' }); }
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DELRETID, title: ' ', align: 'center' });
             this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+
+            if (this.options.canDetachDocuments) {
+                this.options.columns.push({ name: 'detach', link: { text: 'detach', valueField: 'delRetId', onclick: 'detachDocument' } });
+            }
             //this.options.columns.push({ name: 'invoiceCountIcon', title: '&#x2699;', align: 'center', width: '10px', headerToolTip: 'invoice generated' });
 
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });

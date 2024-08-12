@@ -53,6 +53,7 @@ const _fieldNames = {
     CREATEDFROMTYPE: 'createdFromType',
     DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
     TOTALDRS: 'totalDRS',
+    INVGRPID: 'invGrpId',
 
 }
 //
@@ -93,6 +94,7 @@ const _fields = {
     createdFromType: { name: 'createdFromType', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     docketNumberLookedUp: { name: 'docketNumberLookedUp', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    invGrpId: { name: 'invGrpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -314,6 +316,12 @@ class Persistent_cp_deliveryReturn extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TOTALDRS);
     } set totalDRS(val) {
         super.setValue(_fieldNames.TOTALDRS, val);
+    }
+
+    get invGrpId() {
+        return super.getValue(_fieldNames.INVGRPID);
+    } set invGrpId(val) {
+        super.setValue(_fieldNames.INVGRPID, val);
     }
 
 

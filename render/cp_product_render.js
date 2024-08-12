@@ -169,15 +169,15 @@ class CPProductRender extends RenderBase {
             this.options.lookupLists = { aliasInfoNull: await this.dataSource.cx.table(_cxSchema.cp_productAlias).toLookUpList(this.options.query.s) };
 
             if (map == _cxConst.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_DEP) {
-                this.options.columns.push({ name: 'depMapConfigId', title: 'department mapping', width: '500px', input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
+                this.options.columns.push({ name: 'depMapConfigId', title: 'department mapping', width: '500px', sortable: false, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
                 this.options.lookupLists.depMapConfigId = await this.dataSource.cx.table(_cxSchema.cx_map_config_dep).toLookupFullList(this.options.query.s);
             }
             if (map == _cxConst.CP_PRODUCT.MAP_STATUS.NOT_MAPPED_TAX) {
-                this.options.columns.push({ name: 'taxMapConfigId', title: 'tax mapping', width: '300px', unbound: true, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
+                this.options.columns.push({ name: 'taxMapConfigId', title: 'tax mapping', width: '300px', sortable: false, unbound: true, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
                 this.options.lookupLists.taxMapConfigId = await this.dataSource.cx.table(_cxSchema.cx_map_config_tax).toLookupFullList(this.options.query.s);
             }
 
-            this.options.columns.push({ name: 'aliasId', title: 'alias', width: '350px', unbound: true, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
+            this.options.columns.push({ name: 'aliasId', title: 'alias', width: '350px', sortable: false, unbound: true, input: { type: _cxConst.RENDER.CTRL_TYPE.TEXT } });
             this.options.lookupLists.aliasId = await this.dataSource.cx.table(_cxSchema.cp_productAlias).toLookUpList(this.options.query.s);
 
         } else {

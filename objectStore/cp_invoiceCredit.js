@@ -38,9 +38,14 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
         }
+
+        if (params.grp == 'T') {
+            query.sql += ' and d.documentStatus in (' + _declarations.CP_DOCUMENT.STATE_INV.Pending.join(',') + ',' + _declarations.CP_DOCUMENT.STATE_INV.PendingPost.join(',') + ')';
+        }
+
         if (params.gid) {
             if (params.gid == 'none') {
-                query.sql += ' and d.invGrpId is null';   
+                query.sql += ' and d.invGrpId is null';
             } else {
                 query.sql += ' and d.invGrpId = @invGrpId';
                 query.params.push({ name: 'invGrpId', value: params.gid });
@@ -164,7 +169,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         }
 
         query.sql += ' order by d.documentDate desc';
-      
+
         if (!params.noPaging) {
             if (params.paging) {
                 query.paging = params.paging;
@@ -306,8 +311,12 @@ class cp_invoiceCredit extends _persistentTable.Record {
 
     get editedIcon() {
         var icons = '';
-        if (this.createdFrom) { icons += '&#x2699;'; }
-        if (this.isUserEdited) { icons += '&#x270E;'; }
+        if (this.isManual) {
+            icons += '&#x1F590;';
+        } else {
+            if (this.createdFrom) { icons += '&#x2699;'; }
+            if (this.isUserEdited) { icons += '&#x270E;'; }
+        }
         if (this.isUserEditLocked) { icons += '&#x1F512;'; }
         return icons;
     }
@@ -334,7 +343,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#logs = logs;
     }
 
-   
+
 
     async save() {
         this.totalGross = (this.totalNet + this.totalVat + this.totalDRS);
