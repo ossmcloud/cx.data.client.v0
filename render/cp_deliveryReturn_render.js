@@ -18,7 +18,7 @@ class CPDeliveryReturnRender extends RenderBase {
         await transactionLines.select({ pid: this.options.query.id });
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
-        transactionLinesOptions.quickSearch = true;
+        transactionLinesOptions.quickSearch = !this.options.embedded;
         return transactionLinesOptions;
     }
 
@@ -247,6 +247,10 @@ class CPDeliveryReturnRender extends RenderBase {
             if (await queries.select({ delRetId: this.dataSource.id })) {
                 this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
             }
+        }
+
+        if (this.options.embedded) {
+            this.options.buttons = [];
         }
     }
 
