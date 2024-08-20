@@ -16,10 +16,11 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  l.*, s.shopCode, s.shopName
-                      from    ${this.type} l, cx_shop s
-                      where   l.${this.FieldNames.SHOPID} = s.shopId
-                      and     l.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+        query.sql = ` select  l.*, s.shopCode, s.shopName, dtfs.dtfsSettingName, dtfs.eposProvider
+                      from    ${this.type} l
+                      join    cx_shop s on s.shopId = l.shopId
+                      left join    epos_dtfs_setting dtfs on dtfs.dtfsSettingId = l.dtfsSettingId
+                      where   l.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
         
         if (params.s) {
             query.sql += ' and l.shopId = @shopId';
@@ -40,6 +41,10 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
         if (params.st) {
             query.sql += ' and l.status = @status';
             query.params.push({ name: 'status', value: params.st });
+        }
+        if (params.dtfs) {
+            query.sql += ' and dtfs.dtfsSettingId  = @dtfsSettingId';
+            query.params.push({ name: 'dtfsSettingId', value: params.dtfs });
         }
         query.sql += ' order by l.created desc';
 
@@ -94,17 +99,24 @@ class epos_dtfs_transmission_Collection extends _persistentTable.Table {
 class epos_dtfs_transmission extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
+    #dtfsSettingName = '';
+    #eposProvider = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
+        this.#dtfsSettingName = defaults['dtfsSettingName'] || '';
+        this.#eposProvider = defaults['eposProvider'] || '';
     };
 
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
     get transmissionIdText() { return this.transmissionId.toString(); }
+
+    get dtfsSettingName() { return this.#dtfsSettingName; }
+    get eposProvider() { return this.#eposProvider; }
 
     async abort(message) {
         if (this.status != _declarations.EPOS_DTFS_TRANSMISSION.STATUS.PENDING && this.status != _declarations.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING) {

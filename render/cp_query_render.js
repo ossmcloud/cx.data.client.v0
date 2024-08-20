@@ -59,13 +59,13 @@ class CPQueryRender extends RenderBase {
             column.title = 'document #';
             column.addTotals = false;
             column.align = 'left';
-            column.link = { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' };
+            column.link = { url: '/cp/invoice?id={documentNumber}', paramName: 'documentNumber', valueField: 'invCreId' };
         } else if (field.name == _cxSchema.cp_query.DELRETID) {
             column.name = 'docketNumber';
             column.title = 'docket #';
             column.addTotals = false;
             column.align = 'left';
-            column.link = { url: '/cp/delivery?id={docketNumber}', valueField: 'delRetId' };
+            column.link = { url: '/cp/delivery?id={docketNumber}', paramName: 'docketNumber', valueField: 'delRetId' };
         } else if (field.name == _cxSchema.cp_query.QUERYTYPEID) {
             column.title = 'query type';
             column.addTotals = false;

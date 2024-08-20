@@ -28,7 +28,7 @@ class CPRecoSessionRender extends RenderBase {
 
 
         this.autoLoadFields['documentDate'] = { name: 'documentDate', fieldName: 'SKIP_documentDate', dataType: 'datetime' };
-        this.autoLoadFields['documentNumber'] = { name: 'documentNumber', fieldName: 'SKIP_documentNumber', link: { url: '/cp/invoice?id={documentNumber}', valueField: 'invCreId' } };
+        this.autoLoadFields['documentNumber'] = { name: 'documentNumber', fieldName: 'SKIP_documentNumber', link: { url: '/cp/invoice?id={documentNumber}', paramName: 'documentNumber', valueField: 'invCreId' } };
         this.autoLoadFields['docketNumber'] = { name: 'docketNumber', fieldName: 'SKIP_docketNumber' };
         this.autoLoadFields['groupInvoice'] = { name: 'groupInvoice', fieldName: 'SKIP_groupInvoice' };
         

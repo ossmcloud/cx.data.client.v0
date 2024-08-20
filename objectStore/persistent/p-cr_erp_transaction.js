@@ -42,6 +42,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    CBTRANTYPE: 'cbTranType',
 
 }
 //
@@ -71,6 +72,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    cbTranType: { name: 'cbTranType', dataType: 'varchar', pk: false, identity: false, maxLength: 10, null: true },
 
 }
 //
@@ -226,6 +228,12 @@ class Persistent_cr_erp_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get cbTranType() {
+        return super.getValue(_fieldNames.CBTRANTYPE);
+    } set cbTranType(val) {
+        super.setValue(_fieldNames.CBTRANTYPE, val);
     }
 
 

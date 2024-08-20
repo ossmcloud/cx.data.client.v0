@@ -340,6 +340,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         doc.modifiedBy = null;
         doc.modified = null;
         await doc.save();
+        doc.log('document generated from delivery: ' + this.documentId);
         return doc;
     }
 }

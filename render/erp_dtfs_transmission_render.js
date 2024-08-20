@@ -35,6 +35,7 @@ class ErpTransmissionRender extends RenderBase {
         this.options.filters = [
             //await this.dataSource.db.table(_cxSchema.cx_shop).renderDropDownOptions({ fieldName: 's' }),
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
+            await this.filterDropDownOptions(_cxSchema.erp_dtfs_setting, { fieldName: 'dtfs' }),
             { label: 'transmission', fieldName: 'tr', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
             { label: 'from', fieldName: 'df', type: _cxConst.RENDER.CTRL_TYPE.DATE },
             { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
@@ -47,6 +48,8 @@ class ErpTransmissionRender extends RenderBase {
             { name: 'transmissionId', title: ' ', align: 'center' },
             { name: 'transmissionIdText', title: 'transmission ID', align: 'center', width: '150px' },
             { name: 'shopInfo', title: 'store', width: '200px' },
+            { name: 'dtfsSettingName', title: 'erp component', width: '200px' },
+            { name: 'erpProvider', title: 'erp provider', width: '100px' },
             { name: 'status', title: 'status', align: 'center', width: '130px', lookUps: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.toList(), },
             { name: 'action', title: 'action', align: 'center', width: '70px', lookUps: _cxConst.EPOS_DTFS_TRANSMISSION.ACTION.toList() },
             { name: 'message', title: 'message' },
@@ -57,6 +60,9 @@ class ErpTransmissionRender extends RenderBase {
             { column: 'status', op: '=', value: _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING, style: 'color: #FFCD00; background-color: var(--element-bg-color);' }
         ];
     }
+
+
+    
 
 }
 
