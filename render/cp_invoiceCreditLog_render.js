@@ -24,6 +24,7 @@ class CPInvoiceCreditLogRender extends RenderBase {
             { name: _cxSchema.cp_invoiceCreditLog.LOGTYPE, title: 'type', width: '50px' },
             { name: _cxSchema.cp_invoiceCreditLog.LOGMESSAGE, title: 'log message' },
             { name: _cxSchema.cp_invoiceCreditLog.LOGINFO, title: 'log info' },
+            { name: _cxSchema.cp_invoiceCreditLog.CREATEDBY, title: 'user' },
                        
         ];
 

@@ -4,7 +4,6 @@ const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
 const RenderBase = require('./render_base');
-const { setDefaultHighWaterMark } = require('nodemailer/lib/xoauth2');
 
 class CPInvoiceGroupRender extends RenderBase {
     matchingEnabled = false;
@@ -232,16 +231,16 @@ class CPInvoiceGroupRender extends RenderBase {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
                     if (transactionOptions.records.length < deliveriesOptions.records.length) {
                         this.options.buttons.push({ id: 'cp_generate_invoices', text: 'Generate Invoices', function: 'generateInvoices' });
-                        this.manualHelpMessage = "if all deliveries have been added the group invoice, please click on the 'generate invoices' button above";
+                        this.manualHelpMessage = "If you're finished with adding deliveries, please click on the 'generate invoices' button above";
                     } else {
                         if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
-                            this.manualHelpMessage = "all is good, the group invoice is ready for posting";
+                            this.manualHelpMessage = "All seems good, the group invoice is ready for posting";
                         } else {
                             
                             for (var tx = 0; tx < transactionOptions.records.length; tx++) {
                                 var s = transactionOptions.records[tx].documentStatus;
                                 if (s == _cxConst.CP_DOCUMENT.STATUS.Generating || s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
-                                    this.manualHelpMessage = "documents are being generated, refresh the page in few moments";
+                                    this.manualHelpMessage = "Documents are being generated, refresh the page in a few moments";
                                     break;
                                 }
                             }
@@ -252,9 +251,9 @@ class CPInvoiceGroupRender extends RenderBase {
                                     if (s != _cxConst.CP_DOCUMENT.STATUS.PostingReady) { readyToRefresh = false; break; }
                                 }
                                 if (readyToRefresh) {
-                                    this.manualHelpMessage = "click on the 'refresh data' button and choose to refresh erp data to prepare the invoice for posting";
+                                    this.manualHelpMessage = "Click on the [Refresh Data] button and choose to [Refresh only <b>posting data</b>] to prepare the invoice for posting";
                                 } else {
-                                    this.manualHelpMessage = "some documents are not ready for posting, please address the issues then click on the 'refresh data' button and choose to refresh erp data to prepare the invoice for posting";
+                                    this.manualHelpMessage = "Some documents are not ready for posting, please address the issues then click on the [Refresh Data] button and choose to [Refresh only posting data] to prepare the invoice for posting";
                                 }
                             }
                             
