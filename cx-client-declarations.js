@@ -712,7 +712,7 @@ const CP_DOCUMENT = {
             if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
             if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
             if (returnObject) { return styles; }
-            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+            return `color: ${styles.color} !important; background-color: ${styles.bkgColor} !important;`;
         }
 
     },

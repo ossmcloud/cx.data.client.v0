@@ -187,6 +187,11 @@ async function getPermission(recordType, role) {
         permission.allowNew = false;
         permission.allowDelete = false;
     }
+    if (recordType == _cxSchema.cp_accrual.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = false;
+        permission.allowDelete = false;
+    }
 
     if (recordType == _cxSchema.cp_product.TBL_NAME || recordType == _cxSchema.cp_productAlias.TBL_NAME || recordType == _cxSchema.cp_productAliasShop.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);

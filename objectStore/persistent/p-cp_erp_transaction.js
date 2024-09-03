@@ -43,6 +43,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     ISUSEREDITED: 'isUserEdited',
     INVGRPID: 'invGrpId',
+    ACCRID: 'accrId',
 
 }
 //
@@ -73,6 +74,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     invGrpId: { name: 'invGrpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    accrId: { name: 'accrId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -234,6 +236,12 @@ class Persistent_cp_erp_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.INVGRPID);
     } set invGrpId(val) {
         super.setValue(_fieldNames.INVGRPID, val);
+    }
+
+    get accrId() {
+        return super.getValue(_fieldNames.ACCRID);
+    } set accrId(val) {
+        super.setValue(_fieldNames.ACCRID, val);
     }
 
 
