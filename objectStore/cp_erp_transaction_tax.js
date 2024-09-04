@@ -26,7 +26,10 @@ class cp_erp_transaction_tax_Collection extends _persistentTable.Table {
             query.sql += ' where   t.invGrpId = @invGrpId';
             query.params.push({ name: 'invGrpId', value: params.invGrpId });
         }
-
+        if (params.accrId) {
+            query.sql += ' where   t.accrId = @accrId';
+            query.params.push({ name: 'accrId', value: params.accrId });
+        }
         
         query.sql += ' order by gl.taxTranId';
         query.paging = {

@@ -24,6 +24,9 @@ class cp_accrual_Collection extends _persistentTable.Table {
                 where       a.${this.FieldNames.SHOPID} in ${this.cx.shopList}
                 `
         };
+
+        if (params.SKIP_sta) { query.sql += ' and a.documentStatus in (' + params.SKIP_sta + ')'; }
+
         this.queryFromParams(query, params, 'a');
         query.sql += ' order by a.created desc';
 
@@ -77,7 +80,7 @@ class cp_accrual extends _persistentTable.Record {
         if (!this.#logs) {
             this.#logs = this.cx.table(_schema.cp_accrualLog);
         }
-        var log = await this.#logs.log(this.invGrpId, type, message, info);
+        var log = await this.#logs.log(this.accrId, type, message, info);
         this.#logs.records.push(log);
         return log;
     }

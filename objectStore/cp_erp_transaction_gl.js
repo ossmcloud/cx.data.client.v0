@@ -27,6 +27,10 @@ class cp_erp_transaction_gl_Collection extends _persistentTable.Table {
             query.sql += ' where   t.invGrpId = @invGrpId';
             query.params.push({ name: 'invGrpId', value: params.invGrpId });
         }
+        if (params.accrId) {
+            query.sql += ' where   t.accrId = @accrId';
+            query.params.push({ name: 'accrId', value: params.accrId });
+        }
       
         query.sql += ' order by gl.glTranId';
         query.paging = {

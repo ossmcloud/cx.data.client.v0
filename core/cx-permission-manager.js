@@ -189,7 +189,7 @@ async function getPermission(recordType, role) {
     }
     if (recordType == _cxSchema.cp_accrual.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
-        permission.allowNew = false;
+        permission.allowNew = true;
         permission.allowDelete = false;
     }
 
