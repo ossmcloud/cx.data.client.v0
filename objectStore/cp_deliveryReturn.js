@@ -22,8 +22,11 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
 
         var invoiceJoin = '';
         var isGenerateInvoice = (params.generate == 'T' || params.generate == 'true' || params.grp == 'T');
-        if (isGenerateInvoice) {
-            invoiceJoin = 'left join cp_invoiceCredit inv on inv.createdFrom = d.delRetId'
+        if (isGenerateInvoice) { invoiceJoin = 'left join cp_invoiceCredit inv on inv.createdFrom = d.delRetId'; }
+
+        var accrualJoin = ''
+        if (params.accrId) {
+            accrualJoin = 'join cp_accrualDocument accrDoc on accrDoc.delRetId = d.delRetId and accrDoc.accrId = ' + params.accrId;
         }
 
         var query = { sql: '', params: [] };
@@ -50,6 +53,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                       ${invoiceJoin}
+                      ${accrualJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (isGenerateInvoice) {
@@ -169,12 +173,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         
         query.sql += ' order by d.documentDate desc';
 
-        if (params.paging) {
-            query.paging = params.paging;
-        } else {
-            query.paging = {
-                page: params.page || 1,
-                pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            if (params.paging) {
+                query.paging = params.paging;
+            } else {
+                query.paging = {
+                    page: params.page || 1,
+                    pageSize: _declarations.SQL.PAGE_SIZE
+                }
             }
         }
 

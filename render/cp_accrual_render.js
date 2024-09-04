@@ -84,74 +84,99 @@ class CPAccrualRender extends RenderBase {
 
 
 
-    // async getQueryLogListOptions() {
-    //     var queryLogs = this.dataSource.cx.table(_cxSchema.cp_queryLog);
-    //     await queryLogs.select({ qid: this.dataSource.id });
+    async getDocumentLogListOptions() {
+        var transactionLogs = this.dataSource.cx.table(_cxSchema.cp_accrualLog);
+        await transactionLogs.select({ pid: this.options.query.id });
+        var transactionLogsOptions = await this.listOptions(transactionLogs, { listView: true });
+        transactionLogsOptions.quickSearch = true;
+        return transactionLogsOptions;
+    }
+    async getDeliveryListOptions() {
+        var canDetachDocuments = false;
+        var s = this.dataSource.documentStatus;
+        if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+            canDetachDocuments = true;
+        }
 
-    //     var queryLogsOptions = await this.listOptions(queryLogs, { listView: true });
-    //     queryLogsOptions.quickSearch = true;
-    //     queryLogsOptions.title = '<span>system logs</span>';
-    //     return queryLogsOptions;
-    // }
+        var transactions = this.dataSource.cx.table(_cxSchema.cp_deliveryReturn);
+        await transactions.select({ accrId: this.options.query.id, noPaging: true });
 
-    // buildFormTitle() {
-    //     var applyStyle = 'margin: 7px ;padding: 0px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
-    //     this.options.title = `<div style="padding-bottom: 7px; width: 100%;"><table><tr>`;
-
-    //     if (this.dataSource.invCreId) {
-    //         this.options.title += `<td>${this.dataSource.wholesalerInfo} - query</td>`;
-    //     } else {
-    //         this.options.title += `<td>${this.dataSource.supplierInfo} - query</td>`;
-    //     }
-
-    //     this.options.title += `
-    //         <td>
-    //             <span style="${_cxConst.CP_QUERY_STATUS.getStyleInverted(this.dataSource.statusId) + applyStyle}">
-    //                 ${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}
-    //             </span>
-    //         </td>`;
-
-    //     if (this.dataSource.invCreId) {
-    //         this.options.title += `
-    //         <td style="padding-left: 17px;">
-    //             <label style="display: block; padding: 0px;">invoice gross</label>
-    //             <span  style="display: block; margin-bottom: -10px; color: var(--main-color-3);">${this.dataSource.documentGross}</span>
-    //         </td>`;
-    //     }
-
-    //     if (this.dataSource.delRetId) {
-    //         this.options.title += `
-    //         <td style="padding-left: 17px;">
-    //             <label style="display: block; padding: 0px;">delivery gross</label>
-    //             <span  style="display: block; margin-bottom: -10px; color: var(--main-color-3);">${this.dataSource.docketGross}</span>
-    //         </td>`;
-    //     }
-    //     this.options.title += `</tr></table></div>`;
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments });
+        transactionsOptions.quickSearch = true;
+        return transactionsOptions;
+    }
 
 
-    //     if (this.dataSource.isNew()) {
-    //         this.options.tabTitle = `cx::new query`;
-    //     } else {
-    //         if (this.dataSource.queryReference == 'TBA') {
-    //             this.options.tabTitle = `query::${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}`
-    //         } else {
-    //             this.options.tabTitle = `${this.dataSource.queryReference}`
-    //         }
-    //     }
-    //     var icon = '';
-    //     if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED) {
-    //         icon = '\u2713 ';    // check mark
-    //     } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.PENDING) {
-    //         icon = '\u21BB ';
-    //     } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
-    //         icon = '\u26A0 ';    // warning triangle
-    //     } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.ERROR) {
-    //         icon = '\u274C ';    // red x
-    //     }
-    //     this.options.tabTitle = `${icon}${this.options.tabTitle}`;
 
-    // }
+    setRecordTitle() {
+        // SET TAB TITLE
+        this.options.tabTitle = `accrual`;
+        // SET DOCUMENT TILE WITH DOC TYPE, STATUS AND EDITED BUBBLES
+        var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
+        this.options.title = `<div style="display: table;">`;
+        this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${this.dataSource.documentNumber}</div>`;
+        this.options.title += `
+            <div style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
+                ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
+            </div>
+        `;
+        this.options.title += '</div>';
+    }
 
+    buildFormActions(erpName) {
+        if (this.options.mode == 'view') {
+            var s = this.dataSource.documentStatus;
+            // 
+            if (s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
+                this.options.buttons.push({ id: 'cp_view_missmapped', text: 'View Mis-mapped Products', function: 'viewMisMappedProds' });
+            }
+
+            // allow to refresh only under certain statuses
+            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+            }
+            // allow to post based on role only under certain statuses
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
+                    var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                    this.options.buttons.push(btnPostToErp);
+                }
+            }
+            // allow to un-post based on role only under certain statuses
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
+                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                }
+            }
+            // in case something went wrong and we need to reset
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+                if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
+                    this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
+                }
+            }
+
+            // allow to delete if not posted
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
+                    this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                }
+            }
+
+            var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+            this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+        }
+    }
+
+    async buildFormLists() {
+        var deliveriesOptions = await this.getDeliveryListOptions();
+        this.options.fields.push({ group: 'deliveries', title: 'deliveries', fields: [deliveriesOptions], collapsed: true });
+
+        if (this.options.query.viewLogs == 'T') {
+            var transactionLogOptions = await this.getDocumentLogListOptions();
+            this.options.fields.push({ group: 'logs', title: 'document logs', fields: [transactionLogOptions], collapsed: true });
+        }
+
+    }
 
     async _record() {
         this.options.fields = [];
@@ -230,49 +255,16 @@ class CPAccrualRender extends RenderBase {
         ];
 
 
+        this.options.formBanner = await this.validateErpToken();
 
+        await this.buildFormLists(); 
 
-        // var body = { group: 'body', title: 'query messages', columnCount: 1, fields: [] };
-        // body.fields = [
-        //     { name: _cxSchema.cp_query.QUERYMESSAGE, label: 'query message', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, column: 1, readOnly: readOnly, validation: '{"mandatory": true}' },
-        //     { name: _cxSchema.cp_query.NOTES, label: 'internal notes', type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 3, column: 1, readOnly: readOnly },
+        var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
+        var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
 
-        // ]
-        // this.options.fields.push(body);
+        this.buildFormActions(erpName);
+        this.setRecordTitle();
 
-        // if (!this.dataSource.isNew()) {
-        //     var queryLogOptions = await this.getQueryLogListOptions();
-        //     var auditLogs = { group: 'logs', title: '', columnCount: 1, fields: [queryLogOptions] };
-        //     this.options.fields.push(auditLogs);
-        // }
-
-        // var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig).getConfigValue(this.dataSource.wholesalerId, this.dataSource.shopId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
-        // if (this.options.mode == 'view') {
-        //     if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR)
-        //         if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
-        //             if (bwgShopOptions) {
-        //                 this.options.buttons.push({ id: 'cp_check_status', text: 'Check BWG Status', function: 'checkQueryStatus' });
-        //             }
-        //         } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
-        //             if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
-        //                 this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
-        //             }
-        //             this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
-
-        //         }
-
-        // } else {
-        //     if (!this.dataSource.isNew()) {
-        //         if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.PENDING) {
-        //             this.options.buttons.push({ id: 'cp_submit_query', text: 'Mark as submitted', function: 'submitQuery' });
-        //         }
-        //         if (this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.CLOSED && this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.RESOLVED) {
-        //             this.options.buttons.push({ id: 'cp_close_query', text: 'Mark as closed', function: 'closeQuery' });
-        //         }
-        //     }
-        // }
-
-        // this.buildFormTitle();
     }
 }
 
