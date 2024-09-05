@@ -20,35 +20,17 @@ class CPQueryRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_query.QUERYTYPEID] = null;
         this.autoLoadFields[_cxSchema.cp_query.INVCREID] = null;
         this.autoLoadFields[_cxSchema.cp_query.DELRETID] = null;
-
         this.autoLoadFields[_cxSchema.cp_query.DISPUTEDAMOUNT] = null;
-
         this.autoLoadFields[_cxSchema.cp_query.QUERYREFERENCE] = null;
-        //this.autoLoadFields[_cxSchema.cp_query.NOTES] = null;
         this.autoLoadFields[_cxSchema.cp_query.SUBMITDATE] = null;
         this.autoLoadFields[_cxSchema.cp_query.RESOLUTIONTYPEID] = null;
         this.autoLoadFields[_cxSchema.cp_query.RESOLUTIONDATE] = null;
-
-        //this.autoLoadFields[_cxSchema.cp_query.CREATED] = null;
-
-
-
     }
 
     async initColumn(field, column) {
-        if (!this.#allQueryTypes) {
-            this.#allQueryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(null, '- all -');
-        }
-        if (!this.#allResolutionTypes) {
-            this.#allResolutionTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(null, '- all -');
-        }
+        if (!this.#allQueryTypes) { this.#allQueryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(null, '- all -'); }
+        if (!this.#allResolutionTypes) { this.#allResolutionTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(null, '- all -'); }
 
-        // if (field.name == _cxSchema.cp_query.WHOLESALERID) {
-        //     column.name = 'wholesalerInfo';
-        //     column.title = 'wholesaler';
-        //     column.addTotals = false;
-        //     column.align = 'left';
-        // } else
         if (field.name == _cxSchema.cp_query.SHOPID) {
             column.name = 'shopInfo';
             column.title = 'store';
@@ -91,9 +73,6 @@ class CPQueryRender extends RenderBase {
         if (field.name == _cxSchema.cp_query.SHOPID) {
             filter.replace = await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 'shopId' });
             filter.hide = false;
-            // } else if (field.name == _cxSchema.cp_query.WHOLESALERID) {
-            //     filter.replace = await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' });
-            //     filter.hide = false;
         } else if (field.name == _cxSchema.cp_query.STATUSID) {
             filter.replace = { label: 'status', fieldName: _cxSchema.cp_query.STATUSID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_QUERY_STATUS.toList('- all -') }
             filter.hide = false;
@@ -152,7 +131,7 @@ class CPQueryRender extends RenderBase {
         return queryLogsOptions;
     }
 
-    buildFormTitle() {
+    async buildFormTitle() {
         var applyStyle = 'margin: 7px ;padding: 0px 7px 3px 7px; border-radius: 7px; width: calc(100% - 14px); display: inline; overflow: hidden; text-align: center;';
         this.options.title = `<div style="padding-bottom: 7px; width: 100%;"><table><tr>`;
 
@@ -184,8 +163,39 @@ class CPQueryRender extends RenderBase {
                 <span  style="display: block; margin-bottom: -10px; color: var(--main-color-3);">${this.dataSource.docketGross}</span>
             </td>`;
         }
-        this.options.title += `</tr></table></div>`;
 
+        var recoSession = await this.dataSource.cx.exec({
+            sql: `
+                select	reco.recoSessionId as id, reco.recoStatusId
+                from	cp_recoSession reco
+                join	cp_recoSessionDocument recoDoc on  recoDoc.recoSessionId = reco.recoSessionId
+                where	reco.shopId = @shopId
+                and		(
+                    (recoDoc.documentType = 'cp_invoiceCredit' and recoDoc.documentId = @invCreId) or
+                    (recoDoc.documentType = 'cp_deliveryReturn' and recoDoc.documentId = @delRetId)
+                )
+            `,
+            params: [
+                { name: 'shopId', value: this.dataSource.shopId },
+                { name: 'invCreId', value: this.dataSource.invCreId },
+                { name: 'delRetId', value: this.dataSource.delRetId },
+            ],
+            returnFirst: true,
+        });
+        if (recoSession) {
+            var applyStoreColorStyle = 'border: 5px solid var(--main-bg-color); display: table-cell; padding: 3px 17px 5px 17px; border-radius: 15px; font-size: 24px; overflow: hidden; text-align: center; vertical-align: middle;';
+            var recoSessionLink = (this.dataSource.recoSessionId) ? `; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${recoSession.id}');` : '';
+            this.options.title += `
+                <td style="padding-left: 17px;">
+                    <span style="${_cxConst.CP_DOCUMENT.RECO_STATUS.getStyleInverted(recoSession.recoStatusId) + applyStyle}; cursor: pointer;" onclick="window.open('&#47;cp&#47;match-session?id=${recoSession.id}');">
+                        <img src="/public/images/puzzle_${this.dataSource.cx.theme}.png" style="width: 32px; margin-bottom: -5px;" />
+                        <span>${_cxConst.CP_DOCUMENT.RECO_STATUS.getName(recoSession.recoStatusId)}</span>
+                    </span>
+                </td>
+            `;
+        }
+        
+        this.options.title += `</tr></table></div>`;
 
         if (this.dataSource.isNew()) {
             this.options.tabTitle = `cx::new query`;
@@ -210,6 +220,36 @@ class CPQueryRender extends RenderBase {
 
     }
 
+    async buildFormActions() {
+        var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig).getConfigValue(this.dataSource.wholesalerId, this.dataSource.shopId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
+        if (this.options.mode == 'view') {
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR)
+                if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
+                    if (bwgShopOptions) {
+                        this.options.buttons.push({ id: 'cp_check_status', text: 'Check BWG Status', function: 'checkQueryStatus' });
+                    }
+                } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
+                    if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
+                        this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
+                    }
+                    this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
+
+                }
+
+        } else {
+            if (!this.dataSource.isNew()) {
+                if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.PENDING) {
+                    this.options.buttons.push({ id: 'cp_submit_query', text: 'Mark as submitted', function: 'submitQuery' });
+                }
+                if (this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.CLOSED && this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.RESOLVED) {
+                    this.options.buttons.push({ id: 'cp_close_query', text: 'Mark as closed', function: 'closeQuery' });
+                }
+            }
+        }
+
+       
+    }
+
 
     async _record() {
         this.options.fields = [];
@@ -224,8 +264,8 @@ class CPQueryRender extends RenderBase {
         var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(this.dataSource.wholesalerId, true);
         var queryResTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(this.dataSource.wholesalerId, true);
 
-        var columnCount = (!this.dataSource.isNew() && !this.options.dialog) ? 7 : 6;
-        var header = { group: 'head', title: 'query info', columnCount: columnCount, styles: ['width: 200px', 'width: 200px', 'width: 200px', 'width: calc(100% - 1400px)', 'width: 300px', 'width: 200px', 'width: 300px'], fields: [] };
+        var columnCount = (!this.dataSource.isNew() && !this.options.dialog) ? 8 : 6;
+        var header = { group: 'head', title: 'query info', columnCount: columnCount, styles: ['width: 200px', 'width: 200px', 'width: 200px', 'width: calc(100% - 1700px)', 'width: 300px', 'width: 200px', 'width: 300px', 'width: 300px'], fields: [] };
         header.fields = [
             // NOTE: we need these fields on the form as we need the values to merge the query message template without having to make a server call
             { name: 'shopCode', hidden: true },
@@ -278,8 +318,29 @@ class CPQueryRender extends RenderBase {
 
         ]
         if (!this.dataSource.isNew() && !this.options.dialog) {
+            var docsGroup = { group: 'docsInfo', title: '', column: 7, columnCount: 1, fields: [] };
+            if (this.dataSource.invCreId) {
+                this.dataSource.documentNumberLink = `<a href="/cp/invoice?id=${this.dataSource.invCreId}"target="_blank">${this.dataSource.documentNumber}</a>`;
+                docsGroup.fields.push({
+                    group: 'docsInfo1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'documentNumberLink', label: 'invoice #', column: 1, readOnly: true },
+                        { name: 'documentDate', label: 'invoice date', column: 2, readOnly: true },
+                    ]
+                })
+            }
+            if (this.dataSource.delRetId) {
+                this.dataSource.docketNumberLink = `<a href="/cp/delivery?id=${this.dataSource.delRetId}"target="_blank">${this.dataSource.docketNumber}</a>`;
+                docsGroup.fields.push({
+                    group: 'docsInfo2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        { name: 'docketNumberLink', label: 'delivery #', column: 1, readOnly: true },
+                        { name: 'docketDate', label: 'delivery date', column: 2, readOnly: true },
+                    ]
+                })
+            }
+
+            header.fields.push(docsGroup);
             header.fields.push({
-                group: 'audit', title: '', column: 7, columnCount: 1, fields: [
+                group: 'audit', title: '', column: 8, columnCount: 1, fields: [
                     {
                         group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
                             { name: 'created', label: 'created', column: 1, readOnly: true },
@@ -293,8 +354,7 @@ class CPQueryRender extends RenderBase {
                         ]
                     }
                 ]
-            }
-            )
+            })
         }
 
 
@@ -314,31 +374,7 @@ class CPQueryRender extends RenderBase {
             this.options.fields.push(auditLogs);
         }
 
-        var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig).getConfigValue(this.dataSource.wholesalerId, this.dataSource.shopId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
-        if (this.options.mode == 'view') {
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR)
-                if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
-                    if (bwgShopOptions) {
-                        this.options.buttons.push({ id: 'cp_check_status', text: 'Check BWG Status', function: 'checkQueryStatus' });
-                    }
-                } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
-                    if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
-                        this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
-                    }
-                    this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
-
-                }
-
-        } else {
-            if (!this.dataSource.isNew()) {
-                if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.PENDING) {
-                    this.options.buttons.push({ id: 'cp_submit_query', text: 'Mark as submitted', function: 'submitQuery' });
-                }
-                if (this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.CLOSED && this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.RESOLVED) {
-                    this.options.buttons.push({ id: 'cp_close_query', text: 'Mark as closed', function: 'closeQuery' });
-                }
-            }
-        }
+        await this.buildFormActions();
 
         this.buildFormTitle();
     }

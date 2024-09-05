@@ -50,6 +50,11 @@ class CPAccrualRender extends RenderBase {
         } else if (field.name == _cxSchema.cp_accrual.DOCUMENTSTATUS) {
             filter.replace = { label: 'status', fieldName: 'SKIP_sta', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_INV.toList('- all -') }
             filter.hide = false;
+        } else if (field.name == _cxSchema.cp_accrual.DOCUMENTDATE) {
+            filter.label = 'date (from)';
+        } else if (field.name == _cxSchema.cp_accrual.DOCUMENTNUMBER) {
+            filter.replace = { label: 'references', fieldName: 'SKIP_ref', type: _cxConst.RENDER.CTRL_TYPE.TEXT }
+            filter.hide = false;
         } else {
             filter.hide = true;
         }
@@ -116,15 +121,15 @@ class CPAccrualRender extends RenderBase {
         return transactionLinesOptions;
     }
 
-    async getErpTaxListOptions() {
-        var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_tax);
-        await transactionLines.select({ accrId: this.options.query.id });
-        transactionLines.forceReadOnly = true;
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
-        transactionLinesOptions.quickSearch = true;
-        transactionLinesOptions.title = '<span>erp tax transactions</span>';
-        return transactionLinesOptions;
-    }
+    // async getErpTaxListOptions() {
+    //     var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_tax);
+    //     await transactionLines.select({ accrId: this.options.query.id });
+    //     transactionLines.forceReadOnly = true;
+    //     var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
+    //     transactionLinesOptions.quickSearch = true;
+    //     transactionLinesOptions.title = '<span>erp tax transactions</span>';
+    //     return transactionLinesOptions;
+    // }
 
 
 
@@ -189,7 +194,8 @@ class CPAccrualRender extends RenderBase {
 
     async buildFormLists() {
         var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetchOrNew(this.dataSource.shopId);
-        var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
+        //var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
+        var erpSubListsGroupStyles = ['width: 100%; min-width: 500px;'];
 
         var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
         this.options.fields.push(erpSubListsGroup);
@@ -199,10 +205,10 @@ class CPAccrualRender extends RenderBase {
 
         var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
         erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] })
-        if (!erpSett.mergeGLAndTax) {
-            var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
-            erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
-        }
+        // if (!erpSett.mergeGLAndTax) {
+        //     var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
+        //     erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] })
+        // }
 
         var deliveriesOptions = await this.getDeliveryListOptions();
         this.options.fields.push({ group: 'deliveries', title: 'deliveries', fields: [deliveriesOptions], collapsed: true });

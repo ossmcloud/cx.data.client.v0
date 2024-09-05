@@ -26,6 +26,15 @@ class cp_accrual_Collection extends _persistentTable.Table {
         };
 
         if (params.SKIP_sta) { query.sql += ' and a.documentStatus in (' + params.SKIP_sta + ')'; }
+        if (params.SKIP_ref) {
+            query.sql += `
+                and (
+                    a.documentNumber like '${params.SKIP_ref}%' or
+                    a.documentReference like '${params.SKIP_ref}%' or
+                    a.documentSecondReference like '${params.SKIP_ref}%'
+                )
+            `;
+        }
 
         this.queryFromParams(query, params, 'a');
         query.sql += ' order by a.created desc';

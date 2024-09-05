@@ -179,6 +179,7 @@ const ERP_DTFS_CONFIGS = {
     ERP_CP_POST_PREFIX: "ERPCpPostPrefix",
     ERP_CP_POST_POSTFIX: "ERPCpPostPostfix",
     ERP_CP_DRS_CONFIG: "ERPCpDRSConfig",
+    ERP_CP_ACCRUAL_CONFIG: "ERPCpAccrualConfig",
 
     API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',
