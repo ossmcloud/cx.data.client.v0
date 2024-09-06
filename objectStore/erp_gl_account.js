@@ -156,6 +156,7 @@ class erp_gl_account extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
+        if (!defaults) { defaults = {}; }
         super(table, defaults);
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
