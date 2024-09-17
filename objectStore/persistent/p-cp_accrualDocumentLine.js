@@ -30,6 +30,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    DEPMAPCONFIGID: 'depMapConfigId',
 
 }
 //
@@ -38,7 +39,7 @@ const _fieldNames = {
 const _fields = {
     accrDocLineId: { name: 'accrDocLineId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     accrDocId: { name: 'accrDocId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    docLineId: { name: 'docLineId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    docLineId: { name: 'docLineId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     lineNet: { name: 'lineNet', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineVat: { name: 'lineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineGross: { name: 'lineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
@@ -47,6 +48,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -130,6 +132,12 @@ class Persistent_cp_accrualDocumentLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get depMapConfigId() {
+        return super.getValue(_fieldNames.DEPMAPCONFIGID);
+    } set depMapConfigId(val) {
+        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
     }
 
 

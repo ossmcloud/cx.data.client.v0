@@ -44,6 +44,7 @@ const _fieldNames = {
     ISUSEREDITED: 'isUserEdited',
     INVGRPID: 'invGrpId',
     ACCRID: 'accrId',
+    REVERSEDATE: 'reverseDate',
 
 }
 //
@@ -75,6 +76,7 @@ const _fields = {
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     invGrpId: { name: 'invGrpId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     accrId: { name: 'accrId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    reverseDate: { name: 'reverseDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
 
 }
 //
@@ -242,6 +244,12 @@ class Persistent_cp_erp_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ACCRID);
     } set accrId(val) {
         super.setValue(_fieldNames.ACCRID, val);
+    }
+
+    get reverseDate() {
+        return super.getValue(_fieldNames.REVERSEDATE);
+    } set reverseDate(val) {
+        super.setValue(_fieldNames.REVERSEDATE, val);
     }
 
 

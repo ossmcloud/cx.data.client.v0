@@ -107,7 +107,7 @@ class CPAccrualRender extends RenderBase {
         var transactions = this.dataSource.cx.table(_cxSchema.cp_deliveryReturn);
         await transactions.select({ accrId: this.options.query.id, noPaging: true });
 
-        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments });
+        var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments, accrId: this.options.query.id });
         transactionsOptions.quickSearch = true;
         return transactionsOptions;
     }
@@ -153,7 +153,7 @@ class CPAccrualRender extends RenderBase {
             var s = this.dataSource.documentStatus;
             // 
             if (s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION) {
-                this.options.buttons.push({ id: 'cp_view_missmapped', text: 'View Mis-mapped Items', function: 'viewMisMappedItems' });
+                //this.options.buttons.push({ id: 'cp_view_missmapped', text: 'View Mis-mapped Items', function: 'viewMisMappedItems' });
             }
 
             // allow to refresh only under certain statuses
@@ -251,7 +251,12 @@ class CPAccrualRender extends RenderBase {
                             },
                             {
                                 group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                                    { name: _cxSchema.cp_accrual.DOCUMENTDATE, label: 'date', width: '100%', validation: '{ "mandatory": true }' },
+                                    {
+                                        group: 'main.col1.dates', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                            { name: _cxSchema.cp_accrual.DOCUMENTDATE, column: 1, label: 'date', width: '100%', validation: '{ "mandatory": true }' },
+                                            { name: _cxSchema.cp_accrual.REVERSEDATE, column: 2, label: 'rev. date', width: '100%', validation: '{ "mandatory": true }' },
+                                        ]
+                                    },
                                     { name: _cxSchema.cp_accrual.DOCUMENTNUMBER, label: 'document number', width: '100%', validation: '{ "mandatory": true, "max": 20  }' },
                                     { name: _cxSchema.cp_accrual.CURRENCY, label: 'currency', readOnly: true },
                                 ]

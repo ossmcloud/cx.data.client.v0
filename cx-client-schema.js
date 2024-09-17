@@ -23,6 +23,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        REVERSEDATE: 'reverseDate',
     },
 
     cp_accrualDocument: {
@@ -51,6 +52,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DEPMAPCONFIGID: 'depMapConfigId',
     },
 
     cp_accrualLog: {
@@ -111,8 +113,8 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         CREATEDFROM: 'createdFrom',
         CREATEDFROMTYPE: 'createdFromType',
-        DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
         TOTALDRS: 'totalDRS',
+        DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
         INVGRPID: 'invGrpId',
     },
 
@@ -218,6 +220,7 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         INVGRPID: 'invGrpId',
         ACCRID: 'accrId',
+        REVERSEDATE: 'reverseDate',
     },
 
     cp_erp_transaction_gl: {
@@ -537,23 +540,23 @@ module.exports = {
         QUERYID: 'queryId',
         SHOPID: 'shopId',
         INVCREID: 'invCreId',
+        DELRETID: 'delRetId',
         STATUSID: 'statusId',
         STATUSMESSAGE: 'statusMessage',
         QUERYTYPEID: 'queryTypeId',
+        SUBMITDATE: 'submitDate',
+        RESOLUTIONTYPEID: 'resolutionTypeId',
+        RESOLUTIONMESSAGE: 'resolutionMessage',
+        RESOLUTIONDATE: 'resolutionDate',
         QUERYREFERENCE: 'queryReference',
+        QUERYEXREFERENCE: 'queryExReference',
+        DISPUTEDAMOUNT: 'disputedAmount',
         QUERYMESSAGE: 'queryMessage',
         NOTES: 'notes',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        QUERYEXREFERENCE: 'queryExReference',
-        DISPUTEDAMOUNT: 'disputedAmount',
-        RESOLUTIONTYPEID: 'resolutionTypeId',
-        SUBMITDATE: 'submitDate',
-        RESOLUTIONMESSAGE: 'resolutionMessage',
-        RESOLUTIONDATE: 'resolutionDate',
-        DELRETID: 'delRetId',
         CREDITAPPLIED: 'creditApplied',
         CREDITNOTENUMBER: 'creditNoteNumber',
         CREDITTOTAL: 'creditTotal',
@@ -580,11 +583,11 @@ module.exports = {
         WHOLESALERID: 'wholesalerId',
         NAME: 'name',
         CODE: 'code',
+        CREDITISSUED: 'creditIssued',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        CREDITISSUED: 'creditIssued',
     },
 
     cp_queryType: {
@@ -593,13 +596,13 @@ module.exports = {
         WHOLESALERID: 'wholesalerId',
         NAME: 'name',
         CODE: 'code',
+        MANDATORYFIELDS: 'mandatoryFields',
+        MESSAGETEMPLATE: 'messageTemplate',
+        REQUIRESDISPUTEDAMOUNT: 'requiresDisputedAmount',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        MANDATORYFIELDS: 'mandatoryFields',
-        MESSAGETEMPLATE: 'messageTemplate',
-        REQUIRESDISPUTEDAMOUNT: 'requiresDisputedAmount',
     },
 
     cp_recoSession: {
@@ -676,10 +679,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        HTOLERANCEPC: 'hTolerancePc',
-        LTOLERANCEPC: 'lTolerancePc',
-        IGNOREVATMISMATCH: 'ignoreVatMismatch',
-        IGNORELINETOLERANCE: 'ignoreLineTolerance',
     },
 
     cp_recoSettingSupplier: {
@@ -689,13 +688,13 @@ module.exports = {
         SUPPLIERCODE: 'supplierCode',
         MATCHINGSUPPLIERCODES: 'matchingSupplierCodes',
         IGNOREVATMISMATCH: 'ignoreVatMismatch',
+        IGNORELINETOLERANCE: 'ignoreLineTolerance',
         NODELIVERY: 'noDelivery',
         NODELIVERYCOMMENT: 'noDeliveryComment',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        IGNORELINETOLERANCE: 'ignoreLineTolerance',
     },
 
     cp_wholesaler: {
@@ -843,7 +842,6 @@ module.exports = {
         GLACCOUNTSEG2: 'glAccountSeg2',
         GLACCOUNTSEG3: 'glAccountSeg3',
         GLACCOUNTDESCRIPTION: 'glAccountDescription',
-        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         NARRATIVE: 'narrative',
         VALUENET: 'valueNet',
         TAXACCOUNT: 'taxAccount',
@@ -857,6 +855,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         GLCONTRAENTRY: 'glContraEntry',
         ROUNDNET: 'roundNet',
         ROUNDTAX: 'roundTax',
@@ -914,11 +913,11 @@ module.exports = {
         PREFERENCEID: 'preferenceId',
         LEVELID: 'levelId',
         RECORDTYPE: 'recordType',
+        DISABLED: 'disabled',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        DISABLED: 'disabled',
     },
 
     cr_preference_value: {
@@ -1094,7 +1093,6 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         EXTERNALFLAGS: 'externalFlags',
-        FILEVERSION: 'fileVersion',
     },
 
     cx_login: {
@@ -1187,11 +1185,11 @@ module.exports = {
         EPOSTAXRATE: 'eposTaxRate',
         EPOSDESCRIPTION: 'eposDescription',
         TAXACCOUNTID: 'taxAccountId',
+        PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-        PURCHASETAXACCOUNTID: 'purchaseTaxAccountId',
         ISMANUAL: 'isManual',
     },
 
@@ -1203,10 +1201,6 @@ module.exports = {
         SHOPNAME: 'shopName',
         SHOPADDRESS: 'shopAddress',
         STATUS: 'status',
-        CREATED: 'created',
-        CREATEDBY: 'createdBy',
-        MODIFIED: 'modified',
-        MODIFIEDBY: 'modifiedBy',
         SHOPPOSTCODE: 'shopPostCode',
         SHOPLATITUDE: 'shopLatitude',
         SHOPLONGITUDE: 'shopLongitude',
@@ -1215,6 +1209,10 @@ module.exports = {
         TAXMAPCONFIGID: 'taxMapConfigId',
         CURRENCYCODE: 'currencyCode',
         SHOPCOLOR: 'shopColor',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
     },
 
     cx_shop_group: {
@@ -1251,10 +1249,10 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         ERPTRADERACCOUNTID: 'erpTraderAccountId',
-        ISMANUAL: 'isManual',
         ANALYSIS1: 'analysis1',
         ANALYSIS2: 'analysis2',
         ANALYSIS3: 'analysis3',
+        ISMANUAL: 'isManual',
     },
 
     cx_traderNameLookUp: {
@@ -1473,15 +1471,15 @@ module.exports = {
         SHOPID: 'shopId',
         ERPPROVIDER: 'erpProvider',
         ERPCOMPANYNAME: 'erpCompanyName',
+        ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
+        ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
+        ERPCOSTCENTRE: 'erpCostCentre',
+        ERPDEPARTMENT: 'erpDepartment',
         DTFSSETTINGID: 'dtfsSettingId',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
-        ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
-        ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
-        ERPCOSTCENTRE: 'erpCostCentre',
-        ERPDEPARTMENT: 'erpDepartment',
     },
 
     erp_tax_account: {
@@ -1520,21 +1518,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-    },
-
-    raw_cp_attachment: {
-        TBL_NAME: 'raw_cp_attachment',
-        ATTACHMENTID: 'attachmentId',
-        TRANSMISSIONID: 'transmissionID',
-        SHOPID: 'shopId',
-        NAME: 'name',
-        DESCRIPTION: 'description',
-        VERSION: 'version',
-        EXTERNALREFERENCE: 'externalReference',
-        EXTERNALLINK: 'externalLink',
-        EXTERNALFLAGS: 'externalFlags',
-        JSONOPTIONS: 'jsonOptions',
-        CREATED: 'created',
     },
 
     raw_cp_delivery: {

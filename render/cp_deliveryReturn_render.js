@@ -336,7 +336,8 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTNUMBER, title: 'document number' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTREFERENCE, title: 'document reference' });
             this.options.columns.push({ name: _cxSchema.cp_deliveryReturn.DOCUMENTSECONDREFERENCE, title: 'second reference' });
-            this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+            // @@NOTE: no point in showing discounts for accrual views
+            if (!this.options.accrId) { this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true }); }
             this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Vat, title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             if (this.cx.accountCountry == 'IE') {
