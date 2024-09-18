@@ -11,16 +11,24 @@ class ErpBankAccount extends RenderBase {
     }
 
     async _record() {
+        var readOnly = (this.dataSource.isManual) ? false : !this.dataSource.isNew();
+        if (this.options.mode == 'view') { readOnly = true; }
+        if (this.dataSource.isManual) { this.options.title = '<span style="color: var(--main-color-3);" title="record was added manually">&#x2699;</span> ' + this.options.title; }
+
+        this.options.allowDelete = this.dataSource.isManual;
+
         this.options.fields = [
             {
                 group: 'bankOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 2, fields: [
-                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
-                            { name: 'code', label: 'Code', column: 1, readOnly: true },
-                            { name: 'description', label: 'Name', column: 2, readOnly: true },
-                            { name: 'countryCode', label: 'Country', column: 1, readOnly: true },
-                            { name: 'currencyCode', label: 'Currency', column: 2, readOnly: true },
+                            await this.fieldDropDownOptions(_cxSchema.cx_shop, {
+                                id: 'shopId', name: 'shopId', column: 1, validation: (this.options.mode == 'view') ? '' : '{ "mandatory": true }', readOnly: !this.dataSource.isNew()
+                            }),
+                            { name: 'code', label: 'Code', column: 1, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: 'description', label: 'Name', column: 2, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: 'countryCode', label: 'Country', column: 1, readOnly: readOnly },
+                            { name: 'currencyCode', label: 'Currency', column: 2, readOnly: readOnly },
 
                         ]
                     },
@@ -55,6 +63,7 @@ class ErpBankAccount extends RenderBase {
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { id: 'cx_bank_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'bc', label: 'bank code' },
             { id: 'cx_bank_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'bd', label: 'bank name' },
+            { id: 'cx_bank_manual', inputType: _cxConst.RENDER.CTRL_TYPE.CHECK, fieldName: 'man', label: 'Is Manual' },
         ];
         this.options.columns = [
             { name: 'erpBankAccountId', title: ' ', align: 'center' },
@@ -67,7 +76,13 @@ class ErpBankAccount extends RenderBase {
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
 
+        this.options.highlights = [
+            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
+        ];
 
+        if (this.options.allowEdit == true) {
+            this.options.allowEditCondition = function (object) { return object.isManual; }
+        }
     }
 
     async dropDown(options) {

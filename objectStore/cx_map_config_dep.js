@@ -327,7 +327,7 @@ class cx_map_config_dep extends _persistentTable.Record {
 
     async save() {
         if (this.isNew() && this.cx.tUserId > 0) { this.isManual = true; }
-        await super.save()
+        return await super.save()
     }
 }
 //

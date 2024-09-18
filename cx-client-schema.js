@@ -1373,6 +1373,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         COUNTRYCODE: 'countryCode',
+        ISMANUAL: 'isManual',
     },
 
     erp_dtfs_configs: {
@@ -1451,6 +1452,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         IGNORESTOREGLSEGMENTS: 'ignoreStoreGLSegments',
+        ISMANUAL: 'isManual',
     },
 
     erp_shop_configs: {
@@ -1496,6 +1498,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         COUNTRYCODE: 'countryCode',
+        ISMANUAL: 'isManual',
     },
 
     erp_traderAccount: {

@@ -11,18 +11,26 @@ class ErpTaxAccount extends RenderBase {
     }
 
     async _record() {
+        var readOnly = (this.dataSource.isManual) ? false : !this.dataSource.isNew();
+        if (this.options.mode == 'view') { readOnly = true; }
+        if (this.dataSource.isManual) { this.options.title = '<span style="color: var(--main-color-3);" title="record was added manually">&#x2699;</span> ' + this.options.title; }
+
+        this.options.allowDelete = this.dataSource.isManual;
+
         this.options.fields = [
             {
                 group: 'bankOuter', title: '', columnCount: 2, fields: [
                     {
                         group: 'main', title: 'main info', column: 1, columnCount: 3, fields: [
-                            { name: 'shopInfo', label: 'store', column: 1, readOnly: true },
-                            { name: 'code', label: 'Code', column: 1, readOnly: true },
-                            { name: 'rate', label: 'Rate', column: 2, readOnly: true },
-                            { name: 'description', label: 'Name', column: 3, readOnly: true },
-                            { name: 'countryCode', label: 'Country', column: 1, readOnly: true },
-                            { name: 'currencyCode', label: 'Currency', column: 2, readOnly: true },
-                            { name: 'ecTermId', label: 'EC Terms', column: 3, readOnly: true },
+                            await this.fieldDropDownOptions(_cxSchema.cx_shop, {
+                                id: 'shopId', name: 'shopId', column: 1, validation: (this.options.mode == 'view') ? '' : '{ "mandatory": true }', readOnly: !this.dataSource.isNew()
+                            }),
+                            { name: 'code', label: 'Code', column: 1, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: 'rate', label: 'Rate', column: 2, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: 'description', label: 'Name', column: 3, readOnly: readOnly, validation: '{ "mandatory": true }' },
+                            { name: 'countryCode', label: 'Country', column: 1, readOnly: readOnly },
+                            { name: 'currencyCode', label: 'Currency', column: 2, readOnly: readOnly },
+                            { name: 'ecTermId', label: 'EC Terms', column: 3, readOnly: readOnly },
 
                         ]
                     },
@@ -57,6 +65,7 @@ class ErpTaxAccount extends RenderBase {
             await this.filterDropDownOptions(_cxSchema.cx_shop, { fieldName: 's' }),
             { id: 'cx_tax_code', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'txc', label: 'Tax code' },
             { id: 'cx_tax_name', inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, fieldName: 'txd', label: 'Tax Name' },
+            { id: 'cx_tax_manual', inputType: _cxConst.RENDER.CTRL_TYPE.CHECK, fieldName: 'man', label: 'Is Manual' },
         ];
         this.options.columns = [
             { name: 'erpTaxAccountId', title: ' ', align: 'center' },
@@ -71,7 +80,13 @@ class ErpTaxAccount extends RenderBase {
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
         ];
 
+        this.options.highlights = [
+            { column: 'isManual', op: '=', value: true, style: 'color: var(--main-color-3);' }
+        ];
 
+        if (this.options.allowEdit == true) {
+            this.options.allowEditCondition = function (object) { return object.isManual; }
+        }
     }
 
     async dropDown(options) {

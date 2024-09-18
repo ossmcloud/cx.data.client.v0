@@ -258,7 +258,18 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.erp_gl_account.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
-        
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.erp_tax_account.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.erp_bank_account.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
     if (recordType == _cxSchema.sys_customScript.TBL_NAME) {

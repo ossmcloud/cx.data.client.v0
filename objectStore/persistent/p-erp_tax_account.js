@@ -31,6 +31,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     COUNTRYCODE: 'countryCode',
+    ISMANUAL: 'isManual',
 
 }
 //
@@ -41,7 +42,7 @@ const _fields = {
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     currencyCode: { name: 'currencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: false },
     code: { name: 'code', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
-    rate: { name: 'rate', dataType: 'decimal', pk: false, identity: false, maxLength: 5, null: true },
+    rate: { name: 'rate', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     description: { name: 'description', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     ecTermId: { name: 'ecTermId', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
@@ -49,6 +50,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     countryCode: { name: 'countryCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -68,7 +70,7 @@ class Persistent_erp_tax_account extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get erpTaxAccountId() {
         return super.getValue(_fieldNames.ERPTAXACCOUNTID);
@@ -138,6 +140,12 @@ class Persistent_erp_tax_account extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.COUNTRYCODE);
     } set countryCode(val) {
         super.setValue(_fieldNames.COUNTRYCODE, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 

@@ -29,13 +29,14 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     COUNTRYCODE: 'countryCode',
+    ISMANUAL: 'isManual',
 
 }
 //
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    erpBankAccountId: { name: 'erpBankAccountId', dataType: 'int', pk: true, identity: true, maxLength: 4, null: false },
+    erpBankAccountId: { name: 'erpBankAccountId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     currencyCode: { name: 'currencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: false },
     code: { name: 'code', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
@@ -45,6 +46,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     countryCode: { name: 'countryCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -64,7 +66,7 @@ class Persistent_erp_bank_account extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get erpBankAccountId() {
         return super.getValue(_fieldNames.ERPBANKACCOUNTID);
@@ -122,6 +124,12 @@ class Persistent_erp_bank_account extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.COUNTRYCODE);
     } set countryCode(val) {
         super.setValue(_fieldNames.COUNTRYCODE, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 
