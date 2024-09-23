@@ -89,6 +89,9 @@ class CRCashBookRender extends RenderBase {
             this.options.columns.push({ name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
         }
         this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        if (isExpanded) {
+            this.options.columns.push({ name: 'totalTax', title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        }
         this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         if (isExpanded) {
