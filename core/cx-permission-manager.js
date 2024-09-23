@@ -187,6 +187,11 @@ async function getPermission(recordType, role) {
         permission.allowNew = false;
         permission.allowDelete = false;
     }
+    if (recordType == _cxSchema.cp_accrual.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowNew = true;
+        permission.allowDelete = false;
+    }
 
     if (recordType == _cxSchema.cp_product.TBL_NAME || recordType == _cxSchema.cp_productAlias.TBL_NAME || recordType == _cxSchema.cp_productAliasShop.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
@@ -253,7 +258,18 @@ async function getPermission(recordType, role) {
 
     if (recordType == _cxSchema.erp_gl_account.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
-        
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.erp_tax_account.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+    }
+    if (recordType == _cxSchema.erp_bank_account.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        //permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
     }
 
     if (recordType == _cxSchema.sys_customScript.TBL_NAME) {

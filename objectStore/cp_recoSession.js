@@ -3,6 +3,7 @@
 const _persistentTable = require('./persistent/p-cp_recoSession');
 const _declarations = require('../cx-client-declarations');
 const _schema = require('../cx-client-schema');
+const _core = require('cx-core');
 //
 class cp_recoSession_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -19,7 +20,8 @@ class cp_recoSession_Collection extends _persistentTable.Table {
                                     recoDoc.recoMatchLevel, grp.documentNumber as groupInvoice, grp.wholesalerId,
                                     isnull(supp.traderName, isnull(supp2.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end)) as supplierName,
                                     ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId ) as queryCount,
-                                    ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId and q.statusId < 8 ) as queryCountOpen
+                                    ( select count(q.queryId) from cp_query q where q.invCreId = doc.invCreId and q.statusId < 8 ) as queryCountOpen,
+                                    convert(varchar, DATEPART(yyyy, doc.documentDate)) + '-' + RIGHT('00' + convert(varchar, DATEPART(ISO_WEEK, doc.documentDate)), 2) as weekNumber
                 
                                     from	            cp_recoSession          reco
                 left outer join     cp_recoSessionDocument	recoDoc ON recoDoc.recoSessionId = reco.recoSessionId and recoDoc.isMainDocument = 1
@@ -61,6 +63,12 @@ class cp_recoSession_Collection extends _persistentTable.Table {
         if (params.SKIP_documentNumber) {
             query.sql += ` and doc.documentNumber like @documentNumber`;
             query.params.push({ name: 'documentNumber', value: params.SKIP_documentNumber + '%' });
+        }
+        if (params.SKIP_weekNumber) {
+            var weekNo = _core.date.parseWeekNo(params.SKIP_weekNumber);
+
+            query.sql += ` and convert(varchar, DATEPART(yyyy, doc.documentDate)) + '-' + RIGHT('00' + convert(varchar, DATEPART(ISO_WEEK, doc.documentDate)), 2) = @weekNo`;
+            query.params.push({ name: 'weekNo', value: weekNo });
         }
         if (params.SKIP_docketNumber) {
             query.sql += ` and doc.docketNumber like @docketNumber`;
@@ -110,6 +118,7 @@ class cp_recoSession extends _persistentTable.Record {
     #docketNumber = '';
     #documentType = '';
     #documentDate = '';
+    #weekNumber = '';
     #supplierCode = '';
     #supplierName = null;
     #recoMatchLevel = -1;
@@ -126,6 +135,7 @@ class cp_recoSession extends _persistentTable.Record {
         this.#docketNumber = defaults['docketNumber'] || '';
         this.#documentType = defaults['documentType'] || '';
         this.#documentDate = defaults['documentDate'] || '';
+        this.#weekNumber = defaults['weekNumber'] || '';
         this.#supplierCode = defaults['supplierCode'] || '';
         this.#supplierName = defaults['supplierName'] || null;
         this.#recoMatchLevel = defaults['recoMatchLevel'];
@@ -144,6 +154,7 @@ class cp_recoSession extends _persistentTable.Record {
     get documentNumber() { return this.#documentNumber; }
     get docketNumber() { return this.#docketNumber; }
     get documentDate() { return this.#documentDate; }
+    get weekNumber() { return this.#weekNumber; }
     get supplierCode() { return this.#supplierCode; }
     get supplierName() { return this.#supplierName; }
     get recoMatchLevel() { return this.#recoMatchLevel; }

@@ -1,6 +1,73 @@
 'use strict'
 
 module.exports = {
+    cp_accrual: {
+        TBL_NAME: 'cp_accrual',
+        ACCRID: 'accrId',
+        SHOPID: 'shopId',
+        DOCUMENTSTATUS: 'documentStatus',
+        DOCUMENTSTATUSMESSAGE: 'documentStatusMessage',
+        DOCUMENTNUMBER: 'documentNumber',
+        DOCUMENTDATE: 'documentDate',
+        DOCUMENTREFERENCE: 'documentReference',
+        DOCUMENTSECONDREFERENCE: 'documentSecondReference',
+        DOCUMENTMEMO: 'documentMemo',
+        CURRENCY: 'currency',
+        TOTALNET: 'totalNet',
+        TOTALVAT: 'totalVat',
+        TOTALGROSS: 'totalGross',
+        TOTALDRS: 'totalDRS',
+        SYSINFO: 'sysInfo',
+        ERPTRANSMISSIONID: 'erpTransmissionId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        REVERSEDATE: 'reverseDate',
+    },
+
+    cp_accrualDocument: {
+        TBL_NAME: 'cp_accrualDocument',
+        ACCRDOCID: 'accrDocId',
+        ACCRID: 'accrId',
+        DOCUMENTTYPE: 'documentType',
+        DELRETID: 'delRetId',
+        INVCREID: 'invCreId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cp_accrualDocumentLine: {
+        TBL_NAME: 'cp_accrualDocumentLine',
+        ACCRDOCLINEID: 'accrDocLineId',
+        ACCRDOCID: 'accrDocId',
+        DOCLINEID: 'docLineId',
+        LINENET: 'lineNet',
+        LINEVAT: 'lineVat',
+        LINEGROSS: 'lineGross',
+        LINEDRS: 'lineDRS',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        DEPMAPCONFIGID: 'depMapConfigId',
+    },
+
+    cp_accrualLog: {
+        TBL_NAME: 'cp_accrualLog',
+        ACCRLOGID: 'accrLogId',
+        ACCRID: 'accrId',
+        LOGTYPE: 'logType',
+        LOGMESSAGE: 'logMessage',
+        LOGINFO: 'logInfo',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     cp_deliveryNoLookUp: {
         TBL_NAME: 'cp_deliveryNoLookUp',
         DELIVERYNOLOOKUPID: 'deliveryNoLookUpId',
@@ -152,6 +219,8 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         ISUSEREDITED: 'isUserEdited',
         INVGRPID: 'invGrpId',
+        ACCRID: 'accrId',
+        REVERSEDATE: 'reverseDate',
     },
 
     cp_erp_transaction_gl: {
@@ -1304,6 +1373,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         COUNTRYCODE: 'countryCode',
+        ISMANUAL: 'isManual',
     },
 
     erp_dtfs_configs: {
@@ -1382,6 +1452,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         IGNORESTOREGLSEGMENTS: 'ignoreStoreGLSegments',
+        ISMANUAL: 'isManual',
     },
 
     erp_shop_configs: {
@@ -1427,6 +1498,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         COUNTRYCODE: 'countryCode',
+        ISMANUAL: 'isManual',
     },
 
     erp_traderAccount: {

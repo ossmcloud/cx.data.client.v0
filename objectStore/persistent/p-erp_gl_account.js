@@ -30,6 +30,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     IGNORESTOREGLSEGMENTS: 'ignoreStoreGLSegments',
+    ISMANUAL: 'isManual',
 
 }
 //
@@ -47,6 +48,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     ignoreStoreGLSegments: { name: 'ignoreStoreGLSegments', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -130,6 +132,12 @@ class Persistent_erp_gl_account extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.IGNORESTOREGLSEGMENTS);
     } set ignoreStoreGLSegments(val) {
         super.setValue(_fieldNames.IGNORESTOREGLSEGMENTS, val);
+    }
+
+    get isManual() {
+        return super.getValue(_fieldNames.ISMANUAL);
+    } set isManual(val) {
+        super.setValue(_fieldNames.ISMANUAL, val);
     }
 
 

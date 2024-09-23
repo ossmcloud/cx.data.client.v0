@@ -156,6 +156,7 @@ class erp_gl_account extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
+        if (!defaults) { defaults = {}; }
         super(table, defaults);
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
@@ -167,8 +168,8 @@ class erp_gl_account extends _persistentTable.Record {
 
 
     async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
+        if (this.isNew() && this.cx.tUserId > 0) { this.isManual = true; }
+        return await super.save()
     }
 }
 //

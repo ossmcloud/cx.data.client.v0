@@ -80,14 +80,18 @@ class CRCashBookRender extends RenderBase {
         this.options.columns.push({ name: 'shopInfo', title: 'store', width: 'auto' });
         this.options.columns.push({ name: 'date', title: 'date', align: 'center', width: '130px' });
         if (isBatchProcessing) { this.options.columns.push({ name: 'statusX', title: ' ', unbound: true }); }
-        this.options.columns.push({ name: 'warnLevelIcon', title: '&#9888;', align: 'center', width: '10px', style: 'cursor: default;', headerToolTip: 'warn level', toolTip: { valueField: 'warnMessage' } });
         if (isExpanded) {
             this.options.columns.push({ name: 'statusX', title: ' ', unbound: true });
         } else {
+            this.options.columns.push({ name: 'warnLevelIcon', title: '&#9888;', align: 'center', width: '10px', style: 'cursor: default;', headerToolTip: 'warn level', toolTip: { valueField: 'warnMessage' } });
+
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '30px', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
             this.options.columns.push({ name: 'statusMessage', title: 'status message', align: 'left', lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(), });
         }
         this.options.columns.push({ name: 'totalSales', title: 'sales', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        if (isExpanded) {
+            this.options.columns.push({ name: 'totalTax', title: 'tax', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
+        }
         this.options.columns.push({ name: 'totalLodgement', title: 'lodgements', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         this.options.columns.push({ name: 'tillDifference', title: 'diff', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
         if (isExpanded) {

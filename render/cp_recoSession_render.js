@@ -28,10 +28,12 @@ class CPRecoSessionRender extends RenderBase {
 
 
         this.autoLoadFields['documentDate'] = { name: 'documentDate', fieldName: 'SKIP_documentDate', dataType: 'datetime' };
+        this.autoLoadFields['weekNumber'] = { name: 'weekNumber', fieldName: 'SKIP_weekNumber', align: 'center' };
         this.autoLoadFields['documentNumber'] = { name: 'documentNumber', fieldName: 'SKIP_documentNumber', link: { url: '/cp/invoice?id={documentNumber}', paramName: 'documentNumber', valueField: 'invCreId' } };
+        
         this.autoLoadFields['docketNumber'] = { name: 'docketNumber', fieldName: 'SKIP_docketNumber' };
         this.autoLoadFields['groupInvoice'] = { name: 'groupInvoice', fieldName: 'SKIP_groupInvoice' };
-        
+
         this.autoLoadFields['supplierCode'] = { name: 'supplierCode' };
         this.autoLoadFields['supplierName'] = { name: 'supplierName', nullText: 'not found' };
 
@@ -42,8 +44,8 @@ class CPRecoSessionRender extends RenderBase {
 
         this.autoLoadFields['notesDisplay'] = { name: 'notesDisplay' };
 
-        
-        
+
+
         // this.autoLoadFields[_cxSchema.cp_recoSession.CREATED] = null;
         // this.autoLoadFields[_cxSchema.cp_recoSession.MODIFIED] = null;
     }
@@ -84,15 +86,18 @@ class CPRecoSessionRender extends RenderBase {
             filter.hide = false;
         } else if (field.name == _cxSchema.cp_recoSession.RECOSTATUSID) {
             filter.replace = { label: 'status', fieldName: 'reco.' + _cxSchema.cp_recoSession.RECOSTATUSID, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') }
-            filter.hide = false;    
+            filter.hide = false;
         } else if (field.name == 'documentType') {
             filter.replace = { label: 'type', fieldName: 'doc.documentType', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') };
+
+        } else if (field.name == 'documentDate') {
+            filter.label = 'date (from)';
 
         } else if (field.name == _cxSchema.cp_recoSession.MODIFIED || field.name == _cxSchema.cp_recoSession.CREATED
             || field.name == _cxSchema.cp_recoSession.RECOSOURCEID || field.name == _cxSchema.cp_recoSession.RECOSCORE
             || field.name == _cxSchema.cp_recoSession.BALANCENET || field.name == _cxSchema.cp_recoSession.BALANCEVAT || field.name == _cxSchema.cp_recoSession.BALANCEGROSS) {
             return false;
-        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay' || field.name == 'action' || field.name == 'supplierName') {
+        } else if (field.name == 'recoMatchLevel' || field.name == 'notesDisplay' || field.name == 'matchByUserDisplay' || field.name == 'action' || field.name == 'supplierName' || field.name == 'queryCount') {
             filter.hide = true;
         }
     }
@@ -100,7 +105,7 @@ class CPRecoSessionRender extends RenderBase {
 
 
     async _record() {
-    
+
     }
 
     async _list() {
@@ -109,7 +114,7 @@ class CPRecoSessionRender extends RenderBase {
             this.options.pageNo = (this.options.query.page || 1);
         }
 
-        
+
         if (this.options.query['reco.recoStatusId'] == _cxConst.CP_DOCUMENT.RECO_STATUS.NotReconciled) {
             this.options.title = 'unmatched documents';
         } else if (this.options.query['reco.recoStatusId'] == _cxConst.CP_DOCUMENT.RECO_STATUS.Pending) {

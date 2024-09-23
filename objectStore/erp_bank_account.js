@@ -38,6 +38,10 @@ class erp_bank_account_Collection extends _persistentTable.Table {
             query.sql += ' and t.description like @description';
             query.params.push({ name: 'description', value: params.bd + '%' });
         }
+        if (params.man) {
+            query.sql += ' and isnull(t.isManual,0) like @isManual';
+            query.params.push({ name: 'isManual', value: (params.man == 'true' || params.man == 'T') ? '1' : '0' });
+        }
 
         query.sql += ' order by s.shopCode, t.code';
 
@@ -106,6 +110,7 @@ class erp_bank_account extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
     constructor(table, defaults) {
+        if (!defaults) { defaults = {}; }
         super(table, defaults);
         this.#shopName = defaults['shopName'] || '';
         this.#shopCode = defaults['shopCode'] || '';
@@ -118,8 +123,8 @@ class erp_bank_account extends _persistentTable.Record {
 
 
     async save() {
-        // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
+        if (this.isNew() && this.cx.tUserId > 0) { this.isManual = true; }
+        return await super.save()
     }
 }
 //

@@ -22,8 +22,19 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
 
         var invoiceJoin = '';
         var isGenerateInvoice = (params.generate == 'T' || params.generate == 'true' || params.grp == 'T');
-        if (isGenerateInvoice) {
-            invoiceJoin = 'left join cp_invoiceCredit inv on inv.createdFrom = d.delRetId'
+        if (isGenerateInvoice) { invoiceJoin = 'left join cp_invoiceCredit inv on inv.createdFrom = d.delRetId'; }
+
+        var accrualJoin = ''; var accrualTotals = '';
+        if (params.accrId) {
+            accrualJoin = `
+                join cp_accrualDocument accrDoc on accrDoc.delRetId = d.delRetId and accrDoc.accrId = ${params.accrId}
+                join (
+                    select  accrDocId, sum(lineNet) as accrTotNet, sum(lineVat) as accrTotVat, sum(lineGross) as accrTotGross, sum(lineDRS) as accrTotDRS
+                    from	cp_accrualDocumentLine 
+                    group by accrDocId
+                ) accrDocTotals on accrDocTotals.accrDocId = accrDoc.accrDocId
+            `;
+            accrualTotals =', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
         }
 
         var query = { sql: '', params: [] };
@@ -43,6 +54,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag,
                                         ( select top 1 a.externalLink from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachLink,
                                         ( select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId ) as invoiceCount
+                                        ${accrualTotals}
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
@@ -50,6 +62,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                       ${invoiceJoin}
+                      ${accrualJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (isGenerateInvoice) {
@@ -169,12 +182,14 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
 
         query.sql += ' order by d.documentDate desc';
 
-        if (params.paging) {
-            query.paging = params.paging;
-        } else {
-            query.paging = {
-                page: params.page || 1,
-                pageSize: _declarations.SQL.PAGE_SIZE
+        if (!params.noPaging) {
+            if (params.paging) {
+                query.paging = params.paging;
+            } else {
+                query.paging = {
+                    page: params.page || 1,
+                    pageSize: _declarations.SQL.PAGE_SIZE
+                }
             }
         }
 
@@ -220,6 +235,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
     #attachFlag = '';
     #attachLink = null;
     #invoiceCount = 0;
+    #accrTotNet = null;
+    #accrTotVat = null;
+    #accrTotGross = null;
+    #accrTotDRS = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -234,6 +253,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#attachFlag = defaults['attachFlag'] || null;
         this.#attachLink = defaults['attachLink'] || null;
         this.#invoiceCount = defaults['invoiceCount'] || 0;
+        this.#accrTotNet = defaults['accrTotNet'] || null;
+        this.#accrTotVat = defaults['accrTotVat'] || null;
+        this.#accrTotGross = defaults['accrTotGross'] || null;
+        this.#accrTotDRS = defaults['accrTotDRS'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             this.#documentSign = -1;
         }
@@ -254,19 +277,41 @@ class cp_deliveryReturn extends _persistentTable.Record {
     }
 
     get editedIcon() {
+        if (this.#accrTotNet !== null) {
+            if (this.#accrTotNet != this.totalNet) {
+                return '&#x270E;';
+            }
+        }
         if (this.#invoiceCount > 0) { return '&#x2699;'; }
         if (this.isUserEdited) { return '&#x270E;'; }
         return '';
     }
 
-    get totalNetSign() { return this.totalNet * this.#documentSign; }
-    get totalVatSign() { return this.totalVat * this.#documentSign; }
-    get totalGrossSign() { return this.totalGross * this.#documentSign; }
-    get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
+    get totalNetSign() {
+        if (this.#accrTotNet !== null) { return this.accrTotNet; }
+        return this.totalNet * this.#documentSign;
+    }
+    get totalVatSign() {
+        // @@NOTE: accruals have no VAT but we still store it in the table
+        if (this.#accrTotNet !== null) { return 0; }
+        return this.totalVat * this.#documentSign;
+    }
+    get totalGrossSign() {
+        if (this.#accrTotGross !== null) { return this.#accrTotGross; }
+        return this.totalGross * this.#documentSign;
+    }
     get totalDRSSign() {
+        if (this.#accrTotDRS !== null) { return this.#accrTotDRS; }
         if (!this.totalDRS) { return ''; }
         return this.totalDRS * this.#documentSign;
     }
+    get totalDiscountSign() { return this.totalDiscount * this.#documentSign; }
+
+
+    get accrTotNet() { return this.#accrTotNet * this.#documentSign; }
+    get accrTotVat() { return this.#accrTotVat * this.#documentSign; }
+    get accrTotGross() { return this.#accrTotGross * this.#documentSign; }
+    get accrTotDRS() { return this.#accrTotDRS * this.#documentSign; }
 
 
     get recoSessionId() { return this.#recoSessionId; }

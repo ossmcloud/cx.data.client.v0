@@ -139,7 +139,7 @@ class RenderBase {
                 column.align = 'center';
                 column.title = ' ';
             }
-            if (field.dataType == 'datetime') {
+            if (field.dataType == 'datetime' || field.dataType == 'date') {
                 column.align = 'center';
                 column.width = '130px';
                 filter.label += ' (from)';
@@ -200,7 +200,8 @@ class RenderBase {
                             this.#dataSourceFilters.push(filter.replace);
                         } else {
                             this.#dataSourceFilters.push(filter);
-                            if (field.dataType == 'datetime') {
+                            if (field.dataType == 'datetime' || field.dataType == 'date') {
+                               //field.dataType = 'date';
                                 var filter2 = {};
                                 for (var fk in filter) { filter2[fk] = filter[fk]; }
                                 filter2.id += '_2';
