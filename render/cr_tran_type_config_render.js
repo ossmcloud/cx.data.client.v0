@@ -89,26 +89,22 @@ class CrTranTypeConfigRender extends RenderBase {
                                     { name: _cxSchema.cr_tran_type_config.CBREFERENCE, label: 'CB Reference', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.SORTINDEX, label: 'Sort Index', column: 1, width: '100px' },
                                     { name: _cxSchema.cr_tran_type_config.REQUIRESDECLARATION, label: 'Declarations', lookUps: _cxConst.CR_CASH_BOOK.REQUIRE_DECLARATION.toList(), column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config.HIDEFROMDECLARATIONS, label: 'Hide from Declaration Dialog', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.DUPLICATEAS, label: 'Duplicate As', column: 1, lookUps: duplicateAsLookUps },
+                                    { name: _cxSchema.cr_tran_type_config.FORCETAXMAPCONFIGID, label: 'Force Tax Mapping', column: 1, lookUps: forceTaxMapLookUps },
                                 ]
                             },
                             {
                                 group: 'cb1', column: 2, columnCount: 1, inline: true, fields: [
-
                                     { name: _cxSchema.cr_tran_type_config.IGNORE, label: 'Ignore', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.INVERTSIGN, label: 'Invert Sign', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.ALLOWEDIT, label: 'Allow Edit', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.ERPIGNORESTOREGLSEGMENTS, label: 'Ignore store gl segments', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.ERPSPLITBYREFERENCE, label: 'Split posting by reference', column: 1, noRender: (!this.dataSource.requiresDeclaration) },
+                                    { name: _cxSchema.cr_tran_type_config.HIDEFROMDECLARATIONS, label: 'Hide from Declaration Dialog', column: 1 },
                                     { name: _cxSchema.cr_tran_type_config.SHOWINCASHBOOKLIST, label: 'Show In Expanded List', column: 1 },
-                                    { name: _cxSchema.cr_tran_type_config.FORCETAXMAPCONFIGID, label: 'Force Tax Mapping', column: 1, lookUps: forceTaxMapLookUps },
+                                    { name: _cxSchema.cr_tran_type_config.POSTACSALEASINVOICE, label: 'Post A/C Sales as Invoices', column: 1 },                                   
                                 ]
                             },
-
-
-
-
                         ]
                     },
 
