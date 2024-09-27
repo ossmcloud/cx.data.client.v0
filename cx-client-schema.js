@@ -679,6 +679,10 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        HTOLERANCEPC: 'hTolerancePc',
+        LTOLERANCEPC: 'lTolerancePc',
+        IGNOREVATMISMATCH: 'ignoreVatMismatch',
+        IGNORELINETOLERANCE: 'ignoreLineTolerance',
     },
 
     cp_recoSettingSupplier: {
@@ -1093,6 +1097,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         EXTERNALFLAGS: 'externalFlags',
+        FILEVERSION: 'fileVersion',
     },
 
     cx_login: {
@@ -1521,6 +1526,21 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+    },
+
+    raw_cp_attachment: {
+        TBL_NAME: 'raw_cp_attachment',
+        ATTACHMENTID: 'attachmentId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        NAME: 'name',
+        DESCRIPTION: 'description',
+        VERSION: 'version',
+        EXTERNALREFERENCE: 'externalReference',
+        EXTERNALLINK: 'externalLink',
+        EXTERNALFLAGS: 'externalFlags',
+        JSONOPTIONS: 'jsonOptions',
+        CREATED: 'created',
     },
 
     raw_cp_delivery: {
