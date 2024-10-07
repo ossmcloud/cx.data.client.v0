@@ -69,7 +69,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: _declarations.CP_DOCUMENT.STATUS.Ready });
         }
-        
+
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
             query.params.push({ name: 'shopId', value: params.s });
@@ -179,7 +179,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (isGenerateInvoice) {
             query.sql += " and inv.invCreId is null"
         }
-        
+
         query.sql += ' order by d.documentDate desc';
 
         if (!params.noPaging) {

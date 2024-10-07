@@ -1544,6 +1544,21 @@ module.exports = {
         CREATED: 'created',
     },
 
+    raw_cp_attachment: {
+        TBL_NAME: 'raw_cp_attachment',
+        ATTACHMENTID: 'attachmentId',
+        TRANSMISSIONID: 'transmissionID',
+        SHOPID: 'shopId',
+        NAME: 'name',
+        DESCRIPTION: 'description',
+        VERSION: 'version',
+        EXTERNALREFERENCE: 'externalReference',
+        EXTERNALLINK: 'externalLink',
+        EXTERNALFLAGS: 'externalFlags',
+        JSONOPTIONS: 'jsonOptions',
+        CREATED: 'created',
+    },
+
     raw_cp_delivery: {
         TBL_NAME: 'raw_cp_delivery',
         RAWDELIVERYID: 'rawDeliveryId',
