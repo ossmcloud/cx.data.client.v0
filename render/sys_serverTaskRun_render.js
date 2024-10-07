@@ -75,7 +75,7 @@ class SysServerTaskRunRender extends RenderBase {
 
     async getTaskRunLogListOptions() {
         var taskRuns = this.dataSource.cx.table(_cxSchema.sys_serverTaskRunLog);
-        await taskRuns.select({ taskRunId: this.options.query.id || -1 });
+        await taskRuns.select({ taskRunId: this.options.query.id || -1, noPaging: true });
 
         var taskRunsOptions = await this.listOptions(taskRuns, { listView: true });
         taskRunsOptions.quickSearch = true;

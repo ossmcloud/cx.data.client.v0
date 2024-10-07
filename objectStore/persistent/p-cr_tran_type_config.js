@@ -62,6 +62,7 @@ const _fieldNames = {
     ERPIGNORECUSTOMER: 'erpIgnoreCustomer',
     ERP2NDIGNORECUSTOMER: 'erp2ndIgnoreCustomer',
     HIDEFROMDECLARATIONS: 'hideFromDeclarations',
+    POSTACSALEASINVOICE: 'postACSaleAsInvoice',
 
 }
 //
@@ -111,6 +112,7 @@ const _fields = {
     erpIgnoreCustomer: { name: 'erpIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     erp2ndIgnoreCustomer: { name: 'erp2ndIgnoreCustomer', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     hideFromDeclarations: { name: 'hideFromDeclarations', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    postACSaleAsInvoice: { name: 'postACSaleAsInvoice', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -386,6 +388,12 @@ class Persistent_cr_tran_type_config extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.HIDEFROMDECLARATIONS);
     } set hideFromDeclarations(val) {
         super.setValue(_fieldNames.HIDEFROMDECLARATIONS, val);
+    }
+
+    get postACSaleAsInvoice() {
+        return super.getValue(_fieldNames.POSTACSALEASINVOICE);
+    } set postACSaleAsInvoice(val) {
+        super.setValue(_fieldNames.POSTACSALEASINVOICE, val);
     }
 
 
