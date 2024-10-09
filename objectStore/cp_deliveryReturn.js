@@ -370,6 +370,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
+    
+    async log(message, info) {
+        // @@TODO:
+    }
 
     async generate() {
         var doc = this.cx.table(_schema.cp_invoiceCredit).createNew();
