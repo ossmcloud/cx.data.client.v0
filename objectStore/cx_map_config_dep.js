@@ -26,7 +26,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             left outer join erp_gl_account glPurch ON glPurch.erpGLAccountId = dep.purchaseAccountId
             left outer join erp_gl_account glWaste ON glWaste.erpGLAccountId = dep.wasteAccountId
             left outer join erp_gl_account glAccrual ON glAccrual.erpGLAccountId = dep.accrualAccountId
-            left outer join erp_gl_account glCogs ON glAccrual.erpGLAccountId = dep.cogsAccountId
+            left outer join erp_gl_account glCogs ON glCogs.erpGLAccountId = dep.cogsAccountId
             left outer join cp_wholesaler whs ON whs.wholesalerId = dep.wholesalerId
         `;
 

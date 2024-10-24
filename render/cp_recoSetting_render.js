@@ -21,9 +21,8 @@ class CPRecoSettingRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSetting.FORCENOTES] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.IGNOREVATMISMATCH] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.IGNORELINETOLERANCE] = null;
-        // this.autoLoadFields[_cxSchema.cp_recoSetting.CREATED] = null;
-        // this.autoLoadFields[_cxSchema.cp_recoSetting.MODIFIED] = null;
-
+        this.autoLoadFields[_cxSchema.cp_recoSetting.IGNORELINES] = null;
+        
     }
 
 
@@ -57,7 +56,7 @@ class CPRecoSettingRender extends RenderBase {
             filter.hide = true;
         } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE 
             || field.name == _cxSchema.cp_recoSetting.HTOLERANCEPC || field.name == _cxSchema.cp_recoSetting.LTOLERANCEPC
-            || field.name == _cxSchema.cp_recoSetting.FORCENOTES || field.name == _cxSchema.cp_recoSetting.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSetting.IGNORELINETOLERANCE) {
+            || field.name == _cxSchema.cp_recoSetting.FORCENOTES || field.name == _cxSchema.cp_recoSetting.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSetting.IGNORELINETOLERANCE || field.name == _cxSchema.cp_recoSetting.IGNORELINES) {
             filter.hide = true;
         }
     }
@@ -121,6 +120,7 @@ class CPRecoSettingRender extends RenderBase {
                                                       
                             { name: 'ignoreVatMismatch', label: 'ignore vat differences (only match net)', column: 3 },
                             { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 3 },
+                            { name: 'ignoreLines', label: 'ignore lines when matching', column: 3 },
                             { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 3 },
                         ]
                     },

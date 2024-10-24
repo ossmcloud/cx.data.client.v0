@@ -683,6 +683,7 @@ module.exports = {
         LTOLERANCEPC: 'lTolerancePc',
         IGNOREVATMISMATCH: 'ignoreVatMismatch',
         IGNORELINETOLERANCE: 'ignoreLineTolerance',
+        IGNORELINES: 'ignoreLines',
     },
 
     cp_recoSettingSupplier: {
@@ -699,6 +700,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         IGNORELINETOLERANCE: 'ignoreLineTolerance',
+        IGNORELINES: 'ignoreLines',
     },
 
     cp_wholesaler: {

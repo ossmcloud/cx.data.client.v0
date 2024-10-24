@@ -31,9 +31,9 @@ class CxMapConfigRender extends RenderBase {
                     {
                         group: 'main', title: 'main info', columnCount: 1, column: 1, inLine: true, fields: [
                             { name: _cxSchema.cx_map_config_dep.MAPCONFIGID, hidden: true },
-                            { name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, label: 'epos department', column: 1, readOnly: readOnly },
+                            { name: _cxSchema.cx_map_config_dep.EPOSDEPARTMENT, label: 'epos department', column: 1, readOnly: readOnly, validation: '{ "mandatory": true }' },
                             { name: _cxSchema.cx_map_config_dep.EPOSSUBDEPARTMENT, label: 'epos sub department', column: 1, readOnly: readOnly },
-                            { name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: readOnly },
+                            { name: _cxSchema.cx_map_config_dep.EPOSDESCRIPTION, label: 'epos description', column: 1, readOnly: readOnly, validation: '{ "mandatory": true }' },
                         ]
                     },
                     {

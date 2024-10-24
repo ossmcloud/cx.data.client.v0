@@ -31,6 +31,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     IGNORELINETOLERANCE: 'ignoreLineTolerance',
+    IGNORELINES: 'ignoreLines',
 
 }
 //
@@ -49,6 +50,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     ignoreLineTolerance: { name: 'ignoreLineTolerance', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    ignoreLines: { name: 'ignoreLines', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -138,6 +140,12 @@ class Persistent_cp_recoSettingSupplier extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.IGNORELINETOLERANCE);
     } set ignoreLineTolerance(val) {
         super.setValue(_fieldNames.IGNORELINETOLERANCE, val);
+    }
+
+    get ignoreLines() {
+        return super.getValue(_fieldNames.IGNORELINES);
+    } set ignoreLines(val) {
+        super.setValue(_fieldNames.IGNORELINES, val);
     }
 
 

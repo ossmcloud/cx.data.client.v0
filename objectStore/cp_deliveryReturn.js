@@ -371,6 +371,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
         await super.save()
     }
 
+    async log(message, info) {
+        // @@TODO:
+    }
+
     async generate() {
         var doc = this.cx.table(_schema.cp_invoiceCredit).createNew();
         doc.populate(this.toObject());
