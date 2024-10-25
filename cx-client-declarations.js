@@ -600,6 +600,7 @@ const CR_PREFERENCE = {
 const CP_PREFERENCE = {
     USER_LANDING_PAGE: 10,
     INV_REQUIRES_REVIEW: 100,
+    DEL_GENERATE_INVOICE_ON_TRANSFER: 110,
     INVOICE_EDIT_MODE: {
         ID: 200,
         VALUES: {
@@ -617,7 +618,8 @@ const CP_PREFERENCE = {
             GRP_AND_DOCS: 3,    // both
         }
     },
-    MAP_PROD_DO_NOT_USE_MASTER: 300
+    MAP_PROD_DO_NOT_USE_MASTER: 300,
+
 }
 
 const CP_PRODUCT = {
