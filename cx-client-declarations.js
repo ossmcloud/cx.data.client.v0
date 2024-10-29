@@ -105,6 +105,10 @@ const CX_LOGIN_TOKEN_TYPE = {
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); }
 }
+const CX_LOGIN_CACHE_TYPE = {
+    URL_QUERY: 1
+}
+
 
 const CX_MODULE = {
     STATIC: 'static',
@@ -1436,6 +1440,7 @@ module.exports = {
     CX_LOGIN_STATUS: CX_LOGIN_STATUS,
     CX_LOGIN_TOKEN_STATUS: CX_LOGIN_TOKEN_STATUS,
     CX_LOGIN_TOKEN_TYPE: CX_LOGIN_TOKEN_TYPE,
+    CX_LOGIN_CACHE_TYPE: CX_LOGIN_CACHE_TYPE,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
     CX_SERVICES: CX_SERVICES,

@@ -352,11 +352,10 @@ class RenderBase {
         throw new Error('RenderBase._record not overwritten')
     }
 
-    async list(request, h) {
+    async list(options) {
         await this.setPermission();
         if (this.autoLoad === true) { await this.initColumnsAndFilters(); }
-        await this._list(request, h);
-
+        await this._list(this.options.request, this.options.h);
     }
     async _list(request, h) {
         //throw new Error('RenderBase._list not overwritten')

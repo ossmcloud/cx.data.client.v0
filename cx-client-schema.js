@@ -1119,6 +1119,17 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    cx_login_cache: {
+        TBL_NAME: 'cx_login_cache',
+        CACHEID: 'cacheId',
+        LOGINID: 'loginId',
+        CACHETYPE: 'cacheType',
+        CACHEKEY: 'cacheKey',
+        CACHEVALUE: 'cacheValue',
+        JSONOPTIONS: 'jsonOptions',
+        CREATED: 'created',
+    },
+
     cx_login_roles: {
         TBL_NAME: 'cx_login_roles',
         LOGINROLEID: 'loginRoleId',
@@ -1529,21 +1540,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-    },
-
-    raw_cp_attachment: {
-        TBL_NAME: 'raw_cp_attachment',
-        ATTACHMENTID: 'attachmentId',
-        TRANSMISSIONID: 'transmissionID',
-        SHOPID: 'shopId',
-        NAME: 'name',
-        DESCRIPTION: 'description',
-        VERSION: 'version',
-        EXTERNALREFERENCE: 'externalReference',
-        EXTERNALLINK: 'externalLink',
-        EXTERNALFLAGS: 'externalFlags',
-        JSONOPTIONS: 'jsonOptions',
-        CREATED: 'created',
     },
 
     raw_cp_attachment: {
