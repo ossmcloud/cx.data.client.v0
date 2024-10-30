@@ -347,6 +347,10 @@ class CrTranTypeConfigRender extends RenderBase {
             style: 'border: 1px dotted gray; color: silver; ' + appendStyle,
         })
 
+        if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+            this.options.showButtons = [];
+            this.options.showButtons.push({ id: 'cr_tran_type_copy', text: 'copy from account', function: 'copyFromAccount' });
+        }
     }
 
 
