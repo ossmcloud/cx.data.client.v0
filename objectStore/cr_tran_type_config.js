@@ -199,6 +199,12 @@ class cr_tran_type_config extends _persistentTable.Record {
         return '<span style="background-color: var(--action-btn-bg-color); color: white; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;"></span>';
     }
 
+    get copyAction() {
+        return `
+            <a href="/cr/config/map-config?type=1&mid=${this.mapConfigId}&e=T&copy=${this.tranTypeConfigId}" target="_self">&#x29C9;</a>
+        `
+    }
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
 

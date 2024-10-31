@@ -189,6 +189,8 @@ class CrTranTypeConfigRender extends RenderBase {
             this.options.fields.push(listsGroup);
         }
 
+       
+
     }
 
     async _list() {
@@ -214,6 +216,7 @@ class CrTranTypeConfigRender extends RenderBase {
         ];
         this.options.columns = [
             { title: ' ', name: _cxSchema.cr_tran_type_config.TRANTYPECONFIGID },
+            { title: '&#x29C9;', name: 'copyAction' },
             //{ title: 'map id', name: _cxSchema.cr_tran_type_config.MAPCONFIGID },
             //{ title: 'r', name: 's', unbound: true, align: 'center', width: '15px' },
             { title: 'epos tran. type', name: _cxSchema.cr_tran_type_config.EPOSTRANTYPE },
@@ -351,6 +354,17 @@ class CrTranTypeConfigRender extends RenderBase {
             this.options.showButtons = [];
             this.options.showButtons.push({ id: 'cr_tran_type_copy', text: 'copy from account', function: 'copyFromAccount' });
         }
+
+        // this.options.actionsTitle = '&#x29C9;';
+        // this.options.actionsShowFirst = true;
+        // this.options.actions = [
+        //     {
+        //         label: '&#x29C9;', target: '_self', func: function (object) {
+        //             return 'cr/config/map-config?type=' + object.mapTypeId + '&mid=' + object.mapConfigId + '&copy=' + object.tranTypeConfigId;
+        //         }
+        //     },
+
+        // ]
     }
 
 

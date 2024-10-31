@@ -370,7 +370,7 @@ const CR_CASH_BOOK = {
     },
     STATE: {
         Pending: [1, 2],
-        Processing: [0, 3, 4, 99, 100],
+        Processing: [0, 3, 4, 41, 99, 100],
         PendingPost: [5],
         ProcessingPost: [6, 7, 9],
         Posted: [8],
@@ -388,7 +388,8 @@ const CR_CASH_BOOK = {
         Pending: 2,                // user saved but did not submit
         Refresh: 3,                // user requested dtfs refresh
 
-        PostingPrep: 4,            // user sent this for poosting
+        PostingPrep: 4,            // user sent this for posting preparation
+        PostingPrepAndPost: 41,    // user sent this for posting preparation and posting
         PostingReady: 5,           //
         Posting: 6,                // erps.exe has to  pick up the stuff to post
         PostingRunning: 7,         // erps.exe has picked up the stuff to post
@@ -404,6 +405,7 @@ const CR_CASH_BOOK = {
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 PostingPrep: 'preparing for posting',
+                PostingPrepAndPost: 'preparing and send posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -414,6 +416,7 @@ const CR_CASH_BOOK = {
         getName: function (value) {
             return enumGetName(this, value, {
                 PostingPrep: 'preparing for posting',
+                PostingPrepAndPost: 'preparing and send for posting',
                 PostingReady: 'ready for posting',
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
@@ -423,7 +426,7 @@ const CR_CASH_BOOK = {
         getStyle: function (status, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
                 color = '128,128,128';
                 bkgColor = '';
             } else if (status == this.New) {
@@ -461,7 +464,7 @@ const CR_CASH_BOOK = {
         getStyleInverted: function (status, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
             } else if (status == this.New) {
@@ -789,7 +792,7 @@ const CP_DOCUMENT = {
         getStyleInverted: function (status, returnObject) {
             var color = 'var(--main-color)'; var bkgColor = '';
 
-            if (status == this.REFRESH || status == this.PostingPrep || status == this.Posting || status == this.PostingRunning) {
+            if (status == this.REFRESH || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning) {
                 color = '255,255,255';
                 bkgColor = '128,128,128';
             } else if (status == this.Ready) {
