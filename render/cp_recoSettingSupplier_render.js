@@ -16,6 +16,7 @@ class CPRecoSettingSupplierRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.MATCHINGSUPPLIERCODES] = null;
         this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH] = null;
         this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.IGNORELINETOLERANCE] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.IGNOREDRS] = null;
         this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.IGNORELINES] = null;
         this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.NODELIVERY] = null;
         this.autoLoadFields[_cxSchema.cp_recoSettingSupplier.NODELIVERYCOMMENT] = null;
@@ -30,7 +31,8 @@ class CPRecoSettingSupplierRender extends RenderBase {
             column.align = 'left';
         } else if (field.name == _cxSchema.cp_recoSettingSupplier.MATCHINGSUPPLIERCODES) {
             column.nullText = '';
-        } else if (field.name == _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSettingSupplier.IGNORELINETOLERANCE || field.name == _cxSchema.cp_recoSettingSupplier.IGNORELINES || field.name == _cxSchema.cp_recoSettingSupplier.NODELIVERY) {
+        } else if (field.name == _cxSchema.cp_recoSettingSupplier.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSettingSupplier.IGNORELINETOLERANCE
+            || field.name == _cxSchema.cp_recoSettingSupplier.IGNORELINES || field.name == _cxSchema.cp_recoSettingSupplier.IGNOREDRS || field.name == _cxSchema.cp_recoSettingSupplier.NODELIVERY) {
             column.align = 'center';
             column.width = '100px';
         }
@@ -62,6 +64,7 @@ class CPRecoSettingSupplierRender extends RenderBase {
                             { name: 'ignoreVatMismatch', label: 'ignore vat differences (only match net)', column: 1 },
                             { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 1 },
                             { name: 'ignoreLines', label: 'ignore lines when matching', column: 1 },
+                            { name: 'ignoreDRS', label: 'ignore DRS when matching', column: 1 },
                             
                         ]
                     },

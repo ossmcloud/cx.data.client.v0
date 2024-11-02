@@ -21,6 +21,7 @@ class CPRecoSettingRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_recoSetting.FORCENOTES] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.IGNOREVATMISMATCH] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.IGNORELINETOLERANCE] = null;
+        this.autoLoadFields[_cxSchema.cp_recoSetting.IGNOREDRS] = null;
         this.autoLoadFields[_cxSchema.cp_recoSetting.IGNORELINES] = null;
         
     }
@@ -56,7 +57,9 @@ class CPRecoSettingRender extends RenderBase {
             filter.hide = true;
         } else if (field.name == _cxSchema.cp_recoSetting.HTOLERANCE || field.name == _cxSchema.cp_recoSetting.LTOLERANCE 
             || field.name == _cxSchema.cp_recoSetting.HTOLERANCEPC || field.name == _cxSchema.cp_recoSetting.LTOLERANCEPC
-            || field.name == _cxSchema.cp_recoSetting.FORCENOTES || field.name == _cxSchema.cp_recoSetting.IGNOREVATMISMATCH || field.name == _cxSchema.cp_recoSetting.IGNORELINETOLERANCE || field.name == _cxSchema.cp_recoSetting.IGNORELINES) {
+            || field.name == _cxSchema.cp_recoSetting.FORCENOTES || field.name == _cxSchema.cp_recoSetting.IGNOREVATMISMATCH
+            || field.name == _cxSchema.cp_recoSetting.IGNORELINETOLERANCE || field.name == _cxSchema.cp_recoSetting.IGNORELINES
+            || field.name == _cxSchema.cp_recoSetting.IGNOREDRS) {
             filter.hide = true;
         }
     }
@@ -98,9 +101,9 @@ class CPRecoSettingRender extends RenderBase {
 
         this.options.fields = [
             {
-                group: 'all', title: '', columnCount: 2, fields: [
+                group: 'all', title: '', columnCount: 2, styles: ['min-width: 500px;', 'min-width: 400px; max-width: 400px'], fields: [
                     {
-                        group: 'main', title: 'main info', column: 1, columnCount: 3, fields: [
+                        group: 'main', title: 'main info', column: 1, columnCount: 4, fields: [
                             //{ name: 'wholesalerId', label: 'wholesaler', column: 1 },
                             await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', column: 1 }),
                             //{ name: 'shopId', label: 'store', column: 1 },
@@ -120,8 +123,9 @@ class CPRecoSettingRender extends RenderBase {
                                                       
                             { name: 'ignoreVatMismatch', label: 'ignore vat differences (only match net)', column: 3 },
                             { name: 'ignoreLineTolerance', label: 'ignore lines out of tolerance if header is within tolerance', column: 3 },
-                            { name: 'ignoreLines', label: 'ignore lines when matching', column: 3 },
-                            { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 3 },
+                            { name: 'ignoreDRS', label: 'ignore DRS amount', column: 3 },
+                            { name: 'ignoreLines', label: 'ignore lines when matching', column: 4 },
+                            { name: 'forceNotes', label: 'force entering notes when marking as matched', column: 4 },
                         ]
                     },
                     {

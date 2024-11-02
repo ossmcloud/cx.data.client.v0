@@ -623,6 +623,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         MATCHEDALONE: 'matchedAlone',
+        BALANCEDRS: 'balanceDRS',
     },
 
     cp_recoSessionDocument: {
@@ -644,6 +645,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DOCUMENTDRS: 'documentDRS',
     },
 
     cp_recoSessionDocumentLine: {
@@ -661,6 +663,20 @@ module.exports = {
         VATRATEMISMATCH: 'vatRateMismatch',
         MATCHEDLINEID: 'matchedLineId',
         MATCHEDLINENO: 'matchedLineNo',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        BALANCEDRS: 'balanceDRS',
+    },
+
+    cp_recoSessionLog: {
+        TBL_NAME: 'cp_recoSessionLog',
+        RECOSESSIONLOGID: 'recoSessionLogId',
+        RECOSESSIONID: 'recoSessionId',
+        LOGTYPE: 'logType',
+        LOGMESSAGE: 'logMessage',
+        LOGINFO: 'logInfo',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
@@ -684,6 +700,7 @@ module.exports = {
         IGNOREVATMISMATCH: 'ignoreVatMismatch',
         IGNORELINETOLERANCE: 'ignoreLineTolerance',
         IGNORELINES: 'ignoreLines',
+        IGNOREDRS: 'ignoreDRS',
     },
 
     cp_recoSettingSupplier: {
@@ -701,6 +718,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         IGNORELINETOLERANCE: 'ignoreLineTolerance',
         IGNORELINES: 'ignoreLines',
+        IGNOREDRS: 'ignoreDRS',
     },
 
     cp_wholesaler: {

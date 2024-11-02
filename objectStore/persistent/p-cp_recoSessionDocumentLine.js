@@ -36,6 +36,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    BALANCEDRS: 'balanceDRS',
 
 }
 //
@@ -59,6 +60,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    balanceDRS: { name: 'balanceDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -178,6 +180,12 @@ class Persistent_cp_recoSessionDocumentLine extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get balanceDRS() {
+        return super.getValue(_fieldNames.BALANCEDRS);
+    } set balanceDRS(val) {
+        super.setValue(_fieldNames.BALANCEDRS, val);
     }
 
 
