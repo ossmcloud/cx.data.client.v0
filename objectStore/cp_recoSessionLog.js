@@ -10,7 +10,7 @@ class cp_recoSessionLog_Collection extends _persistentTable.Table {
     async select(params) {
         if (!params) { params = {} };
 
-        var query = { sql: `select * from cp_recoSessionLog where 1 = 1 `, params: [] };
+        var query = { sql: `select top 200 * from cp_recoSessionLog where 1 = 1 `, params: [] };
         this.queryFromParams(query, params);
         query.sql += ' order by created desc';
 
