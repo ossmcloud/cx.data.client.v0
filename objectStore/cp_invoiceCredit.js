@@ -17,7 +17,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
 
         var query = { sql: '', params: [] };
-        query.sql = ` select    d.*, s.shopCode, s.shopName, 
+        query.sql = ` select    distinct d.*, s.shopCode, s.shopName, 
                                 isnull(supp.traderName, isnull(supp2.traderName, isnull(supp3.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end))) as supplierName,
                                 grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,

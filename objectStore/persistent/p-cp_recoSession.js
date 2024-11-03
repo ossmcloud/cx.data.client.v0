@@ -35,6 +35,7 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     MATCHEDALONE: 'matchedAlone',
+    BALANCEDRS: 'balanceDRS',
 
 }
 //
@@ -57,6 +58,7 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     matchedAlone: { name: 'matchedAlone', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
+    balanceDRS: { name: 'balanceDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -170,6 +172,12 @@ class Persistent_cp_recoSession extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MATCHEDALONE);
     } set matchedAlone(val) {
         super.setValue(_fieldNames.MATCHEDALONE, val);
+    }
+
+    get balanceDRS() {
+        return super.getValue(_fieldNames.BALANCEDRS);
+    } set balanceDRS(val) {
+        super.setValue(_fieldNames.BALANCEDRS, val);
     }
 
 

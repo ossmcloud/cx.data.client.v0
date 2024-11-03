@@ -76,7 +76,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
             }
             if (params.batch == 'T') {
                 var allowedStatuses = [-1];
-                if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Refresh || params.tst == _declarations.CR_CASH_BOOK.STATUS.PostingPrep) {
+                if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Refresh || params.tst == _declarations.CR_CASH_BOOK.STATUS.PostingPrep || params.tst == _declarations.CR_CASH_BOOK.STATUS.PostingPrepAndPost) {
                     allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.New);
                     allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.Pending);
                     if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Refresh) { allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.Error); }

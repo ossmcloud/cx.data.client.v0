@@ -33,6 +33,8 @@ const _fieldNames = {
     LTOLERANCEPC: 'lTolerancePc',
     IGNOREVATMISMATCH: 'ignoreVatMismatch',
     IGNORELINETOLERANCE: 'ignoreLineTolerance',
+    IGNORELINES: 'ignoreLines',
+    IGNOREDRS: 'ignoreDRS',
 
 }
 //
@@ -53,6 +55,8 @@ const _fields = {
     lTolerancePc: { name: 'lTolerancePc', dataType: 'money', pk: false, identity: false, maxLength: 5, null: true },
     ignoreVatMismatch: { name: 'ignoreVatMismatch', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
     ignoreLineTolerance: { name: 'ignoreLineTolerance', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    ignoreLines: { name: 'ignoreLines', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    ignoreDRS: { name: 'ignoreDRS', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -154,6 +158,18 @@ class Persistent_cp_recoSetting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.IGNORELINETOLERANCE);
     } set ignoreLineTolerance(val) {
         super.setValue(_fieldNames.IGNORELINETOLERANCE, val);
+    }
+
+    get ignoreLines() {
+        return super.getValue(_fieldNames.IGNORELINES);
+    } set ignoreLines(val) {
+        super.setValue(_fieldNames.IGNORELINES, val);
+    }
+
+    get ignoreDRS() {
+        return super.getValue(_fieldNames.IGNOREDRS);
+    } set ignoreDRS(val) {
+        super.setValue(_fieldNames.IGNOREDRS, val);
     }
 
 

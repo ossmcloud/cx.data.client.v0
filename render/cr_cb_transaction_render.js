@@ -48,11 +48,6 @@ class CRCashBookRender extends RenderBase {
         if (isBatchProcessing) {
             this.options.filters.push({ label: 'target status (value)', fieldName: 'tst', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, hidden: true });
             this.options.filters.push({ label: 'target status', fieldName: 'target_status', value: _cxConst.CR_CASH_BOOK.STATUS.getName(this.options.query.tst), readOnly: true });
-            // this.options.filters.push({
-            //     label: 'target status', fieldName: 'tst', width: '200px', type: _cxConst.RENDER.CTRL_TYPE.SELECT,
-            //     lookUps: _cxConst.CR_CASH_BOOK.STATUS.toList(),
-            //     readOnly: true
-            // });
 
             this.options.title = 'cash-book batch processing';
             this.options.showButtons = [];

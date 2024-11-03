@@ -623,6 +623,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         MATCHEDALONE: 'matchedAlone',
+        BALANCEDRS: 'balanceDRS',
     },
 
     cp_recoSessionDocument: {
@@ -644,6 +645,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DOCUMENTDRS: 'documentDRS',
     },
 
     cp_recoSessionDocumentLine: {
@@ -661,6 +663,20 @@ module.exports = {
         VATRATEMISMATCH: 'vatRateMismatch',
         MATCHEDLINEID: 'matchedLineId',
         MATCHEDLINENO: 'matchedLineNo',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        BALANCEDRS: 'balanceDRS',
+    },
+
+    cp_recoSessionLog: {
+        TBL_NAME: 'cp_recoSessionLog',
+        RECOSESSIONLOGID: 'recoSessionLogId',
+        RECOSESSIONID: 'recoSessionId',
+        LOGTYPE: 'logType',
+        LOGMESSAGE: 'logMessage',
+        LOGINFO: 'logInfo',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
@@ -683,6 +699,8 @@ module.exports = {
         LTOLERANCEPC: 'lTolerancePc',
         IGNOREVATMISMATCH: 'ignoreVatMismatch',
         IGNORELINETOLERANCE: 'ignoreLineTolerance',
+        IGNORELINES: 'ignoreLines',
+        IGNOREDRS: 'ignoreDRS',
     },
 
     cp_recoSettingSupplier: {
@@ -699,6 +717,8 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         IGNORELINETOLERANCE: 'ignoreLineTolerance',
+        IGNORELINES: 'ignoreLines',
+        IGNOREDRS: 'ignoreDRS',
     },
 
     cp_wholesaler: {
@@ -1117,6 +1137,17 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
     },
 
+    cx_login_cache: {
+        TBL_NAME: 'cx_login_cache',
+        CACHEID: 'cacheId',
+        LOGINID: 'loginId',
+        CACHETYPE: 'cacheType',
+        CACHEKEY: 'cacheKey',
+        CACHEVALUE: 'cacheValue',
+        JSONOPTIONS: 'jsonOptions',
+        CREATED: 'created',
+    },
+
     cx_login_roles: {
         TBL_NAME: 'cx_login_roles',
         LOGINROLEID: 'loginRoleId',
@@ -1527,21 +1558,6 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
-    },
-
-    raw_cp_attachment: {
-        TBL_NAME: 'raw_cp_attachment',
-        ATTACHMENTID: 'attachmentId',
-        TRANSMISSIONID: 'transmissionID',
-        SHOPID: 'shopId',
-        NAME: 'name',
-        DESCRIPTION: 'description',
-        VERSION: 'version',
-        EXTERNALREFERENCE: 'externalReference',
-        EXTERNALLINK: 'externalLink',
-        EXTERNALFLAGS: 'externalFlags',
-        JSONOPTIONS: 'jsonOptions',
-        CREATED: 'created',
     },
 
     raw_cp_attachment: {
