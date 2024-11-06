@@ -759,6 +759,7 @@ const CP_DOCUMENT = {
         Posting: 6,                // erps.exe is to pick up the stuff to post
         PostingRunning: 7,         // erps.exe has picked up the stuff to post
         Posted: 8,                 // posted successfully
+        ERROR9: 9,
         ERROR: 97,
         PostingError: 98,
         DeleteAndPull: 99,
@@ -773,6 +774,7 @@ const CP_DOCUMENT = {
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
                 PostingRunning: 'posting running',
+                ERROR9: 'error',
                 //PostingUndo: 'reset posting running',
             });
         },
@@ -785,6 +787,7 @@ const CP_DOCUMENT = {
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
                 PostingRunning: 'posting running',
+                ERROR9: 'error',
                 //PostingUndo: 'reset posting running',
             });
         },
@@ -814,7 +817,7 @@ const CP_DOCUMENT = {
             } else if (status == this.PendingReview) {
                 color = '255,255,255';
                 bkgColor = '246,71,146';
-            } else if (status == this.ERROR) {
+            } else if (status == this.ERROR || status == this.ERROR9) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
             } else if (status == this.Delete) {

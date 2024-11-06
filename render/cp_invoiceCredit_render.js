@@ -497,10 +497,6 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-            this.options.showButtons = [];
-            if (!this.options.listView) {
-                this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
-            }
             
             var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
             if (this.options.allowEdit == true) {
@@ -694,6 +690,14 @@ class CPInvoiceReturnRender extends RenderBase {
             }
 
 
+            if (isBatchProcessing) {
+                this.options.allowNew = false;
+            } else {
+                this.options.showButtons = [];
+                if (!this.options.listView) {
+                    this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
+                }
+            }
 
 
 
