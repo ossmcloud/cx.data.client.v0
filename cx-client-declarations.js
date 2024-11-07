@@ -241,6 +241,7 @@ const CX_EPOS_PROVIDER = {
     EVOPOS: 'EVOPOS',
     LEADERS: 'LEADERS',
     CAPTIVA: 'CAPTIVA',
+    
     THERE: 'THERE',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', THERE: 'Therefore' }); }
