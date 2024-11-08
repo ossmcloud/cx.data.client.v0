@@ -159,6 +159,7 @@ const EPOS_DTFS_CONFIGS = {
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
     API_CONFIG: 'EPOSApiConfig',
+    ONE_DRIVE_CONFIG: 'OneDriveConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
@@ -241,10 +242,11 @@ const CX_EPOS_PROVIDER = {
     EVOPOS: 'EVOPOS',
     LEADERS: 'LEADERS',
     CAPTIVA: 'CAPTIVA',
+    EDATA: 'EDATA',
     
     THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', THERE: 'Therefore' }); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', EDATA: 'Euro Data', THERE: 'Therefore' }); }
 }
 
 
@@ -303,6 +305,12 @@ const CX_EPOS_PROVIDERS = {
             type: CX_EPOS_PROVIDER.CAPTIVA,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.EDATA,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.ONE_DRIVE_CONFIG, value: '{ "provider": "one" }' },
             ]
         },
         {

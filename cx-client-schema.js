@@ -1965,6 +1965,7 @@ module.exports = {
         NAME: 'name',
         ISCLOUD: 'isCloud',
         LOGOURL: 'logoUrl',
+        ISFLATFILES: 'isFlatFiles',
     },
 
     sys_serverTask: {

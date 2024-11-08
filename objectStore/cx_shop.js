@@ -19,6 +19,22 @@ class cx_shop_Collection extends _persistentTable.Table {
         await this.cx.exec(query);
     }
 
+    async selectFlatFiles(userId) {
+        var query = {
+            sql: `  
+                select  s.*
+                FROM    cx_shop s
+                join    cx_login_shop l on l.shopId = s.shopId
+                join    epos_shop_setting ss on ss.shopId=s.shopId
+                join    sys_provider p on p.code = ss.eposProvider
+                where   l.loginId = @loginId
+                and     p.isFlatFiles = 1
+            `,
+            params: [{ name: 'loginId', value: userId }]
+        }
+        return await super.select(query);
+    }
+
     async selectByUser(userId) {
         var query = {
             sql: `  select  s.*, g.groupCode, g.groupName

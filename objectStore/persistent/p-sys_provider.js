@@ -23,6 +23,8 @@ const _fieldNames = {
     CODE: 'code',
     NAME: 'name',
     ISCLOUD: 'isCloud',
+    LOGOURL: 'logoUrl',
+    ISFLATFILES: 'isFlatFiles',
 
 }
 //
@@ -33,6 +35,8 @@ const _fields = {
     code: { name: 'code', dataType: 'varchar', pk: true, identity: false, maxLength: 20, null: false },
     name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     isCloud: { name: 'isCloud', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
+    logoUrl: { name: 'logoUrl', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    isFlatFiles: { name: 'isFlatFiles', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -76,6 +80,18 @@ class Persistent_sys_provider extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISCLOUD);
     } set isCloud(val) {
         super.setValue(_fieldNames.ISCLOUD, val);
+    }
+
+    get logoUrl() {
+        return super.getValue(_fieldNames.LOGOURL);
+    } set logoUrl(val) {
+        super.setValue(_fieldNames.LOGOURL, val);
+    }
+
+    get isFlatFiles() {
+        return super.getValue(_fieldNames.ISFLATFILES);
+    } set isFlatFiles(val) {
+        super.setValue(_fieldNames.ISFLATFILES, val);
     }
 
 
