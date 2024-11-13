@@ -155,6 +155,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
+    DTFS_AUTO_MAP: 'DTFSAutoMap',
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
