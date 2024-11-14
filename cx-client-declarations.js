@@ -244,10 +244,25 @@ const CX_EPOS_PROVIDER = {
     LEADERS: 'LEADERS',
     CAPTIVA: 'CAPTIVA',
     EDATA: 'EDATA',
+    ZAMBR:'ZAMBR',
     
     THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', EDATA: 'Euro Data', THERE: 'Therefore' }); }
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            CBE: 'CBE',
+            RS: 'Retail Solution',
+            EDGE: 'EdgePos',
+            MRDN: 'Meridian',
+            VME: 'VME Retail',
+            EVOPOS: 'EvoPos Retail',
+            LEADERS: 'Leaders',
+            CAPTIVA: 'Captiva',
+            EDATA: 'Euro Data',
+            ZAMBR: 'Zambrero',
+            THERE: 'Therefore'
+        });
+    }
 }
 
 
@@ -310,9 +325,11 @@ const CX_EPOS_PROVIDERS = {
         },
         {
             type: CX_EPOS_PROVIDER.EDATA,
-            configDefaults: [
-                { name: EPOS_DTFS_CONFIGS.ONE_DRIVE_CONFIG, value: '{ "provider": "one" }' },
-            ]
+            configDefaults: []
+        },
+        {
+            type: CX_EPOS_PROVIDER.ZAMBR,
+            configDefaults: []
         },
         {
             type: CX_EPOS_PROVIDER.THERE,
