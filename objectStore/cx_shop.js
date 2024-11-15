@@ -22,7 +22,7 @@ class cx_shop_Collection extends _persistentTable.Table {
     async selectFlatFiles(userId) {
         var query = {
             sql: `  
-                select  s.*
+                select  s.*, p.code as eposProvider
                 FROM    cx_shop s
                 join    cx_login_shop l on l.shopId = s.shopId
                 join    epos_shop_setting ss on ss.shopId=s.shopId
@@ -177,11 +177,13 @@ class cx_shop extends _persistentTable.Record {
     #groupName = '';
     #groupCode = '';
     #check = false;
+    #eposProvider = '';
     constructor(table, defaults) {
         super(table, defaults);
         if (defaults) {
             this.#groupName = defaults['groupName'] || '';
             this.#groupCode = defaults['groupCode'] || '';
+            this.#eposProvider = defaults['eposProvider'] || '';
         }
     };
 
@@ -202,6 +204,10 @@ class cx_shop extends _persistentTable.Record {
 
     get shopInfo() {
         return `[${this.shopCode}]${this.shopName}`;
+    }
+
+    get eposProvider() {
+        return this.#eposProvider;
     }
    
     async save() {

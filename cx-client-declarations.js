@@ -156,6 +156,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
     DTFS_AUTO_MAP: 'DTFSAutoMap',
+    DTFS_IMPORT_OPTIONS: 'DTFSImportOptions',
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
@@ -214,7 +215,9 @@ const CX_WHS_PROVIDER = {
     GBI: 'gbi',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail' }); },
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail'
+        });
+    },
     getName: function (value) {
         return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail' });
     },
@@ -244,8 +247,9 @@ const CX_EPOS_PROVIDER = {
     LEADERS: 'LEADERS',
     CAPTIVA: 'CAPTIVA',
     EDATA: 'EDATA',
-    ZAMBR:'ZAMBR',
-    
+    ZAMBR: 'ZAMBR',
+    PRISM: 'PRISM',
+
     THERE: 'THERE',
     //
     toList: function (addEmpty) {
@@ -260,6 +264,7 @@ const CX_EPOS_PROVIDER = {
             CAPTIVA: 'Captiva',
             EDATA: 'Euro Data',
             ZAMBR: 'Zambrero',
+            PRISM: 'PRISM',
             THERE: 'Therefore'
         });
     }
@@ -330,6 +335,37 @@ const CX_EPOS_PROVIDERS = {
         {
             type: CX_EPOS_PROVIDER.ZAMBR,
             configDefaults: []
+        },
+        {
+            type: CX_EPOS_PROVIDER.PRISM,
+            configDefaults: [
+                {
+                    name: EPOS_DTFS_CONFIGS.DTFS_IMPORT_OPTIONS, value: JSON.stringify({
+                        rules: [
+                            {
+                                contains: 'Adj',
+                                tranType: 'ADJ',
+                                subType: ''
+                            },
+                            {
+                                contains: 'C.O.S',
+                                tranType: 'STOCK',
+                                subType: ''
+                            },
+                            {
+                                range: '1200-1251',
+                                tranType: 'T-$GL',
+                                subType: '$GLDescr'
+                            },
+                            {
+                                range: '4000-4999',
+                                tranType: 'SALE',
+                                subType: ''
+                            }
+                        ]
+                    })
+                },
+            ]
         },
         {
             type: CX_EPOS_PROVIDER.THERE,
@@ -776,7 +812,7 @@ const CP_DOCUMENT = {
         },
     },
     STATUS: {
-        New: -1,    
+        New: -1,
         Ready: 0,
         Generating: 1,
         REFRESH: 2,
