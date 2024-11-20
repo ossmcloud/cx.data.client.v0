@@ -520,6 +520,7 @@ class CPInvoiceReturnRender extends RenderBase {
             var batchActionSelected = (isBatchProcessing && this.options.query.action);
 
             this.options.filters = [];
+            this.options.showButtons = [];
 
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
@@ -693,7 +694,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.allowNew = false;
             } else {
-                this.options.showButtons = [];
+                
                 if (!this.options.listView) {
                     this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
                 }
