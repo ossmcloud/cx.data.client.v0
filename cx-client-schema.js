@@ -24,6 +24,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DOCUMENTTYPE: 'documentType',
     },
 
     cp_accrualDocument: {

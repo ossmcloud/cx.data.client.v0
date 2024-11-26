@@ -104,7 +104,7 @@ class CPAccrualRender extends RenderBase {
             canDetachDocuments = true;
         }
 
-        var transactions = this.dataSource.cx.table(_cxSchema.cp_deliveryReturn);
+        var transactions = this.dataSource.cx.table(this.dataSource.documentType);
         await transactions.select({ accrId: this.options.query.id, noPaging: true });
 
         var transactionsOptions = await this.listOptions(transactions, { listView: true, linkTarget: '_blank', canDetachDocuments: canDetachDocuments, accrId: this.options.query.id });
@@ -211,7 +211,7 @@ class CPAccrualRender extends RenderBase {
         // }
 
         var deliveriesOptions = await this.getDeliveryListOptions();
-        this.options.fields.push({ group: 'deliveries', title: 'deliveries', fields: [deliveriesOptions], collapsed: true });
+        this.options.fields.push({ group: 'documents', title: 'documents', fields: [deliveriesOptions], collapsed: true });
 
         if (this.options.query.viewLogs == 'T') {
             var transactionLogOptions = await this.getDocumentLogListOptions();
