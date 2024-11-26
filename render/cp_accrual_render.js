@@ -15,6 +15,8 @@ class CPAccrualRender extends RenderBase {
         this.autoLoadFields[_cxSchema.cp_accrual.SHOPID] = null;
         this.autoLoadFields[_cxSchema.cp_accrual.DOCUMENTSTATUS] = null;
         this.autoLoadFields[_cxSchema.cp_accrual.DOCUMENTDATE] = null;
+        this.autoLoadFields['documentTypeSource'] = { name: 'documentTypeSource', title: 'source' };
+
         this.autoLoadFields[_cxSchema.cp_accrual.DOCUMENTNUMBER] = null;
         this.autoLoadFields[_cxSchema.cp_accrual.DOCUMENTREFERENCE] = null;
         this.autoLoadFields[_cxSchema.cp_accrual.DOCUMENTSECONDREFERENCE] = null;
@@ -247,6 +249,7 @@ class CPAccrualRender extends RenderBase {
                             {
                                 group: 'main1.col1', column: 1, columnCount: 1, fields: [
                                     await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', readOnly: true }),
+                                    { name: 'documentTypeSource', label: 'source', readOnly: true }, 
                                 ]
                             },
                             {
