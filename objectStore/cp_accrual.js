@@ -73,6 +73,14 @@ class cp_accrual extends _persistentTable.Record {
         this.#logs = logs;
     }
 
+    get documentTypeSource() {
+        if (this.documentType == 'cp_invoiceCredit') {
+            return 'Invoices';
+        } else {
+            return 'Deliveries';
+        }
+    }
+
     async log(message, info) {
         await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.INFO, message, info);
     }

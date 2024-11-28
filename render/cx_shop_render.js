@@ -31,7 +31,7 @@ class CxShopRender extends RenderBase {
                 var shopErpSet = (shopErp != null && shopErp.isSet());;
                 if (!shopErpSet) {
                     this.options.buttons.push({ id: 'cr_shop_set_erp', text: 'Configure ERP (DTFS)', link: '/erp/shopSetting?e=T&id=' + shop.id });
-                } 
+                }
 
                 if (shopEposSet && shopErpSet) {
                     this.options.buttons.push({ id: 'cr_shop_activate', text: 'Activate Store', function: 'activateShop' });
@@ -140,9 +140,14 @@ class CxShopRender extends RenderBase {
         // populate drop down items
         var dropDownItems = [];
         this.dataSource.each(function (record) {
+            var obj = undefined;
+            if (record.eposProvider) {
+                obj = { eposProvider: record.eposProvider }
+            }
             dropDownItems.push({
                 value: record.shopId,
                 text: record.shopName + ' [' + record.shopCode + ']',
+                object: obj
             });
         });
         this.options.items = dropDownItems;

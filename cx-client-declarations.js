@@ -155,10 +155,14 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_PING_FREQ: 'DTFSPingFrequency',
     DTFS_DATASOURCE_CONFIG: 'DTFSDataSourceConfig',
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
+    DTFS_AUTO_MAP: 'DTFSAutoMap',
+    DTFS_IMPORT_OPTIONS: 'DTFSImportOptions',
+    DTFS_OPTIONS: 'DTFSOptions',
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
     API_CONFIG: 'EPOSApiConfig',
+    ONE_DRIVE_CONFIG: 'OneDriveConfig',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
@@ -212,7 +216,9 @@ const CX_WHS_PROVIDER = {
     GBI: 'gbi',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail' }); },
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail'
+        });
+    },
     getName: function (value) {
         return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail' });
     },
@@ -241,9 +247,28 @@ const CX_EPOS_PROVIDER = {
     EVOPOS: 'EVOPOS',
     LEADERS: 'LEADERS',
     CAPTIVA: 'CAPTIVA',
+    EDATA: 'EDATA',
+    ZAMBR: 'ZAMBR',
+    PRISM: 'PRISM',
+
     THERE: 'THERE',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, { CBE: 'CBE', RS: 'Retail Solution', EDGE: 'EdgePos', MRDN: 'Meridian', VME: 'VME Retail', EVOPOS: 'EvoPos Retail', LEADERS: 'Leaders', CAPTIVA: 'Captiva', THERE: 'Therefore' }); }
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            CBE: 'CBE',
+            RS: 'Retail Solution',
+            EDGE: 'EdgePos',
+            MRDN: 'Meridian',
+            VME: 'VME Retail',
+            EVOPOS: 'EvoPos Retail',
+            LEADERS: 'Leaders',
+            CAPTIVA: 'Captiva',
+            EDATA: 'Euro Data',
+            ZAMBR: 'Zambrero',
+            PRISM: 'PRISM',
+            THERE: 'Therefore'
+        });
+    }
 }
 
 
@@ -302,6 +327,45 @@ const CX_EPOS_PROVIDERS = {
             type: CX_EPOS_PROVIDER.CAPTIVA,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.EDATA,
+            configDefaults: []
+        },
+        {
+            type: CX_EPOS_PROVIDER.ZAMBR,
+            configDefaults: []
+        },
+        {
+            type: CX_EPOS_PROVIDER.PRISM,
+            configDefaults: [
+                {
+                    name: EPOS_DTFS_CONFIGS.DTFS_IMPORT_OPTIONS, value: JSON.stringify({
+                        rules: [
+                            {
+                                contains: 'Adj',
+                                tranType: 'ADJ',
+                                subType: ''
+                            },
+                            {
+                                contains: 'C.O.S',
+                                tranType: 'STOCK',
+                                subType: ''
+                            },
+                            {
+                                range: '1200-1251',
+                                tranType: 'T-$GL',
+                                subType: '$GLDescr'
+                            },
+                            {
+                                range: '4000-4999',
+                                tranType: 'SALE',
+                                subType: ''
+                            }
+                        ]
+                    })
+                },
             ]
         },
         {
@@ -749,7 +813,7 @@ const CP_DOCUMENT = {
         },
     },
     STATUS: {
-        New: -1,    
+        New: -1,
         Ready: 0,
         Generating: 1,
         REFRESH: 2,
@@ -759,6 +823,7 @@ const CP_DOCUMENT = {
         Posting: 6,                // erps.exe is to pick up the stuff to post
         PostingRunning: 7,         // erps.exe has picked up the stuff to post
         Posted: 8,                 // posted successfully
+        ERROR9: 9,
         ERROR: 97,
         PostingError: 98,
         DeleteAndPull: 99,
@@ -773,6 +838,7 @@ const CP_DOCUMENT = {
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
                 PostingRunning: 'posting running',
+                ERROR9: 'error',
                 //PostingUndo: 'reset posting running',
             });
         },
@@ -785,6 +851,7 @@ const CP_DOCUMENT = {
                 DeleteAndPull: 'delete and pull again',
                 PostingError: 'posting errors',
                 PostingRunning: 'posting running',
+                ERROR9: 'error',
                 //PostingUndo: 'reset posting running',
             });
         },
@@ -814,7 +881,7 @@ const CP_DOCUMENT = {
             } else if (status == this.PendingReview) {
                 color = '255,255,255';
                 bkgColor = '246,71,146';
-            } else if (status == this.ERROR) {
+            } else if (status == this.ERROR || status == this.ERROR9) {
                 color = '255,255,255';
                 bkgColor = '234,30,37';
             } else if (status == this.Delete) {
@@ -1369,6 +1436,7 @@ const SYS_SERVER_TASK = {
         Drive_Document_Import: 101,
         Dtfs_Get_Request: 200,
         EPoS_Api_Service: 201,
+        EPoS_Cashbook_Import: 202,
         Therefore_Service: 300,
         BWG_Service: 310,
         toList: function (addEmpty) {
@@ -1379,6 +1447,7 @@ const SYS_SERVER_TASK = {
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generates get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
                 EPoS_Api_Service: { name: 'EPoS API Service', desc: 'cloud EPoS Service.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
+                EPoS_Cashbook_Import: { name: 'EPoS Cashbook Import', desc: 'EPoS CashBook Import Service (One Drive).\n\nOptional parameters:\nprovider=[eposProvider];\nshops=[shop1,shop2];', params: '' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 BWG_Service: { name: 'BWG Query Status Service', desc: 'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
             });

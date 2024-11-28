@@ -55,7 +55,7 @@ class cp_recoSetting_Collection extends _persistentTable.Table {
         });
         if (found) { return found; }
         this.each((s, i) => {
-            if (s.shopId == 0 && s.wholesalerId == 0) { found = s; return false; }
+            if (!s.shopId && !s.wholesalerId) { found = s; return false; }
         });
         if (found) { return found; }
         return this.createNew();

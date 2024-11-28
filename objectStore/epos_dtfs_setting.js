@@ -91,6 +91,7 @@ class epos_dtfs_setting extends _persistentTable.Record {
                 try {
                     var query = { sql: '', params: [] };
                     var epos = _cxConst.CX_EPOS_PROVIDERS.getConfigDefaults(this.eposProvider);
+                    if (epos.length == 0) { return; }
                     for (var ex = 0; ex < epos.length; ex++) {
                         query.sql += `insert into ${_cxSchema.epos_dtfs_configs.TBL_NAME} (${_cxSchema.epos_dtfs_configs.SETTINGID}, ${_cxSchema.epos_dtfs_configs.CONFIGNAME}, ${_cxSchema.epos_dtfs_configs.CONFIGVALUE}, ${_cxSchema.epos_dtfs_configs.CREATEDBY})`;
                         query.sql += `values (${this.dtfsSettingId}, '${epos[ex].name}', '${epos[ex].value}', ${this.cx.tUserId})`;

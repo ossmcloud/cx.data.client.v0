@@ -497,10 +497,6 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-            this.options.showButtons = [];
-            if (!this.options.listView) {
-                this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
-            }
             
             var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
             if (this.options.allowEdit == true) {
@@ -524,6 +520,7 @@ class CPInvoiceReturnRender extends RenderBase {
             var batchActionSelected = (isBatchProcessing && this.options.query.action);
 
             this.options.filters = [];
+            this.options.showButtons = [];
 
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
@@ -603,7 +600,7 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
             if (!this.options.listView) {
                 // NOTE: this means it is a sublist of the group invoice so no reason to show this
-                this.options.columns.push({ name: 'groupDocumentNumber', title: 'group invoice', link: { url: '/cp/invoice-group?id={groupDocumentNumber}', valueField: _cxSchema.cp_invoiceCredit.INVGRPID } });
+                this.options.columns.push({ name: 'groupDocumentNumber', title: 'group invoice', link: { url: '/cp/invoice-group?id={invGrpId}', valueField: _cxSchema.cp_invoiceCredit.INVGRPID } });
             }
             this.options.columns.push({ name: signedCols.Discount, title: 'discount', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
             this.options.columns.push({ name: signedCols.Net, title: 'net', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });
@@ -694,6 +691,14 @@ class CPInvoiceReturnRender extends RenderBase {
             }
 
 
+            if (isBatchProcessing) {
+                this.options.allowNew = false;
+            } else {
+                
+                if (!this.options.listView) {
+                    this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
+                }
+            }
 
 
 

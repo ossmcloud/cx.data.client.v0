@@ -37,7 +37,7 @@ const _fields = {
     configId: { name: 'configId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     configName: { name: 'configName', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
-    configValue: { name: 'configValue', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: false },
+    configValue: { name: 'configValue', dataType: 'varchar', pk: false, identity: false, maxLength: 4000, null: false },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },

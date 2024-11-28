@@ -15,6 +15,18 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
 
         var isBatchProcessing = (params.batch == 'T' || params.batch == 'true');
 
+        var accrualJoin = ''; var accrualTotals = '';
+        if (params.accrId) {
+            accrualJoin = `
+                join cp_accrualDocument accrDoc on accrDoc.invCreId = d.invCreId and accrDoc.accrId = ${params.accrId}
+                join (
+                    select  accrDocId, sum(lineNet) as accrTotNet, sum(lineVat) as accrTotVat, sum(lineGross) as accrTotGross, sum(lineDRS) as accrTotDRS
+                    from	cp_accrualDocumentLine 
+                    group by accrDocId
+                ) accrDocTotals on accrDocTotals.accrDocId = accrDoc.accrDocId
+            `;
+            accrualTotals = ', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
+        }
 
         var query = { sql: '', params: [] };
         query.sql = ` select    distinct d.*, s.shopCode, s.shopName, 
@@ -22,6 +34,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                                 grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
+                                ${accrualTotals}
                       from    ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
                       left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
@@ -32,6 +45,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       left outer join   cp_invoiceGroup  grp            ON grp.invGrpId = d.invGrpId 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
+                       ${accrualJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         if (params.s) {

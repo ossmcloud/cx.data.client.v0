@@ -25,6 +25,7 @@ const _fieldNames = {
     DOCUMENTSTATUSMESSAGE: 'documentStatusMessage',
     DOCUMENTNUMBER: 'documentNumber',
     DOCUMENTDATE: 'documentDate',
+    REVERSEDATE: 'reverseDate',
     DOCUMENTREFERENCE: 'documentReference',
     DOCUMENTSECONDREFERENCE: 'documentSecondReference',
     DOCUMENTMEMO: 'documentMemo',
@@ -39,7 +40,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    REVERSEDATE: 'reverseDate',
+    DOCUMENTTYPE: 'documentType',
 
 }
 //
@@ -52,6 +53,7 @@ const _fields = {
     documentStatusMessage: { name: 'documentStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentNumber: { name: 'documentNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
     documentDate: { name: 'documentDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: false },
+    reverseDate: { name: 'reverseDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
     documentReference: { name: 'documentReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentSecondReference: { name: 'documentSecondReference', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     documentMemo: { name: 'documentMemo', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
@@ -66,7 +68,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    reverseDate: { name: 'reverseDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
+    documentType: { name: 'documentType', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
 
 }
 //
@@ -120,6 +122,12 @@ class Persistent_cp_accrual extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.DOCUMENTDATE);
     } set documentDate(val) {
         super.setValue(_fieldNames.DOCUMENTDATE, val);
+    }
+
+    get reverseDate() {
+        return super.getValue(_fieldNames.REVERSEDATE);
+    } set reverseDate(val) {
+        super.setValue(_fieldNames.REVERSEDATE, val);
     }
 
     get documentReference() {
@@ -206,10 +214,10 @@ class Persistent_cp_accrual extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    get reverseDate() {
-        return super.getValue(_fieldNames.REVERSEDATE);
-    } set reverseDate(val) {
-        super.setValue(_fieldNames.REVERSEDATE, val);
+    get documentType() {
+        return super.getValue(_fieldNames.DOCUMENTTYPE);
+    } set documentType(val) {
+        super.setValue(_fieldNames.DOCUMENTTYPE, val);
     }
 
 

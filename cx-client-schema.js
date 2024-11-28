@@ -24,6 +24,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DOCUMENTTYPE: 'documentType',
     },
 
     cp_accrualDocument: {
@@ -1965,6 +1966,7 @@ module.exports = {
         NAME: 'name',
         ISCLOUD: 'isCloud',
         LOGOURL: 'logoUrl',
+        ISFLATFILES: 'isFlatFiles',
     },
 
     sys_serverTask: {
