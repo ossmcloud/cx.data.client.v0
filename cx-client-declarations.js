@@ -157,6 +157,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_FTP_CONFIG: 'DTFSFTPConfig',
     DTFS_AUTO_MAP: 'DTFSAutoMap',
     DTFS_IMPORT_OPTIONS: 'DTFSImportOptions',
+    DTFS_OPTIONS: 'DTFSOptions',
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
