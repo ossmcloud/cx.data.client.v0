@@ -376,7 +376,7 @@ class CPQueryRender extends RenderBase {
 
         await this.buildFormActions();
 
-        this.buildFormTitle();
+        await this.buildFormTitle();
     }
 }
 
