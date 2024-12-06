@@ -1251,6 +1251,9 @@ module.exports = {
         TAXMAPCONFIGID: 'taxMapConfigId',
         CURRENCYCODE: 'currencyCode',
         SHOPCOLOR: 'shopColor',
+        STOREBRANDID: 'storeBrandId',
+        FUELBRANDID: 'fuelBrandId',
+        WHOLESALERID: 'wholesalerId',
     },
 
     cx_shop_group: {
@@ -1957,6 +1960,14 @@ module.exports = {
         CSSSTYLE: 'cssStyle',
         TRANSIGN: 'tranSign',
         ISTAXABLE: 'isTaxable',
+    },
+
+    sys_listValue: {
+        TBL_NAME: 'sys_listValue',
+        SYSLISTVALUEID: 'sysListValueId',
+        LISTID: 'listId',
+        VALUE: 'value',
+        SORTIDX: 'sortIdx',
     },
 
     sys_provider: {

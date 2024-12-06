@@ -368,7 +368,7 @@ class RenderBase {
         if (!options.dropDown) { options.dropDown = {}; }
         options.dropDown = {
             allowAll: true,
-            allowNone: true,
+            //allowNone: true,
         }
         return await _cx_render.getDropDownOptions(table, options);
     }

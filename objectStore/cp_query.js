@@ -36,6 +36,17 @@ class cp_query_Collection extends _persistentTable.Table {
         this.queryFromParams(query, params, 'q');
         query.sql += ' order by q.created desc';
 
+        if (!params.noPaging) {
+            if (params.paging) {
+                query.paging = params.paging;
+            } else {
+                query.paging = {
+                    page: params.page || 1,
+                    pageSize: _cxConst.SQL.PAGE_SIZE
+                }
+            }
+        }
+
         return await super.select(query);
     }
 
