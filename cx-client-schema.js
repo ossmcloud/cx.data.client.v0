@@ -819,6 +819,9 @@ module.exports = {
         ERPTRANSMISSIONID: 'erpTransmissionId',
         WARNLEVEL: 'warnLevel',
         WARNMESSAGE: 'warnMessage',
+        USERNOTES: 'userNotes',
+        USERNOTESBY: 'userNotesBy',
+        USERNOTESDATE: 'userNotesDate',
     },
 
     cr_cb_transactionAudit: {

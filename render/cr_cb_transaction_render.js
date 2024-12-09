@@ -74,6 +74,8 @@ class CRCashBookRender extends RenderBase {
        
         this.options.columns.push({ name: 'shopInfo', title: 'store', width: 'auto' });
         this.options.columns.push({ name: 'date', title: 'date', align: 'center', width: '130px' });
+        this.options.columns.push({ name: 'userNotesIcon', title: '&#x1F6C8;', align: 'center', width: '10px', style: 'cursor: default;', headerToolTip: 'user notes', toolTip: { valueField: 'userNotes' } });
+
         if (isBatchProcessing) { this.options.columns.push({ name: 'statusX', title: ' ', unbound: true }); }
         if (isExpanded) {
             this.options.columns.push({ name: 'statusX', title: ' ', unbound: true });

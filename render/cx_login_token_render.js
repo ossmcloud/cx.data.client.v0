@@ -17,12 +17,12 @@ class CXLoginToken extends RenderBase {
         this.autoLoadFields[_cxSchema.cx_login_token.STATUS] = null;
         this.autoLoadFields['loginName'] = { name: 'loginName' };
         this.autoLoadFields[_cxSchema.cx_login_token.DTFSSETTINGID] = null;
-        
+
         this.autoLoadFields[_cxSchema.cx_login_token.EXPIRYDATE] = null;
         this.autoLoadFields[_cxSchema.cx_login_token.MODIFIED] = null;
         this.autoLoadFields[_cxSchema.cx_login_token.MODIFIEDBY] = null;
-        
-        
+
+
     }
 
     async initColumn(field, column) {
@@ -44,13 +44,13 @@ class CXLoginToken extends RenderBase {
             column.addTotals = false;
             column.align = 'center';
             column.width = '100px';
-        } 
+        }
     }
     async initFilter(field, filter) {
         if (field.name == _cxSchema.cx_login_token.TYPE) {
 
         } else if (field.name == _cxSchema.cx_login_token.EXPIRYDATE) {
-            
+
         } else {
             filter.hide = true;
         }
@@ -59,12 +59,12 @@ class CXLoginToken extends RenderBase {
     async _list() {
         this.options.title = 'login tokens';
         this.options.actionsShowFirst = true;
-      
+
         this.options.showButtons = [];
         this.options.showButtons.push({ id: 'cx_login_token_new_onedrive', text: 'One Drive', function: 'getOneDriveToken' });
         this.options.showButtons.push({ id: 'cx_login_token_new_therefore', text: 'Therefore', function: 'setThereforeToken' });
 
-      
+
     }
 
 
@@ -89,25 +89,32 @@ class CXLoginToken extends RenderBase {
             if (this.dataSource.userName !== undefined) {
                 header.fields.push({ name: 'userName', label: 'user name', validation: validation, column: 2 });
                 header.fields.push({ name: 'userPassword', label: 'password', type: _cxConst.RENDER.CTRL_TYPE.PASSWORD, validation: validation, column: 2 });
-                header.fields.push({ name: 'stateKeyInfo', hidden: true});
+                header.fields.push({ name: 'stateKeyInfo', hidden: true });
                 //
             }
         }
-        
+
         this.options.fields.push(header);
 
         if (this.options.mode == 'view') {
-            if (this.dataSource.createdBy == this.dataSource.cx.userId) {   
+            if (this.dataSource.createdBy == this.dataSource.cx.userId) {
                 if (this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.THEREFORE) {
                     this.options.buttons.push({ id: 'cx_login_token_refresh', text: 'Refresh this Token', function: 'getNewToken_therefore' });
                     this.options.buttons.push({ id: 'cx_login_token_get', text: 'Get Token for therefore', function: 'getToken_therefore' });
-                }else {
+                } else {
                     this.options.buttons.push({ id: 'cx_login_token_refresh', text: 'Refresh this Token', function: 'getNewToken' });
                 }
             }
 
             if (this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.ONE) {
                 this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
+            }
+
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_ADMIN && this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.EPOS && this.dataSource.status == _cxConst.CX_LOGIN_TOKEN_STATUS.ACTIVE) {
+                var dtfsSettings = await this.cx.table(_cxSchema.epos_dtfs_setting).fetch(this.dataSource.dtfsSettingId);
+                if (dtfsSettings.eposProvider == _cxConst.CX_EPOS_PROVIDER.CAPTIVA || dtfsSettings.eposProvider == _cxConst.CX_EPOS_PROVIDER.EVOPOS) {
+                    this.options.buttons.push({ id: 'cx_login_token_copyto', text: 'Copy to User', function: 'copyToken' });
+                }
             }
 
         }

@@ -120,7 +120,7 @@ class cx_login_token extends _persistentTable.Record {
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
-        await super.save()
+        return await super.save()
     }
 }
 //
