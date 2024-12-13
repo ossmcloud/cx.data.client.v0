@@ -807,7 +807,7 @@ const CP_DOCUMENT = {
     STATE_DEL: {
         Pending: [-1, 0, 3, 4],
         Processing: [1, 2, 99, 100],
-        Error: [97, 98],
+        Error: [9, 97, 98],
         toList: function (addEmpty) {
             return enumToList(this, addEmpty);
         },

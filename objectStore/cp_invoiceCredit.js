@@ -169,8 +169,12 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         }
 
         if (params.mstatus) {
-            query.sql += ' and reco.recoStatusId = @recoStatusId';
-            query.params.push({ name: 'recoStatusId', value: params.mstatus });
+            if (params.mstatus == '0') {
+                query.sql += ' and reco.recoStatusId is null';   
+            } else {
+                query.sql += ' and reco.recoStatusId = @recoStatusId';
+                query.params.push({ name: 'recoStatusId', value: params.mstatus });
+            }
         }
 
         if (params.whs) {

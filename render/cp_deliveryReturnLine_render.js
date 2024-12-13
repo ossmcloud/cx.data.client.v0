@@ -10,22 +10,11 @@ class CPDeliveryReturnLineRender extends RenderBase {
     }
 
     async _list() {
-        // if (this.options.query) {
-        //     this.options.paging = true;
-        //     this.options.pageNo = (this.options.query.page || 1);
-        // }
-
-        // this.options.filters = [
-        //     { label: 'supplier', fieldName: 'su', type: _cxConst.RENDER.CTRL_TYPE.TEXT },
-        // ];
-        
         this.options.columns = [
-            //{ name: _cxSchema.cp_deliveryReturnLine.DELRETID, title: ' ', align: 'center', hidden: true },
-
             { name: _cxSchema.cp_deliveryReturnLine.LINENUMBER, title: 'line', align: 'right', width: '30px', },
             { name: _cxSchema.cp_deliveryReturnLine.LINESTATUS, title: 'status', lookUps: _cxConst.CP_DOCUMENT_LINE.STATUS.toList(), width: '70px' },
             { title: ' ', name: 'productIcon', width: '10px', unbound: true },
-            { name: _cxSchema.cp_deliveryReturnLine.EPOSCODE, title: 'item code' },
+            { name: _cxSchema.cp_deliveryReturnLine.EPOSCODE, title: 'item code', link: { url: '/cp/config/product?id={prod}', valueField: 'productId', paramName: 'prod' } },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSBARCODE, title: 'item barcode' },
             { name: _cxSchema.cp_deliveryReturnLine.EPOSDESCRIPTION, title: 'item description' },
             { name: _cxSchema.cp_deliveryReturnLine.PACKSIZE, title: 'pack size', align: 'right', width: '60px' },

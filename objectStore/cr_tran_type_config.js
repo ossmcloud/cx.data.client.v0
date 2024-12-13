@@ -49,6 +49,9 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
         if (params.e_tt_eq) {
             query.sql += ' and c.eposTranType = @eposTranType';
             query.params.push({ name: 'eposTranType', value: params.e_tt_eq });
+
+            query.sql += ' and c.eposTranSubType = @eposTranSubType';
+            query.params.push({ name: 'eposTranSubType', value: params.e_st_eq || '' });
         }
 
 
@@ -56,10 +59,7 @@ class cr_tran_type_config_Collection extends _persistentTable.Table {
             query.sql += ' and c.eposTranSubType like @eposTranSubType';
             query.params.push({ name: 'eposTranSubType', value: params.e_st + '%' });
         }
-        if (params.e_st_eq) {
-            query.sql += ' and c.eposTranSubType = @eposTranSubType';
-            query.params.push({ name: 'eposTranSubType', value: params.e_st_eq });
-        }
+        
 
         if (params.desc) {
             query.sql += ' and c.description like @description';
