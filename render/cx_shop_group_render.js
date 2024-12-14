@@ -88,6 +88,7 @@ class CxShopGroupRender extends RenderBase {
     }
 
     async dropDown() {
+        this.options.dropDown.allowNone = true;
         if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a group'; }
         if (this.options.label == undefined) { this.options.label = 'store group'; }
 

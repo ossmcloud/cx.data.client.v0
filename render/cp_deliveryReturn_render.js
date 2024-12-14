@@ -270,8 +270,10 @@ class CPDeliveryReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_DEL.toList('- all -'), });
             }
             if (this.matchingEnabled) {
+                var matchStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -');
+                matchStatuses.splice(1, 1);
                 //this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
-                this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') });
+                this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: matchStatuses });
             } else {
                 //this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
             }

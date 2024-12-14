@@ -39,9 +39,11 @@ class CxShopRender extends RenderBase {
             }
         }
 
+        var storeBrands = this.cx.table(_cxSchema.sys_listValue);
+
         this.options.fields = [
             {
-                group: 'main', title: 'main info', columnCount: 3, fields: [
+                group: 'main', title: 'main info', columnCount: 4, fields: [
                     {
                         group: 'main1', title: '', column: 1, columnCount: 3, inline: true, fields: [
                             { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
@@ -51,17 +53,25 @@ class CxShopRender extends RenderBase {
                     },
 
                     {
-                        group: 'main1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                        group: 'main2', title: '', column: 1, columnCount: 2, inline: true, fields: [
                             { name: 'shopName', label: 'name', column: 1, validation: '{ "mandatory": true, "max": 60  }' },
                             { name: 'shopColor', label: 'color', column: 2 },
                         ]
                     },
 
-                    { name: 'shopAddress', label: 'address', column: 2, validation: '{ "max": 255 }' },
-                    { name: 'shopPostCode', label: 'post code', column: 2, validation: '{ "max": 50 }' },
+                    {
+                        group: 'main3', title: '', column: 2, columnCount: 2, inline: true, fields: [
+                            { name: 'storeBrandId', label: 'store brand', column: 1, width: '200px', lookUps: await storeBrands.toLookUpList('storeBrand', true) },
+                            { name: 'fuelBrandId', label: 'fuel brand', column: 2, width: '200px', lookUps: await storeBrands.toLookUpList('fuelBrand', true) },
+                        ]
+                    },
+                    { name: 'wholesalerId', label: 'wholesaler', column: 2, width: '200px', lookUps: await storeBrands.toLookUpList('wholesaler', true) },
 
-                    { name: 'shopLatitude', label: 'latitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
-                    { name: 'shopLongitude', label: 'longitude', column: 3, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
+                    { name: 'shopAddress', label: 'address', column: 3, validation: '{ "max": 255 }' },
+                    { name: 'shopPostCode', label: 'post code', column: 3, validation: '{ "max": 50 }' },
+
+                    { name: 'shopLatitude', label: 'latitude', column: 4, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
+                    { name: 'shopLongitude', label: 'longitude', column: 4, type: _cxConst.RENDER.CTRL_TYPE.NUMERIC },
 
 
                 ],

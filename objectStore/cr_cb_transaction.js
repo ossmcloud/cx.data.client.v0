@@ -195,6 +195,13 @@ class cr_cb_transaction extends _persistentTable.Record {
         return this.warnLevel;
     }
 
+    get userNotesIcon() {
+        if (this.userNotes) {
+            return `&#x1F6C8;`;
+        }
+        return '';
+    }
+
     
     get canEdit() {
         return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status == _declarations.CR_CASH_BOOK.STATUS.Error)

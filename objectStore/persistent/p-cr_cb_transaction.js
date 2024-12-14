@@ -37,6 +37,9 @@ const _fieldNames = {
     ERPTRANSMISSIONID: 'erpTransmissionId',
     WARNLEVEL: 'warnLevel',
     WARNMESSAGE: 'warnMessage',
+    USERNOTES: 'userNotes',
+    USERNOTESBY: 'userNotesBy',
+    USERNOTESDATE: 'userNotesDate',
 
 }
 //
@@ -61,6 +64,9 @@ const _fields = {
     erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     warnLevel: { name: 'warnLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false, default: '0' },
     warnMessage: { name: 'warnMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
+    userNotes: { name: 'userNotes', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: true },
+    userNotesBy: { name: 'userNotesBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    userNotesDate: { name: 'userNotesDate', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -186,6 +192,24 @@ class Persistent_cr_cb_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.WARNMESSAGE);
     } set warnMessage(val) {
         super.setValue(_fieldNames.WARNMESSAGE, val);
+    }
+
+    get userNotes() {
+        return super.getValue(_fieldNames.USERNOTES);
+    } set userNotes(val) {
+        super.setValue(_fieldNames.USERNOTES, val);
+    }
+
+    get userNotesBy() {
+        return super.getValue(_fieldNames.USERNOTESBY);
+    } set userNotesBy(val) {
+        super.setValue(_fieldNames.USERNOTESBY, val);
+    }
+
+    get userNotesDate() {
+        return super.getValue(_fieldNames.USERNOTESDATE);
+    } set userNotesDate(val) {
+        super.setValue(_fieldNames.USERNOTESDATE, val);
     }
 
 

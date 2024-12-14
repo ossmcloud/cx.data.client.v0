@@ -37,6 +37,9 @@ const _fieldNames = {
     TAXMAPCONFIGID: 'taxMapConfigId',
     CURRENCYCODE: 'currencyCode',
     SHOPCOLOR: 'shopColor',
+    STOREBRANDID: 'storeBrandId',
+    FUELBRANDID: 'fuelBrandId',
+    WHOLESALERID: 'wholesalerId',
 
 }
 //
@@ -54,13 +57,16 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     shopPostCode: { name: 'shopPostCode', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: true },
-    shopLatitude: { name: 'shopLatitude', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
-    shopLongitude: { name: 'shopLongitude', dataType: 'decimal', pk: false, identity: false, maxLength: 9, null: true },
+    shopLatitude: { name: 'shopLatitude', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
+    shopLongitude: { name: 'shopLongitude', dataType: 'money', pk: false, identity: false, maxLength: 9, null: true },
     tranTypeConfigId: { name: 'tranTypeConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     depMapConfigId: { name: 'depMapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     taxMapConfigId: { name: 'taxMapConfigId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     currencyCode: { name: 'currencyCode', dataType: 'varchar', pk: false, identity: false, maxLength: 3, null: true },
     shopColor: { name: 'shopColor', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    storeBrandId: { name: 'storeBrandId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    fuelBrandId: { name: 'fuelBrandId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    wholesalerId: { name: 'wholesalerId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -80,7 +86,7 @@ class Persistent_cx_shop extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get shopId() {
         return super.getValue(_fieldNames.SHOPID);
@@ -186,6 +192,24 @@ class Persistent_cx_shop extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.SHOPCOLOR);
     } set shopColor(val) {
         super.setValue(_fieldNames.SHOPCOLOR, val);
+    }
+
+    get storeBrandId() {
+        return super.getValue(_fieldNames.STOREBRANDID);
+    } set storeBrandId(val) {
+        super.setValue(_fieldNames.STOREBRANDID, val);
+    }
+
+    get fuelBrandId() {
+        return super.getValue(_fieldNames.FUELBRANDID);
+    } set fuelBrandId(val) {
+        super.setValue(_fieldNames.FUELBRANDID, val);
+    }
+
+    get wholesalerId() {
+        return super.getValue(_fieldNames.WHOLESALERID);
+    } set wholesalerId(val) {
+        super.setValue(_fieldNames.WHOLESALERID, val);
     }
 
 

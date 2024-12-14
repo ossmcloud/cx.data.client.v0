@@ -160,8 +160,13 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         }
 
         if (params.mstatus) {
-            query.sql += ' and reco.recoStatusId = @recoStatusId';
-            query.params.push({ name: 'recoStatusId', value: params.mstatus });
+            // @@NOTE: Not analysed and not matched are kind of the same thing for deliveries
+            if (params.mstatus == '0' || params.mstatus == '1') {
+                query.sql += ' and reco.recoStatusId is null';
+            } else {
+                query.sql += ' and reco.recoStatusId = @recoStatusId';
+                query.params.push({ name: 'recoStatusId', value: params.mstatus });
+            }
         }
 
         if (params.inv === 'true') {
