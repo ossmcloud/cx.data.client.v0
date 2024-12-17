@@ -41,7 +41,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
             if (params.expanded == 'true') {
                 var additionalColumns = [];
                 //query.sql += `, ('[' + s.shopCode + '] ' + s.shopName) as shopInfo `;
-                query.sql += `, '[' + s.shopCode + '] ' + s.shopName as shopInfo, (select sum(isnull(cbt.valueTax, 0)) from cr_transaction cbt where cbt.cbTranId = l.cbTranId and voided = 0) as totalTax`;
+                query.sql += `, '[' + s.shopCode + '] ' + s.shopName as shopInfo, case isnull(l.userNotes, '') when '' then '' else '&#x1F6C8;' end as userNotesIcon, (select sum(isnull(cbt.valueTax, 0)) from cr_transaction cbt where cbt.cbTranId = l.cbTranId and voided = 0) as totalTax`;
                 var cols = await this.getTranTypeConfigCols();
                 cols.each(function (c, idx) {
                     query.sql += `, (select sum(cbt.valueGross) from cr_transaction cbt where cbt.cbTranId = l.cbTranId and voided = 0 and cbt.tranTypeConfigId = ${c.tranTypeConfigId}) as [AC_${c.tranTypeConfigId}] `;
@@ -99,7 +99,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
             }
             if (params.expanded == 'true') {
                 query.sql += ` group by  l.cbTranId, l.shopId, l.date, l.status, l.statusMessage, l.totalSales, l.totalLodgement, l.tillDifference, l.totalAccountSales, l.totalAccountLodgement,
-                                        l.erpTransmissionId, l.transmissionId, l.warnLevel, l.warnMessage, l.created, l.createdBy, l.modified, l.modifiedBy, l.rowver, s.shopCode, s.shopName`;
+                                        l.erpTransmissionId, l.transmissionId, l.warnLevel, l.warnMessage, l.created, l.createdBy, l.modified, l.modifiedBy, l.rowver, l.userNotes, l.userNotesBy, l.userNotesDate, s.shopCode, s.shopName`;
             }
             query.sql += ' order by l.date desc';
 
