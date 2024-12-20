@@ -394,6 +394,8 @@ class CPInvoiceReturnRender extends RenderBase {
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
+           
+
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
@@ -413,6 +415,8 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
                     this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                } else if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH || s == _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                    this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
                 }
             }
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
