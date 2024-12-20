@@ -133,7 +133,7 @@ class CPInvoiceReturnRender extends RenderBase {
             `;
             return;
         }
-        
+
 
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
@@ -394,6 +394,8 @@ class CPInvoiceReturnRender extends RenderBase {
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
+
+
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
@@ -413,6 +415,8 @@ class CPInvoiceReturnRender extends RenderBase {
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
                 if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
                     this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                } else if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH || s == _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                    this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
                 }
             }
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
@@ -497,7 +501,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-            
+
             var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
             if (this.options.allowEdit == true) {
                 this.options.allowEditCondition = function (object) {
@@ -525,7 +529,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
                 if (batchActionSelected) {
-                    
+
                     this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                     this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
@@ -614,7 +618,7 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' });
 
 
-           
+
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'select', width: '30px', type: 'check' }); }
 
 
@@ -694,7 +698,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.allowNew = false;
             } else {
-                
+
                 if (!this.options.listView) {
                     this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
                 }
