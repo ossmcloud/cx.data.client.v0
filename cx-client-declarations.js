@@ -1449,7 +1449,7 @@ const SYS_SERVER_TASK = {
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generates get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
                 EPoS_Api_Service: { name: 'EPoS API Service', desc: 'cloud EPoS Service.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 EPoS_Cashbook_Import: { name: 'EPoS Cashbook Import', desc: 'EPoS CashBook Import Service (One Drive).\n\nOptional parameters:\nprovider=[eposProvider];\nshops=[shop1,shop2];', params: '' },
-                MMS_Request_Task: { name: 'Document Matching', desc: 'Document Matching.\n\nOptional parameters:\ndelta_days=[number];\nshops=[shop1,shop2];', params: '' },
+                MMS_Request_Task: { name: 'Document Matching', desc: 'Document Matching.\n\nOptional parameters:\nshops=[shop1,shop2];\ndelta_days=[number];\ndelta_days_inv=[number];', params: '' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 BWG_Service: { name: 'BWG Query Status Service', desc: 'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
             });
