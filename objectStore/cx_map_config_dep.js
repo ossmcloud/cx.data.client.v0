@@ -92,7 +92,15 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
 
     async toLookupFullList(shopId, showErp, returnResults) {
         var query = { sql: '', params: [{ name: 'shopId', value: shopId }] };
+
+        var orderBy = 'text';
+        if (showErp == 'SL') {
+            orderBy = "isnull(text_sl, 'Z'), text";
+        } else if (showErp == 'PL') {
+            orderBy = "isnull(text_pl, 'Z'), text";
+        }
         query.sql = `
+            select * from (
             select	            dep.depMapConfigId as value,
                                 eposDepartment + '/' + eposSubDepartment +  ' ['+ eposDescription + ']' as text,
                                 sgl.code + '/' + sgl.costCentre + '/' + sgl.description +  ' ['+ eposDescription + ']' as text_sl,
@@ -110,7 +118,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             left outer join     erp_gl_account sgl ON sgl.erpGLAccountId = dep.saleAccountId
             left outer join     erp_gl_account pgl ON pgl.erpGLAccountId = dep.purchaseAccountId
             where	    s.shopId = @shopId
-            order by    eposDepartment, eposSubDepartment
+            ) as res
+            order by    ${orderBy}
         `;
         var lookUpValues = [{ value: '', text: '' }];
         var result = await this.db.exec(query);
@@ -118,8 +127,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         for (var rx = 0; rx < result.rows.length; rx++) {
             var row = result.rows[rx];
             var text = row.text;
-            if (showErp == 'SL') { text = row.text_sl; }
-            if (showErp == 'PL') { text = row.text_pl; }
+            if (showErp == 'SL') { text = row.text_sl || `[!!!] ${row.text}`; }
+            if (showErp == 'PL') { text = row.text_pl || `[!!!] ${row.text}`; }
             var obj = {};
             if (showErp) {
                 obj.code = row[`${showErp}_code`];

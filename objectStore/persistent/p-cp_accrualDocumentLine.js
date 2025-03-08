@@ -26,11 +26,15 @@ const _fieldNames = {
     LINEVAT: 'lineVat',
     LINEGROSS: 'lineGross',
     LINEDRS: 'lineDRS',
+    DEPMAPCONFIGID: 'depMapConfigId',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
-    DEPMAPCONFIGID: 'depMapConfigId',
+    GLSEGMENT1: 'glSegment1',
+    GLSEGMENT2: 'glSegment2',
+    GLSEGMENT3: 'glSegment3',
+    GLSEGMENTDESCR: 'glSegmentDescr',
 
 }
 //
@@ -44,11 +48,15 @@ const _fields = {
     lineVat: { name: 'lineVat', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineGross: { name: 'lineGross', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     lineDRS: { name: 'lineDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
+    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
-    depMapConfigId: { name: 'depMapConfigId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    glSegment1: { name: 'glSegment1', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    glSegment2: { name: 'glSegment2', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    glSegment3: { name: 'glSegment3', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    glSegmentDescr: { name: 'glSegmentDescr', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
 
 }
 //
@@ -110,6 +118,12 @@ class Persistent_cp_accrualDocumentLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.LINEDRS, val);
     }
 
+    get depMapConfigId() {
+        return super.getValue(_fieldNames.DEPMAPCONFIGID);
+    } set depMapConfigId(val) {
+        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
+    }
+
     get created() {
         return super.getValue(_fieldNames.CREATED);
     } set created(val) {
@@ -134,10 +148,28 @@ class Persistent_cp_accrualDocumentLine extends _cx_data.DBRecord {
         super.setValue(_fieldNames.MODIFIEDBY, val);
     }
 
-    get depMapConfigId() {
-        return super.getValue(_fieldNames.DEPMAPCONFIGID);
-    } set depMapConfigId(val) {
-        super.setValue(_fieldNames.DEPMAPCONFIGID, val);
+    get glSegment1() {
+        return super.getValue(_fieldNames.GLSEGMENT1);
+    } set glSegment1(val) {
+        super.setValue(_fieldNames.GLSEGMENT1, val);
+    }
+
+    get glSegment2() {
+        return super.getValue(_fieldNames.GLSEGMENT2);
+    } set glSegment2(val) {
+        super.setValue(_fieldNames.GLSEGMENT2, val);
+    }
+
+    get glSegment3() {
+        return super.getValue(_fieldNames.GLSEGMENT3);
+    } set glSegment3(val) {
+        super.setValue(_fieldNames.GLSEGMENT3, val);
+    }
+
+    get glSegmentDescr() {
+        return super.getValue(_fieldNames.GLSEGMENTDESCR);
+    } set glSegmentDescr(val) {
+        super.setValue(_fieldNames.GLSEGMENTDESCR, val);
     }
 
 

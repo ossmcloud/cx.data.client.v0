@@ -18,10 +18,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
 
-    async getDocumentLineListOptions() {
-
-
-
+    async getDocumentLineListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
@@ -30,7 +27,7 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLines.forceReadOnly = this.options.query.line != 'T';
         }
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
         if (transactionLines.forceReadOnly) {
@@ -79,16 +76,19 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLines.forceReadOnly = true;
         }
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
-
+        
         if (!transactionLines.forceReadOnly) {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
             var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre, erpSett.mergeGLAndTax);
             transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+
+            var glAccountSegs2 = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpSeg2LookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2] = glAccountSegs2;
 
             if (erpSett.mergeGLAndTax) {
                 var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
@@ -133,7 +133,7 @@ class CPInvoiceReturnRender extends RenderBase {
             `;
             return;
         }
-        
+
 
         // SET TAB TITLE
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
@@ -371,7 +371,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var subListsGroup = { group: 'sublists', columnCount: 1, fields: [] };
         this.options.fields.push(subListsGroup);
 
-        var transactionLineOptions = await this.getDocumentLineListOptions();
+        var transactionLineOptions = await this.getDocumentLineListOptions(erpSett);
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
         if (this.options.query.viewLogs == 'T') {
 
@@ -394,7 +394,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                 this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
-           
+
 
             // allow to post based on role only under certain statuses
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
@@ -501,7 +501,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
     async _list() {
         try {
-            
+
             var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
             if (this.options.allowEdit == true) {
                 this.options.allowEditCondition = function (object) {
@@ -529,7 +529,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
                 if (batchActionSelected) {
-                    
+
                     this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                     this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
@@ -618,7 +618,7 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.CREATED, title: 'created', align: 'center', width: '130px' });
 
 
-           
+
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'select', width: '30px', type: 'check' }); }
 
 
@@ -698,7 +698,7 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.allowNew = false;
             } else {
-                
+
                 if (!this.options.listView) {
                     this.options.showButtons.push({ id: 'cp_new_credit', text: 'new credit note', function: 'newCreditNote' });
                 }

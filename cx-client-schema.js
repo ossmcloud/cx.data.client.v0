@@ -54,6 +54,10 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        GLSEGMENT1: 'glSegment1',
+        GLSEGMENT2: 'glSegment2',
+        GLSEGMENT3: 'glSegment3',
+        GLSEGMENTDESCR: 'glSegmentDescr',
     },
 
     cp_accrualLog: {
@@ -1526,6 +1530,7 @@ module.exports = {
         ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
         ERPCOSTCENTRE: 'erpCostCentre',
         ERPDEPARTMENT: 'erpDepartment',
+        SHOWGLSEGMENT3: 'showGlSegment3',
     },
 
     erp_tax_account: {

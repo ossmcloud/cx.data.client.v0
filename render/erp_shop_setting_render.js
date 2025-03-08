@@ -62,6 +62,8 @@ class ErpTraderAccount extends RenderBase {
                             
                             { name: 'erpCostCentre', label: 'force gl segment 2', column: 2 },
                             { name: 'erpDepartment', label: 'force gl segment 3', column: 2 },
+
+                            { name: 'showGlSegment3', label: 'show gl segment 3 on UI', column: 2 },
                             
                             
                         ]
@@ -119,6 +121,7 @@ class ErpTraderAccount extends RenderBase {
             { name: 'erpCustomerAccountName', title: 'erp EPoS account name' },
             { name: 'erpCostCentre', title: 'gl segment 2' },
             { name: 'erpDepartment', title: 'gl segment 3' },
+            { name: 'showGlSegment3', title: 'show gl segment 3 on UI', nullText: '' },
             { name: 'dtfsSettingId', title: 'ERPS Settings', lookUps: dtfsSettingsLookUps },
             { name: 'created', title: 'created', align: 'center', width: '130px' },
             { name: 'createdBy', title: 'by', align: 'left', width: '130px' },
