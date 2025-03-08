@@ -812,6 +812,13 @@ const CP_DOCUMENT = {
             return enumToList(this, addEmpty);
         },
     },
+    // @@IMPORTANT NOTE: ANY CHANGES TO THIS CLASS MUST BE REFLECTED TO
+    //                      C:\e_drive\cx.v0\cx.app.v0\public\javascript\jx-api\jx-declarations.js :: CP_DOC_STATUS_MESSAGE (approx line 288)
+
+    STATUS_MESSAGE: {
+        NEED_ATTENTION_GRP: 'one or more documents associated with this group invoice has changed, the gl mappings needs to be fully refreshed',
+    },
+
     STATUS: {
         New: -1,
         Ready: 0,
