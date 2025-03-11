@@ -18,10 +18,7 @@ class CPInvoiceReturnRender extends RenderBase {
 
 
 
-    async getDocumentLineListOptions() {
-
-
-
+    async getDocumentLineListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
         await transactionLines.select({ pid: this.options.query.id });
 
@@ -30,7 +27,7 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLines.forceReadOnly = this.options.query.line != 'T';
         }
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
         if (transactionLines.forceReadOnly) {
@@ -79,16 +76,19 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLines.forceReadOnly = true;
         }
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
-
+        
         if (!transactionLines.forceReadOnly) {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
 
             var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre, erpSett.mergeGLAndTax);
             transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+
+            var glAccountSegs2 = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpSeg2LookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2] = glAccountSegs2;
 
             if (erpSett.mergeGLAndTax) {
                 var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
@@ -371,7 +371,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var subListsGroup = { group: 'sublists', columnCount: 1, fields: [] };
         this.options.fields.push(subListsGroup);
 
-        var transactionLineOptions = await this.getDocumentLineListOptions();
+        var transactionLineOptions = await this.getDocumentLineListOptions(erpSett);
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
         if (this.options.query.viewLogs == 'T') {
 

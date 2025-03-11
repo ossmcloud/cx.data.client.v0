@@ -26,9 +26,9 @@ class erp_gl_account_Collection extends _persistentTable.Table {
                     where	s.shopId ${shopFilter} ${shopFilterValue}
                     --AND     isnull(t.costCentre, '') = ''
                     `;
-        
+
         this.queryFromParams(query, params, 't');
-        
+
         // if (params.tt) {
         //     query.sql += ' and t.traderType = @traderType';
         //     query.params.push({ name: 'traderType', value: params.tt });
@@ -38,7 +38,7 @@ class erp_gl_account_Collection extends _persistentTable.Table {
         //     query.sql += ' and (t.code like @code or t.costCentre like @code or department like @code)';
         //     query.params.push({ name: 'code', value: params.glc + '%' });
         // }
-       
+
 
         // if (params.gld) {
         //     query.sql += ' and t.description like @description';
@@ -79,33 +79,50 @@ class erp_gl_account_Collection extends _persistentTable.Table {
     async toErpLookUpList(shopId, fixedGlSeg2, mergeGLAndTax) {
         if (mergeGLAndTax) {
             await super.select({
-                sql: 'select code, description from erp_gl_account where shopId = @shopId order by code',
+                sql: 'select code, description, ignoreStoreGLSegments from erp_gl_account where shopId = @shopId order by code',
                 params: [
                     { name: 'shopId', value: shopId },
                 ],
                 noPaging: true,
-            });   
+            });
         } else {
             await super.select({
-                sql: 'select code, description from erp_gl_account where shopId = @shopId group by code, description order by code',
+                sql: 'select code, description, ignoreStoreGLSegments from erp_gl_account where shopId = @shopId group by code, description, ignoreStoreGLSegments order by code',
                 params: [
                     { name: 'shopId', value: shopId },
-                    //{ name: 'costCentre', value: fixedGlSeg2 }
                 ],
                 noPaging: true,
             });
         }
 
         var lookUpValues = [];
-        //if (addEmpty) { lookUpValues.push({ value: '', text: '' }); };
         super.each(function (rec) {
             lookUpValues.push({
                 value: rec.code,
                 text: rec.code,
                 others: {
                     glAccountDescription: rec.description,
-                    glAccountSeg2: fixedGlSeg2
+                    glAccountSeg2: (rec.ignoreStoreGLSegments) ? '' : fixedGlSeg2
                 }
+            })
+        });
+        return lookUpValues;
+    }
+
+    async toErpSeg2LookUpList(shopId) {
+        await super.select({
+            sql: 'select costCentre from erp_gl_account where shopId = @shopId group by costCentre order by costCentre',
+            params: [
+                { name: 'shopId', value: shopId },
+            ],
+            noPaging: true,
+        });
+
+        var lookUpValues = [];
+        super.each(function (rec) {
+            lookUpValues.push({
+                value: rec.costCentre,
+                text: rec.costCentre,
             })
         });
         return lookUpValues;
@@ -140,7 +157,7 @@ class erp_gl_account_Collection extends _persistentTable.Table {
         if (!res) {
             query.sql = sqlScript.replace('{USE_COST_CENTER}', '');
             res = await this.cx.exec(query);
-            
+
             if (!res) { return null; }
         }
         if (returnRecord) { return await this.fetch(res.erpGLAccountId); }

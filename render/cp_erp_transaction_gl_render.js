@@ -10,8 +10,8 @@ class CPErpTransactionGLRender extends RenderBase {
     }
 
     async _list() {
-        // var shopId = await this.dataSource.cx.table(_cxSchema.cp_erp_transaction).lookUp(this.dataSource.erpTranId, _cxSchema.cp_erp_transaction.SHOPID);
-        // var erpShopSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetch(shopId);
+
+        
 
         var textInput = null; var textInputReadOnly = null; var numberInput = null;
         if (this.options.mode == 'edit' && !this.dataSource.forceReadOnly) {
@@ -28,10 +28,11 @@ class CPErpTransactionGLRender extends RenderBase {
             { name: 'editedIcon', title: ' ', align: 'center', width: '10px' },
             { name: _cxSchema.cp_erp_transaction_gl.STATUSMESSAGE, title: 'status', align: 'center', width: '90px', style: 'white-space: normal;' },
             { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1, title: 'GL Code', width: '70px', input: textInput },
-            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2, title: 'GL Seg 2', width: '70px', input: textInputReadOnly },
-            //{ name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG3, title: 'GL Seg 3', width: '70px', input: textInput },
-            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTDESCRIPTION, title: 'GL Description', input: textInputReadOnly },
+            { name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2, title: 'GL Seg 2', width: '70px', input: textInput },
         ];
+        if (this.options.showGlSegment3) { this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG3, title: 'GL Seg 3', width: '70px', input: textInput, nullText: '' }); }
+        this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.GLACCOUNTDESCRIPTION, title: 'GL Description', input: textInputReadOnly });
+
 
         if (this.options.mergeGLAndTax) {
             this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXACCOUNT, title: 'Tax', width: '50px', input: textInput });
@@ -39,7 +40,7 @@ class CPErpTransactionGLRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_erp_transaction_tax.TAXDESCRIPTION, title: 'Description', input: textInputReadOnly });
         }
 
-        
+
         var signedPostfix = (this.options.editMode) ? '' : 'Signed';
 
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput });

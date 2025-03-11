@@ -22,15 +22,16 @@ const _fieldNames = {
     SHOPID: 'shopId',
     ERPPROVIDER: 'erpProvider',
     ERPCOMPANYNAME: 'erpCompanyName',
-    ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
-    ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
-    ERPCOSTCENTRE: 'erpCostCentre',
-    ERPDEPARTMENT: 'erpDepartment',
     DTFSSETTINGID: 'dtfsSettingId',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
+    ERPCUSTOMERACCOUNT: 'erpCustomerAccount',
+    ERPCUSTOMERACCOUNTNAME: 'erpCustomerAccountName',
+    ERPCOSTCENTRE: 'erpCostCentre',
+    ERPDEPARTMENT: 'erpDepartment',
+    SHOWGLSEGMENT3: 'showGlSegment3',
 
 }
 //
@@ -40,15 +41,16 @@ const _fields = {
     shopId: { name: 'shopId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
     erpProvider: { name: 'erpProvider', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     erpCompanyName: { name: 'erpCompanyName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: false },
-    erpCustomerAccount: { name: 'erpCustomerAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    erpCustomerAccountName: { name: 'erpCustomerAccountName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
-    erpCostCentre: { name: 'erpCostCentre', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
-    erpDepartment: { name: 'erpDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
     dtfsSettingId: { name: 'dtfsSettingId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    erpCustomerAccount: { name: 'erpCustomerAccount', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    erpCustomerAccountName: { name: 'erpCustomerAccountName', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
+    erpCostCentre: { name: 'erpCostCentre', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    erpDepartment: { name: 'erpDepartment', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
+    showGlSegment3: { name: 'showGlSegment3', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
 
 }
 //
@@ -68,7 +70,7 @@ class Persistent_erp_shop_setting extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get shopId() {
         return super.getValue(_fieldNames.SHOPID);
@@ -86,30 +88,6 @@ class Persistent_erp_shop_setting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ERPCOMPANYNAME);
     } set erpCompanyName(val) {
         super.setValue(_fieldNames.ERPCOMPANYNAME, val);
-    }
-
-    get erpCustomerAccount() {
-        return super.getValue(_fieldNames.ERPCUSTOMERACCOUNT);
-    } set erpCustomerAccount(val) {
-        super.setValue(_fieldNames.ERPCUSTOMERACCOUNT, val);
-    }
-
-    get erpCustomerAccountName() {
-        return super.getValue(_fieldNames.ERPCUSTOMERACCOUNTNAME);
-    } set erpCustomerAccountName(val) {
-        super.setValue(_fieldNames.ERPCUSTOMERACCOUNTNAME, val);
-    }
-
-    get erpCostCentre() {
-        return super.getValue(_fieldNames.ERPCOSTCENTRE);
-    } set erpCostCentre(val) {
-        super.setValue(_fieldNames.ERPCOSTCENTRE, val);
-    }
-
-    get erpDepartment() {
-        return super.getValue(_fieldNames.ERPDEPARTMENT);
-    } set erpDepartment(val) {
-        super.setValue(_fieldNames.ERPDEPARTMENT, val);
     }
 
     get dtfsSettingId() {
@@ -140,6 +118,36 @@ class Persistent_erp_shop_setting extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDBY);
     } set createdBy(val) {
         super.setValue(_fieldNames.CREATEDBY, val);
+    }
+
+    get erpCustomerAccount() {
+        return super.getValue(_fieldNames.ERPCUSTOMERACCOUNT);
+    } set erpCustomerAccount(val) {
+        super.setValue(_fieldNames.ERPCUSTOMERACCOUNT, val);
+    }
+
+    get erpCustomerAccountName() {
+        return super.getValue(_fieldNames.ERPCUSTOMERACCOUNTNAME);
+    } set erpCustomerAccountName(val) {
+        super.setValue(_fieldNames.ERPCUSTOMERACCOUNTNAME, val);
+    }
+
+    get erpCostCentre() {
+        return super.getValue(_fieldNames.ERPCOSTCENTRE);
+    } set erpCostCentre(val) {
+        super.setValue(_fieldNames.ERPCOSTCENTRE, val);
+    }
+
+    get erpDepartment() {
+        return super.getValue(_fieldNames.ERPDEPARTMENT);
+    } set erpDepartment(val) {
+        super.setValue(_fieldNames.ERPDEPARTMENT, val);
+    }
+
+    get showGlSegment3() {
+        return super.getValue(_fieldNames.SHOWGLSEGMENT3);
+    } set showGlSegment3(val) {
+        super.setValue(_fieldNames.SHOWGLSEGMENT3, val);
     }
 
 
