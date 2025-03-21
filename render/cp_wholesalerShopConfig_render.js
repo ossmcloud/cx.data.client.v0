@@ -22,7 +22,7 @@ class WholesalerShopConfig extends RenderBase {
             this.options.fields[0].fields.push(await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'cp_shop_id', name: _cxSchema.cx_shop.SHOPID, column: 1 }));
         }
         this.options.fields[0].fields.push({ name: 'configName', label: 'config name', width: '250px', readOnly: !this.dataSource.isNew(), lookUps: _cxConst.CP_WHS_SHOP_CONFIG.toList(true), validation: '{ "mandatory": true }' });
-        this.options.fields[0].fields.push({ name: 'configValue', label: 'config value', validation: '{ "mandatory": true, "max": 500 }' });
+        this.options.fields[0].fields.push({ name: 'configValue', label: 'config value', validation: '{ "mandatory": true, "max": 2000 }' });
     }
 
     async _list() {
