@@ -214,13 +214,14 @@ const CX_WHS_PROVIDER = {
     BUNZL: 'bunzl',
     SYSCO: 'sysco',
     GBI: 'gbi',
+    JH: 'jh',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail'
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall'
         });
     },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -713,13 +714,6 @@ const CP_PRODUCT = {
 }
 
 const CP_DOCUMENT = {
-    // PROVIDER: {
-    //     BWG: 1,
-
-    //     toList: function (addEmpty) { return enumToList(this, addEmpty); },
-    //     getName: function (value) { return enumGetName(this, value); },
-    // },
-
     BATCH_ACTIONS: {
         REFRESH: 1,
         POST: 2,

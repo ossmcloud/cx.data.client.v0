@@ -51,6 +51,7 @@ class CPDocumentImportRender extends RenderBase {
                             {
                                 group: 'main1_3', title: '', columnCount: 1, fields: [
                                     { name: _cxSchema.cp_documentImport.FILENAME, label: 'file name', width: '425px', column: 1, placeHolder: 'click here tol pick a file from your computer', validation: '{ "mandatory": true }' },
+                                    { name: _cxSchema.cp_documentImport.FILENAME + '_d', label: 'file name (details)', width: '425px', column: 1, placeHolder: 'click here tol pick a file from your computer', validation: '{ "mandatory": true }', cssOuterContainer: 'jx-control-hidden' },
                                 ]
                             },
 
