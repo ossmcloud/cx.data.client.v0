@@ -68,7 +68,7 @@ class ErpTraderAccount extends RenderBase {
         } else {
             if (this.options.mode == 'view') {
                 if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
-                    this.options.buttons.push({ id: 'cx_create_account', text: 'create cx account', function: 'createCxAccount' });
+                    this.options.buttons.push({ id: 'cx_create_account', text: 'create sruu account', function: 'createCxAccount' });
                 }
             }
         }
