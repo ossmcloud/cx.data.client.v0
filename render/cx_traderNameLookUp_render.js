@@ -58,6 +58,8 @@ class ErpShopConfig extends RenderBase {
         this.options.fields[0].fields.push({ name: 'traderType', label: 'type', width: '100px', readOnly: !this.dataSource.isNew(), items: [{ value: '', text: '' }, { value: 'C', text: 'Customer' }, { value: 'S', text: 'Supplier' }], validation: '{ "mandatory": true }' });
         this.options.fields[0].fields.push({ name: 'traderCode', label: 'trader code', width: '250px', readOnly: !this.dataSource.isNew(), validation: '{ "mandatory": true }' });
         this.options.fields[0].fields.push({ name: 'traderName', label: 'trader name', validation: '{ "mandatory": true, "max": 2000 }' });
+
+        this.options.buttons.push({ id: 'cx_createTrader', text: 'Create Trader', function: 'createTrader' });
     }
 
     async _list() {

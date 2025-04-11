@@ -39,7 +39,7 @@ const _fields = {
     wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     configName: { name: 'configName', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
-    configValue: { name: 'configValue', dataType: 'varchar', pk: false, identity: false, maxLength: 500, null: false },
+    configValue: { name: 'configValue', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: false },
     valueEncrypted: { name: 'valueEncrypted', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
