@@ -40,6 +40,12 @@ class CXTraderAccount extends RenderBase {
                 }
             ];
         } else {
+            if (this.dataSource.isNew() && this.options.query.name) {
+                var traderName = await this.cx.table(_cxSchema.cx_traderNameLookUp).fetch(this.options.query.name);
+                this.dataSource.traderCode = traderName.traderCode;
+                this.dataSource.traderName = traderName.traderName;
+            }
+
             shopField.readOnly = true;
             if (this.options.mode == 'edit') {
                 readOnly = !this.dataSource.isManual;

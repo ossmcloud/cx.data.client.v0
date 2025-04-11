@@ -448,6 +448,13 @@ class CPInvoiceReturnRender extends RenderBase {
             if (await queries.select({ invCreId: this.dataSource.id })) {
                 this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
             }
+
+            if (this.matchingEnabled) {
+                if (this.dataSource.recoStatus == _cxConst.CP_DOCUMENT.RECO_STATUS.NotAnalyzed || this.dataSource.recoStatus == _cxConst.CP_DOCUMENT.RECO_STATUS.NotReconciled) {
+                    this.options.buttons.push({ id: 'cp_run_matching', text: 'Run Matching Process', function: 'runMatching', style: 'color: white; background-color: rgba(0,125,0,1);' });
+                }
+            }
+
         }
     }
 
