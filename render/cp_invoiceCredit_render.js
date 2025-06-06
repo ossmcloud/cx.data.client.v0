@@ -247,7 +247,7 @@ class CPInvoiceReturnRender extends RenderBase {
                 },
                 {
                     group: 'main1.col3', column: 3, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number', validation: '{ "mandatory": true, "max": 20  }' },
+                        { name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, label: 'document number', validation: '{ "mandatory": true, "max": 60  }' },
                         { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, column: 1, label: 'date', validation: newDocMandatory },
                         { name: _cxSchema.cp_invoiceCredit.UPLOADDATE, label: 'upload date', readOnly: true },
                     ]
