@@ -41,24 +41,33 @@ class CPProductRender extends RenderBase {
         var mainInfoGroup = { group: 'main', title: '', columnCount: 4, styles: ['min-width: 500px', 'min-width: 250px', 'min-width: 350px', 'min-width: 250px'], fields: [] };
         this.options.fields = [mainInfoGroup];
 
+        var validationMandatory = null;
+        var readOnly = !this.dataSource.isNew();
+        var shopField = { name: 'shopInfo', label: 'store', column: 1, readOnly: readOnly };
+        if (!readOnly) {
+            validationMandatory = '{ "mandatory": true }';
+            shopField = await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }', label: 'store' });
+        }
         //
         //
         mainInfoGroup.fields.push({
             group: 'main1', title: 'product info', column: 1, columnCount: 2, fields: [
                 {
                     group: 'main1.col1', column: 1, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_product.ITEMCODE, label: 'code' },
-                        { name: _cxSchema.cp_product.ITEMDESCRIPTION, label: 'description' },
-                        { name: _cxSchema.cp_product.ITEMBARCODE, label: 'barcode' },
+                        shopField,
+                        { name: _cxSchema.cp_product.ITEMCODE, label: 'code', validation: validationMandatory },
+                        { name: _cxSchema.cp_product.ITEMDESCRIPTION, label: 'description', validation: validationMandatory },
+                        { name: _cxSchema.cp_product.ITEMBARCODE, label: 'barcode', validation: validationMandatory },
                         { name: _cxSchema.cp_product.ITEMCOSTPRICE, label: 'cost price' },
                         { name: _cxSchema.cp_product.ITEMSIZE, label: 'size' },
                     ]
                 },
                 {
                     group: 'main1.col2', column: 2, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_product.SUPPLIERCODE, label: 'supplier' },
+                        { name: _cxSchema.cp_product.SUPPLIERCODE, label: 'supplier', validation: validationMandatory },
                         { name: _cxSchema.cp_product.SUPPLIERITEMCODE, label: 'supplier code' },
                         { name: _cxSchema.cp_product.SUPPLIERITEMDESCRIPTION, label: 'supplier description' },
+                        
                     ]
                 }
             ]
@@ -93,9 +102,10 @@ class CPProductRender extends RenderBase {
                 },
                 {
                     group: 'main3.col2', column: 2, columnCount: 1, fields: [
-                        { name: _cxSchema.cp_product.RAW_EPOSDEPARTMENT, label: 'department', readOnly: true },
-                        { name: _cxSchema.cp_product.RAW_EPOSSUBDEPARTMENT, label: 'sub-department', readOnly: true },
-
+                        { name: _cxSchema.cp_product.SOURCEID, label: 'source', readOnly: true },
+                        { name: _cxSchema.cp_product.RAW_EPOSDEPARTMENT, label: 'department', readOnly: readOnly },
+                        { name: _cxSchema.cp_product.RAW_EPOSSUBDEPARTMENT, label: 'sub-department', readOnly: readOnly },
+                        
                     ]
                 }
             ]
