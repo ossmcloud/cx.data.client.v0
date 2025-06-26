@@ -252,6 +252,7 @@ const CX_EPOS_PROVIDER = {
     EDATA: 'EDATA',
     ZAMBR: 'ZAMBR',
     PRISM: 'PRISM',
+    SM: 'SM',
 
     THERE: 'THERE',
     //
@@ -268,6 +269,7 @@ const CX_EPOS_PROVIDER = {
             EDATA: 'Euro Data',
             ZAMBR: 'Zambrero',
             PRISM: 'PRISM',
+            SM: 'Station Master',
             THERE: 'Therefore'
         });
     }
@@ -368,6 +370,13 @@ const CX_EPOS_PROVIDERS = {
                         ]
                     })
                 },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.SM,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "ODBC",   "connString": ""  }' },
             ]
         },
         {
