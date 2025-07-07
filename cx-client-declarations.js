@@ -169,6 +169,7 @@ const EPOS_DTFS_CONFIGS = {
     toEncrypt: function (configName) {
         if (configName == this.API_AUTH_CONFIG) { return true; }
         if (configName == this.API_CONFIG) { return true; }
+        
         return false;
     }
 }
@@ -194,12 +195,15 @@ const ERP_DTFS_CONFIGS = {
     API_CONFIG: 'ERPApiConfig',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
 
+    SAGE200_CONFIG: 'Sage200Config',
+
     //API_TOKEN: 'ERPApiToken',
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
         if (configName == this.API_AUTH_CONFIG) { return true; }
         if (configName == this.API_CONFIG) { return true; }
+        if (configName == this.SAGE200_CONFIG) { return true; }
         return false;
     }
 }
