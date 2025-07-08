@@ -375,6 +375,10 @@ class cp_deliveryReturn extends _persistentTable.Record {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
+    
+    async log(message, info) {
+        // @@TODO:
+    }
 
     async log(message, info) {
         // @@TODO:
