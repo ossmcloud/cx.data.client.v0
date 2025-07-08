@@ -67,7 +67,7 @@ class CPProductRender extends RenderBase {
                         { name: _cxSchema.cp_product.SUPPLIERCODE, label: 'supplier', validation: validationMandatory },
                         { name: _cxSchema.cp_product.SUPPLIERITEMCODE, label: 'supplier code' },
                         { name: _cxSchema.cp_product.SUPPLIERITEMDESCRIPTION, label: 'supplier description' },
-
+                        
                     ]
                 }
             ]
@@ -105,7 +105,7 @@ class CPProductRender extends RenderBase {
                         { name: _cxSchema.cp_product.SOURCEID, label: 'source', readOnly: true },
                         { name: _cxSchema.cp_product.RAW_EPOSDEPARTMENT, label: 'department', readOnly: readOnly },
                         { name: _cxSchema.cp_product.RAW_EPOSSUBDEPARTMENT, label: 'sub-department', readOnly: readOnly },
-
+                        
                     ]
                 }
             ]
