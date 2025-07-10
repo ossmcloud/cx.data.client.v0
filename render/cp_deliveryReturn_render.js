@@ -272,13 +272,14 @@ class CPDeliveryReturnRender extends RenderBase {
             if (this.matchingEnabled) {
                 var matchStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -');
                 matchStatuses.splice(1, 1);
+                matchStatuses.push({ value: -9, text: 'all but matched' });
                 //this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                 this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: matchStatuses });
             } else {
                 //this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
             }
-            this.options.filters.push({ label: 'invoiced', fieldName: 'inv', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
-            this.options.filters.push({ label: 'attachments', fieldName: 'attach', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
+            this.options.filters.push({ label: 'doc generated', fieldName: 'inv', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '100px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
+            this.options.filters.push({ label: 'attachments', fieldName: 'attach', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '88px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
             this.options.filters.push({ label: 'supplier', fieldName: 'su', width: '125px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
             this.options.filters.push({ label: 'doc #.', fieldName: 'tno', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
             this.options.filters.push({ label: 'document refs.', fieldName: 'tref', width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });

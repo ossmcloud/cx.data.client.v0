@@ -318,6 +318,7 @@ module.exports = {
         ISUSEREDITLOCKED: 'isUserEditLocked',
         ISUSEREDITEDGL: 'isUserEditedGL',
         ISMANUAL: 'isManual',
+        MERGEDTO: 'mergedTo',
     },
 
     cp_invoiceCreditLine: {
@@ -1143,6 +1144,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        PREFLINKTARGET: 'prefLinkTarget',
     },
 
     cx_login_cache: {

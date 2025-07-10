@@ -121,6 +121,9 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                 query.sql += ' and d.invGrpId is null';
             } else if (params.action == _declarations.CP_DOCUMENT.BATCH_ACTIONS.RESET) {
                 validStatuses.push(_declarations.CP_DOCUMENT.STATUS.PostingError);
+                if (this.cx.roleId >= _declarations.CX_ROLE.CX_SUPPORT) {
+                    validStatuses.push(_declarations.CP_DOCUMENT.STATUS.REFRESH);
+                }
                 // IMPORTANT: grouped invoices cannot be posted individually
                 query.sql += ' and d.invGrpId is null';
             }
@@ -168,9 +171,18 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.params.push({ name: 'createdFrom', value: params.from });
         }
 
+        if (params.matched) {
+            if (params.matched == 'T') {
+                query.sql += ' and reco.recoSessionId >' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            } else {
+                query.sql += ' and  isnull(reco.recoSessionId,0) <=' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            }
+        }
         if (params.mstatus) {
             if (params.mstatus == '0') {
                 query.sql += ' and reco.recoStatusId is null';   
+            } else if (params.mstatus == '-9') {
+                query.sql += ' and reco.recoStatusId != ' + _declarations.CP_DOCUMENT.RECO_STATUS.Reconciled; 
             } else {
                 query.sql += ' and reco.recoStatusId = @recoStatusId';
                 query.params.push({ name: 'recoStatusId', value: params.mstatus });

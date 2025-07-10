@@ -110,7 +110,7 @@ class CXLoginToken extends RenderBase {
                 this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
             }
 
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_ADMIN && this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.EPOS && this.dataSource.status == _cxConst.CX_LOGIN_TOKEN_STATUS.ACTIVE) {
+            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT && this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.EPOS && this.dataSource.status == _cxConst.CX_LOGIN_TOKEN_STATUS.ACTIVE) {
                 var dtfsSettings = await this.cx.table(_cxSchema.epos_dtfs_setting).fetch(this.dataSource.dtfsSettingId);
                 if (dtfsSettings.eposProvider == _cxConst.CX_EPOS_PROVIDER.CAPTIVA || dtfsSettings.eposProvider == _cxConst.CX_EPOS_PROVIDER.EVOPOS) {
                     this.options.buttons.push({ id: 'cx_login_token_copyto', text: 'Copy to User', function: 'copyToken' });

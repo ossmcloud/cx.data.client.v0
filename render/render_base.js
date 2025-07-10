@@ -95,6 +95,7 @@ class RenderBase {
         if (!this.options.cellHighlights) { this.options.cellHighlights = []; }
 
         if (this.options.query == undefined) { this.options.query = {}; }
+        
     }
 
     async getUserListOptions() {
@@ -355,6 +356,9 @@ class RenderBase {
     async list(options) {
         await this.setPermission();
         if (this.autoLoad === true) { await this.initColumnsAndFilters(); }
+
+        this.options.linkTarget = this.cx.prefLinkTarget;
+        
         await this._list(this.options.request, this.options.h);
     }
     async _list(request, h) {

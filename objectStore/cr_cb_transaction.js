@@ -83,8 +83,9 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
 
                 } else if (params.tst == _declarations.CR_CASH_BOOK.STATUS.Posting || params.tst == _declarations.CR_CASH_BOOK.STATUS.Pending) {
                     allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.PostingReady);
-                    
-                    
+                    if (this.cx.roleId >= _declarations.CX_ROLE.CX_SUPPORT) {
+                        allowedStatuses.push(_declarations.CR_CASH_BOOK.STATUS.Refresh);
+                    }
                 }
                 query.sql += ' and l.status in (' + allowedStatuses.join(',') + ')';
             } else {

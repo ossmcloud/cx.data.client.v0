@@ -81,7 +81,7 @@ class CPInvoiceGroupRender extends RenderBase {
 
         transactionLines.forceReadOnly = true;
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, mode: 'view', id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, mode: 'view', id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
 

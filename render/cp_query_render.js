@@ -203,7 +203,7 @@ class CPQueryRender extends RenderBase {
         this.options.title += `</tr></table></div>`;
 
         if (this.dataSource.isNew()) {
-            this.options.tabTitle = `cx::new query`;
+            this.options.tabTitle = `sruu::new query`;
         } else {
             if (this.dataSource.queryReference == 'TBA') {
                 this.options.tabTitle = `query::${_cxConst.CP_QUERY_STATUS.getName(this.dataSource.statusId)}`
