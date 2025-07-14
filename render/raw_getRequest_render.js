@@ -13,18 +13,21 @@ class RawGetRequest extends RenderBase {
     }
 
     async _record() {
+        var params = {};
+        params[_cxSchema.epos_dtfs_setting.EPOSPROVIDER] = _cxConst.CX_EPOS_PROVIDER.THERE;
+        var eposSett = this.cx.table(_cxSchema.epos_dtfs_setting);
+        var hasThereforeLegacy = await eposSett.select(params);
 
         var modules = _cxConst.CX_MODULE.toList(true);
         if (this.options.query.svc == 'erps') {
             modules = modules.slice(1, 2);
             
-        } else {
-            var params = {};
-            params[_cxSchema.epos_dtfs_setting.EPOSPROVIDER] = _cxConst.CX_EPOS_PROVIDER.THERE;
-            var eposSett = this.cx.table(_cxSchema.epos_dtfs_setting);
-            var hasThereforeLegacy = await eposSett.select(params);
-
+        } else if (this.options.query.svc == 'dtfs') {
+            
             if (!hasThereforeLegacy) { modules.pop(); }
+
+        } else {
+            modules = [];
         }
 
 
@@ -47,8 +50,10 @@ class RawGetRequest extends RenderBase {
 
         var svcReadOnly = this.options.query.ro == 'T';
         var moduleReadOnly = this.options.query.svc == 'erps' ? this.options.query.ro == 'T' : false;
+        
+        this.options.title = 'get data request';
 
-
+        this.dataSource.hasThereforeLegacy = hasThereforeLegacy;
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 4, fields: [
@@ -57,13 +62,14 @@ class RawGetRequest extends RenderBase {
                         id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }'
                     }),
                     { name: 'transmissionID', label: 'transmission ID', column: 2, readOnly: true },
+                    { name: 'hasThereforeLegacy', hidden: true}
                 ]
             },
             {
                 group: 'get', title: 'get info', columnCount: 4, fields: [
                     { name: 'getDate', label: 'date', align: 'center', type: 'inputDate', column: 1, validation: '{ "mandatory": true }' },
-                    { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: modules, disabled: moduleReadOnly },
                     { name: 'svcName', label: 'service', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: _cxConst.EPOS_DTFS_UPGRADE_AUDIT.SERVICES.toList(true), disabled: svcReadOnly },
+                    { name: 'getModule', label: 'module', align: 'center', column: 1, validation: '{ "mandatory": true }', lookUps: modules, disabled: moduleReadOnly },
                     { name: 'getReference', label: 'message', column: 2, readOnly: true },
                     { name: 'status', label: 'status', column: 2, lookUps: _cxConst.RAW_GET_REQUEST.STATUS.toList(), readOnly: true },
                 ]
