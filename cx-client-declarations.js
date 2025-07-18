@@ -117,7 +117,14 @@ const CX_MODULE = {
     THEREFORE: 'therefore',
 
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            STATIC: 'Static Data',
+            RETAIL: 'Sales Data',
+            PURCHASE: 'Purchase Data',
+            THEREFORE: 'Therefore Documents',
+        });
+    }
 }
 
 
@@ -636,7 +643,7 @@ const EPOS_DTFS_UPGRADE_AUDIT = {
         DTFS: 'dtfs',
         ERPS: 'erps',
         //
-        toList: function (addEmpty) { return enumToList(this, addEmpty); }
+        toList: function (addEmpty) { return enumToList(this, addEmpty, { DTFS: 'EPOS Service', ERPS: 'ERP Service'}); }
     }
 }
 

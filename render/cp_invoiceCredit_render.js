@@ -79,7 +79,7 @@ class CPInvoiceReturnRender extends RenderBase {
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
-        
+
         if (!transactionLines.forceReadOnly) {
             transactionLinesOptions.hideTitlePanel = true;
             transactionLinesOptions.lookupLists = {};
@@ -559,8 +559,11 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'type', fieldName: 'tt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.TYPE_IC.toList('- all -') });
                 this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATE_INV.toList('- all -'), });
                 if (this.matchingEnabled) {
+                    var matchStatuses = _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -');
+                    matchStatuses.push({ value: -9, text: 'all but matched' });
+
                     this.options.filters.push({ label: 'status', fieldName: 'st', width: '135px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
-                    this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.RECO_STATUS.toList('- all -') });
+                    this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: matchStatuses });
                 } else {
                     this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
                 }

@@ -17,6 +17,7 @@ class CXClientContext extends _cx_data.DBContext {
     #role = null;
     #user = null;
     #theme = null;
+    #prefLinkTarget = null;
     #cxSvc = false;
     #cxSvcInfo = null;
     #accountId = null;
@@ -33,6 +34,7 @@ class CXClientContext extends _cx_data.DBContext {
     get accountCountry() { return this.#accountCountry; }
     get accountCurrency() { return this.#accountCurrency; }
     get theme() { return this.#theme; }
+    get prefLinkTarget() { return this.#prefLinkTarget; }
     get shops() { return this.#shops };
     get shopList() { return this.#shopList; }
     get dbInfo() { return this.#dbInfo; }
@@ -129,6 +131,7 @@ class CXClientContext extends _cx_data.DBContext {
                 this.#role = { id: response.first().roleId || 0 }
                 this.#role.name = _cxConst.CX_ROLE.getName(this.#role.id);
                 this.#theme = this.#user.theme;
+                this.#prefLinkTarget = this.#user.prefLinkTarget || '_self';
 
                 var shops = [];
                 response.subResults[0].each(function (record, idx) {

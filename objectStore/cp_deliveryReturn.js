@@ -34,7 +34,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                     group by accrDocId
                 ) accrDocTotals on accrDocTotals.accrDocId = accrDoc.accrDocId
             `;
-            accrualTotals =', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
+            accrualTotals = ', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
         }
 
         var query = { sql: '', params: [] };
@@ -82,6 +82,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (params.gid) {
             if (params.gid == 'none') {
                 query.sql += ' and d.invGrpId is null';
+                if (isGenerateInvoice) { query.sql += " and inv.invGrpId is null" }
             } else {
                 query.sql += ' and d.invGrpId = @invGrpId';
                 query.params.push({ name: 'invGrpId', value: params.gid });
@@ -143,13 +144,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.delRetId = @delRetId';
             query.params.push({ name: 'delRetId', value: params.id });
         }
-        if (params.matched) {
-            if (params.matched == 'T') {
-                query.sql += ' and reco.recoSessionId >' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
-            } else {
-                query.sql += ' and  isnull(reco.recoSessionId,0) <=' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
-            }
-        }
+       
         if (params.whs) {
             query.sql += ' and (isnull(supp.traderCode, supp2.traderCode) = @wholesalerCode OR isnull(supp.wholesalerCode, supp2.wholesalerCode) = @wholesalerCode)'
             query.params.push({ name: 'wholesalerCode', value: params.whs });
@@ -159,10 +154,19 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.params.push({ name: 'supplierName', value: '%' + params.whsn + '%' });
         }
 
+        if (params.matched) {
+            if (params.matched == 'T') {
+                query.sql += ' and reco.recoSessionId >' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            } else {
+                query.sql += ' and  isnull(reco.recoSessionId,0) <=' + _declarations.CP_DOCUMENT.RECO_STATUS.NotReconciled;
+            }
+        }
         if (params.mstatus) {
             // @@NOTE: Not analysed and not matched are kind of the same thing for deliveries
             if (params.mstatus == '0' || params.mstatus == '1') {
                 query.sql += ' and reco.recoStatusId is null';
+            } else if (params.mstatus == '-9') {
+                query.sql += ' and reco.recoStatusId != ' + _declarations.CP_DOCUMENT.RECO_STATUS.Reconciled; 
             } else {
                 query.sql += ' and reco.recoStatusId = @recoStatusId';
                 query.params.push({ name: 'recoStatusId', value: params.mstatus });
@@ -182,7 +186,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         }
 
         if (isGenerateInvoice) {
-            query.sql += " and inv.invCreId is null"
+            // query.sql += " and inv.invCreId is null"
         }
 
         query.sql += ' order by d.documentDate desc';

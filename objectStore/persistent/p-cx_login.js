@@ -31,6 +31,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    PREFLINKTARGET: 'prefLinkTarget',
 
 }
 //
@@ -49,6 +50,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    prefLinkTarget: { name: 'prefLinkTarget', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: true },
 
 }
 //
@@ -68,7 +70,7 @@ class Persistent_cx_login extends _cx_data.DBRecord {
         super(table, defaults);
     }
     get FieldNames() { return _fieldNames; }
-
+    
     // DEFINE TABLE FIELDS AS PROPERTIES
     get loginId() {
         return super.getValue(_fieldNames.LOGINID);
@@ -138,6 +140,12 @@ class Persistent_cx_login extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get prefLinkTarget() {
+        return super.getValue(_fieldNames.PREFLINKTARGET);
+    } set prefLinkTarget(val) {
+        super.setValue(_fieldNames.PREFLINKTARGET, val);
     }
 
 

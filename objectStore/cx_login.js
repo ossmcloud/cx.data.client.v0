@@ -9,12 +9,21 @@ class cx_login_Collection extends _persistentTable.Table {
         return new cx_login(this, defaults);
     }
 
-    async select(params) {
+    async select(params, forUIList) {
         if (!params) { params = {}; }
 
         var query = {
-            sql: 'select l.*, (select count(*) from cx_login_roles r where r.roleId >= 8 and r.loginId = l.loginId) as cx_roles from cx_login l order by l.loginId'
+            sql: 'select l.*, (select count(*) from cx_login_roles r where r.roleId >= 8 and r.loginId = l.loginId) as cx_roles from cx_login l'
         }
+
+        if (forUIList) {
+            if (this.cx.roleId < _declarations.CX_ROLE.CX_SUPPORT) {
+                query.sql += ' where l.roleId < ' + _declarations.CX_ROLE.CX_SUPPORT;
+            }
+        }
+
+
+        query.sql += ' order by l.loginId';
 
         return await super.select(query)
     }
