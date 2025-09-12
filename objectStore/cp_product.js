@@ -30,7 +30,7 @@ class cp_product_Collection extends _persistentTable.Table {
 
             left outer join cx_traderAccount supp           ON supp.traderAccountId = prod.traderAccountId
             left outer join cx_traderAccount supp2          ON supp2.shopId = prod.shopId AND supp2.traderCode = prod.supplierCode AND supp2.traderType = 'S' 
-            left outer join cx_traderAccount supp3          ON supp3.shopId = prod.shopId AND supp3.wholesalerCode = prod.supplierCode AND supp3.traderType = 'S' 
+            left outer join cx_traderAccount supp3          ON supp3.shopId = prod.shopId AND isnull(prod.supplierCode, '') != '' AND supp3.wholesalerCode = prod.supplierCode AND supp3.traderType = 'S' 
             left outer join cx_traderNameLookUp suppName    ON suppName.shopId = prod.shopId AND suppName.traderCode = prod.supplierCode AND suppName.traderType = 'S' 
 
             left outer join erp_gl_account sgl              ON sgl.erpGLAccountId = dep.saleAccountId
