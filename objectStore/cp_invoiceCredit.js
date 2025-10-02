@@ -291,7 +291,10 @@ class cp_invoiceCredit extends _persistentTable.Record {
         this.#recoStatus = defaults['recoStatusId'] || 0;
         this.#queryCount = defaults['queryCount'] || null;
         this.#queryCountOpen = defaults['queryCountOpen'] || null;
-        if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) { this.#documentSign = -1; }
+        if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.CreditNote) {
+            // @@TODO: DOCU-SIGN
+            // this.#documentSign = -1;
+        }
 
     };
 

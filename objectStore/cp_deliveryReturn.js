@@ -267,6 +267,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#accrTotGross = defaults['accrTotGross'] || null;
         this.#accrTotDRS = defaults['accrTotDRS'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
+            // @@TODO: DOCU-SIGN
             this.#documentSign = -1;
         }
     };
@@ -284,6 +285,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get documentTypeName() {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
+
 
     get editedIcon() {
         if (this.#accrTotNet !== null) {

@@ -27,7 +27,7 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLines.forceReadOnly = this.options.query.line != 'T';
         }
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query, showGlSegment3: erpSett.showGlSegment3 });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query, showGlSegment3: erpSett.showGlSegment3, documentType: this.dataSource.documentType });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
         if (transactionLines.forceReadOnly) {
@@ -581,11 +581,11 @@ class CPInvoiceReturnRender extends RenderBase {
             }
 
             var signedCols = {
-                Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
-                Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
-                Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
-                Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
-                DRS: _cxSchema.cp_invoiceCredit.TOTALDRS + 'Sign'
+                Net: _cxSchema.cp_invoiceCredit.TOTALNET,
+                Vat: _cxSchema.cp_invoiceCredit.TOTALVAT,
+                Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS,
+                Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT,
+                DRS: _cxSchema.cp_invoiceCredit.TOTALDRS
             }
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' });

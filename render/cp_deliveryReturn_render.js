@@ -17,7 +17,7 @@ class CPDeliveryReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLine);
         await transactionLines.select({ pid: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, documentType: this.dataSource.documentType });
         transactionLinesOptions.quickSearch = !this.options.embedded;
         return transactionLinesOptions;
     }
@@ -68,6 +68,8 @@ class CPDeliveryReturnRender extends RenderBase {
         });
         generatedDocs = generatedDocs.generatedDocs > 0;
 
+
+
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
 
@@ -109,8 +111,7 @@ class CPDeliveryReturnRender extends RenderBase {
         }
 
         this.options.title += '</div>';
-
-
+     
         var fieldGroups = [];
         fieldGroups.push({
             group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 3, minWidth: '300px', fields: [
@@ -195,6 +196,7 @@ class CPDeliveryReturnRender extends RenderBase {
         this.options.fields.push(subListsGroup);
 
         var transactionLineOptions = await this.getDocumentLineListOptions();
+        
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
 
         var relatedTransactionsOptions = await this.getRelatedDocumentListOptions();
@@ -300,11 +302,11 @@ class CPDeliveryReturnRender extends RenderBase {
             }
 
             var signedCols = {
-                Net: _cxSchema.cp_deliveryReturn.TOTALNET + 'Sign',
-                Vat: _cxSchema.cp_deliveryReturn.TOTALVAT + 'Sign',
-                Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS + 'Sign',
-                Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT + 'Sign',
-                DRS: _cxSchema.cp_deliveryReturn.TOTALDRS + 'Sign',
+                Net: _cxSchema.cp_deliveryReturn.TOTALNET,
+                Vat: _cxSchema.cp_deliveryReturn.TOTALVAT,
+                Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS,
+                Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT,
+                DRS: _cxSchema.cp_deliveryReturn.TOTALDRS,
             }
             this.options.columns = [];
             if (isGenerateInvoice) { this.options.columns.push({ name: 'check', title: 'select', width: '30px', type: 'check' }); }

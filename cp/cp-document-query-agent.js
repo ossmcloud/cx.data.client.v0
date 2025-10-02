@@ -47,13 +47,7 @@ class CPDocumentQueryAgent {
             { label: 'to', fieldName: 'dt', type: _cxConst.RENDER.CTRL_TYPE.DATE },
         ]
 
-        var signedCols = {
-            Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
-            Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
-            Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
-            Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
-        }
-
+       
         options.columns = [
             { name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() },
             { name: _cxSchema.cp_invoiceCredit.DOCUMENTDATE, title: 'date', align: 'center', width: '100px' },

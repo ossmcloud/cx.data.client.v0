@@ -91,10 +91,11 @@ class CPInvoiceReturnLineRender extends RenderBase {
         }
 
 
-
+        var highlightLineOperator = this.options.documentType == _cxConst.CP_DOCUMENT.TYPE.CreditNote ? '>' : '<';
         this.options.highlights = [
             { column: _cxSchema.cp_invoiceCreditLine.LINEGROSS, op: '=', value: 0, style: 'color: green; font-style: italic;' },
             { column: _cxSchema.cp_invoiceCreditLine.LINEQUANTITY, op: '=', value: 0, style: 'color: rgb(75,75,75); font-style: italic;' },
+            { column: _cxSchema.cp_deliveryReturnLine.LINEGROSS, op: highlightLineOperator, value: 0, style: 'color: red; font-style: italic;' },
         ];
 
 
