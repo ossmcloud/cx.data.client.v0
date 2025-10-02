@@ -28,6 +28,9 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             accrualTotals = ', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
         }
 
+        var joinLines = '';
+        if (params.pdt) { joinLines = `inner join ${this.type}Line dl on dl.invCreId = d.invCreId` }
+
         var query = { sql: '', params: [] };
         query.sql = ` select    distinct d.*, s.shopCode, s.shopName, 
                                 isnull(supp.traderName, isnull(supp2.traderName, isnull(supp3.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end))) as supplierName,
@@ -35,8 +38,10 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
                                 ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
                                 ${accrualTotals}
-                      from    ${this.type} d
+                      from      ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                      ${joinLines}
+
                       left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2          ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cx_traderAccount supp3          ON supp3.shopId = d.shopId AND supp3.wholesalerCode = d.supplierCode AND supp3.traderType = 'S' 
@@ -47,6 +52,32 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                        ${accrualJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+
+        
+        if (params.pdt) {
+            params.pdt = params.pdt.trim();
+            if (params.pdtt == 'all') {
+                query.sql += `
+                    and (
+                            dl.itemCode like '%${params.pdt}%'
+                        or  dl.itemDescription like '%${params.pdt}%'
+                        or  dl.itemBarcode like '%${params.pdt}%'
+                        or  dl.itemBarcodeOuter like '%${params.pdt}%'
+                    )
+                `
+            } else if (params.pdtt == 'barcode') {
+                query.sql += `
+                    and (
+                            dl.itemBarcode like '%${params.pdt}%'
+                        or  dl.itemBarcodeOuter like '%${params.pdt}%'
+                    )
+                `
+            } else if (params.pdtt == 'code') {
+                query.sql += `and dl.itemCode like '%${params.pdt}%' `
+            } else if (params.pdtt == 'descr') {
+                query.sql += `and dl.itemDescription like '%${params.pdt}%' `
+            }
+        }
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -180,9 +211,9 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         }
         if (params.mstatus) {
             if (params.mstatus == '0') {
-                query.sql += ' and reco.recoStatusId is null';   
+                query.sql += ' and reco.recoStatusId is null';
             } else if (params.mstatus == '-9') {
-                query.sql += ' and reco.recoStatusId != ' + _declarations.CP_DOCUMENT.RECO_STATUS.Reconciled; 
+                query.sql += ' and reco.recoStatusId != ' + _declarations.CP_DOCUMENT.RECO_STATUS.Reconciled;
             } else {
                 query.sql += ' and reco.recoStatusId = @recoStatusId';
                 query.params.push({ name: 'recoStatusId', value: params.mstatus });

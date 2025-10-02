@@ -536,7 +536,6 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
                 if (batchActionSelected) {
-
                     this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                     this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
@@ -578,6 +577,18 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'uploaded (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 //this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
 
+                if (!isBatchProcessing) {
+                    this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
+                    this.options.filters.push({
+                        label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [
+                            { value: 'all', text: 'all product fields' },
+                            { value: 'barcode', text: 'product bar-code' },
+                            { value: 'code', text: 'product code' },
+                            { value: 'descr', text: 'product description' },
+                        ],
+                        width: '150px'
+                    });
+                }
             }
 
             var signedCols = {

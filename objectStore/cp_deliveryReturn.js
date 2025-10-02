@@ -37,6 +37,10 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             accrualTotals = ', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
         }
 
+        var joinLines = '';
+        if (params.pdt) { joinLines = `inner join ${this.type}Line dl on dl.delRetId = d.delRetId` }
+
+
         var query = { sql: '', params: [] };
         query.sql = ` select            distinct d.*, s.shopCode, s.shopName, 
                                         isnull(supp.traderName, (
@@ -57,6 +61,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         ${accrualTotals}
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                      ${joinLines}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
@@ -68,6 +73,26 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (isGenerateInvoice) {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: _declarations.CP_DOCUMENT.STATUS.Ready });
+        } else {
+            if (params.pdt) {
+                params.pdt = params.pdt.trim();
+                if (params.pdtt == 'all') {
+                    query.sql += `
+                    and (
+                            dl.eposCode like '%${params.pdt}%'
+                        or  dl.eposDescription like '%${params.pdt}%'
+                        or  dl.eposBarcode like '%${params.pdt}%'
+                    )
+                `
+                } else if (params.pdtt == 'barcode') {
+                    query.sql += `and dl.eposBarcode like '%${params.pdt}%'`;
+                } else if (params.pdtt == 'code') {
+                    query.sql += `and dl.eposCode like '%${params.pdt}%' `
+                } else if (params.pdtt == 'descr') {
+                    query.sql += `and dl.eposDescription like '%${params.pdt}%' `
+                }
+            }
+
         }
 
         if (params.s) {

@@ -111,7 +111,7 @@ class CPDeliveryReturnRender extends RenderBase {
         }
 
         this.options.title += '</div>';
-     
+
         var fieldGroups = [];
         fieldGroups.push({
             group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 3, minWidth: '300px', fields: [
@@ -196,7 +196,7 @@ class CPDeliveryReturnRender extends RenderBase {
         this.options.fields.push(subListsGroup);
 
         var transactionLineOptions = await this.getDocumentLineListOptions();
-        
+
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
 
         var relatedTransactionsOptions = await this.getRelatedDocumentListOptions();
@@ -292,13 +292,24 @@ class CPDeliveryReturnRender extends RenderBase {
 
             if (isGenerateInvoice) {
                 this.options.title = 'generate invoices/credits';
-                
+
                 this.options.showButtons = [];
                 this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                 this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                 this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for invoice generation', function: 'submitForBatchProcessing' });
 
                 this.options.filters.push({ label: 'generate', fieldName: 'generate', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '30px' });
+            } else {
+                this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
+                this.options.filters.push({
+                    label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [
+                        { value: 'all', text: 'all product fields' },
+                        { value: 'barcode', text: 'product bar-code' },
+                        { value: 'code', text: 'product code' },
+                        { value: 'descr', text: 'product description' },
+                    ],
+                    width: '150px'
+                });
             }
 
             var signedCols = {
