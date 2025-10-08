@@ -42,6 +42,7 @@ class CPErpTransactionGLRender extends RenderBase {
 
 
         var signedPostfix = (this.options.editMode) ? '' : 'Signed';
+        signedPostfix = '';
 
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.NARRATIVE, title: 'Narrative', nullText: '', input: textInput });
         this.options.columns.push({ name: _cxSchema.cp_erp_transaction_gl.VALUENET + signedPostfix, title: 'Net', align: 'right', width: '90px', formatMoney: true, addTotals: true, input: numberInput });

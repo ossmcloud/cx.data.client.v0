@@ -20,6 +20,7 @@ class CPErpTransactionTaxRender extends RenderBase {
         }
 
         var signedPostfix = (this.options.editMode) ? '' : 'Signed';
+        signedPostfix = '';
 
         this.options.columns = [
             { name: 'editedIcon', title: ' ', align: 'center', width: '10px' },
