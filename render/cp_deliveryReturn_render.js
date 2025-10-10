@@ -223,33 +223,41 @@ class CPDeliveryReturnRender extends RenderBase {
 
         if (this.options.mode == 'view') {
 
-            var s = this.dataSource.documentStatus;
-            // allow to refresh only under certain statuses
-            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
-                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
-            }
+            if (this.dataSource.inactive) {
+                this.options.allowEdit = false;
+                
+                var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+                this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
-                // @@TODO: check if we already have a doc for this
-
-                if (!query && !generatedDocs) {
-                    var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
-                    this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
-                }
-            }
-
-            var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
-            this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
-
-            if (query) {
-                this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
             } else {
-                this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
-            }
+                var s = this.dataSource.documentStatus;
+                // allow to refresh only under certain statuses
+                if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                    this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+                }
 
-            var queries = this.dataSource.cx.table(_cxSchema.cp_query);
-            if (await queries.select({ delRetId: this.dataSource.id })) {
-                this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                    // @@TODO: check if we already have a doc for this
+
+                    if (!query && !generatedDocs) {
+                        var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
+                        this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
+                    }
+                }
+
+                var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+                this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+
+                if (query) {
+                    this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+                } else {
+                    this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
+                }
+
+                var queries = this.dataSource.cx.table(_cxSchema.cp_query);
+                if (await queries.select({ delRetId: this.dataSource.id })) {
+                    this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+                }
             }
         }
 
