@@ -53,6 +53,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                        ${accrualJoin}
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
+        query.sql += ` and d.inactive = ${params.inactive == 'true' ? '1' : '0'}`;
         
         if (params.pdt) {
             params.pdt = params.pdt.trim();

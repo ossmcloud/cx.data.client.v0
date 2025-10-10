@@ -196,7 +196,7 @@ class CPInvoiceReturnRender extends RenderBase {
             `;
         }
 
-
+        if (this.dataSource.inactive) { this.options.title += `<div style="${applyStoreColorStyle} background-color: red; color; white">INACTIVE</div>`; }
 
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
@@ -578,6 +578,10 @@ class CPInvoiceReturnRender extends RenderBase {
                 //this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
 
                 if (!isBatchProcessing) {
+                    if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                        this.options.filters.push({ label: 'inactive', fieldName: 'inactive', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '50px' });
+                    }
+
                     this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
                     this.options.filters.push({
                         label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [
@@ -642,6 +646,9 @@ class CPInvoiceReturnRender extends RenderBase {
 
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'select', width: '30px', type: 'check' }); }
 
+            this.options.highlights = [
+                { column: _cxSchema.cp_deliveryReturn.INACTIVE, op: '=', value: true, style: 'color: white; background-color: rgba(255, 0, 0, 0.5); font-style: italic;' },
+            ];
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });

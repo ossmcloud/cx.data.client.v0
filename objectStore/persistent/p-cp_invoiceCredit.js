@@ -61,6 +61,7 @@ const _fieldNames = {
     ISUSEREDITLOCKED: 'isUserEditLocked',
     ISUSEREDITEDGL: 'isUserEditedGL',
     ISMANUAL: 'isManual',
+    INACTIVE: 'inactive',
 
 }
 //
@@ -109,6 +110,7 @@ const _fields = {
     isUserEditLocked: { name: 'isUserEditLocked', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isUserEditedGL: { name: 'isUserEditedGL', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    inactive: { name: 'inactive', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -378,6 +380,12 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISMANUAL);
     } set isManual(val) {
         super.setValue(_fieldNames.ISMANUAL, val);
+    }
+
+    get inactive() {
+        return super.getValue(_fieldNames.INACTIVE);
+    } set inactive(val) {
+        super.setValue(_fieldNames.INACTIVE, val);
     }
 
 

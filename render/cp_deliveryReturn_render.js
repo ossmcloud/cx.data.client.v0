@@ -110,6 +110,8 @@ class CPDeliveryReturnRender extends RenderBase {
             `;
         }
 
+        if (this.dataSource.inactive) { this.options.title += `<div style="${applyStoreColorStyle} background-color: red; color; white">INACTIVE</div>`; }
+
         this.options.title += '</div>';
 
         var fieldGroups = [];
@@ -300,6 +302,10 @@ class CPDeliveryReturnRender extends RenderBase {
 
                 this.options.filters.push({ label: 'generate', fieldName: 'generate', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '30px' });
             } else {
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                    this.options.filters.push({ label: 'inactive', fieldName: 'inactive', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '50px' });
+                }
+
                 this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
                 this.options.filters.push({
                     label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [
@@ -366,6 +372,10 @@ class CPDeliveryReturnRender extends RenderBase {
 
 
 
+            this.options.highlights = [
+                { column: _cxSchema.cp_deliveryReturn.INACTIVE, op: '=', value: true, style: 'color: white; background-color: rgba(255, 0, 0, 0.5); font-style: italic;' },
+            ];
+
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Vat] });
@@ -373,7 +383,6 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Discount] });
-
 
             var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
@@ -414,13 +423,6 @@ class CPDeliveryReturnRender extends RenderBase {
                     style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
                     columns: ['queryCount']
                 })
-                // this.options.cellHighlights.push({
-                //     column: 'attachCount',
-                //     op: '>',
-                //     value: 0,
-                //     style: 'background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
-                //     columns: ['attachCount']
-                // })
             }
 
 
@@ -436,6 +438,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 })
             }
 
+         
             var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
             var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
             for (var cx = 0; cx < shopColors.length; cx++) {
