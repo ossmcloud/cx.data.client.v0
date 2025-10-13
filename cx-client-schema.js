@@ -121,6 +121,7 @@ module.exports = {
         DOCKETNUMBERLOOKEDUP: 'docketNumberLookedUp',
         TOTALDRS: 'totalDRS',
         INVGRPID: 'invGrpId',
+        INACTIVE: 'inactive',
     },
 
     cp_deliveryReturnLine: {
@@ -318,7 +319,7 @@ module.exports = {
         ISUSEREDITLOCKED: 'isUserEditLocked',
         ISUSEREDITEDGL: 'isUserEditedGL',
         ISMANUAL: 'isManual',
-        MERGEDTO: 'mergedTo',
+        INACTIVE: 'inactive',
     },
 
     cp_invoiceCreditLine: {

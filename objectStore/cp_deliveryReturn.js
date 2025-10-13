@@ -37,6 +37,10 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             accrualTotals = ', accrDocTotals.accrTotNet, accrDocTotals.accrTotVat, accrDocTotals.accrTotGross, accrDocTotals.accrTotDRS'
         }
 
+        var joinLines = '';
+        if (params.pdt) { joinLines = `inner join ${this.type}Line dl on dl.delRetId = d.delRetId` }
+
+
         var query = { sql: '', params: [] };
         query.sql = ` select            distinct d.*, s.shopCode, s.shopName, 
                                         isnull(supp.traderName, (
@@ -57,6 +61,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                                         ${accrualTotals}
                       from              ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                      ${joinLines}
                       left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
                       left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
@@ -68,7 +73,28 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         if (isGenerateInvoice) {
             query.sql += ' and d.documentStatus = @documentStatus';
             query.params.push({ name: 'documentStatus', value: _declarations.CP_DOCUMENT.STATUS.Ready });
+        } else {
+            if (params.pdt) {
+                params.pdt = params.pdt.trim();
+                if (params.pdtt == 'all') {
+                    query.sql += `
+                    and (
+                            dl.eposCode like '%${params.pdt}%'
+                        or  dl.eposDescription like '%${params.pdt}%'
+                        or  dl.eposBarcode like '%${params.pdt}%'
+                    )
+                `
+                } else if (params.pdtt == 'barcode') {
+                    query.sql += `and dl.eposBarcode like '%${params.pdt}%'`;
+                } else if (params.pdtt == 'code') {
+                    query.sql += `and dl.eposCode like '%${params.pdt}%' `
+                } else if (params.pdtt == 'descr') {
+                    query.sql += `and dl.eposDescription like '%${params.pdt}%' `
+                }
+            }
         }
+
+        query.sql += ` and d.inactive = ${params.inactive == 'true' ? '1' : '0'}`;
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -144,7 +170,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.sql += ' and d.delRetId = @delRetId';
             query.params.push({ name: 'delRetId', value: params.id });
         }
-       
+
         if (params.whs) {
             query.sql += ' and (isnull(supp.traderCode, supp2.traderCode) = @wholesalerCode OR isnull(supp.wholesalerCode, supp2.wholesalerCode) = @wholesalerCode)'
             query.params.push({ name: 'wholesalerCode', value: params.whs });
@@ -166,7 +192,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             if (params.mstatus == '0' || params.mstatus == '1') {
                 query.sql += ' and reco.recoStatusId is null';
             } else if (params.mstatus == '-9') {
-                query.sql += ' and reco.recoStatusId != ' + _declarations.CP_DOCUMENT.RECO_STATUS.Reconciled; 
+                query.sql += ' and reco.recoStatusId != ' + _declarations.CP_DOCUMENT.RECO_STATUS.Reconciled;
             } else {
                 query.sql += ' and reco.recoStatusId = @recoStatusId';
                 query.params.push({ name: 'recoStatusId', value: params.mstatus });
@@ -267,6 +293,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#accrTotGross = defaults['accrTotGross'] || null;
         this.#accrTotDRS = defaults['accrTotDRS'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
+            // @@TODO: DOCU-SIGN
             this.#documentSign = -1;
         }
     };
@@ -284,6 +311,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
     get documentTypeName() {
         return _declarations.CP_DOCUMENT.TYPE.getName(this.documentType);
     }
+
 
     get editedIcon() {
         if (this.#accrTotNet !== null) {
@@ -379,7 +407,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         await super.save()
     }
-    
+
     async log(message, info) {
         // @@TODO:
     }

@@ -27,7 +27,7 @@ class CPInvoiceReturnRender extends RenderBase {
             transactionLines.forceReadOnly = this.options.query.line != 'T';
         }
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query, showGlSegment3: erpSett.showGlSegment3 });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'lineItems', query: this.options.query, showGlSegment3: erpSett.showGlSegment3, documentType: this.dataSource.documentType });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>document lines</span>';
         if (transactionLines.forceReadOnly) {
@@ -196,7 +196,7 @@ class CPInvoiceReturnRender extends RenderBase {
             `;
         }
 
-
+        if (this.dataSource.inactive) { this.options.title += `<div style="${applyStoreColorStyle} background-color: red; color; white">INACTIVE</div>`; }
 
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
@@ -389,72 +389,81 @@ class CPInvoiceReturnRender extends RenderBase {
         if (process.env.APP_CONTEXT == 'LOCAL') { this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' }); }
 
         if (this.options.mode == 'view') {
-            var s = this.dataSource.documentStatus;
-            // allow to refresh only under certain statuses
-            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
-                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
-            }
+
+            if (this.dataSource.inactive) {
+                this.options.allowEdit = false;
+
+                var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+                this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+
+            } else {
+
+                var s = this.dataSource.documentStatus;
+                // allow to refresh only under certain statuses
+                if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                    this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+                }
 
 
-            // allow to post based on role only under certain statuses
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
-                if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
-                    if (!this.dataSource.invGrpId) {
-                        var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
-                        var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
-                        var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                // allow to post based on role only under certain statuses
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                    if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
+                        if (!this.dataSource.invGrpId) {
+                            var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
+                            var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
+                            var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                            this.options.buttons.push(btnPostToErp);
+                        }
+                    } else if (s == _cxConst.CP_DOCUMENT.STATUS.PendingReview) {
+                        var btnPostToErp = { id: 'cp_flag_reviewed', text: 'Flag as Reviewed', function: 'flagAsReviewed', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                         this.options.buttons.push(btnPostToErp);
                     }
-                } else if (s == _cxConst.CP_DOCUMENT.STATUS.PendingReview) {
-                    var btnPostToErp = { id: 'cp_flag_reviewed', text: 'Flag as Reviewed', function: 'flagAsReviewed', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
-                    this.options.buttons.push(btnPostToErp);
+
+                }
+                // allow to un-post based on role only under certain statuses
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                    if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
+                        this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                    } else if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH || s == _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                        this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
+                    }
+                }
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+                    if (s == _cxConst.CP_DOCUMENT.STATUS.Posting || s == _cxConst.CP_DOCUMENT.STATUS.PostingRunning) {
+                        this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
+                    }
                 }
 
-            }
-            // allow to un-post based on role only under certain statuses
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
-                if (s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
-                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
-                } else if (s == _cxConst.CP_DOCUMENT.STATUS.REFRESH || s == _cxConst.CP_DOCUMENT.STATUS.Generating) {
-                    this.options.buttons.push({ id: 'cp_reset_status', text: 'Reset To Ready', function: 'resetStatus', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);' });
+                // allow to delete if not posted
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                    if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
+                        && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH && s != _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                        if (!this.dataSource.invGrpId) {
+                            this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                        }
+                    }
                 }
-            }
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
-                if (s == _cxConst.CP_DOCUMENT.STATUS.Posting || s == _cxConst.CP_DOCUMENT.STATUS.PostingRunning) {
-                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset To Ready', function: 'resetPostedStatus' });
-                }
-            }
 
-            // allow to delete if not posted
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
-                if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
-                    && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH && s != _cxConst.CP_DOCUMENT.STATUS.Generating) {
-                    if (!this.dataSource.invGrpId) {
-                        this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+                this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+
+                if (query) {
+                    this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+                } else {
+                    this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
+                }
+
+                var queries = this.dataSource.cx.table(_cxSchema.cp_query);
+                if (await queries.select({ invCreId: this.dataSource.id })) {
+                    this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+                }
+
+                if (this.matchingEnabled) {
+                    if (this.dataSource.recoStatus == _cxConst.CP_DOCUMENT.RECO_STATUS.NotAnalyzed || this.dataSource.recoStatus == _cxConst.CP_DOCUMENT.RECO_STATUS.NotReconciled) {
+                        this.options.buttons.push({ id: 'cp_run_matching', text: 'Run Matching Process', function: 'runMatching', style: 'color: white; background-color: rgba(0,125,0,1);' });
                     }
                 }
             }
-
-            var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
-            this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
-
-            if (query) {
-                this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
-            } else {
-                this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
-            }
-
-            var queries = this.dataSource.cx.table(_cxSchema.cp_query);
-            if (await queries.select({ invCreId: this.dataSource.id })) {
-                this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
-            }
-
-            if (this.matchingEnabled) {
-                if (this.dataSource.recoStatus == _cxConst.CP_DOCUMENT.RECO_STATUS.NotAnalyzed || this.dataSource.recoStatus == _cxConst.CP_DOCUMENT.RECO_STATUS.NotReconciled) {
-                    this.options.buttons.push({ id: 'cp_run_matching', text: 'Run Matching Process', function: 'runMatching', style: 'color: white; background-color: rgba(0,125,0,1);' });
-                }
-            }
-
         }
     }
 
@@ -536,7 +545,6 @@ class CPInvoiceReturnRender extends RenderBase {
             if (isBatchProcessing) {
                 this.options.title = 'invoice / credits batch processing';
                 if (batchActionSelected) {
-
                     this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                     this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
@@ -578,14 +586,30 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.filters.push({ label: 'uploaded (to)', fieldName: 'udt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
                 //this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.CHECK });
 
+                if (!isBatchProcessing) {
+                    if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                        this.options.filters.push({ label: 'inactive', fieldName: 'inactive', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '50px' });
+                    }
+
+                    this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
+                    this.options.filters.push({
+                        label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [
+                            { value: 'all', text: 'all product fields' },
+                            { value: 'barcode', text: 'product bar-code' },
+                            { value: 'code', text: 'product code' },
+                            { value: 'descr', text: 'product description' },
+                        ],
+                        width: '150px'
+                    });
+                }
             }
 
             var signedCols = {
-                Net: _cxSchema.cp_invoiceCredit.TOTALNET + 'Sign',
-                Vat: _cxSchema.cp_invoiceCredit.TOTALVAT + 'Sign',
-                Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS + 'Sign',
-                Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT + 'Sign',
-                DRS: _cxSchema.cp_invoiceCredit.TOTALDRS + 'Sign'
+                Net: _cxSchema.cp_invoiceCredit.TOTALNET,
+                Vat: _cxSchema.cp_invoiceCredit.TOTALVAT,
+                Gross: _cxSchema.cp_invoiceCredit.TOTALGROSS,
+                Discount: _cxSchema.cp_invoiceCredit.TOTALDISCOUNT,
+                DRS: _cxSchema.cp_invoiceCredit.TOTALDRS
             }
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.INVCREID, title: ' ', align: 'center' });
@@ -631,6 +655,9 @@ class CPInvoiceReturnRender extends RenderBase {
 
             if (isBatchProcessing && batchActionSelected) { this.options.columns.splice(0, 0, { name: 'check', title: 'select', width: '30px', type: 'check' }); }
 
+            this.options.highlights = [
+                { column: _cxSchema.cp_deliveryReturn.INACTIVE, op: '=', value: true, style: 'color: white; background-color: rgba(255, 0, 0, 0.5); font-style: italic;' },
+            ];
 
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });

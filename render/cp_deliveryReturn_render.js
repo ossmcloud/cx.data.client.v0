@@ -17,7 +17,7 @@ class CPDeliveryReturnRender extends RenderBase {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLine);
         await transactionLines.select({ pid: this.options.query.id });
 
-        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true });
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, documentType: this.dataSource.documentType });
         transactionLinesOptions.quickSearch = !this.options.embedded;
         return transactionLinesOptions;
     }
@@ -68,6 +68,8 @@ class CPDeliveryReturnRender extends RenderBase {
         });
         generatedDocs = generatedDocs.generatedDocs > 0;
 
+
+
         var docNumber = this.dataSource.documentNumber || this.dataSource.documentId;
         this.options.tabTitle = `${this.dataSource.documentTypeName.toUpperCase()} [${docNumber}]`;
 
@@ -108,8 +110,9 @@ class CPDeliveryReturnRender extends RenderBase {
             `;
         }
 
-        this.options.title += '</div>';
+        if (this.dataSource.inactive) { this.options.title += `<div style="${applyStoreColorStyle} background-color: red; color; white">INACTIVE</div>`; }
 
+        this.options.title += '</div>';
 
         var fieldGroups = [];
         fieldGroups.push({
@@ -195,6 +198,7 @@ class CPDeliveryReturnRender extends RenderBase {
         this.options.fields.push(subListsGroup);
 
         var transactionLineOptions = await this.getDocumentLineListOptions();
+
         subListsGroup.fields.push({ group: 'lines', title: 'document lines', column: 1, fields: [transactionLineOptions] })
 
         var relatedTransactionsOptions = await this.getRelatedDocumentListOptions();
@@ -219,33 +223,41 @@ class CPDeliveryReturnRender extends RenderBase {
 
         if (this.options.mode == 'view') {
 
-            var s = this.dataSource.documentStatus;
-            // allow to refresh only under certain statuses
-            if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
-                this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
-            }
+            if (this.dataSource.inactive) {
+                this.options.allowEdit = false;
+                
+                var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+                this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
-                // @@TODO: check if we already have a doc for this
-
-                if (!query && !generatedDocs) {
-                    var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
-                    this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
-                }
-            }
-
-            var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
-            this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
-
-            if (query) {
-                this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
             } else {
-                this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
-            }
+                var s = this.dataSource.documentStatus;
+                // allow to refresh only under certain statuses
+                if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
+                    this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+                }
 
-            var queries = this.dataSource.cx.table(_cxSchema.cp_query);
-            if (await queries.select({ delRetId: this.dataSource.id })) {
-                this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                    // @@TODO: check if we already have a doc for this
+
+                    if (!query && !generatedDocs) {
+                        var generateDocumentLabel = 'Generate ' + ((this.dataSource.documentType == _cxConst.CP_DOCUMENT.TYPE.Delivery) ? 'Invoice' : 'Credit Note');
+                        this.options.buttons.push({ id: 'cp_generate_doc', text: generateDocumentLabel, function: 'generateDocument' });
+                    }
+                }
+
+                var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
+                this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
+
+                if (query) {
+                    this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+                } else {
+                    this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
+                }
+
+                var queries = this.dataSource.cx.table(_cxSchema.cp_query);
+                if (await queries.select({ delRetId: this.dataSource.id })) {
+                    this.options.buttons.push({ id: 'cp_view_queries', text: 'View Queries', function: 'viewQueries' });
+                }
             }
         }
 
@@ -290,21 +302,36 @@ class CPDeliveryReturnRender extends RenderBase {
 
             if (isGenerateInvoice) {
                 this.options.title = 'generate invoices/credits';
-                
+
                 this.options.showButtons = [];
                 this.options.showButtons.push({ id: 'cp_batch_mark_all', text: 'select all', function: 'checkAll' });
                 this.options.showButtons.push({ id: 'cp_batch_unmark_all', text: 'clear selection', function: 'uncheckAll' });
                 this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for invoice generation', function: 'submitForBatchProcessing' });
 
                 this.options.filters.push({ label: 'generate', fieldName: 'generate', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '30px' });
+            } else {
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.ADMIN) {
+                    this.options.filters.push({ label: 'inactive', fieldName: 'inactive', type: _cxConst.RENDER.CTRL_TYPE.CHECK, width: '50px' });
+                }
+
+                this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
+                this.options.filters.push({
+                    label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [
+                        { value: 'all', text: 'all product fields' },
+                        { value: 'barcode', text: 'product bar-code' },
+                        { value: 'code', text: 'product code' },
+                        { value: 'descr', text: 'product description' },
+                    ],
+                    width: '150px'
+                });
             }
 
             var signedCols = {
-                Net: _cxSchema.cp_deliveryReturn.TOTALNET + 'Sign',
-                Vat: _cxSchema.cp_deliveryReturn.TOTALVAT + 'Sign',
-                Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS + 'Sign',
-                Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT + 'Sign',
-                DRS: _cxSchema.cp_deliveryReturn.TOTALDRS + 'Sign',
+                Net: _cxSchema.cp_deliveryReturn.TOTALNET,
+                Vat: _cxSchema.cp_deliveryReturn.TOTALVAT,
+                Gross: _cxSchema.cp_deliveryReturn.TOTALGROSS,
+                Discount: _cxSchema.cp_deliveryReturn.TOTALDISCOUNT,
+                DRS: _cxSchema.cp_deliveryReturn.TOTALDRS,
             }
             this.options.columns = [];
             if (isGenerateInvoice) { this.options.columns.push({ name: 'check', title: 'select', width: '30px', type: 'check' }); }
@@ -353,6 +380,10 @@ class CPDeliveryReturnRender extends RenderBase {
 
 
 
+            this.options.highlights = [
+                { column: _cxSchema.cp_deliveryReturn.INACTIVE, op: '=', value: true, style: 'color: white; background-color: rgba(255, 0, 0, 0.5); font-style: italic;' },
+            ];
+
             this.options.cellHighlights = [];
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Discount] });
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '=', value: '0', style: 'color: gray;', columns: [signedCols.Vat] });
@@ -360,7 +391,6 @@ class CPDeliveryReturnRender extends RenderBase {
             this.options.cellHighlights.push({ column: signedCols.Vat, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Vat] });
             this.options.cellHighlights.push({ column: signedCols.Gross, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Gross] });
             this.options.cellHighlights.push({ column: signedCols.Discount, op: '<', value: '0', style: 'color: red;', columns: [signedCols.Discount] });
-
 
             var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
             var statuses = _cxConst.CP_DOCUMENT.STATUS.toList();
@@ -401,13 +431,6 @@ class CPDeliveryReturnRender extends RenderBase {
                     style: 'background-color: yellow; color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
                     columns: ['queryCount']
                 })
-                // this.options.cellHighlights.push({
-                //     column: 'attachCount',
-                //     op: '>',
-                //     value: 0,
-                //     style: 'background-color: rgb(0,127,127); color: maroon; padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
-                //     columns: ['attachCount']
-                // })
             }
 
 
@@ -423,6 +446,7 @@ class CPDeliveryReturnRender extends RenderBase {
                 })
             }
 
+         
             var applyStoreColorStyle = 'padding: 3px 7px 3px 7px; border-radius: 5px; width: auto; display: block; overflow: hidden; text-align: left;';
             var shopColors = await this.dataSource.cx.table(_cxSchema.cx_shop).selectColors();
             for (var cx = 0; cx < shopColors.length; cx++) {
