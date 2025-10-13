@@ -42,33 +42,42 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
 
 
         var query = { sql: '', params: [] };
-        query.sql = ` select            distinct d.*, s.shopCode, s.shopName, 
-                                        isnull(supp.traderName, (
-                                                select  top 1 '&#x2048;' + tx.traderName 
-                                                from    cx_traderAccount tx 
-                                                where   tx.shopId = d.shopId and tx.traderType = 'S' 
-                                                and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
-                                                order by traderAccountId desc
-                                            )
-                                        ) as supplierName,
-                                        recoDoc.recoSessionId, reco.recoStatusId,
-                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId ) as queryCount,
-                                        ( select count(q.queryId) from cp_query q where q.delRetId = d.delRetId and statusId < 8 ) as queryCountOpen,
-                                        ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount,
-                                        ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag,
-                                        ( select top 1 a.externalLink from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachLink,
-                                        ( select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId ) as invoiceCount
-                                        ${accrualTotals}
-                      from              ${this.type} d
-                      inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
-                      ${joinLines}
-                      left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
-                      left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
-                      left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
-                      left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
-                      ${invoiceJoin}
-                      ${accrualJoin}
-                      where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
+        query.sql = ` 
+            declare @queryCount  table (delRetId bigint, queryCount int, queryCountOpen int )
+            insert into @queryCount
+            select      q.delRetId, count(q.queryId) as query_count, SUM(case when q.statusId < 8 then 1 else 0 end) as queryCountOpen
+            from        cp_query q
+            where       delRetId is not null
+            group by q.delRetId
+
+            select            distinct d.*, s.shopCode, s.shopName,
+                                isnull(supp.traderName, (
+                                        select  top 1 '&#x2048;' + tx.traderName 
+                                        from    cx_traderAccount tx 
+                                        where   tx.shopId = d.shopId and tx.traderType = 'S' 
+                                        and     (tx.traderCode = d.supplierCode or tx.wholesalerCode = d.supplierCode) 
+                                        order by traderAccountId desc
+                                    )
+                                ) as supplierName,
+                                recoDoc.recoSessionId, reco.recoStatusId,
+                                qq.queryCount, qq.queryCountOpen,
+                                ( select count(a.attachmentId) from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId ) as attachCount,
+                                ( select top 1 a.externalFlags from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachFlag,
+                                ( select top 1 a.externalLink from cx_attachment a where a.recordType = 'cp_deliveryReturn' and a.recordId = d.delRetId order by a.created desc ) as attachLink,
+                                ( select count(*) from cp_invoiceCredit a where a.createdFrom = d.delRetId ) as invoiceCount
+                                ${accrualTotals}
+                from              ${this.type} d
+                inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+                ${joinLines}
+                left outer join	cx_traderAccount supp ON supp.traderAccountId = d.traderAccountId
+                left outer join   cx_traderAccount supp2 ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.delRetId and recoDoc.documentType = 'cp_deliveryReturn'
+                left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
+                left outer join   @queryCount as qq on qq.delRetId = d.delRetId
+                ${invoiceJoin}
+                ${accrualJoin}
+                where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+        `;
 
         if (isGenerateInvoice) {
             query.sql += ' and d.documentStatus = @documentStatus';
