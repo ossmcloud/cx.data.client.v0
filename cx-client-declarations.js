@@ -115,7 +115,9 @@ const CX_MODULE = {
     RETAIL: 'retail',
     PURCHASE: 'purchase',
     THEREFORE: 'therefore',
-
+    STOCK_TAKE: 'stockTake',
+    STOCK_VALU: 'stockValuation',
+    
     //
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
@@ -123,6 +125,9 @@ const CX_MODULE = {
             RETAIL: 'Sales Data',
             PURCHASE: 'Purchase Data',
             THEREFORE: 'Therefore Documents',
+            STOCK_TAKE: 'Stock Take',
+            STOCK_VALU: 'Stock Valuation',
+
         });
     }
 }

@@ -21,10 +21,11 @@ class RawGetRequest extends RenderBase {
         var modules = _cxConst.CX_MODULE.toList(true);
         if (this.options.query.svc == 'erps') {
             modules = modules.slice(1, 2);
-            
+
         } else if (this.options.query.svc == 'dtfs') {
-            
-            if (!hasThereforeLegacy) { modules.pop(); }
+
+            if (!hasThereforeLegacy) { modules.splice(3, 1); }
+            if (!this.hasModule('cs')) { modules.pop(); }
 
         } else {
             modules = [];
@@ -50,9 +51,10 @@ class RawGetRequest extends RenderBase {
 
         var svcReadOnly = this.options.query.ro == 'T';
         var moduleReadOnly = this.options.query.svc == 'erps' ? this.options.query.ro == 'T' : false;
-        
+
         this.options.title = 'get data request';
 
+        this.dataSource.hasStockModule = this.hasModule('cs');
         this.dataSource.hasThereforeLegacy = hasThereforeLegacy;
         this.options.fields = [
             {
@@ -62,7 +64,8 @@ class RawGetRequest extends RenderBase {
                         id: 'shopId', name: 'shopId', column: 1, validation: '{ "mandatory": true }'
                     }),
                     { name: 'transmissionID', label: 'transmission ID', column: 2, readOnly: true },
-                    { name: 'hasThereforeLegacy', hidden: true}
+                    { name: 'hasThereforeLegacy', hidden: true },
+                    { name: 'hasStockModule', hidden: true }
                 ]
             },
             {
