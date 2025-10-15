@@ -117,7 +117,7 @@ const CX_MODULE = {
     THEREFORE: 'therefore',
     STOCK_TAKE: 'stockTake',
     STOCK_VALU: 'stockValuation',
-    
+
     //
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
@@ -181,7 +181,7 @@ const EPOS_DTFS_CONFIGS = {
     toEncrypt: function (configName) {
         if (configName == this.API_AUTH_CONFIG) { return true; }
         if (configName == this.API_CONFIG) { return true; }
-        
+
         return false;
     }
 }
@@ -648,7 +648,7 @@ const EPOS_DTFS_UPGRADE_AUDIT = {
         DTFS: 'dtfs',
         ERPS: 'erps',
         //
-        toList: function (addEmpty) { return enumToList(this, addEmpty, { DTFS: 'EPOS Service', ERPS: 'ERP Service'}); }
+        toList: function (addEmpty) { return enumToList(this, addEmpty, { DTFS: 'EPOS Service', ERPS: 'ERP Service' }); }
     }
 }
 
@@ -1540,6 +1540,164 @@ const CX_ATTACHMENT = {
 }
 
 
+
+
+const CS_STOCK_VALUATION = {
+    STATE: {
+        Pending: [1, 2],
+        Processing: [0, 3, 4, 41, 99, 100],
+        PendingPost: [5],
+        ProcessingPost: [6, 7, 9],
+        Posted: [8],
+        Error: [97, 98],
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                PendingPost: 'pending posting',
+                ProcessingPost: 'posting running',
+            });
+        },
+    },
+    STATUS: {
+        Transferring: 0,           // task is transferring/transforming data from the raw tables
+        New: 1,                    // data is ready but never seen/saved by user
+        Pending: 2,                // user saved but did not submit
+        Refresh: 3,                // user requested dtfs refresh
+
+        PostingPrep: 4,            // user sent this for posting preparation
+        PostingPrepAndPost: 41,    // user sent this for posting preparation and posting
+        PostingReady: 5,           //
+        Posting: 6,                // erps.exe has to  pick up the stuff to post
+        PostingRunning: 7,         // erps.exe has picked up the stuff to post
+        Posted: 8,                 // posted successfully
+        PostingUndo: 9,            // reset to pending
+
+        Error: 97,                 // something went wrong while transferring or during user stuff
+        PostingError: 98,          // error while posting
+        DeleteAndPull: 99,         // cash book to be deleted and re-gathered
+        Delete: 100,               // cash book to be deleted
+
+        //
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                PostingPrep: 'preparing for posting',
+                PostingPrepAndPost: 'preparing and send posting',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+                PostingUndo: 'reset posting running',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                PostingPrep: 'preparing for posting',
+                PostingPrepAndPost: 'preparing and send for posting',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+            });
+        },
+        getStyle: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+                color = '128,128,128';
+                bkgColor = '';
+            } else if (status == this.New) {
+                color = '255,202,58';
+            } else if (status == this.Pending) {
+                color = '246,71,146';
+                //bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.PostingReady) {
+                color = '25,130,196';
+            } else if (status == this.Posted) {
+                color = '138,201,38';
+            } else if (status == this.PostingError) {
+                color = '234,30,37';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Error) {
+                color = '234,30,37';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Delete) {
+                color = '83,49,138';
+            } else if (status == this.DeleteAndPull) {
+                color = '83,49,138';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+
+            if (returnObject) { return styles; }
+
+            var style = 'color: ' + styles.color + '; ';
+            if (bkgColor) { style += ('background-color: ' + styles.bkgColor + '; '); }
+            return style;
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            } else if (status == this.New) {
+                color = '0,0,0';
+                bkgColor = '255,202,58';
+            } else if (status == this.Pending) {
+                color = '255,255,255';
+                bkgColor = '246,71,146';
+            } else if (status == this.PostingReady) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Posted) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.PostingError) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else if (status == this.Error) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else if (status == this.Delete) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            } else if (status == this.DeleteAndPull) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+
+    },
+
+    TYPE: {
+        StockTake: 0,
+        StockValuation: 1,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                StockTake: 'Stock Take',
+                StockValuation: 'Stock Valuation'
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                StockTake: 'Stock Take',
+                StockValuation: 'Stock Valuation'
+            });
+        },
+    }
+}
+
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
@@ -1580,6 +1738,7 @@ module.exports = {
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     SYS_CUSTOM_SCRIPT: SYS_CUSTOM_SCRIPT,
     SYS_SERVER_TASK: SYS_SERVER_TASK,
+    CS_STOCK_VALUATION: CS_STOCK_VALUATION,
     RENDER: RENDER,
     SQL: SQL,
 }
