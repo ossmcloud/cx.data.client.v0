@@ -1158,6 +1158,7 @@ module.exports = {
         MODIFIEDBY: 'modifiedBy',
         GLACCOUNTSEGFIXED: 'glAccountSegFixed',
         GLCONTRAENTRY: 'glContraEntry',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cs_erp_transaction_tax: {
@@ -1177,6 +1178,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cs_stockValuation: {
@@ -1198,6 +1200,9 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         TRANSMISSIONID: 'transmissionId',
+        ISUSEREDITED: 'isUserEdited',
+        ISUSEREDITLOCKED: 'isUserEditLocked',
+        ISUSEREDITEDGL: 'isUserEditedGL',
     },
 
     cs_stockValuationItem: {
@@ -1225,6 +1230,19 @@ module.exports = {
         RETAILPRICE: 'retailPrice',
         PRODUCTID: 'productId',
         DEPMAPCONFIGID: 'depMapConfigId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    cs_stockValuationLog: {
+        TBL_NAME: 'cs_stockValuationLog',
+        STOCKVALUATIONLOGID: 'stockValuationLogId',
+        STOCKVALUATIONID: 'stockValuationId',
+        LOGTYPE: 'logType',
+        LOGMESSAGE: 'logMessage',
+        LOGINFO: 'logInfo',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',

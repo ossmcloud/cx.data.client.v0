@@ -22,16 +22,104 @@ class CSStockValuationRender extends RenderBase {
         return transactionLinesOptions;
     }
 
-    // async getDocumentLogListOptions() {
-    //     var transactionLogs = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLog);
-    //     await transactionLogs.select({ pid: this.options.query.id });
+    async getDocumentLogListOptions() {
+        var transactionLogs = this.dataSource.cx.table(_cxSchema.cs_stockValuationLog);
+        await transactionLogs.select({ pid: this.options.query.id });
 
-    //     var transactionLogsOptions = await this.listOptions(transactionLogs, { listView: true });
-    //     transactionLogsOptions.quickSearch = true;
-    //     return transactionLogsOptions;
-    // }
+        var transactionLogsOptions = await this.listOptions(transactionLogs, { listView: true });
+        transactionLogsOptions.quickSearch = true;
+        return transactionLogsOptions;
+    }
+
+    async getErpGLListOptions(erpSett) {
+        var transactionLines = this.dataSource.cx.table(_cxSchema.cs_erp_transaction_gl);
+        await transactionLines.select({ id: this.options.query.id });
+
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLines.forceReadOnly = this.options.query.line == 'T';
+        }
+        if (this.invoiceEditMode == _cxConst.CP_PREFERENCE.INVOICE_EDIT_MODE.VALUES.ITEM_ONLY) {
+            transactionLines.forceReadOnly = true;
+        }
+
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
+        transactionLinesOptions.quickSearch = true;
+        transactionLinesOptions.title = '<span>erp gl transactions</span>';
+
+        if (!transactionLines.forceReadOnly) {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
+
+            var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre, erpSett.mergeGLAndTax);
+            transactionLinesOptions.lookupLists[_cxSchema.cs_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+
+            var glAccountSegs2 = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpSeg2LookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cs_erp_transaction_gl.GLACCOUNTSEG2] = glAccountSegs2;
+
+            if (erpSett.mergeGLAndTax) {
+                var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+                transactionLinesOptions.lookupLists[_cxSchema.cs_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            }
+
+        }
+        return transactionLinesOptions;
+    }
+
+    async getErpTaxListOptions() {
+        var transactionLines = this.dataSource.cx.table(_cxSchema.cs_erp_transaction_tax);
+        await transactionLines.select({ id: this.options.query.id });
+
+        if (this.options.allowEdit && this.options.mode == 'edit') {
+            transactionLines.forceReadOnly = this.options.query.line == 'T';
+        }
+
+        var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
+        transactionLinesOptions.quickSearch = true;
+        transactionLinesOptions.title = '<span>erp tax transactions</span>';
+
+        if (!transactionLines.forceReadOnly) {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
+
+            var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cs_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+
+        }
+        return transactionLinesOptions;
+    }
 
 
+
+    async buildFormLists() {
+        var erpSett = await this.dataSource.cx.table(_cxSchema.erp_shop_setting).fetchOrNew(this.dataSource.shopId);
+        var erpSubListsGroupStyles = (erpSett.mergeGLAndTax) ? ['width: 100%; min-width: 500px;'] : ['width: 60%; min-width: 500px;', 'min-width: 400px;'];
+
+
+        var erpSubListsGroup = { group: 'erp_sublists', columnCount: 2, styles: erpSubListsGroupStyles, fields: [] };
+        this.options.fields.push(erpSubListsGroup);
+
+        var erpGlLineOptions = await this.getErpGLListOptions(erpSett);
+        erpSubListsGroup.fields.push({ group: 'erp_gl_lines', title: 'erp gl lines', column: 1, fields: [erpGlLineOptions] });
+        if (!erpSett.mergeGLAndTax) {
+            var erpTaxLineOptions = await this.getErpTaxListOptions(erpSett);
+            erpSubListsGroup.fields.push({ group: 'erp_tax_lines', title: 'erp tax lines', column: 2, fields: [erpTaxLineOptions] });
+        }
+
+        var subListsGroup = { group: 'sublists', columnCount: 1, fields: [] };
+        this.options.fields.push(subListsGroup);
+
+        var transactionLineOptions = await this.getValuationItemListOptions();
+        subListsGroup.fields.push({ group: 'items', title: 'stock valuation items', column: 1, fields: [transactionLineOptions] })
+
+        if (this.options.query.viewLogs == 'T') {
+            var transactionLogOptions = await this.getDocumentLogListOptions();
+            this.options.fields.push({
+                group: 'sublists_logs', columnCount: 1, fields: [{ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
+            });
+            
+        }
+
+    }
 
 
     async _record() {
@@ -101,34 +189,20 @@ class CSStockValuationRender extends RenderBase {
 
         this.options.fields = [{ group: 'main', title: '', columnCount: fieldGroups.length, fields: fieldGroups, }];
 
-        var subListsGroup = { group: 'sublists', columnCount: 2, fields: [] };
-        this.options.fields.push(subListsGroup);
-
-        var transactionLineOptions = await this.getValuationItemListOptions();
-
-        subListsGroup.fields.push({ group: 'items', title: 'stock valuation items', column: 1, fields: [transactionLineOptions] })
-
-        // if (this.options.query.viewLogs == 'T') {
-        //     var transactionLogOptions = await this.getDocumentLogListOptions();
-        //     this.options.fields.push({
-        //         group: 'sublists_logs', columnCount: 1, fields: [
-        //             { group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
-        //     });
-        //     //subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true });
-        // }
-
+        await this.buildFormLists();
 
         if (this.options.mode == 'view') {
             var s = this.dataSource.status;
             // allow to refresh only under certain statuses
-            if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.Pending || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
+            if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
                 this.options.buttons.push({ id: 'cs_refresh_data', text: 'Refresh Data', function: 'refreshData' });
             }
 
             if (s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady) {
                 var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
                 var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
-                this.options.buttons.push({ id: 'cs_post_erp', text: 'Post to ' + erpName, function: 'refreshData' });
+                var btnPostToErp = { id: 'cs_post_erp', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                this.options.buttons.push(btnPostToErp);
             }
 
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';

@@ -36,6 +36,9 @@ const _fieldNames = {
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
     TRANSMISSIONID: 'transmissionId',
+    ISUSEREDITED: 'isUserEdited',
+    ISUSEREDITLOCKED: 'isUserEditLocked',
+    ISUSEREDITEDGL: 'isUserEditedGL',
 
 }
 //
@@ -59,6 +62,9 @@ const _fields = {
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     transmissionId: { name: 'transmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    isUserEditLocked: { name: 'isUserEditLocked', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    isUserEditedGL: { name: 'isUserEditedGL', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -178,6 +184,24 @@ class Persistent_cs_stockValuation extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.TRANSMISSIONID);
     } set transmissionId(val) {
         super.setValue(_fieldNames.TRANSMISSIONID, val);
+    }
+
+    get isUserEdited() {
+        return super.getValue(_fieldNames.ISUSEREDITED);
+    } set isUserEdited(val) {
+        super.setValue(_fieldNames.ISUSEREDITED, val);
+    }
+
+    get isUserEditLocked() {
+        return super.getValue(_fieldNames.ISUSEREDITLOCKED);
+    } set isUserEditLocked(val) {
+        super.setValue(_fieldNames.ISUSEREDITLOCKED, val);
+    }
+
+    get isUserEditedGL() {
+        return super.getValue(_fieldNames.ISUSEREDITEDGL);
+    } set isUserEditedGL(val) {
+        super.setValue(_fieldNames.ISUSEREDITEDGL, val);
     }
 
 

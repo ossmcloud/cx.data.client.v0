@@ -40,6 +40,7 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     GLACCOUNTSEGFIXED: 'glAccountSegFixed',
     GLCONTRAENTRY: 'glContraEntry',
+    ISUSEREDITED: 'isUserEdited',
 
 }
 //
@@ -67,6 +68,7 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     glAccountSegFixed: { name: 'glAccountSegFixed', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     glContraEntry: { name: 'glContraEntry', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
 
 }
 //
@@ -210,6 +212,12 @@ class Persistent_cs_erp_transaction_gl extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.GLCONTRAENTRY);
     } set glContraEntry(val) {
         super.setValue(_fieldNames.GLCONTRAENTRY, val);
+    }
+
+    get isUserEdited() {
+        return super.getValue(_fieldNames.ISUSEREDITED);
+    } set isUserEdited(val) {
+        super.setValue(_fieldNames.ISUSEREDITED, val);
     }
 
 

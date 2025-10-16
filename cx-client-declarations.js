@@ -170,6 +170,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_AUTO_MAP: 'DTFSAutoMap',
     DTFS_IMPORT_OPTIONS: 'DTFSImportOptions',
     DTFS_OPTIONS: 'DTFSOptions',
+    DTFS_CS_CONFIG: "DTFSCsConfig",
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
@@ -202,12 +203,15 @@ const ERP_DTFS_CONFIGS = {
     ERP_CP_POST_POSTFIX: "ERPCpPostPostfix",
     ERP_CP_DRS_CONFIG: "ERPCpDRSConfig",
     ERP_CP_ACCRUAL_CONFIG: "ERPCpAccrualConfig",
+    ERP_CS_CONFIG: "ERPCsConfig",
 
     API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
 
     SAGE200_CONFIG: 'Sage200Config',
+
+
 
     //API_TOKEN: 'ERPApiToken',
     //
@@ -1560,7 +1564,7 @@ const CS_STOCK_VALUATION = {
     STATUS: {
         Transferring: 0,           // task is transferring/transforming data from the raw tables
         New: 1,                    // data is ready but never seen/saved by user
-        Pending: 2,                // user saved but did not submit
+        NeedAttention: 2,
         Refresh: 3,                // user requested dtfs refresh
 
         PostingPrep: 4,            // user sent this for posting preparation
@@ -1579,6 +1583,7 @@ const CS_STOCK_VALUATION = {
         //
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
+                NeedAttention: 'mapping issues',
                 PostingPrep: 'preparing for posting',
                 PostingPrepAndPost: 'preparing and send posting',
                 PostingReady: 'ready for posting',
@@ -1590,6 +1595,7 @@ const CS_STOCK_VALUATION = {
         },
         getName: function (value) {
             return enumGetName(this, value, {
+                NeedAttention: 'mapping issues',
                 PostingPrep: 'preparing for posting',
                 PostingPrepAndPost: 'preparing and send for posting',
                 PostingReady: 'ready for posting',
@@ -1606,9 +1612,9 @@ const CS_STOCK_VALUATION = {
                 bkgColor = '';
             } else if (status == this.New) {
                 color = '255,202,58';
-            } else if (status == this.Pending) {
-                color = '246,71,146';
-                //bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.NeedAttention) {
+                bkgColor = '175,0,0';
+                color = '230,230,0';
             } else if (status == this.PostingReady) {
                 color = '25,130,196';
             } else if (status == this.Posted) {
@@ -1645,9 +1651,9 @@ const CS_STOCK_VALUATION = {
             } else if (status == this.New) {
                 color = '0,0,0';
                 bkgColor = '255,202,58';
-            } else if (status == this.Pending) {
-                color = '255,255,255';
-                bkgColor = '246,71,146';
+            } else if (status == this.NeedAttention) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
             } else if (status == this.PostingReady) {
                 color = '255,255,255';
                 bkgColor = '25,130,196';
@@ -1698,6 +1704,16 @@ const CS_STOCK_VALUATION = {
     }
 }
 
+const CS_STOCK_VALUATION_LOG = {
+    STATUS: {
+        INFO: 'INFO',
+        WARNING: 'WARNING',
+        ERROR: 'ERROR',
+        CRITICAL: 'IMPORTANT',
+        toList: function (addEmpty) { return enumToList(this); }
+    }
+}
+
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
@@ -1739,6 +1755,7 @@ module.exports = {
     SYS_CUSTOM_SCRIPT: SYS_CUSTOM_SCRIPT,
     SYS_SERVER_TASK: SYS_SERVER_TASK,
     CS_STOCK_VALUATION: CS_STOCK_VALUATION,
+    CS_STOCK_VALUATION_LOG: CS_STOCK_VALUATION_LOG,
     RENDER: RENDER,
     SQL: SQL,
 }

@@ -32,7 +32,7 @@ class cs_stockValuation_Collection extends _persistentTable.Table {
 class cs_stockValuation extends _persistentTable.Record {
     #shopName = '';
     #shopCode = '';
-    
+    #logs = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (!defaults) { defaults = {}; }
@@ -44,14 +44,39 @@ class cs_stockValuation extends _persistentTable.Record {
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
 
-    // get status() {
-    //     return _declarations.CS_STOCK_VALUATION.STATUS.getName(super.status);
-    // }
+    get logs() {
+        return this.#logs;
+    } set logs(logs) {
+        this.#logs = logs;
+    }
 
+  
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         return await super.save()
     }
+
+    async log(message, info) {
+        await this.logBase(_declarations.CS_STOCK_VALUATION_LOG.STATUS.INFO, message, info);
+    }
+    async logWarning(message, info) {
+        await this.logBase(_declarations.CS_STOCK_VALUATION_LOG.STATUS.WARNING, message, info);
+    }
+    async logError(error, info) {
+        if (!info && error.stack) { info = error.stack; }
+        if (error && error.message) { error = error.message; }
+        await this.logBase(_declarations.CS_STOCK_VALUATION_LOG.STATUS.ERROR, error, info);
+
+    }
+    async logBase(type, message, info) {
+        if (!this.#logs) {
+            this.#logs = this.cx.table(_schema.cs_stockValuationLog);
+        }
+        var log = await this.#logs.log(this.stockValuationId, type, message, info);
+        this.#logs.records.push(log);
+        return log;
+    }
+
 }
 //
 // ----------------------------------------------------------------------------------------
