@@ -273,12 +273,14 @@ const CX_EPOS_PROVIDER = {
     ZAMBR: 'ZAMBR',
     PRISM: 'PRISM',
     SM: 'SM',
+    ALOHA: 'ALOHA',
 
     THERE: 'THERE',
     //
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
             CBE: 'CBE',
+            ALOHA: 'NCR Aloha',
             RS: 'Retail Solution',
             EDGE: 'EdgePos',
             MRDN: 'Meridian',
@@ -304,6 +306,13 @@ const CX_EPOS_PROVIDERS = {
                 { name: EPOS_DTFS_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.ALOHA,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "???",   "user": "sruu",   "pass": "???"  }' },
             ]
         },
         {
