@@ -20,6 +20,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
                         glWaste.code as waste_code,     glWaste.costCentre as waste_cc,     glWaste.department as waste_dep,     glWaste.description as waste_desc,
                         glAccrual.code as accrual_code, glAccrual.costCentre as accrual_cc, glAccrual.department as accrual_dep, glAccrual.description as accrual_desc,
                         glCogs.code as cogs_code,       glCogs.costCentre as cogs_cc,       glCogs.department as cogs_dep,       glCogs.description as cogs_desc,
+                        glStockDeb.code as stDeb_code,  glStockDeb.costCentre as stDeb_cc,  glStockDeb.department as stDeb_dep,  glStockDeb.description as stDeb_desc,
+                        glStockCre.code as stCre_code,  glStockCre.costCentre as stCre_cc,  glStockCre.department as stCre_dep,  glStockCre.description as stCre_desc,
                         whs.code as whs_code,           whs.name as whs_name
             from		cx_map_config_dep dep
             left outer join erp_gl_account glSales ON glSales.erpGLAccountId = dep.saleAccountId
@@ -27,6 +29,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             left outer join erp_gl_account glWaste ON glWaste.erpGLAccountId = dep.wasteAccountId
             left outer join erp_gl_account glAccrual ON glAccrual.erpGLAccountId = dep.accrualAccountId
             left outer join erp_gl_account glCogs ON glCogs.erpGLAccountId = dep.cogsAccountId
+            left outer join erp_gl_account glStockDeb ON glStockDeb.erpGLAccountId = dep.stockDebitAccountId
+            left outer join erp_gl_account glStockCre ON glStockCre.erpGLAccountId = dep.stockCreditAccountId
             left outer join cp_wholesaler whs ON whs.wholesalerId = dep.wholesalerId
         `;
 
@@ -65,6 +69,8 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
             if (params.mapped.indexOf('_waste') > 0) { fieldName = 'wasteAccountId'; }
             if (params.mapped.indexOf('_accrual') > 0) { fieldName = 'accrualAccountId'; }
             if (params.mapped.indexOf('_cogs') > 0) { fieldName = 'cogsAccountId'; }
+            if (params.mapped.indexOf('_stock_debit') > 0) { fieldName = 'stockDebitAccountId'; }
+            if (params.mapped.indexOf('_stock_credit') > 0) { fieldName = 'stockCreditAccountId'; }
             query.sql += ` and dep.${fieldName} ${fieldFilter}`;
         }
 
@@ -225,6 +231,16 @@ class cx_map_config_dep extends _persistentTable.Record {
     #cogs_dep = '';
     #cogs_desc = '';
 
+    #stDeb_code = '';
+    #stDeb_cc = '';
+    #stDeb_dep = '';
+    #stDeb_desc = '';
+
+    #stCre_code = '';
+    #stCre_cc = '';
+    #stCre_dep = '';
+    #stCre_desc = '';
+
     #whs_code = '';
     #whs_name = '';
 
@@ -259,6 +275,16 @@ class cx_map_config_dep extends _persistentTable.Record {
         this.#cogs_cc = defaults['cogs_cc'] || '';
         this.#cogs_dep = defaults['cogs_dep'] || '';
         this.#cogs_desc = defaults['cogs_desc'] || '';
+
+        this.#stDeb_code = defaults['stDeb_code'] || '';
+        this.#stDeb_cc = defaults['stDeb_cc'] || '';
+        this.#stDeb_dep = defaults['stDeb_dep'] || '';
+        this.#stDeb_desc = defaults['stDeb_desc'] || '';
+
+        this.#stCre_code = defaults['stCre_code'] || '';
+        this.#stCre_cc = defaults['stCre_cc'] || '';
+        this.#stCre_dep = defaults['stCre_dep'] || '';
+        this.#stCre_desc = defaults['stCre_desc'] || '';
 
         this.#whs_code = defaults['whs_code'] || '';
         this.#whs_name = defaults['whs_name'] || '';
@@ -323,6 +349,29 @@ class cx_map_config_dep extends _persistentTable.Record {
         var spec = this.cogsCode;
         if (this.cogsCc) { spec += `/${this.cogsCc}`; }
         if (this.cogsDep) { spec += `/${this.cogsDep}`; }
+        return spec;
+    }
+
+
+    get stockDebCode() { return this.#stDeb_code; }
+    get stockDebCc() { return this.#stDeb_cc; }
+    get stockDebDep() { return this.#stDeb_dep; }
+    get stockDebDesc() { return this.#stDeb_desc; }
+    get stockDebSpec() {
+        var spec = this.stockDebCode;
+        if (this.stockDebCc) { spec += `/${this.stockDebCc}`; }
+        if (this.stockDebDep) { spec += `/${this.stockDebDep}`; }
+        return spec;
+    }
+
+    get stockCreCode() { return this.#stCre_code; }
+    get stockCreCc() { return this.#stCre_cc; }
+    get stockCreDep() { return this.#stCre_dep; }
+    get stockCreDesc() { return this.#stCre_desc; }
+    get stockCreSpec() {
+        var spec = this.stockCreCode;
+        if (this.stockCreCc) { spec += `/${this.stockCreCc}`; }
+        if (this.stockCreDep) { spec += `/${this.stockCreDep}`; }
         return spec;
     }
 

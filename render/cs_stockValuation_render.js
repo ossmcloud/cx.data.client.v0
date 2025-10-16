@@ -205,6 +205,10 @@ class CSStockValuationRender extends RenderBase {
                 this.options.buttons.push(btnPostToErp);
             }
 
+            if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
+                this.options.buttons.push({ id: 'cs_delete_document', text: 'Delete', function: 'deleteData', style: 'color: white; background-color: rgba(230,0,0,1);' });
+            }
+
             var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
             this.options.buttons.push({ id: 'cs_view_logs', text: buttonLabel, function: 'viewLogs' });
 
