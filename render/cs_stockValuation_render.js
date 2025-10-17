@@ -209,7 +209,7 @@ class CSStockValuationRender extends RenderBase {
                 var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
                 var btnPostToErp = { id: 'cs_post_erp', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                 this.options.buttons.push(btnPostToErp);
-            } 
+            }
 
             if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
                 this.options.buttons.push({ id: 'cs_delete_document', text: 'Delete', function: 'deleteData', style: 'color: white; background-color: rgba(230,0,0,1);' });
@@ -236,7 +236,7 @@ class CSStockValuationRender extends RenderBase {
             this.options.filters.push({ label: 'state', fieldName: 'sta', width: '100px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CS_STOCK_VALUATION.STATE.toList('- all -'), });
             this.options.filters.push({ label: 'reference', fieldName: _cxSchema.cs_stockValuation.REFERENCE, width: '150px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
             this.options.filters.push({ label: 'from', fieldName: _cxSchema.cs_stockValuation.DATE, type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
-            this.options.filters.push({ label: 'to', fieldName: _cxSchema.cs_stockValuation.DATE, type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+            this.options.filters.push({ label: 'to', fieldName: _cxSchema.cs_stockValuation.DATE + 'To', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
             this.options.filters.push({ label: 'product details', fieldName: 'pdt', type: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '250px' });
             this.options.filters.push({
                 label: 'search in fields', fieldName: 'pdtt', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: [

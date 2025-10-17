@@ -9,20 +9,67 @@ class cs_stockValuation_Collection extends _persistentTable.Table {
         return new cs_stockValuation(this, defaults);
     }
 
-
+    value
     async select(params) {
+
+        var joinLines = '';
+        if (params.pdt) { joinLines = `inner join cs_stockValuationItem dl on dl.stockValuationId = sv.stockValuationId` }
 
         var query = {
             sql: `
-                select  s.shopCode, s.shopName,  sv.*
+                select  distinct s.shopCode, s.shopName,  sv.*
                 from    cs_stockValuation sv
+                ${joinLines}
                 join    cx_shop s on s.shopId = sv.shopId
                 where   1 = 1
             `,
             params: []
         };
-        this.queryFromParams(query, params);
+
+        this.queryFromParams(query, params, 'sv', options => {
+            if (options.fieldName == 'sta') {
+                return {
+                    field: 'sv.status',
+                    operator: 'in',
+                    paramName: 'status',
+                    paramValue: options.paramValue
+                }
+            } else if (options.fieldName == 'pdtt') {
+                var value = params.pdt.trim();
+                if (!value) { return false; }
+                if (options.paramValue == 'all') {
+                    return `
+                        and (
+                                dl.eposCode like '%${value}%'
+                            or  dl.eposDescription like '%${value}%'
+                            or  dl.eposBarcode like '%${value}%'
+                        )
+                    `;
+                } else if (options.paramValue == 'barcode') {
+                    return `and dl.eposBarcode like '%${value}%' `;
+                } else if (options.paramValue == 'code') {
+                    return `and dl.eposCode like '%${value}%' `;
+                } else if (options.paramValue == 'descr') {
+                    return `and dl.eposDescription like '%${value}%' `;
+                } else {
+                    return false;
+                }
+            } else if (options.fieldName == 'pdt') {
+                return false;
+            }
+
+        });
         query.sql += ' order by created desc';
+
+        if (params.paging) {
+            query.paging = params.paging;
+        } else {
+            query.paging = {
+                page: params.page || 1,
+                pageSize: _declarations.SQL.PAGE_SIZE
+            }
+        }
+
         return await super.select(query);
     }
 }
@@ -50,7 +97,7 @@ class cs_stockValuation extends _persistentTable.Record {
         this.#logs = logs;
     }
 
-  
+
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         return await super.save()
