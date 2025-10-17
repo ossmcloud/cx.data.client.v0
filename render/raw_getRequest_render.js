@@ -19,13 +19,37 @@ class RawGetRequest extends RenderBase {
         var hasThereforeLegacy = await eposSett.select(params);
 
         var modules = _cxConst.CX_MODULE.toList(true);
+        var removeModule = function (modules, mod) {
+            for (var mx = 0; mx < modules.length; mx++) {
+                if (modules[mx].value === mod) {
+                    modules.splice(mx, 1);
+                    return;
+                }
+            }
+            return;
+        }
         if (this.options.query.svc == 'erps') {
-            modules = modules.slice(1, 2);
+            removeModule(modules, "");
+            removeModule(modules, _cxConst.CX_MODULE.RETAIL);
+            removeModule(modules, _cxConst.CX_MODULE.PURCHASE);
+            removeModule(modules, _cxConst.CX_MODULE.THEREFORE);
+            removeModule(modules, _cxConst.CX_MODULE.STOCK_TAKE);
+            removeModule(modules, _cxConst.CX_MODULE.STOCK_VALU);
 
         } else if (this.options.query.svc == 'dtfs') {
 
-            if (!hasThereforeLegacy) { modules.splice(3, 1); }
-            if (!this.hasModule('cs')) { modules.pop(); }
+            if (!hasThereforeLegacy) { removeModule(modules, _cxConst.CX_MODULE.THEREFORE); }
+            if (this.hasModule('cs')) {
+                if (this.options.query.mod == 'stock') {
+                    removeModule(modules, _cxConst.CX_MODULE.STATIC);
+                    removeModule(modules, _cxConst.CX_MODULE.RETAIL);
+                    removeModule(modules, _cxConst.CX_MODULE.PURCHASE);
+                    removeModule(modules, _cxConst.CX_MODULE.THEREFORE);
+                }
+            } else {
+                removeModule(modules, _cxConst.CX_MODULE.STOCK_TAKE);
+                removeModule(modules, _cxConst.CX_MODULE.STOCK_VALU);
+            }
 
         } else {
             modules = [];
@@ -56,6 +80,8 @@ class RawGetRequest extends RenderBase {
 
         this.dataSource.hasStockModule = this.hasModule('cs');
         this.dataSource.hasThereforeLegacy = hasThereforeLegacy;
+        this.dataSource.onlyStockModule = this.options.query.mod == 'stock';
+
         this.options.fields = [
             {
                 group: 'main', title: 'main info', columnCount: 4, fields: [
@@ -65,7 +91,8 @@ class RawGetRequest extends RenderBase {
                     }),
                     { name: 'transmissionID', label: 'transmission ID', column: 2, readOnly: true },
                     { name: 'hasThereforeLegacy', hidden: true },
-                    { name: 'hasStockModule', hidden: true }
+                    { name: 'hasStockModule', hidden: true },
+                    { name: 'onlyStockModule', hidden: true }
                 ]
             },
             {

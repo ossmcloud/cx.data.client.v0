@@ -116,7 +116,7 @@ class CSStockValuationRender extends RenderBase {
             this.options.fields.push({
                 group: 'sublists_logs', columnCount: 1, fields: [{ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
             });
-            
+
         }
 
     }
@@ -196,6 +196,12 @@ class CSStockValuationRender extends RenderBase {
             // allow to refresh only under certain statuses
             if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
                 this.options.buttons.push({ id: 'cs_refresh_data', text: 'Refresh Data', function: 'refreshData' });
+            } else if (s == _cxConst.CS_STOCK_VALUATION.STATUS.DeleteAndPull || s == _cxConst.CS_STOCK_VALUATION.STATUS.Refresh || s == _cxConst.CS_STOCK_VALUATION.STATUS.Transferring) {
+                this.options.buttons.push({ id: 'cs_reset_data', text: 'Reset', function: 'resetStatus' });
+            } else if (s == _cxConst.CS_STOCK_VALUATION.STATUS.Posting || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingRunning || s == _cxConst.CS_STOCK_VALUATION.STATUS.Posted || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingError || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingPrepAndPost) {
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
+                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Un-Post', style: 'color: white; background-color: rgba(230,0,0,1);', function: 'resetPostedStatus' });
+                }
             }
 
             if (s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady) {
@@ -203,7 +209,7 @@ class CSStockValuationRender extends RenderBase {
                 var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
                 var btnPostToErp = { id: 'cs_post_erp', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
                 this.options.buttons.push(btnPostToErp);
-            }
+            } 
 
             if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
                 this.options.buttons.push({ id: 'cs_delete_document', text: 'Delete', function: 'deleteData', style: 'color: white; background-color: rgba(230,0,0,1);' });
