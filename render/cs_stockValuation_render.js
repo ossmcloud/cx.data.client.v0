@@ -196,7 +196,7 @@ class CSStockValuationRender extends RenderBase {
             // allow to refresh only under certain statuses
             if (s == _cxConst.CS_STOCK_VALUATION.STATUS.New || s == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady || s == _cxConst.CS_STOCK_VALUATION.STATUS.Error) {
                 this.options.buttons.push({ id: 'cs_refresh_data', text: 'Refresh Data', function: 'refreshData' });
-            } else if (s == _cxConst.CS_STOCK_VALUATION.STATUS.DeleteAndPull || s == _cxConst.CS_STOCK_VALUATION.STATUS.Refresh || s == _cxConst.CS_STOCK_VALUATION.STATUS.Transferring) {
+            } else if (s == _cxConst.CS_STOCK_VALUATION.STATUS.DeleteAndPull || s == _cxConst.CS_STOCK_VALUATION.STATUS.Refresh || s == _cxConst.CS_STOCK_VALUATION.STATUS.Transferring || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingPrep) {
                 this.options.buttons.push({ id: 'cs_reset_data', text: 'Reset', function: 'resetStatus' });
             } else if (s == _cxConst.CS_STOCK_VALUATION.STATUS.Posting || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingRunning || s == _cxConst.CS_STOCK_VALUATION.STATUS.Posted || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingError || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingPrepAndPost) {
                 if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
