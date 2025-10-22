@@ -303,7 +303,7 @@ class cp_deliveryReturn extends _persistentTable.Record {
         this.#accrTotDRS = defaults['accrTotDRS'] || null;
         if (defaults[this.FieldNames.DOCUMENTTYPE] == _declarations.CP_DOCUMENT.TYPE.Return) {
             // @@TODO: DOCU-SIGN
-            this.#documentSign = -1;
+            // this.#documentSign = -1;
         }
     };
 
