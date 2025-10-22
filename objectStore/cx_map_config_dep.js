@@ -75,7 +75,7 @@ class cx_map_config_dep_Collection extends _persistentTable.Table {
         }
 
         if (params.manual) {
-            query.sql += ` and isnull(${this.FieldNames.ISMANUAL}, 0) = @${this.FieldNames.ISMANUAL}`;
+            query.sql += ` and isnull(dep.${this.FieldNames.ISMANUAL}, 0) = @${this.FieldNames.ISMANUAL}`;
             query.params.push({ name: this.FieldNames.ISMANUAL, value: (params.manual == 'T' || params.manual == 'true') ? 1 : 0 });
         }
 
