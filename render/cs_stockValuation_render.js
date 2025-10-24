@@ -145,9 +145,10 @@ class CSStockValuationRender extends RenderBase {
         fieldGroups.push({
             group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 1, minWidth: '300px', fields: [
                 {
-                    group: 'main1.col1', column: 1, columnCount: 2, fields: [
+                    group: 'main1.col1', column: 1, columnCount: 3, fields: [
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
                         { name: _cxSchema.cs_stockValuation.TYPE, label: 'type', lookUps: _cxConst.CS_STOCK_VALUATION.TYPE.toList(), column: 2 },
+                        { name: _cxSchema.cs_stockValuation.DATE, label: 'date',  column: 3 },
                         { name: _cxSchema.cs_stockValuation.REFERENCE, label: 'reference' },
                         { name: _cxSchema.cs_stockValuation.NOTES, label: 'notes' },
                     ]
