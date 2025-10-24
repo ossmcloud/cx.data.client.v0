@@ -18,12 +18,12 @@ class CSStockValuationItemRender extends RenderBase {
             { name: _cxSchema.cs_stockValuationItem.EPOSDEPARTMENT, title: 'department' },
             { name: _cxSchema.cs_stockValuationItem.EPOSSUBDEPARTMENT, title: 'sub department' },
             { name: _cxSchema.cs_stockValuationItem.COSTVALUE, title: 'cost value', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
-            { name: _cxSchema.cs_stockValuationItem.RETAILVALUE, title: 'cost value', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
+            { name: _cxSchema.cs_stockValuationItem.RETAILVALUE, title: 'retail value', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
 
             { name: _cxSchema.cs_stockValuationItem.OUTERSINSTOCK, title: 'outer in stock', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
             { name: _cxSchema.cs_stockValuationItem.UNITSINOUTER, title: 'units in outer', align: 'right', width: '100px', formatMoney: 'N2' },
             { name: _cxSchema.cs_stockValuationItem.UNITSINSTOCK, title: 'units in stock', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
-            { name: 'totalInStock', title: 'units in stock', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
+            { name: 'totalInStock', title: 'total in stock', align: 'right', width: '100px', formatMoney: 'N2', addTotals: true },
         ];
         
 

@@ -200,7 +200,7 @@ class CSStockValuationRender extends RenderBase {
                 this.options.buttons.push({ id: 'cs_reset_data', text: 'Reset', function: 'resetStatus' });
             } else if (s == _cxConst.CS_STOCK_VALUATION.STATUS.Posting || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingRunning || s == _cxConst.CS_STOCK_VALUATION.STATUS.Posted || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingError || s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingPrepAndPost) {
                 if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT) {
-                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Un-Post', style: 'color: white; background-color: rgba(230,0,0,1);', function: 'resetPostedStatus' });
+                    this.options.buttons.push({ id: 'cp_reset_data', text: 'Reset', style: 'color: white; background-color: rgba(230,0,0,1);', function: 'resetPostedStatus' });
                 }
             }
 
