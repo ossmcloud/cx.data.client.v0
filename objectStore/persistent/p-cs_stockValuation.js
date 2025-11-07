@@ -39,6 +39,7 @@ const _fieldNames = {
     ISUSEREDITED: 'isUserEdited',
     ISUSEREDITLOCKED: 'isUserEditLocked',
     ISUSEREDITEDGL: 'isUserEditedGL',
+    REVERSEDATE: 'reverseDate',
 
 }
 //
@@ -65,6 +66,7 @@ const _fields = {
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isUserEditLocked: { name: 'isUserEditLocked', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isUserEditedGL: { name: 'isUserEditedGL', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    reverseDate: { name: 'reverseDate', dataType: 'date', pk: false, identity: false, maxLength: 3, null: true },
 
 }
 //
@@ -202,6 +204,12 @@ class Persistent_cs_stockValuation extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISUSEREDITEDGL);
     } set isUserEditedGL(val) {
         super.setValue(_fieldNames.ISUSEREDITEDGL, val);
+    }
+
+    get reverseDate() {
+        return super.getValue(_fieldNames.REVERSEDATE);
+    } set reverseDate(val) {
+        super.setValue(_fieldNames.REVERSEDATE, val);
     }
 
 

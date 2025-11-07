@@ -145,10 +145,11 @@ class CSStockValuationRender extends RenderBase {
         fieldGroups.push({
             group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 1, minWidth: '300px', fields: [
                 {
-                    group: 'main1.col1', column: 1, columnCount: 3, fields: [
+                    group: 'main1.col1', column: 1, columnCount: 4, fields: [
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
                         { name: _cxSchema.cs_stockValuation.TYPE, label: 'type', lookUps: _cxConst.CS_STOCK_VALUATION.TYPE.toList(), column: 2 },
-                        { name: _cxSchema.cs_stockValuation.DATE, label: 'date',  column: 3 },
+                        { name: _cxSchema.cs_stockValuation.DATE, label: 'date', column: 3 },
+                        { name: _cxSchema.cs_stockValuation.REVERSEDATE, label: 'reverse date', column: 4 },
                         { name: _cxSchema.cs_stockValuation.REFERENCE, label: 'reference' },
                         { name: _cxSchema.cs_stockValuation.NOTES, label: 'notes' },
                     ]
@@ -257,6 +258,7 @@ class CSStockValuationRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.STATUS, title: 'status', lookUps: _cxConst.CS_STOCK_VALUATION.STATUS.toList(), align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.TYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CS_STOCK_VALUATION.TYPE.toList() });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.DATE, title: 'date', align: 'center', width: '100px' });
+            this.options.columns.push({ name: _cxSchema.cs_stockValuation.REVERSEDATE, title: 'reverse date', align: 'center', width: '100px' });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.REFERENCE, title: 'reference' });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.NOTES, title: 'notes' });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.TOTALCOSTVALUE, title: 'total cost', align: 'right', width: '90px', formatMoney: 'N2', addTotals: true });

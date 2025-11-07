@@ -25,6 +25,7 @@ module.exports = {
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
         DOCUMENTTYPE: 'documentType',
+        INACTIVE: 'inactive',
     },
 
     cp_accrualDocument: {
@@ -412,6 +413,7 @@ module.exports = {
         TOTALDRS: 'totalDRS',
         ERPTRANSMISSIONID: 'erpTransmissionId',
         ISMANUAL: 'isManual',
+        INACTIVE: 'inactive',
     },
 
     cp_invoiceGroupLog: {
@@ -1203,6 +1205,7 @@ module.exports = {
         ISUSEREDITED: 'isUserEdited',
         ISUSEREDITLOCKED: 'isUserEditLocked',
         ISUSEREDITEDGL: 'isUserEditedGL',
+        REVERSEDATE: 'reverseDate',
     },
 
     cs_stockValuationItem: {
@@ -1864,6 +1867,9 @@ module.exports = {
         COSTPRICE: 'costPrice',
         ITEMSIZE: 'itemSize',
         CREATED: 'created',
+        ANALYSIS1: 'analysis1',
+        ANALYSIS2: 'analysis2',
+        ANALYSIS3: 'analysis3',
     },
 
     raw_cr_transaction: {
