@@ -42,6 +42,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    ISREVERSE: 'isReverse',
 
 }
 //
@@ -71,6 +72,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    isReverse: { name: 'isReverse', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -226,6 +228,12 @@ class Persistent_cs_erp_transaction extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get isReverse() {
+        return super.getValue(_fieldNames.ISREVERSE);
+    } set isReverse(val) {
+        super.setValue(_fieldNames.ISREVERSE, val);
     }
 
 

@@ -1135,6 +1135,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        ISREVERSE: 'isReverse',
     },
 
     cs_erp_transaction_gl: {
