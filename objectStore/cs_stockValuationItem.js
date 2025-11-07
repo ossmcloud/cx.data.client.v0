@@ -23,9 +23,9 @@ class cs_stockValuationItem extends _persistentTable.Record {
         super(table, defaults);
     };
 
-    get totalInStock() {
-        return (this.outersInStock * this.unitsInOuter) + this.unitsInStock;
-    }
+    // get totalInStock() {
+    //     return (this.outersInStock * this.unitsInOuter) + this.unitsInStock;
+    // }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
