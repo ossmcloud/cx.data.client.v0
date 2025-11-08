@@ -97,6 +97,13 @@ class cs_stockValuation extends _persistentTable.Record {
         this.#logs = logs;
     }
 
+    get editedIcon() {
+        var icons = '';
+        if (this.isUserEdited) { icons += '&#x270E;'; }
+        if (this.isUserEditLocked) { icons += '&#x1F512;'; }
+        return icons;
+    }
+
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

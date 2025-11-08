@@ -14,14 +14,22 @@ class cs_erp_transaction_tax_Collection extends _persistentTable.Table {
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = ` select  tt.tranSign, gl.*
-                      from    ${this.type} gl
-                      inner join cs_erp_transaction t ON t.erpTranId = gl.erpTranId
-                      inner join sys_erp_tran_type tt ON tt.tranTypeId = t.erpTranTypeId`;
+        query.sql = ` 
+            select  tt.tranSign, gl.*
+            from    ${this.type} gl
+            inner join cs_erp_transaction t ON t.erpTranId = gl.erpTranId
+            inner join sys_erp_tran_type tt ON tt.tranTypeId = t.erpTranTypeId
+            where   1 = 1
+        `;
 
         if (params.id) {
-            query.sql += ' where   t.stockValuationId = @stockValuationId';
+            query.sql += ' and   t.stockValuationId = @stockValuationId';
             query.params.push({ name: 'stockValuationId', value: params.id });
+        }
+
+        if (params.erpTranId) {
+            query.sql += ' and   gl.erpTranId = @erpTranId';
+            query.params.push({ name: 'erpTranId', value: params.erpTranId });
         }
         
         query.sql += ' order by gl.taxTranId';

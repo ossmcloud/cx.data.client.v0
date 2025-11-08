@@ -123,6 +123,14 @@ class CSStockValuationRender extends RenderBase {
 
 
     async _record() {
+        if (this.options.allowEdit) {
+            this.options.allowEdit = (
+                this.dataSource.status == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady ||
+                this.dataSource.status == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention ||
+                this.dataSource.status == _cxConst.CS_STOCK_VALUATION.STATUS.New ||
+                this.dataSource.status == _cxConst.CS_STOCK_VALUATION.STATUS.Error
+            );
+        }
 
         var docNumber = this.dataSource.reference || this.dataSource.date;
         this.options.tabTitle = `${_cxConst.CS_STOCK_VALUATION.TYPE.getName(this.dataSource.type).toUpperCase()} [${docNumber}]`;
@@ -133,23 +141,35 @@ class CSStockValuationRender extends RenderBase {
         // document number 
         this.options.title += `<div style="display: table-cell; padding: 5px 17px 3px 17px;">${docNumber}</div>`;
 
+
         // document status
         this.options.title += `
             <div style="${applyStoreColorStyle} ${_cxConst.CS_STOCK_VALUATION.STATUS.getStyleInverted(this.dataSource.status)}">
                 ${_cxConst.CS_STOCK_VALUATION.STATUS.getName(this.dataSource.status)}
             </div>
         `;
+
+        if (this.dataSource.isUserEdited) {
+            this.options.title += `
+                <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this document was manually edited${(this.dataSource.isUserEditLocked) ? ' and edits are locked' : ''}">
+                    &#x270E;
+                    ${(this.dataSource.isUserEditLocked) ? '&#x1F512;' : ''}
+                </div>
+            `;
+            this.options.tabTitle = '\u270E ' + this.options.tabTitle;
+        }
         this.options.title += '</div>';
 
         var fieldGroups = [];
         fieldGroups.push({
             group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 1, minWidth: '300px', fields: [
                 {
-                    group: 'main1.col1', column: 1, columnCount: 4, fields: [
+                    group: 'main1.col1', column: 1, columnCount: 5, fields: [
                         await this.fieldDropDownOptions(_cxSchema.cx_shop, { id: 'shopId', name: 'shopId' }),
                         { name: _cxSchema.cs_stockValuation.TYPE, label: 'type', lookUps: _cxConst.CS_STOCK_VALUATION.TYPE.toList(), column: 2 },
                         { name: _cxSchema.cs_stockValuation.DATE, label: 'date', column: 3 },
                         { name: _cxSchema.cs_stockValuation.REVERSEDATE, label: 'reverse date', column: 4 },
+                        { name: _cxSchema.cs_stockValuation.ISUSEREDITLOCKED, label: 'lock edits', column: 5 },
                         { name: _cxSchema.cs_stockValuation.REFERENCE, label: 'reference' },
                         { name: _cxSchema.cs_stockValuation.NOTES, label: 'notes' },
                     ]
@@ -227,6 +247,17 @@ class CSStockValuationRender extends RenderBase {
 
     async _list() {
         try {
+            if (this.options.allowEdit == true) {
+                this.options.allowEditCondition = function (object) {
+                    return (
+                        object.status == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady ||
+                        object.status == _cxConst.CS_STOCK_VALUATION.STATUS.NeedAttention ||
+                        object.status == _cxConst.CS_STOCK_VALUATION.STATUS.New ||
+                        object.status == _cxConst.CS_STOCK_VALUATION.STATUS.Error
+                    );
+                }
+            }
+
             if (this.options.query) {
                 this.options.paging = true;
                 this.options.pageNo = (this.options.query.page || 1);
@@ -253,7 +284,7 @@ class CSStockValuationRender extends RenderBase {
 
             this.options.columns = [];
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.STOCKVALUATIONID, title: ' ', align: 'center' });
-            //this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
+            this.options.columns.push({ name: 'editedIcon', title: '&#x270E;', align: 'center', width: '10px', headerToolTip: 'edited flag' });
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.STATUS, title: 'status', lookUps: _cxConst.CS_STOCK_VALUATION.STATUS.toList(), align: 'center', width: '70px' });
             this.options.columns.push({ name: _cxSchema.cs_stockValuation.TYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CS_STOCK_VALUATION.TYPE.toList() });
