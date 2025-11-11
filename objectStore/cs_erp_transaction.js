@@ -8,19 +8,27 @@ class cs_erp_transaction_Collection extends _persistentTable.Table {
         return new cs_erp_transaction(this, defaults);
     }
 
-    async select(params) {
+    async select(params, forEdit) {
 
         if (!params) { params = {}; }
 
         var query = { sql: '', params: [] };
-        query.sql = `select  * from    ${this.type}`;
+        query.sql = `
+            select  tt.tranSign, t.*
+            from    ${this.type} t
+            inner join sys_erp_tran_type tt ON tt.tranTypeId = t.erpTranTypeId
+        `;
 
         if (params.stockValuationId) {
-            query.sql += ' where   stockValuationId = @stockValuationId';
+            query.sql += ' where   t.stockValuationId = @stockValuationId';
             query.params.push({ name: 'stockValuationId', value: params.stockValuationId });
         }
     
-        query.sql += ' order by created';
+        if (forEdit) {
+            query.sql += ' order by t.erpTranId';
+        } else {
+            query.sql += ' order by t.created';
+        }
         query.paging = {
             page: params.page || 1,
             pageSize: _declarations.SQL.PAGE_SIZE
@@ -50,9 +58,14 @@ class cs_erp_transaction_Collection extends _persistentTable.Table {
 // ----------------------------------------------------------------------------------------
 //
 class cs_erp_transaction extends _persistentTable.Record {
+    #tranSign = 1;
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
+        this.#tranSign = defaults['tranSign'] || '';
     };
+
+    get tranSign() { return this.#tranSign; }
 
     async save() {
         if (this.valueTax == null) { this.valueTax = 0; }

@@ -33,7 +33,7 @@ class CSStockValuationRender extends RenderBase {
 
     async getErpGLListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cs_erp_transaction_gl);
-        await transactionLines.select({ id: this.options.query.id });
+        await transactionLines.select({ id: this.options.query.id }, this.options.mode == 'edit');
 
         if (this.options.allowEdit && this.options.mode == 'edit') {
             transactionLines.forceReadOnly = this.options.query.line == 'T';
@@ -67,10 +67,11 @@ class CSStockValuationRender extends RenderBase {
 
     async getErpTaxListOptions() {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cs_erp_transaction_tax);
-        await transactionLines.select({ id: this.options.query.id });
+        await transactionLines.select({ id: this.options.query.id }, this.options.mode == 'edit');
 
         if (this.options.allowEdit && this.options.mode == 'edit') {
-            transactionLines.forceReadOnly = this.options.query.line == 'T';
+            //transactionLines.forceReadOnly = this.options.query.line == 'T';
+            transactionLines.forceReadOnly = true;
         }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });

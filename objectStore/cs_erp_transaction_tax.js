@@ -9,7 +9,7 @@ class cs_erp_transaction_tax_Collection extends _persistentTable.Table {
         return new cs_erp_transaction_tax(this, defaults);
     }
 
-    async select(params) {
+    async select(params, forEdit) {
 
         if (!params) { params = {}; }
 
@@ -23,6 +23,17 @@ class cs_erp_transaction_tax_Collection extends _persistentTable.Table {
         `;
 
         if (params.id) {
+
+            if (forEdit) {
+                query.sql += `
+                    and     t.erpTranId = (
+                        SELECT  MIN(erpTranId)
+                        FROM    cs_erp_transaction
+                        where   stockValuationId = @stockValuationId
+                    )
+                `;
+            }
+
             query.sql += ' and   t.stockValuationId = @stockValuationId';
             query.params.push({ name: 'stockValuationId', value: params.id });
         }
@@ -45,14 +56,20 @@ class cs_erp_transaction_tax_Collection extends _persistentTable.Table {
 // ----------------------------------------------------------------------------------------
 //
 class cs_erp_transaction_tax extends _persistentTable.Record {
+    #tranSign = 1;
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
+        this.#tranSign = defaults['tranSign'] || '';
     };
+
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         return await super.save()
     }
+
+    get tranSign() { return this.#tranSign; }
 
     get editedIcon() {
         if (this.isUserEdited) { return '&#x270E;'; }

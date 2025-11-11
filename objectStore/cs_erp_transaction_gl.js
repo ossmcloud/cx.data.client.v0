@@ -9,7 +9,7 @@ class cs_erp_transaction_gl_Collection extends _persistentTable.Table {
         return new cs_erp_transaction_gl(this, defaults);
     }
 
-    async select(params) {
+    async select(params, forEdit) {
 
         if (!params) { params = {}; }
 
@@ -19,12 +19,23 @@ class cs_erp_transaction_gl_Collection extends _persistentTable.Table {
             from    ${this.type} gl
             inner join cs_erp_transaction t ON t.erpTranId = gl.erpTranId
             inner join sys_erp_tran_type tt ON tt.tranTypeId = t.erpTranTypeId
-            where   1 = 1
+            where    1 = 1  
         `;
 
 
         if (params.id) {
-            query.sql += ' and   t.stockValuationId = @stockValuationId';
+
+            if (forEdit) {
+                query.sql += `
+                    and     t.erpTranId = (
+                        SELECT  MIN(erpTranId)
+                        FROM    cs_erp_transaction
+                        where   stockValuationId = @stockValuationId
+                    )
+                `;
+            }
+
+            query.sql += ` and   t.stockValuationId = @stockValuationId`;
             query.params.push({ name: 'stockValuationId', value: params.id });
         }
 
@@ -46,14 +57,19 @@ class cs_erp_transaction_gl_Collection extends _persistentTable.Table {
 // ----------------------------------------------------------------------------------------
 //
 class cs_erp_transaction_gl extends _persistentTable.Record {
+    #tranSign = 1;
     constructor(table, defaults) {
         super(table, defaults);
+        if (!defaults) { defaults = {}; }
+        this.#tranSign = defaults['tranSign'] || '';
     };
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
         return await super.save()
     }
+
+    get tranSign() { return this.#tranSign; }
 
     get editedIcon() {
         if (this.isUserEdited) { return '&#x270E;'; }
