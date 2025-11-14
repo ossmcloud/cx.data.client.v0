@@ -35,6 +35,8 @@ const _fieldNames = {
     MODIFIEDBY: 'modifiedBy',
     ISMANUAL: 'isManual',
     WHOLESALERID: 'wholesalerId',
+    STOCKCREDITACCOUNTID: 'stockCreditAccountId',
+    STOCKDEBITACCOUNTID: 'stockDebitAccountId',
 
 }
 //
@@ -57,6 +59,8 @@ const _fields = {
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    stockCreditAccountId: { name: 'stockCreditAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    stockDebitAccountId: { name: 'stockDebitAccountId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -170,6 +174,18 @@ class Persistent_cx_map_config_dep extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.WHOLESALERID);
     } set wholesalerId(val) {
         super.setValue(_fieldNames.WHOLESALERID, val);
+    }
+
+    get stockCreditAccountId() {
+        return super.getValue(_fieldNames.STOCKCREDITACCOUNTID);
+    } set stockCreditAccountId(val) {
+        super.setValue(_fieldNames.STOCKCREDITACCOUNTID, val);
+    }
+
+    get stockDebitAccountId() {
+        return super.getValue(_fieldNames.STOCKDEBITACCOUNTID);
+    } set stockDebitAccountId(val) {
+        super.setValue(_fieldNames.STOCKDEBITACCOUNTID, val);
     }
 
 

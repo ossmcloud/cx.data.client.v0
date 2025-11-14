@@ -115,6 +115,8 @@ const CX_MODULE = {
     RETAIL: 'retail',
     PURCHASE: 'purchase',
     THEREFORE: 'therefore',
+    STOCK_TAKE: 'stockTake',
+    STOCK_VALU: 'stockValuation',
 
     //
     toList: function (addEmpty) {
@@ -123,8 +125,13 @@ const CX_MODULE = {
             RETAIL: 'Sales Data',
             PURCHASE: 'Purchase Data',
             THEREFORE: 'Therefore Documents',
+            STOCK_TAKE: 'Stock Take',
+            STOCK_VALU: 'Stock Valuation',
+
         });
     }
+
+    
 }
 
 
@@ -165,6 +172,7 @@ const EPOS_DTFS_CONFIGS = {
     DTFS_AUTO_MAP: 'DTFSAutoMap',
     DTFS_IMPORT_OPTIONS: 'DTFSImportOptions',
     DTFS_OPTIONS: 'DTFSOptions',
+    DTFS_CS_CONFIG: "DTFSCsConfig",
     THE_SVC_CONFIG: 'ThereforeConfig',
     EMAIL_CONFIG: 'EmailConfig',
     API_AUTH_CONFIG: 'EPOSApiAuthConfig',
@@ -176,7 +184,7 @@ const EPOS_DTFS_CONFIGS = {
     toEncrypt: function (configName) {
         if (configName == this.API_AUTH_CONFIG) { return true; }
         if (configName == this.API_CONFIG) { return true; }
-        
+
         return false;
     }
 }
@@ -197,12 +205,15 @@ const ERP_DTFS_CONFIGS = {
     ERP_CP_POST_POSTFIX: "ERPCpPostPostfix",
     ERP_CP_DRS_CONFIG: "ERPCpDRSConfig",
     ERP_CP_ACCRUAL_CONFIG: "ERPCpAccrualConfig",
+    ERP_CS_CONFIG: "ERPCsConfig",
 
     API_AUTH_CONFIG: 'ERPApiAuthConfig',
     API_CONFIG: 'ERPApiConfig',
     DTFS_PING_FREQ: 'DTFSPingFrequency',
 
     SAGE200_CONFIG: 'Sage200Config',
+
+
 
     //API_TOKEN: 'ERPApiToken',
     //
@@ -220,6 +231,7 @@ const CX_WHS_PROVIDER = {
     BWG: 'bwg',
     SCP: 'scp',
     NISA: 'nisa',
+    CRUNCH: 'crunchtime',
     MUS: 'mus',
     VAL: 'val',
     BAR: 'bar',
@@ -229,11 +241,11 @@ const CX_WHS_PROVIDER = {
     JH: 'jh',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall'
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall'
         });
     },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -264,12 +276,14 @@ const CX_EPOS_PROVIDER = {
     ZAMBR: 'ZAMBR',
     PRISM: 'PRISM',
     SM: 'SM',
+    ALOHA: 'ALOHA',
 
     THERE: 'THERE',
     //
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
             CBE: 'CBE',
+            ALOHA: 'NCR Aloha',
             RS: 'Retail Solution',
             EDGE: 'EdgePos',
             MRDN: 'Meridian',
@@ -295,6 +309,13 @@ const CX_EPOS_PROVIDERS = {
                 { name: EPOS_DTFS_CONFIGS.FUELCARD_TENDER, value: 'TENDER-8' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "cbewrdb",   "user": "sa",   "pass": "cbe"  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.ALOHA,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "???",   "user": "sruu",   "pass": "???"  }' },
             ]
         },
         {
@@ -643,7 +664,7 @@ const EPOS_DTFS_UPGRADE_AUDIT = {
         DTFS: 'dtfs',
         ERPS: 'erps',
         //
-        toList: function (addEmpty) { return enumToList(this, addEmpty, { DTFS: 'EPOS Service', ERPS: 'ERP Service'}); }
+        toList: function (addEmpty) { return enumToList(this, addEmpty, { DTFS: 'EPOS Service', ERPS: 'ERP Service' }); }
     }
 }
 
@@ -1535,6 +1556,176 @@ const CX_ATTACHMENT = {
 }
 
 
+
+
+const CS_STOCK_VALUATION = {
+    STATE: {
+        Pending: [1, 2],
+        Processing: [0, 3, 4, 41, 99, 100],
+        PendingPost: [5],
+        ProcessingPost: [6, 7, 9],
+        Posted: [8],
+        Error: [97, 98],
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                PendingPost: 'pending posting',
+                ProcessingPost: 'posting running',
+            });
+        },
+    },
+    STATUS: {
+        Transferring: 0,           // task is transferring/transforming data from the raw tables
+        New: 1,                    // data is ready but never seen/saved by user
+        NeedAttention: 2,
+        Refresh: 3,                // user requested dtfs refresh
+
+        PostingPrep: 4,            // user sent this for posting preparation
+        PostingPrepAndPost: 41,    // user sent this for posting preparation and posting
+        PostingReady: 5,           //
+        Posting: 6,                // erps.exe has to  pick up the stuff to post
+        PostingRunning: 7,         // erps.exe has picked up the stuff to post
+        Posted: 8,                 // posted successfully
+        PostingUndo: 9,            // reset to pending
+
+        Error: 97,                 // something went wrong while transferring or during user stuff
+        PostingError: 98,          // error while posting
+        DeleteAndPull: 99,         // cash book to be deleted and re-gathered
+        Delete: 100,               // cash book to be deleted
+
+        //
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                NeedAttention: 'mapping issues',
+                PostingPrep: 'preparing for posting',
+                PostingPrepAndPost: 'preparing and send posting',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+                PostingUndo: 'reset posting running',
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                NeedAttention: 'mapping issues',
+                PostingPrep: 'preparing for posting',
+                PostingPrepAndPost: 'preparing and send for posting',
+                PostingReady: 'ready for posting',
+                DeleteAndPull: 'delete and pull again',
+                PostingError: 'posting errors',
+                PostingRunning: 'posting running',
+            });
+        },
+        getStyle: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+                color = '128,128,128';
+                bkgColor = '';
+            } else if (status == this.New) {
+                color = '255,202,58';
+            } else if (status == this.NeedAttention) {
+                bkgColor = '175,0,0';
+                color = '230,230,0';
+            } else if (status == this.PostingReady) {
+                color = '25,130,196';
+            } else if (status == this.Posted) {
+                color = '138,201,38';
+            } else if (status == this.PostingError) {
+                color = '234,30,37';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Error) {
+                color = '234,30,37';
+                bkgColor = 'var(--element-bg-color)';
+            } else if (status == this.Delete) {
+                color = '83,49,138';
+            } else if (status == this.DeleteAndPull) {
+                color = '83,49,138';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+
+            if (returnObject) { return styles; }
+
+            var style = 'color: ' + styles.color + '; ';
+            if (bkgColor) { style += ('background-color: ' + styles.bkgColor + '; '); }
+            return style;
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+
+            if (status == this.Transferring || status == this.Refresh || status == this.PostingPrep || status == this.PostingPrepAndPost || status == this.Posting || status == this.PostingRunning || status == this.PostingUndo) {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            } else if (status == this.New) {
+                color = '0,0,0';
+                bkgColor = '255,202,58';
+            } else if (status == this.NeedAttention) {
+                color = '175,0,0';
+                bkgColor = '230,230,0';
+            } else if (status == this.PostingReady) {
+                color = '255,255,255';
+                bkgColor = '25,130,196';
+            } else if (status == this.Posted) {
+                color = '0,100,0';
+                bkgColor = '138,201,38';
+            } else if (status == this.PostingError) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else if (status == this.Error) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else if (status == this.Delete) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            } else if (status == this.DeleteAndPull) {
+                color = '255,255,255';
+                bkgColor = '83,49,138';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
+
+    },
+
+    TYPE: {
+        StockTake: 0,
+        StockValuation: 1,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                StockTake: 'Stock Take',
+                StockValuation: 'Stock Valuation'
+            });
+        },
+        getName: function (value) {
+            return enumGetName(this, value, {
+                StockTake: 'Stock Take',
+                StockValuation: 'Stock Valuation'
+            });
+        },
+    }
+}
+
+const CS_STOCK_VALUATION_LOG = {
+    STATUS: {
+        INFO: 'INFO',
+        WARNING: 'WARNING',
+        ERROR: 'ERROR',
+        CRITICAL: 'IMPORTANT',
+        toList: function (addEmpty) { return enumToList(this); }
+    }
+}
+
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
@@ -1575,6 +1766,8 @@ module.exports = {
     RAW_GET_REQUEST: RAW_GET_REQUEST,
     SYS_CUSTOM_SCRIPT: SYS_CUSTOM_SCRIPT,
     SYS_SERVER_TASK: SYS_SERVER_TASK,
+    CS_STOCK_VALUATION: CS_STOCK_VALUATION,
+    CS_STOCK_VALUATION_LOG: CS_STOCK_VALUATION_LOG,
     RENDER: RENDER,
     SQL: SQL,
 }

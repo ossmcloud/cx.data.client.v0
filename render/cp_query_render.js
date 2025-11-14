@@ -199,7 +199,7 @@ class CPQueryRender extends RenderBase {
                 </td>
             `;
         }
-        
+
         this.options.title += `</tr></table></div>`;
 
         if (this.dataSource.isNew()) {
@@ -228,18 +228,21 @@ class CPQueryRender extends RenderBase {
     async buildFormActions() {
         var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerShopConfig).getConfigValue(this.dataSource.wholesalerId, this.dataSource.shopId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
         if (this.options.mode == 'view') {
-            if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR)
-                if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
-                    if (bwgShopOptions) {
-                        this.options.buttons.push({ id: 'cp_check_status', text: 'Check BWG Status', function: 'checkQueryStatus' });
-                    }
-                } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
-                    if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
-                        this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
-                    }
-                    this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
-
+            //if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.SUPERVISOR)
+            if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS) {
+                if (bwgShopOptions) {
+                    this.options.buttons.push({ id: 'cp_check_status', text: 'Check BWG Status', function: 'checkQueryStatus' });
                 }
+            } else if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) {
+                if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
+                    this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
+                }
+                this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
+            }
+
+            if (bwgShopOptions) {
+                this.options.buttons.push({ id: 'cp_check_pod', text: 'Check POD', function: 'checkQueryPOD' });
+            }
 
         } else {
             if (!this.dataSource.isNew()) {
@@ -252,7 +255,7 @@ class CPQueryRender extends RenderBase {
             }
         }
 
-       
+
     }
 
 

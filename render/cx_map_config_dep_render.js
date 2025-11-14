@@ -58,6 +58,14 @@ class CxMapConfigRender extends RenderBase {
                                 label: 'GL Account (accruals)',
                                 id: _cxSchema.cx_map_config_dep.ACCRUALACCOUNTID, name: _cxSchema.cx_map_config_dep.ACCRUALACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
                             }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (stock debit)',
+                                id: _cxSchema.cx_map_config_dep.STOCKDEBITACCOUNTID, name: _cxSchema.cx_map_config_dep.STOCKDEBITACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
+                            await this.fieldDropDownOptions(_cxSchema.erp_gl_account, {
+                                label: 'GL Account (stock credit)',
+                                id: _cxSchema.cx_map_config_dep.STOCKCREDITACCOUNTID, name: _cxSchema.cx_map_config_dep.STOCKCREDITACCOUNTID, column: 1, dropDownSelectOptions: { s: shopId }
+                            }),
                         ]
                     },
                     {
@@ -92,13 +100,16 @@ class CxMapConfigRender extends RenderBase {
             { value: 'not_mapped_waste', text: 'Waste NOT mapped' },
             { value: 'not_mapped_accrual', text: 'Accruals NOT mapped' },
             { value: 'not_mapped_cogs', text: 'COGS NOT mapped' },
+            { value: 'not_mapped_stock_debit', text: 'Stock Debit NOT mapped' },
+            { value: 'not_mapped_stock_credit', text: 'Stock Credit NOT mapped' },
 
             { value: 'mapped_sales', text: 'Sales mapped' },
             { value: 'mapped_purchase', text: 'Purchase mapped' },
             { value: 'mapped_waste', text: 'Waste mapped' },
             { value: 'mapped_accrual', text: 'Accruals mapped' },
             { value: 'mapped_cogs', text: 'COGS mapped' },
-
+            { value: 'mapped_stock_debit', text: 'Stock Debit mapped' },
+            { value: 'mapped_stock_credit', text: 'Stock Credit mapped' },
         ]
 
         this.options.filters = [
@@ -130,6 +141,8 @@ class CxMapConfigRender extends RenderBase {
         this.options.columns.push({ title: 'waste account', name: 'wasteSpec', addValues: [{ name: 'wasteDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
         this.options.columns.push({ title: 'accrual account', name: 'accrualSpec', addValues: [{ name: 'accrualDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
         this.options.columns.push({ title: 'cogs account', name: 'cogsSpec', addValues: [{ name: 'cogsDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        this.options.columns.push({ title: 'stock (+) account', name: 'stockDebSpec', addValues: [{ name: 'stockDebDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
+        this.options.columns.push({ title: 'stock (-) account', name: 'stockCreSpec', addValues: [{ name: 'stockCreDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
         if (this.hasModule('cp')) {
             this.options.columns.push({ title: 'wholesaler', name: 'whsInfo' });
         }

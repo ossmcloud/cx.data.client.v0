@@ -396,6 +396,16 @@ class CPInvoiceReturnRender extends RenderBase {
                 var buttonLabel = (this.options.query.viewLogs == 'T') ? 'Hide Logs' : 'Show Logs';
                 this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
+                // allow to delete if not posted
+                if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
+                    if (s != _cxConst.CP_DOCUMENT.STATUS.Posting && s != _cxConst.CP_DOCUMENT.STATUS.PostingRunning && s != _cxConst.CP_DOCUMENT.STATUS.PostingError && s != _cxConst.CP_DOCUMENT.STATUS.Posted
+                        && s != _cxConst.CP_DOCUMENT.STATUS.REFRESH && s != _cxConst.CP_DOCUMENT.STATUS.Generating) {
+                        if (!this.dataSource.invGrpId) {
+                            this.options.buttons.push({ id: 'cp_delete_document', text: 'Delete', function: 'deleteDocument', style: 'color: white; background-color: rgba(230,0,0,1);' });
+                        }
+                    }
+                }
+                
             } else {
 
                 var s = this.dataSource.documentStatus;
