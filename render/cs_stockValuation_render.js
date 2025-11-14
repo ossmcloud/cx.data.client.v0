@@ -161,6 +161,9 @@ class CSStockValuationRender extends RenderBase {
         }
         this.options.title += '</div>';
 
+        // SET ERP TOKEN BANNER IF REQUIRED
+        this.options.formBanner = await this.validateErpToken();
+
         var fieldGroups = [];
         fieldGroups.push({
             group: 'main1', title: 'main info', column: fieldGroups.length + 1, columnCount: 1, minWidth: '300px', fields: [
@@ -227,7 +230,7 @@ class CSStockValuationRender extends RenderBase {
                 }
             }
 
-            if (s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady) {
+            if (s == _cxConst.CS_STOCK_VALUATION.STATUS.PostingReady && !this.options.formBanner) {
                 var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
                 var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
                 var btnPostToErp = { id: 'cs_post_erp', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
