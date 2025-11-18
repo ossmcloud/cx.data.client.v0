@@ -35,8 +35,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         query.sql = ` select    distinct d.*, s.shopCode, s.shopName, 
                                 isnull(supp.traderName, isnull(supp2.traderName, isnull(supp3.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end))) as supplierName,
                                 grp.documentNumber as groupDocumentNumber, recoDoc.recoSessionId, reco.recoStatusId,
-                                ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId ) as queryCount,
-                                ( select count(q.queryId) from cp_query q where q.invCreId = d.invCreId and statusId < 8 ) as queryCountOpen
+                                q.queryCount, q.queryCountOpen
                                 ${accrualTotals}
                       from      ${this.type} d
                       inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
@@ -51,6 +50,13 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       left outer join   cp_recoSessionDocument recoDoc  ON recoDoc.documentId = d.invCreId and recoDoc.documentType = 'cp_invoiceCredit'
                       left outer join   cp_recoSession         reco     ON reco.recoSessionId = recoDoc.recoSessionId
                        ${accrualJoin}
+
+                      left outer JOIN  (
+                            select  invCreId, count(*) as queryCount, sum(case when statusId < 8 then 1 else 0 end) as queryCountOpen
+                            from    cp_query
+                            group by invCreId
+                      ) as q on q.invCreId = d.invCreId
+
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         query.sql += ` and d.inactive = ${params.inactive == 'true' ? '1' : '0'}`;
