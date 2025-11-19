@@ -26,7 +26,7 @@ function enumToList(obj, addEmpty, aliases, dataObjects) {
         var dataObject = (dataObjects) ? dataObjects[key] : null;
         enums.push({
             value: obj[key],
-            text: (aliases[key]) ? aliases[key] : key.toLowerCase(),
+            text: (aliases[key]) ? aliases[key] : key.toLowerCase().replaceAll('_', ' '),
             object: (dataObject) ? _core.text.toBase64(JSON.stringify(dataObject)) : '',
         });
     }
@@ -131,7 +131,7 @@ const CX_MODULE = {
         });
     }
 
-    
+
 }
 
 
@@ -1225,7 +1225,6 @@ const CP_QUERY_STATUS = {
     }
 }
 
-
 const CP_WHS_CONFIG = {
     BWG_CRM_CONFIG: 'BWGCRMConfig',
     WHS_API_CONFIG: 'WhsAPIConfig',
@@ -1246,7 +1245,7 @@ const CP_WHS_SHOP_CONFIG = {
     FTP_CONFIG: 'FTPConfig',
     EMAIL_CONFIG: 'EmailConfig',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    toList: function (addEmpty) { return enumToList(this, addEmpty,); },
     toEncrypt: function (configName) {
         return true;
     }
@@ -1726,6 +1725,62 @@ const CS_STOCK_VALUATION_LOG = {
     }
 }
 
+
+
+
+
+const BWG_DEPARTMENTS = {
+    CB: 778390001,
+    NDC: 778390000,
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            CB: 'Central Billing',
+            NDC: 'National Distribution Center'
+        });
+    },
+}
+const BWG_DEPOTS = {
+    Chill: 778390000,
+    Ambient: 778390001,
+    Alcohol: 778390002,
+    All: 778390003,
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty);
+    },
+}
+const BWG_UPLIFT_REASON = {
+    Unauthorised_Rep_Order: 778390000,
+    Ordered_in_Error: 778390001,
+    Unwanted_Presell: 778390002,
+    Short_Dated_Stock: 778390003,
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty);
+    },
+}
+const BWG_UPLIFT_FLAG = {
+    Yes: 'Yes',
+    Np: 'No',
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty);
+    },
+}
+const BWG_PAYMENT_TYPE = {
+    POD: 778390000,
+    Credit: 778390001,
+    Debit: 778390002,
+    Arrange_Collection: 778390003,
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty);
+    },
+}
+const BWG_QUALITY_CONTROL = {
+    Date_Code_Issue: 778390000,
+    Product_Quality: 778390001,
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty);
+    },
+}
+
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
@@ -1768,6 +1823,14 @@ module.exports = {
     SYS_SERVER_TASK: SYS_SERVER_TASK,
     CS_STOCK_VALUATION: CS_STOCK_VALUATION,
     CS_STOCK_VALUATION_LOG: CS_STOCK_VALUATION_LOG,
+
+    BWG_DEPARTMENTS: BWG_DEPARTMENTS,
+    BWG_DEPOTS: BWG_DEPOTS,
+    BWG_UPLIFT_FLAG: BWG_UPLIFT_FLAG,
+    BWG_UPLIFT_REASON: BWG_UPLIFT_REASON,
+    BWG_PAYMENT_TYPE: BWG_PAYMENT_TYPE,
+    BWG_QUALITY_CONTROL: BWG_QUALITY_CONTROL,
+
     RENDER: RENDER,
     SQL: SQL,
 }

@@ -30,6 +30,7 @@ const _fieldNames = {
     MANDATORYFIELDS: 'mandatoryFields',
     MESSAGETEMPLATE: 'messageTemplate',
     REQUIRESDISPUTEDAMOUNT: 'requiresDisputedAmount',
+    DEPARTMENT: 'department',
 
 }
 //
@@ -47,6 +48,7 @@ const _fields = {
     mandatoryFields: { name: 'mandatoryFields', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     messageTemplate: { name: 'messageTemplate', dataType: 'varchar', pk: false, identity: false, maxLength: 2000, null: true },
     requiresDisputedAmount: { name: 'requiresDisputedAmount', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    department: { name: 'department', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -130,6 +132,12 @@ class Persistent_cp_queryType extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.REQUIRESDISPUTEDAMOUNT);
     } set requiresDisputedAmount(val) {
         super.setValue(_fieldNames.REQUIRESDISPUTEDAMOUNT, val);
+    }
+
+    get department() {
+        return super.getValue(_fieldNames.DEPARTMENT);
+    } set department(val) {
+        super.setValue(_fieldNames.DEPARTMENT, val);
     }
 
 

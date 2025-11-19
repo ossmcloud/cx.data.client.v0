@@ -25,7 +25,13 @@ class cp_queryType_Collection extends _persistentTable.Table {
 
     async toLookUpList(wholesalerId, addEmpty) {
         var options = {};
-        if (wholesalerId) { options = { wholesalerId: wholesalerId } }
+        if (wholesalerId) {
+            if (wholesalerId.constructor.name == 'Object') {
+                options = wholesalerId   
+            } else {
+                options = { wholesalerId: wholesalerId }
+            }
+        }
         await this.select(options);
 
         var lookUpValues = [];
@@ -33,7 +39,8 @@ class cp_queryType_Collection extends _persistentTable.Table {
         super.each(function (rec) {
             var dataObject = {
                 messageTemplate: rec.messageTemplate,
-                requiresDisputedAmount: rec.requiresDisputedAmount
+                requiresDisputedAmount: rec.requiresDisputedAmount,
+                code: rec.code
             };
             dataObject = _core.text.toBase64(JSON.stringify(dataObject));
             lookUpValues.push({

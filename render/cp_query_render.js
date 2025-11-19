@@ -269,7 +269,51 @@ class CPQueryRender extends RenderBase {
         }
         if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) { this.options.allowEdit = false; }
 
-        var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(this.dataSource.wholesalerId, true);
+        if (this.dataSource.conditionalFields) {
+            var condFields = JSON.parse(this.dataSource.conditionalFields)
+            for (var k in condFields) {
+                this.dataSource[k] = condFields[k];
+            }
+        }
+
+
+        // @@NOTE: BWG: based on vendor select CB or NDC query types only
+        var conditionalFields = { data: 'data-qt="778390001,778390003,778390002,778390005,778390008,778390009"', group: 'cond', title: 'query additional info', columnCount: 8, fields: [] };
+        var conditionalProdFields = { data: 'data-qt="778390003,778390002,778390006"', group: 'prods', title: 'products info', columnCount: 7, fields: [] };
+        var queryTypesOptions = { wholesalerId: this.dataSource.wholesalerId, department: _cxConst.BWG_DEPARTMENTS.CB }
+        var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerConfig).getConfigValue(this.dataSource.wholesalerId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
+        if (bwgShopOptions.ndcVendors) {
+            var supplierCode = '';
+            if (this.dataSource.invCreId) {
+                supplierCode = await this.dataSource.cx.table(_cxSchema.cp_invoiceCredit).lookUp(this.dataSource.invCreId, 'supplierCode');
+            } else {
+                supplierCode = await this.dataSource.cx.table(_cxSchema.cp_deliveryReturn).lookUp(this.dataSource.delRetId, 'supplierCode');
+            }
+            if (bwgShopOptions.ndcVendors.indexOf(supplierCode) >= 0) {
+                queryTypesOptions.department = _cxConst.BWG_DEPARTMENTS.NDC;
+                var col = 1;
+                conditionalFields.fields.push({ data: 'data-qt="778390001,778390003,778390002,778390005,778390008,778390009"', name: 'sp_depot', label: 'depot', column: col++, lookUps: _cxConst.BWG_DEPOTS.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
+                conditionalFields.fields.push({ data: 'data-qt="778390001"', name: 'sp_numberofcases', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, label: 'cases', column: 2, readOnly: readOnly, validation: '{"mandatory": true}' });
+                conditionalFields.fields.push({ data: 'data-qt="778390003"', name: 'sp_upliftreason', label: 'uplift reason', column: 2, lookUps: _cxConst.BWG_UPLIFT_REASON.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
+                conditionalFields.fields.push({ data: 'data-qt="778390002"', name: 'sp_uplift_flag', label: 'uplift flag', column: 2, lookUps: _cxConst.BWG_UPLIFT_FLAG.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
+                conditionalFields.fields.push({ data: 'data-qt="778390008,778390009"', name: 'sp_paymenttype', label: 'payment type', column: 2, lookUps: _cxConst.BWG_PAYMENT_TYPE.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
+                conditionalFields.fields.push({ data: 'data-qt="778390009"', name: 'sp_emailaddress', label: 'email address', column: 3, readOnly: readOnly, type: _cxConst.RENDER.CTRL_TYPE.TEXT, validation: '{"mandatory": true}' })
+                conditionalFields.fields.push({ data: 'data-qt="778390009"', name: 'sp_dateofdelivery', label: 'delivery date', column: 4, readOnly: readOnly, type: _cxConst.RENDER.CTRL_TYPE.DATE, validation: '{"mandatory": true}' })
+                for (var px = 1; px < 8; px++) {
+                    var dataQt = px == 1 ? '778390003,778390002,778390006' : '778390003,778390002';
+                    conditionalProdFields.fields.push({ data: `data-qt="${dataQt}"`, name: 'sp_productcode' + px, label: 'product code  ' + px, column: px, readOnly: readOnly, validation: px == 1 ? '{"mandatory": true}' : '' })
+                    if (px == 1) {
+                        conditionalProdFields.fields.push({ data: 'data-qt="778390006"', name: 'sp_queryoptions_qualitycontrol', label: 'quality control', column: 2, lookUps: _cxConst.BWG_QUALITY_CONTROL.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
+                        conditionalProdFields.fields.push({ data: 'data-qt="778390006"', name: 'sp_productdate', label: 'product date', column: 3, readOnly: readOnly, type: _cxConst.RENDER.CTRL_TYPE.DATE })
+
+                    }
+                }
+
+            }
+        }
+
+
+        var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(queryTypesOptions, true);
         var queryResTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(this.dataSource.wholesalerId, true);
 
         var columnCount = (!this.dataSource.isNew() && !this.options.dialog) ? 8 : 6;
@@ -367,6 +411,12 @@ class CPQueryRender extends RenderBase {
 
 
         this.options.fields.push(header);
+        if (conditionalFields.fields.length > 0) {
+            this.options.fields.push(conditionalFields);
+        }
+        if (conditionalProdFields.fields.length > 0) {
+            this.options.fields.push(conditionalProdFields);
+        }
 
         var body = { group: 'body', title: 'query messages', columnCount: 1, fields: [] };
         body.fields = [

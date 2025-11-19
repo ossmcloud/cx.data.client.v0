@@ -14,6 +14,7 @@ class CPQueryRender extends RenderBase {
 
         this.autoLoadFields[_cxSchema.cp_queryType.QUERYTYPEID] = null;
         this.autoLoadFields[_cxSchema.cp_queryType.WHOLESALERID] = null;
+        this.autoLoadFields[_cxSchema.cp_queryType.DEPARTMENT] = null;
         this.autoLoadFields[_cxSchema.cp_queryType.NAME] = null;
         this.autoLoadFields[_cxSchema.cp_queryType.CODE] = null;
         this.autoLoadFields[_cxSchema.cp_queryType.REQUIRESDISPUTEDAMOUNT] = null;
@@ -39,6 +40,11 @@ class CPQueryRender extends RenderBase {
             column.width = '200px';
         } else if (field.name == _cxSchema.cp_queryType.CODE) {
             column.width = '120px';
+        } else if (field.name == _cxSchema.cp_queryType.DEPARTMENT) {
+            column.lookUps = _cxConst.BWG_DEPARTMENTS.toList();
+            column.addTotals = false;
+            column.align = 'center';
+            column.width = '150px';
         }
     }
 
@@ -46,7 +52,13 @@ class CPQueryRender extends RenderBase {
         if (field.name == _cxSchema.cp_queryType.WHOLESALERID) {
             filter.replace = await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' });
             filter.hide = false;
-        } else if (field.name == _cxSchema.cp_query.CREATED || field.name == _cxSchema.cp_query.MODIFIED) {
+        } else if (field.name == _cxSchema.cp_queryType.DEPARTMENT) {
+            filter.replace = { label: 'department', fieldName: _cxSchema.cp_queryType.DEPARTMENT, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.BWG_DEPARTMENTS.toList('- all -') }
+            filter.hide = false;
+        } else if (field.name == _cxSchema.cp_queryType.REQUIRESDISPUTEDAMOUNT) {
+            filter.replace = { label: 'require disputed amount', fieldName: _cxSchema.cp_queryType.REQUIRESDISPUTEDAMOUNT, type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_QUERY_TYPE_REQ_DISPUTED.toList('- all -') }
+            filter.hide = false;
+        } else if (field.name == _cxSchema.cp_query.CREATED || field.name == _cxSchema.cp_query.MODIFIED || field.name == 'messageTemplateDisplay') {
             filter.hide = true;
         }
     }
@@ -76,6 +88,7 @@ class CPQueryRender extends RenderBase {
         header.fields = [
             await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: _cxSchema.cp_queryType.WHOLESALERID, name: _cxSchema.cp_queryType.WHOLESALERID, column: 1, readOnly: !newRecord, validation: '{"mandatory": true}' }),
 
+            { name: _cxSchema.cp_queryType.DEPARTMENT, label: 'department', items: _cxConst.BWG_DEPARTMENTS.toList(), column: 1, validation: '{"mandatory": true}' },
             { name: _cxSchema.cp_queryType.NAME, label: 'query type name', column: 1, validation: '{"mandatory": true}' },
             {
                 name: 'grp', label: '', column: 1, columnCount: 2, fields: [
@@ -84,7 +97,7 @@ class CPQueryRender extends RenderBase {
                     
                 ]
             },
-            { name: _cxSchema.cp_queryType.MESSAGETEMPLATE, type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 7, label: 'message template', column: 2 },
+            { name: _cxSchema.cp_queryType.MESSAGETEMPLATE, type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 10, label: 'message template', column: 2 },
         ]
         this.options.fields.push(header);
 
