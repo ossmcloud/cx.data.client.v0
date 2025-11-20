@@ -283,12 +283,20 @@ class CPQueryRender extends RenderBase {
         var queryTypesOptions = { wholesalerId: this.dataSource.wholesalerId, department: _cxConst.BWG_DEPARTMENTS.CB }
         var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerConfig).getConfigValue(this.dataSource.wholesalerId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
         if (bwgShopOptions.ndcVendors) {
-            var supplierCode = '';
+
+            var supplierCode = ''; var itemCodes = [{ value: '', text: '' }];
             if (this.dataSource.invCreId) {
                 supplierCode = await this.dataSource.cx.table(_cxSchema.cp_invoiceCredit).lookUp(this.dataSource.invCreId, 'supplierCode');
+                var items = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
+                await items.select({ pid: this.dataSource.invCreId })
+                items.each(i => { itemCodes.push({ value: i.itemCode, text: `${i.itemDescription} (${i.lineQuantity} @ ${i.unitPrice})` }) })
             } else {
                 supplierCode = await this.dataSource.cx.table(_cxSchema.cp_deliveryReturn).lookUp(this.dataSource.delRetId, 'supplierCode');
+                var items = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLine);
+                await items.select({ pid: this.dataSource.delRetId })
+                items.each(i => { itemCodes.push({ value: i.eposCode, text: `${i.itemDescription} (${i.lineQuantity} @ ${i.unitCost})` }) })
             }
+
             if (bwgShopOptions.ndcVendors.indexOf(supplierCode) >= 0) {
                 queryTypesOptions.department = _cxConst.BWG_DEPARTMENTS.NDC;
                 var col = 1;
@@ -301,20 +309,24 @@ class CPQueryRender extends RenderBase {
                 conditionalFields.fields.push({ data: 'data-qt="778390009"', name: 'sp_dateofdelivery', label: 'delivery date', column: 4, readOnly: readOnly, type: _cxConst.RENDER.CTRL_TYPE.DATE, validation: '{"mandatory": true}' })
                 for (var px = 1; px < 8; px++) {
                     var dataQt = px == 1 ? '778390003,778390002,778390006' : '778390003,778390002';
-                    conditionalProdFields.fields.push({ data: `data-qt="${dataQt}"`, name: 'sp_productcode' + px, label: 'product code  ' + px, column: px, readOnly: readOnly, validation: px == 1 ? '{"mandatory": true}' : '' })
+                    conditionalProdFields.fields.push({ data: `data-qt="${dataQt}"`, name: 'sp_productcode' + px, label: 'product code  ' + px, lookUps: itemCodes, column: px, readOnly: readOnly, validation: px == 1 ? '{"mandatory": true}' : '' })
                     if (px == 1) {
                         conditionalProdFields.fields.push({ data: 'data-qt="778390006"', name: 'sp_queryoptions_qualitycontrol', label: 'quality control', column: 2, lookUps: _cxConst.BWG_QUALITY_CONTROL.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
                         conditionalProdFields.fields.push({ data: 'data-qt="778390006"', name: 'sp_productdate', label: 'product date', column: 3, readOnly: readOnly, type: _cxConst.RENDER.CTRL_TYPE.DATE })
-
                     }
                 }
-
             }
         }
 
 
         var queryTypes = await this.dataSource.cx.table(_cxSchema.cp_queryType).toLookUpList(queryTypesOptions, true);
         var queryResTypes = await this.dataSource.cx.table(_cxSchema.cp_queryResolutionType).toLookUpList(this.dataSource.wholesalerId, true);
+
+        this.dataSource.queryTypeCode = '';
+        if (this.dataSource.queryTypeId) {
+            var queryType = await this.dataSource.cx.table(_cxSchema.cp_queryType).fetch(this.dataSource.queryTypeId);
+            this.dataSource.queryTypeCode = queryType?.code;
+        }
 
         var columnCount = (!this.dataSource.isNew() && !this.options.dialog) ? 8 : 6;
         var header = { group: 'head', title: 'query info', columnCount: columnCount, styles: ['width: 200px', 'width: 200px', 'width: 200px', 'width: calc(100% - 1700px)', 'width: 300px', 'width: 200px', 'width: 300px', 'width: 300px'], fields: [] };
@@ -339,6 +351,7 @@ class CPQueryRender extends RenderBase {
             { name: 'docGross', hidden: true },
             { name: 'groupInvoice', hidden: true },
             { name: 'groupInvoiceDate', hidden: true },
+            { name: 'queryTypeCode', hidden: true },
             //
             { name: _cxSchema.cp_query.STATUSID, hidden: true },
             { name: _cxSchema.cp_query.SUBMITDATE, hidden: true },

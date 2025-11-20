@@ -1759,7 +1759,7 @@ const BWG_UPLIFT_REASON = {
 }
 const BWG_UPLIFT_FLAG = {
     Yes: 'Yes',
-    Np: 'No',
+    No: 'No',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty);
     },
