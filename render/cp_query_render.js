@@ -289,12 +289,12 @@ class CPQueryRender extends RenderBase {
                 supplierCode = await this.dataSource.cx.table(_cxSchema.cp_invoiceCredit).lookUp(this.dataSource.invCreId, 'supplierCode');
                 var items = this.dataSource.cx.table(_cxSchema.cp_invoiceCreditLine);
                 await items.select({ pid: this.dataSource.invCreId })
-                items.each(i => { itemCodes.push({ value: i.itemCode, text: `${i.itemDescription} (${i.lineQuantity} @ ${i.unitPrice})` }) })
+                items.each(i => { itemCodes.push({ value: i.itemCode, text: `${i.itemCode} - ${i.itemDescription} (${i.lineQuantity} @ ${i.unitPrice})` }) })
             } else {
                 supplierCode = await this.dataSource.cx.table(_cxSchema.cp_deliveryReturn).lookUp(this.dataSource.delRetId, 'supplierCode');
                 var items = this.dataSource.cx.table(_cxSchema.cp_deliveryReturnLine);
                 await items.select({ pid: this.dataSource.delRetId })
-                items.each(i => { itemCodes.push({ value: i.eposCode, text: `${i.itemDescription} (${i.lineQuantity} @ ${i.unitCost})` }) })
+                items.each(i => { itemCodes.push({ value: i.eposCode, text: `${i.eposCode} - ${i.itemDescription} (${i.lineQuantity} @ ${i.unitCost})` }) })
             }
 
             if (bwgShopOptions.ndcVendors.indexOf(supplierCode) >= 0) {
