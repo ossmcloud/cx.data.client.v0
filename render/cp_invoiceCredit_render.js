@@ -458,7 +458,12 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
                 if (query) {
-                    this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+                    var text = 'View Query'; var style = '';
+                    if (query.statusId == _cxConst.CP_QUERY_STATUS.ERROR) {
+                        text = `&#x26A0; ${text}`;
+                        style ='background-color: maroon; color: white;'
+                    }
+                    this.options.buttons.push({ id: 'cp_manage_query', text: text, function: 'manageQuery', style: style });
                 } else {
                     this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
                 }

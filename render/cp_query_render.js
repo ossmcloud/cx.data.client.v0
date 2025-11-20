@@ -264,7 +264,7 @@ class CPQueryRender extends RenderBase {
 
         var readOnly = true; var canResolve = false;
         if (this.options.mode != 'view') {
-            readOnly = this.dataSource.statusId > _cxConst.CP_QUERY_STATUS.PENDING;
+            readOnly = this.dataSource.statusId > _cxConst.CP_QUERY_STATUS.PENDING && this.dataSource.statusId != _cxConst.CP_QUERY_STATUS.ERROR;
             canResolve = this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.SUBMITTED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.IN_PROGRESS;
         }
         if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED || this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.CLOSED) { this.options.allowEdit = false; }
@@ -278,7 +278,7 @@ class CPQueryRender extends RenderBase {
 
 
         // @@NOTE: BWG: based on vendor select CB or NDC query types only
-        var conditionalFields = { data: 'data-qt="778390001,778390003,778390002,778390005,778390008,778390009"', group: 'cond', title: 'query additional info', columnCount: 8, fields: [] };
+        var conditionalFields = { data: 'data-qt="778390000,778390001,778390003,778390002,778390005,778390008,778390009"', group: 'cond', title: 'query additional info', columnCount: 8, fields: [] };
         var conditionalProdFields = { data: 'data-qt="778390003,778390002,778390006"', group: 'prods', title: 'products info', columnCount: 7, fields: [] };
         var queryTypesOptions = { wholesalerId: this.dataSource.wholesalerId, department: _cxConst.BWG_DEPARTMENTS.CB }
         var bwgShopOptions = await this.dataSource.cx.table(_cxSchema.cp_wholesalerConfig).getConfigValue(this.dataSource.wholesalerId, _cxConst.CP_WHS_CONFIG.BWG_CRM_CONFIG, true);
@@ -300,7 +300,7 @@ class CPQueryRender extends RenderBase {
             if (bwgShopOptions.ndcVendors.indexOf(supplierCode) >= 0) {
                 queryTypesOptions.department = _cxConst.BWG_DEPARTMENTS.NDC;
                 var col = 1;
-                conditionalFields.fields.push({ data: 'data-qt="778390001,778390003,778390002,778390005,778390008,778390009"', name: 'sp_depot', label: 'depot', column: col++, lookUps: _cxConst.BWG_DEPOTS.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
+                conditionalFields.fields.push({ data: 'data-qt="778390000,778390001,778390003,778390002,778390005,778390008,778390009"', name: 'sp_depot', label: 'depot', column: col++, lookUps: _cxConst.BWG_DEPOTS.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
                 conditionalFields.fields.push({ data: 'data-qt="778390001"', name: 'sp_numberofcases', type: _cxConst.RENDER.CTRL_TYPE.NUMERIC, label: 'cases', column: 2, readOnly: readOnly, validation: '{"mandatory": true}' });
                 conditionalFields.fields.push({ data: 'data-qt="778390003"', name: 'sp_upliftreason', label: 'uplift reason', column: 2, lookUps: _cxConst.BWG_UPLIFT_REASON.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
                 conditionalFields.fields.push({ data: 'data-qt="778390002"', name: 'sp_uplift_flag', label: 'uplift flag', column: 2, lookUps: _cxConst.BWG_UPLIFT_FLAG.toList(true), readOnly: readOnly, validation: '{"mandatory": true}' });
