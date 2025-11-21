@@ -55,6 +55,21 @@ class CPInvoiceGroupRender extends RenderBase {
         return transactionLogsOptions;
     }
 
+    async getAttachmentListOptions() {
+        var attachments = this.dataSource.cx.table(_cxSchema.cx_attachment);
+        await attachments.select({ shopId: this.dataSource.shopId, recordType: this.dataSource.type, recordId: this.options.query.id });
+        if (this.dataSource.documentImportId) {
+            await attachments.select({ shopId: this.dataSource.shopId, recordType: _cxSchema.cp_documentImport.TBL_NAME, recordId: this.dataSource.documentImportId }, true);
+        }
+        if (attachments.count() == 0) { return null; }
+        var attachmentsOptions = await this.listOptions(attachments, { listView: true });
+        return {
+            options: attachmentsOptions,
+            shortList: attachments.toHtmlList(),
+        };
+    }
+
+
     async getErpDocListOptions(erpSett) {
         var transactions = this.dataSource.cx.table(_cxSchema.cp_erp_transaction);
         await transactions.select({ invGrpId: this.options.query.id });
@@ -268,6 +283,12 @@ class CPInvoiceGroupRender extends RenderBase {
             var transactionLogOptions = await this.getDocumentLogListOptions();
             subListsGroup.fields.push({ group: 'logs', title: 'document logs', column: 2, width: '600px', fields: [transactionLogOptions], collapsed: true });
         }
+
+        var attachmentOptions = await this.getAttachmentListOptions();
+        if (attachmentOptions) {
+            this.options.fields.push({ group: 'attachments_list', title: 'attachments', column: 1, fields: [attachmentOptions.options], collapsed: true });
+        }
+
 
 
     }

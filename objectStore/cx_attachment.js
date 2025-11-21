@@ -8,7 +8,7 @@ class cx_attachment_Collection extends _persistentTable.Table {
         return new cx_attachment(this, defaults);
     }
 
-    async select(params) {
+    async select(params, append) {
         if (!params) { params = {} };
 
         var query = {};
@@ -18,11 +18,11 @@ class cx_attachment_Collection extends _persistentTable.Table {
         } else {
 
             query.sql = `
-            select  a.*, s.shopCode, s.shopName
-            from    cx_attachment a
-            join    cx_shop s ON s.shopId = a.shopId
+                select  a.*, s.shopCode, s.shopName
+                from    cx_attachment a
+                join    cx_shop s ON s.shopId = a.shopId
 
-            where   1 = 1
+                where   1 = 1
             `;
 
             this.queryFromParams(query, params, 'a');
@@ -31,7 +31,7 @@ class cx_attachment_Collection extends _persistentTable.Table {
 
 
 
-        return await super.select(query);
+        return await super.select(query, append);
     }
 
 

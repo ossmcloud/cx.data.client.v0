@@ -43,7 +43,7 @@ const _fields = {
     dtfsSettingId: { name: 'dtfsSettingId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     stateKey: { name: 'stateKey', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },
     status: { name: 'status', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
-    token: { name: 'token', dataType: 'varchar', pk: false, identity: false, maxLength: 8000, null: true },
+    token: { name: 'token', dataType: '231', pk: false, identity: false, maxLength: -1, null: true },
     expiryDate: { name: 'expiryDate', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
