@@ -275,6 +275,7 @@ const CX_EPOS_PROVIDER = {
     EDATA: 'EDATA',
     ZAMBR: 'ZAMBR',
     PRISM: 'PRISM',
+    AWORK: 'AWORK',
     SM: 'SM',
     ALOHA: 'ALOHA',
 
@@ -293,6 +294,7 @@ const CX_EPOS_PROVIDER = {
             CAPTIVA: 'Captiva',
             EDATA: 'Euro Data',
             ZAMBR: 'Zambrero',
+            AWORK: 'Autowork',
             PRISM: 'PRISM',
             SM: 'Station Master',
             THERE: 'Therefore'
@@ -367,6 +369,10 @@ const CX_EPOS_PROVIDERS = {
         },
         {
             type: CX_EPOS_PROVIDER.EDATA,
+            configDefaults: []
+        },
+        {
+            type: CX_EPOS_PROVIDER.AWORK,
             configDefaults: []
         },
         {
