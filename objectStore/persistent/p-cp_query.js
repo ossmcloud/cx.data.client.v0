@@ -43,6 +43,7 @@ const _fieldNames = {
     CREDITNOTENUMBER: 'creditNoteNumber',
     CREDITTOTAL: 'creditTotal',
     WHOLESALERID: 'wholesalerId',
+    CONDITIONALFIELDS: 'conditionalFields',
 
 }
 //
@@ -73,6 +74,7 @@ const _fields = {
     creditNoteNumber: { name: 'creditNoteNumber', dataType: 'varchar', pk: false, identity: false, maxLength: 60, null: true },
     creditTotal: { name: 'creditTotal', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     wholesalerId: { name: 'wholesalerId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    conditionalFields: { name: 'conditionalFields', dataType: 'varchar', pk: false, identity: false, maxLength: 1000, null: true },
 
 }
 //
@@ -234,6 +236,12 @@ class Persistent_cp_query extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.WHOLESALERID);
     } set wholesalerId(val) {
         super.setValue(_fieldNames.WHOLESALERID, val);
+    }
+
+    get conditionalFields() {
+        return super.getValue(_fieldNames.CONDITIONALFIELDS);
+    } set conditionalFields(val) {
+        super.setValue(_fieldNames.CONDITIONALFIELDS, val);
     }
 
 

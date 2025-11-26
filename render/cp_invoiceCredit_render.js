@@ -65,6 +65,20 @@ class CPInvoiceReturnRender extends RenderBase {
         return transactionLogsOptions;
     }
 
+    async getAttachmentListOptions() {
+        var attachments = this.dataSource.cx.table(_cxSchema.cx_attachment);
+        await attachments.select({ shopId: this.dataSource.shopId, recordType: this.dataSource.type, recordId: this.options.query.id });
+        if (this.dataSource.docImpId) {
+            await attachments.select({ shopId: this.dataSource.shopId, recordType: _cxSchema.cp_documentImport.TBL_NAME, recordId: this.dataSource.docImpId }, true);
+        }
+        if (attachments.count() == 0) { return null; }
+        var attachmentsOptions = await this.listOptions(attachments, { listView: true });
+        return {
+            options: attachmentsOptions,
+            shortList: attachments.toHtmlList(),
+        };
+    }
+
     async getErpGLListOptions(erpSett) {
         var transactionLines = this.dataSource.cx.table(_cxSchema.cp_erp_transaction_gl);
         await transactionLines.select({ id: this.options.query.id });
@@ -377,9 +391,13 @@ class CPInvoiceReturnRender extends RenderBase {
 
             var transactionLogOptions = await this.getDocumentLogListOptions();
             this.options.fields.push({
-                group: 'sublists_logs', columnCount: 1, fields: [
-                    { group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
+                group: 'sublists_logs', columnCount: 1, fields: [{ group: 'logs', title: 'document logs', column: 1, fields: [transactionLogOptions], collapsed: true }]
             });
+        }
+
+        var attachmentOptions = await this.getAttachmentListOptions();
+        if (attachmentOptions) {
+            this.options.fields.push({ group: 'attachments_list', title: 'attachments', column: 1, fields: [attachmentOptions.options], collapsed: true });
         }
 
     }
@@ -405,7 +423,7 @@ class CPInvoiceReturnRender extends RenderBase {
                         }
                     }
                 }
-                
+
             } else {
 
                 var s = this.dataSource.documentStatus;
@@ -458,7 +476,12 @@ class CPInvoiceReturnRender extends RenderBase {
                 this.options.buttons.push({ id: 'cp_view_logs', text: buttonLabel, function: 'viewLogs' });
 
                 if (query) {
-                    this.options.buttons.push({ id: 'cp_manage_query', text: 'View Query', function: 'manageQuery' });
+                    var text = 'View Query'; var style = '';
+                    if (query.statusId == _cxConst.CP_QUERY_STATUS.ERROR) {
+                        text = `&#x26A0; ${text}`;
+                        style = 'background-color: maroon; color: white;'
+                    }
+                    this.options.buttons.push({ id: 'cp_manage_query', text: text, function: 'manageQuery', style: style });
                 } else {
                     this.options.buttons.push({ id: 'cp_manage_query', text: 'Add Query', function: 'manageQuery' });
                 }

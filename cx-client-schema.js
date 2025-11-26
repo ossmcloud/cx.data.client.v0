@@ -570,6 +570,7 @@ module.exports = {
         CREDITNOTENUMBER: 'creditNoteNumber',
         CREDITTOTAL: 'creditTotal',
         WHOLESALERID: 'wholesalerId',
+        CONDITIONALFIELDS: 'conditionalFields',
     },
 
     cp_queryLog: {
@@ -612,6 +613,7 @@ module.exports = {
         MANDATORYFIELDS: 'mandatoryFields',
         MESSAGETEMPLATE: 'messageTemplate',
         REQUIRESDISPUTEDAMOUNT: 'requiresDisputedAmount',
+        DEPARTMENT: 'department',
     },
 
     cp_recoSession: {

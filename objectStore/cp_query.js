@@ -76,14 +76,19 @@ class cp_query_Collection extends _persistentTable.Table {
         if (isDelivery) {
             query.sql += `
                 and         del.delRetId =              ${docId}
-                and         q.statusId   <               ${_cxConst.CP_QUERY_STATUS.RESOLVED}
-                `;
+            `;
         } else {
             query.sql += `
                 and         doc.invCreId =              ${docId}
-                and         q.statusId   <               ${_cxConst.CP_QUERY_STATUS.RESOLVED}
-                `;
+            `;
         }
+
+        query.sql += `
+            and         (q.statusId   <               ${_cxConst.CP_QUERY_STATUS.RESOLVED}
+            or          q.statusId   =               ${_cxConst.CP_QUERY_STATUS.ERROR})
+
+            order by created desc
+        `;
         
         await super.select(query)
         var record = this.first();
