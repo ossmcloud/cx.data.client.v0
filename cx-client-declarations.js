@@ -1,6 +1,7 @@
 'use strict'
 
 const _core = require('cx-core');
+const { type } = require('os');
 
 function enumToList(obj, addEmpty, aliases, dataObjects) {
     if (!aliases) { aliases = {}; }
@@ -1787,6 +1788,33 @@ const BWG_QUALITY_CONTROL = {
     },
 }
 
+const BWG_CONDITIONAL_FIELD_GROUPS = {
+    cond: { label: 'query additional info', queryTypes: [778390000, 778390001, 778390003, 778390002, 778390005, 778390008, 778390009], columnCount: 7 },
+    prods: { label: 'products info', queryTypes: [778390003, 778390002, 778390006], columnCount: 7 }
+}
+const BWG_CONDITIONAL_FIELDS = {
+    sp_depot: { group: 'cond', label: 'depot', queryTypes: [778390000, 778390001, 778390003, 778390002, 778390005, 778390008, 778390009], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_DEPOTS, column: 1 },
+    sp_numberofcases: { group: 'cond', label: 'cases', queryTypes: [778390001], type: RENDER.CTRL_TYPE.NUMERIC, column: 2 },
+    sp_upliftreason: { group: 'cond', label: 'uplift reason', queryTypes: [778390003], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_UPLIFT_REASON, column: 2 },
+    sp_uplift_flag: { group: 'cond', label: 'uplift flag', queryTypes: [778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_UPLIFT_FLAG, column: 2 },
+    sp_paymenttype: { group: 'cond', label: 'payment type', queryTypes: [778390008, 778390009], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_PAYMENT_TYPE, column: 2 },
+    sp_emailaddress: { group: 'cond', label: 'email address', queryTypes: [778390009], type: RENDER.CTRL_TYPE.TEXT, column: 3 },
+    sp_dateofdelivery: { group: 'cond', label: 'delivery date', queryTypes: [778390009], type: RENDER.CTRL_TYPE.DATE, column: 4 },
+
+    sp_productcode1: { group: 'prods', label: 'product code 1', queryTypes: [778390003, 778390002, 778390006], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 1 },
+    sp_queryoptions_qualitycontrol: { group: 'prods', label: 'quality control', queryTypes: [778390006], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_QUALITY_CONTROL, column: 2 },
+    sp_productdate: { group: 'prods', label: 'product date', queryTypes: [778390006], type: RENDER.CTRL_TYPE.DATE, column: 3 },
+
+    sp_productcode2: { group: 'prods', label: 'product code 2', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 2 },
+    sp_productcode3: { group: 'prods', label: 'product code 3', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 3 },
+    sp_productcode4: { group: 'prods', label: 'product code 4', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 4 },
+    sp_productcode5: { group: 'prods', label: 'product code 5', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 5 },
+    sp_productcode6: { group: 'prods', label: 'product code 6', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 6 },
+    sp_productcode7: { group: 'prods', label: 'product code 7', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 7 },
+
+}
+
+
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
@@ -1836,6 +1864,8 @@ module.exports = {
     BWG_UPLIFT_REASON: BWG_UPLIFT_REASON,
     BWG_PAYMENT_TYPE: BWG_PAYMENT_TYPE,
     BWG_QUALITY_CONTROL: BWG_QUALITY_CONTROL,
+    BWG_CONDITIONAL_FIELDS: BWG_CONDITIONAL_FIELDS,
+    BWG_CONDITIONAL_FIELD_GROUPS: BWG_CONDITIONAL_FIELD_GROUPS,
 
     RENDER: RENDER,
     SQL: SQL,
