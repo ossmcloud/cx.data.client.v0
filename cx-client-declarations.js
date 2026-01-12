@@ -1755,6 +1755,13 @@ const BWG_DEPOTS = {
         return enumToList(this, addEmpty);
     },
 }
+const BWG_NO_OF_CASES = {
+    Under_4: 778390000,
+    Over_4: 778390001,
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty);
+    },
+}
 const BWG_UPLIFT_REASON = {
     Unauthorised_Rep_Order: 778390000,
     Ordered_in_Error: 778390001,
@@ -1765,8 +1772,8 @@ const BWG_UPLIFT_REASON = {
     },
 }
 const BWG_UPLIFT_FLAG = {
-    Yes: 'Yes',
-    No: 'No',
+    Yes: 'True',
+    No: 'False',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty);
     },
@@ -1794,9 +1801,9 @@ const BWG_CONDITIONAL_FIELD_GROUPS = {
 }
 const BWG_CONDITIONAL_FIELDS = {
     sp_depot: { group: 'cond', label: 'depot', queryTypes: [778390000, 778390001, 778390003, 778390002, 778390005, 778390008, 778390009], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_DEPOTS, column: 1 },
-    sp_numberofcases: { group: 'cond', label: 'cases', queryTypes: [778390001], type: RENDER.CTRL_TYPE.NUMERIC, column: 2 },
+    sp_numberofcases: { group: 'cond', label: 'cases', queryTypes: [778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_NO_OF_CASES, column: 2 },
     sp_upliftreason: { group: 'cond', label: 'uplift reason', queryTypes: [778390003], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_UPLIFT_REASON, column: 2 },
-    sp_uplift_flag: { group: 'cond', label: 'uplift flag', queryTypes: [778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_UPLIFT_FLAG, column: 2 },
+    sp_uplift_flag: { group: 'cond', label: 'is uplift required', queryTypes: [778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_UPLIFT_FLAG, column: 2 },
     sp_paymenttype: { group: 'cond', label: 'payment type', queryTypes: [778390008, 778390009], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_PAYMENT_TYPE, column: 2 },
     sp_emailaddress: { group: 'cond', label: 'email address', queryTypes: [778390009], type: RENDER.CTRL_TYPE.TEXT, column: 3 },
     sp_dateofdelivery: { group: 'cond', label: 'delivery date', queryTypes: [778390009], type: RENDER.CTRL_TYPE.DATE, column: 4 },
