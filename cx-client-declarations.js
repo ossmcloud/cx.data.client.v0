@@ -1759,7 +1759,10 @@ const BWG_NO_OF_CASES = {
     Under_4: 778390000,
     Over_4: 778390001,
     toList: function (addEmpty) {
-        return enumToList(this, addEmpty);
+        return enumToList(this, addEmpty, {
+            Under_4: '4 or under',
+            Over_4: '5 or over'
+        });
     },
 }
 const BWG_UPLIFT_REASON = {
@@ -1808,16 +1811,16 @@ const BWG_CONDITIONAL_FIELDS = {
     sp_emailaddress: { group: 'cond', label: 'email address', queryTypes: [778390009], type: RENDER.CTRL_TYPE.TEXT, column: 3 },
     sp_dateofdelivery: { group: 'cond', label: 'delivery date', queryTypes: [778390009], type: RENDER.CTRL_TYPE.DATE, column: 4 },
 
-    sp_productcode1: { group: 'prods', label: 'product code 1', queryTypes: [778390003, 778390002, 778390006], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 1 },
+    sp_productcode1: { group: 'prods', label: 'product code 1', queryTypes: [778390003, 778390002, 778390001, 778390006], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 1 },
     sp_queryoptions_qualitycontrol: { group: 'prods', label: 'quality control', queryTypes: [778390006], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_QUALITY_CONTROL, column: 2 },
     sp_productdate: { group: 'prods', label: 'product date', queryTypes: [778390006], type: RENDER.CTRL_TYPE.DATE, column: 3 },
 
-    sp_productcode2: { group: 'prods', label: 'product code 2', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 2 },
-    sp_productcode3: { group: 'prods', label: 'product code 3', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 3 },
-    sp_productcode4: { group: 'prods', label: 'product code 4', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 4 },
-    sp_productcode5: { group: 'prods', label: 'product code 5', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 5 },
-    sp_productcode6: { group: 'prods', label: 'product code 6', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 6 },
-    sp_productcode7: { group: 'prods', label: 'product code 7', queryTypes: [778390003, 778390002], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 7 },
+    sp_productcode2: { group: 'prods', label: 'product code 2', queryTypes: [778390003, 778390002, 778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 2 },
+    sp_productcode3: { group: 'prods', label: 'product code 3', queryTypes: [778390003, 778390002, 778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 3 },
+    sp_productcode4: { group: 'prods', label: 'product code 4', queryTypes: [778390003, 778390002, 778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 4 },
+    sp_productcode5: { group: 'prods', label: 'product code 5', queryTypes: [778390003, 778390002, 778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 5 },
+    sp_productcode6: { group: 'prods', label: 'product code 6', queryTypes: [778390003, 778390002, 778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 6 },
+    sp_productcode7: { group: 'prods', label: 'product code 7', queryTypes: [778390003, 778390002, 778390001], type: RENDER.CTRL_TYPE.SELECT, lookUps: 'itemCodes', column: 7 },
 
 }
 
