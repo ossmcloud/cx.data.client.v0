@@ -1800,7 +1800,7 @@ const BWG_QUALITY_CONTROL = {
 
 const BWG_CONDITIONAL_FIELD_GROUPS = {
     cond: { label: 'query additional info', queryTypes: [778390000, 778390001, 778390003, 778390002, 778390005, 778390008, 778390009], columnCount: 7 },
-    prods: { label: 'products info', queryTypes: [778390003, 778390002, 778390006], columnCount: 7 }
+    prods: { label: 'products info', queryTypes: [778390003, 778390002, 778390001, 778390006], columnCount: 7 }
 }
 const BWG_CONDITIONAL_FIELDS = {
     sp_depot: { group: 'cond', label: 'depot', queryTypes: [778390000, 778390001, 778390003, 778390002, 778390005, 778390008, 778390009], type: RENDER.CTRL_TYPE.SELECT, lookUps: BWG_DEPOTS, column: 1 },
