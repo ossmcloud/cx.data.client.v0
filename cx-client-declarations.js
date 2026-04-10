@@ -283,6 +283,7 @@ const CX_EPOS_PROVIDER = {
     AWORK: 'AWORK',
     SM: 'SM',
     ALOHA: 'ALOHA',
+    BIGC: 'BIGC',
 
     THERE: 'THERE',
     //
@@ -302,7 +303,8 @@ const CX_EPOS_PROVIDER = {
             AWORK: 'Autowork',
             PRISM: 'PRISM',
             SM: 'Station Master',
-            THERE: 'Therefore'
+            THERE: 'Therefore',
+            BIGC: 'Big Commerce'
         });
     }
 }
@@ -325,6 +327,7 @@ const CX_EPOS_PROVIDERS = {
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "MSSQL",   "serverName": "",   "databaseName": "???",   "user": "sruu",   "pass": "???"  }' },
             ]
         },
+
         {
             type: CX_EPOS_PROVIDER.RS,
             configDefaults: [
@@ -370,6 +373,12 @@ const CX_EPOS_PROVIDERS = {
             type: CX_EPOS_PROVIDER.CAPTIVA,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "company": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.BIGC,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "store": ""  }' },
             ]
         },
         {

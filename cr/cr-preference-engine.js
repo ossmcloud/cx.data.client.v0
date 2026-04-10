@@ -63,7 +63,7 @@ class CRPreferenceEngine {
             var configs = await getPrefConfigs(this.#cx, options.preference);
             configs.each(function (cfg, idx) {
                 _core.list.each(options.records, function (rec) {
-                    if (cfg.recordType == rec.recordType && cfg.recordId.toString() == rec.recordId.toString()) {
+                    if (cfg.recordType == rec.recordType && cfg.recordId?.toString() == rec.recordId?.toString()) {
                         prefValue = cfg.value;
                         return false;
                     }
