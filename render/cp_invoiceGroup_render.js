@@ -95,19 +95,34 @@ class CPInvoiceGroupRender extends RenderBase {
         await transactionLines.select({ invGrpId: this.options.query.id });
 
         transactionLines.forceReadOnly = true;
+        if (this.options.allowEdit && this.options.mode == 'edit' && this.dataSource.isManual) {
+            var s = this.dataSource.documentStatus;
+            transactionLines.forceReadOnly = (s > _cxConst.CP_DOCUMENT.STATUS.PostingReady);
+        }
+        
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, mode: 'view', id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
 
-        // if (this.options.allowEdit && this.options.mode == 'edit') {
-        //     transactionLinesOptions.hideTitlePanel = true;
-        //     transactionLinesOptions.lookupLists = {};
+        if (!transactionLines.forceReadOnly) {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
 
-        //     var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
-        //     transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+            var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre, erpSett.mergeGLAndTax);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
 
-        // }
+            var glAccountSegs2 = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpSeg2LookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2] = glAccountSegs2;
+
+            if (erpSett.mergeGLAndTax) {
+                var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+                transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            }
+
+        }
+
+
         return transactionLinesOptions;
     }
 
@@ -116,19 +131,24 @@ class CPInvoiceGroupRender extends RenderBase {
         await transactionLines.select({ invGrpId: this.options.query.id });
 
         transactionLines.forceReadOnly = true;
+        if (this.options.allowEdit && this.options.mode == 'edit' && this.dataSource.isManual) {
+            var s = this.dataSource.documentStatus;
+            transactionLines.forceReadOnly = (s > _cxConst.CP_DOCUMENT.STATUS.PostingReady);
+        }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp tax transactions</span>';
 
-        // if (this.options.allowEdit && this.options.mode == 'edit') {
-        //     transactionLinesOptions.hideTitlePanel = true;
-        //     transactionLinesOptions.lookupLists = {};
+        if (!transactionLines.forceReadOnly) {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
 
-        //     var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
-        //     transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
 
-        // }
+        }
+
         return transactionLinesOptions;
     }
 
@@ -200,13 +220,21 @@ class CPInvoiceGroupRender extends RenderBase {
             `;
             this.options.tabTitle = '\u270E ' + this.options.tabTitle;
         }
+        if (this.dataSource.isManual) {
+            this.options.title += `
+                <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this is a manual group invoice">
+                    &#x1F590;
+                </div>
+            `;
+            this.options.tabTitle = '\u270E ' + this.options.tabTitle;
+        }
 
         if (this.matchingEnabled) {
             var matchSummary = await this.getMatchingSummary();
             // this.options.title += matchSummary.html;
             this.options.title += matchSummary.htmlPie;
         }
-      
+
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
@@ -251,7 +279,7 @@ class CPInvoiceGroupRender extends RenderBase {
                         if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
                             this.manualHelpMessage = "All seems good, the group invoice is ready for posting";
                         } else {
-                            
+
                             for (var tx = 0; tx < transactionOptions.records.length; tx++) {
                                 var s = transactionOptions.records[tx].documentStatus;
                                 if (s == _cxConst.CP_DOCUMENT.STATUS.Generating || s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
@@ -271,7 +299,7 @@ class CPInvoiceGroupRender extends RenderBase {
                                     this.manualHelpMessage = "Some documents are not ready for posting, please address the issues then click on the [Refresh Data] button and choose to [Refresh only posting data] to prepare the invoice for posting";
                                 }
                             }
-                            
+
                         }
                     }
                 }

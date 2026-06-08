@@ -414,6 +414,7 @@ module.exports = {
         ERPTRANSMISSIONID: 'erpTransmissionId',
         ISMANUAL: 'isManual',
         INACTIVE: 'inactive',
+        ISUSEREDITED: 'isUserEdited',
     },
 
     cp_invoiceGroupLog: {

@@ -49,6 +49,23 @@ class cp_erp_transaction_Collection extends _persistentTable.Table {
 
         return super.populate(rawRecord);
     }
+
+    async fetchByGrpDocId(invGrpId) {
+        var query = { sql: '', params: [{ name: 'invGrpId', value: invGrpId }] };
+        query.sql = ` select  *
+                      from    ${this.type}
+                      where     ${this.FieldNames.INVGRPID} = @invGrpId`;
+        query.noResult = 'null';
+        query.returnFirst = true;
+
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) {
+            //throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`);
+            return null;
+        }
+
+        return super.populate(rawRecord);
+    }
 }
 //
 // ----------------------------------------------------------------------------------------

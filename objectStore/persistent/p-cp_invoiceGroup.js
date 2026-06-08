@@ -46,6 +46,8 @@ const _fieldNames = {
     TOTALDRS: 'totalDRS',
     ERPTRANSMISSIONID: 'erpTransmissionId',
     ISMANUAL: 'isManual',
+    INACTIVE: 'inactive',
+    ISUSEREDITED: 'isUserEdited',
 
 }
 //
@@ -79,6 +81,8 @@ const _fields = {
     totalDRS: { name: 'totalDRS', dataType: 'money', pk: false, identity: false, maxLength: 8, null: true },
     erpTransmissionId: { name: 'erpTransmissionId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    inactive: { name: 'inactive', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -258,6 +262,18 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISMANUAL);
     } set isManual(val) {
         super.setValue(_fieldNames.ISMANUAL, val);
+    }
+
+    get inactive() {
+        return super.getValue(_fieldNames.INACTIVE);
+    } set inactive(val) {
+        super.setValue(_fieldNames.INACTIVE, val);
+    }
+
+    get isUserEdited() {
+        return super.getValue(_fieldNames.ISUSEREDITED);
+    } set isUserEdited(val) {
+        super.setValue(_fieldNames.ISUSEREDITED, val);
     }
 
 
