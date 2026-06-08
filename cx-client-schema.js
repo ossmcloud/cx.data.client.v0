@@ -415,6 +415,7 @@ module.exports = {
         ISMANUAL: 'isManual',
         INACTIVE: 'inactive',
         ISUSEREDITED: 'isUserEdited',
+        ISUSEREDITEDGL: 'isUserEditedGL',
     },
 
     cp_invoiceGroupLog: {
