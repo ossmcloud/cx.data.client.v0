@@ -8,9 +8,48 @@ const RenderBase = require('./render_base');
 class CPInvoiceGroupRender extends RenderBase {
     matchingEnabled = false;
     manualHelpMessage = '';
+    invoiceEditMode = null;
     constructor(dataSource, options) {
         super(dataSource, options);
         this.matchingEnabled = this.hasModule('cm');
+
+
+    }
+
+    async getEditModePreference(shopId) {
+        var prefContext = {
+            pref: _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.ID,
+            records: [{ recordType: _cxSchema.cx_shop.TBL_NAME, recordId: shopId },]
+        }
+        if (this.dataSource.records !== undefined) {
+
+            this.invoiceEditMode = {};
+
+            var shopIds = [];
+            this.dataSource.records.map(i => { if (shopIds.indexOf(i.shopId) < 0) { shopIds.push(i.shopId); } });
+
+            await _core.list.eachAsync(shopIds, async s => {
+                if (this.invoiceEditMode[s] === undefined) {
+                    prefContext.records[0].recordId = s;
+                    this.invoiceEditMode[s] = await this.dataSource.cx.cpPref.get(prefContext);
+                }
+            })
+
+
+
+
+        } else {
+            this.invoiceEditMode = await this.dataSource.cx.cpPref.get(prefContext);
+        }
+
+        if (!this.options.allowEdit) {
+            if (this.dataSource.records !== undefined) {
+                this.options.allowEdit = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER;
+            } else {
+                this.options.allowEdit = this.dataSource.isManual && this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER;
+            }
+
+        }
     }
 
     async getDocumentListOptions() {
@@ -79,14 +118,6 @@ class CPInvoiceGroupRender extends RenderBase {
         var transactionsOptions = await this.listOptions(transactions, { listView: true, mode: 'view', id: 'erpTransaction', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax });
         transactionsOptions.title = '<span>erp transactions</span>';
 
-        // if (this.options.allowEdit && this.options.mode == 'edit') {
-        //     transactionLinesOptions.hideTitlePanel = true;
-        //     transactionLinesOptions.lookupLists = {};
-
-        //     var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
-        //     transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
-
-        // }
         return transactionsOptions;
     }
 
@@ -95,19 +126,34 @@ class CPInvoiceGroupRender extends RenderBase {
         await transactionLines.select({ invGrpId: this.options.query.id });
 
         transactionLines.forceReadOnly = true;
+        if (this.options.allowEdit && this.options.mode == 'edit' && this.dataSource.isManual) {
+            if (this.invoiceEditMode == _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP || this.invoiceEditMode == _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP_AND_DOCS) {
+                transactionLines.forceReadOnly = false;
+            }
+        }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, mode: 'view', id: 'glItems', query: this.options.query, mergeGLAndTax: erpSett.mergeGLAndTax, showGlSegment3: erpSett.showGlSegment3 });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp gl transactions</span>';
 
-        // if (this.options.allowEdit && this.options.mode == 'edit') {
-        //     transactionLinesOptions.hideTitlePanel = true;
-        //     transactionLinesOptions.lookupLists = {};
+        if (!transactionLines.forceReadOnly) {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
 
-        //     var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre);
-        //     transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
+            var glAccounts = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpLookUpList(this.dataSource.shopId, erpSett.erpCostCentre, erpSett.mergeGLAndTax);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG1] = glAccounts;
 
-        // }
+            var glAccountSegs2 = await this.dataSource.cx.table(_cxSchema.erp_gl_account).toErpSeg2LookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_gl.GLACCOUNTSEG2] = glAccountSegs2;
+
+            if (erpSett.mergeGLAndTax) {
+                var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+                transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            }
+
+        }
+
+
         return transactionLinesOptions;
     }
 
@@ -116,19 +162,25 @@ class CPInvoiceGroupRender extends RenderBase {
         await transactionLines.select({ invGrpId: this.options.query.id });
 
         transactionLines.forceReadOnly = true;
+        if (this.options.allowEdit && this.options.mode == 'edit' && this.dataSource.isManual) {
+            if (this.invoiceEditMode == _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP || this.invoiceEditMode == _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP_AND_DOCS) {
+                transactionLines.forceReadOnly = false;
+            }
+        }
 
         var transactionLinesOptions = await this.listOptions(transactionLines, { listView: true, id: 'taxItems', query: this.options.query });
         transactionLinesOptions.quickSearch = true;
         transactionLinesOptions.title = '<span>erp tax transactions</span>';
 
-        // if (this.options.allowEdit && this.options.mode == 'edit') {
-        //     transactionLinesOptions.hideTitlePanel = true;
-        //     transactionLinesOptions.lookupLists = {};
+        if (!transactionLines.forceReadOnly) {
+            transactionLinesOptions.hideTitlePanel = true;
+            transactionLinesOptions.lookupLists = {};
 
-        //     var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
-        //     transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
+            var taxAccounts = await this.dataSource.cx.table(_cxSchema.erp_tax_account).toErpLookUpList(this.dataSource.shopId);
+            transactionLinesOptions.lookupLists[_cxSchema.cp_erp_transaction_tax.TAXACCOUNT] = taxAccounts;
 
-        // }
+        }
+
         return transactionLinesOptions;
     }
 
@@ -200,13 +252,21 @@ class CPInvoiceGroupRender extends RenderBase {
             `;
             this.options.tabTitle = '\u270E ' + this.options.tabTitle;
         }
+        if (this.dataSource.isManual) {
+            this.options.title += `
+                <div style="${applyStoreColorStyle}; background-color: #a85c32;" title="this is a manual group invoice">
+                    &#x1F590;
+                </div>
+            `;
+            this.options.tabTitle = '\u270E ' + this.options.tabTitle;
+        }
 
         if (this.matchingEnabled) {
             var matchSummary = await this.getMatchingSummary();
             // this.options.title += matchSummary.html;
             this.options.title += matchSummary.htmlPie;
         }
-      
+
         this.options.title += '</div>';
         // SET ERP TOKEN BANNER IF REQUIRED
         this.options.formBanner = await this.validateErpToken();
@@ -251,7 +311,7 @@ class CPInvoiceGroupRender extends RenderBase {
                         if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady) {
                             this.manualHelpMessage = "All seems good, the group invoice is ready for posting";
                         } else {
-                            
+
                             for (var tx = 0; tx < transactionOptions.records.length; tx++) {
                                 var s = transactionOptions.records[tx].documentStatus;
                                 if (s == _cxConst.CP_DOCUMENT.STATUS.Generating || s == _cxConst.CP_DOCUMENT.STATUS.REFRESH) {
@@ -271,7 +331,7 @@ class CPInvoiceGroupRender extends RenderBase {
                                     this.manualHelpMessage = "Some documents are not ready for posting, please address the issues then click on the [Refresh Data] button and choose to [Refresh only posting data] to prepare the invoice for posting";
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -350,12 +410,13 @@ class CPInvoiceGroupRender extends RenderBase {
 
 
     async _record() {
+        await this.getEditModePreference(this.dataSource.shopId);
+
         if (this.options.allowEdit) {
             this.options.allowEdit = (this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.Ready || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || this.dataSource.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR);
         }
 
         await this.setRecordTitle();
-        //this.options.title = `${this.dataSource.documentTypeName.toUpperCase()} GROUP [${this.dataSource.documentNumber}]`;
 
         var fieldGroup_totals = {
             group: 'totals', title: 'totals', column: 3, columnCount: 2, inline: true, fields: [
@@ -463,6 +524,29 @@ class CPInvoiceGroupRender extends RenderBase {
 
     async _list() {
         try {
+            await this.getEditModePreference();
+
+            var isCxRole = this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT;
+            if (this.options.allowEdit == true) {
+                this.options.allowEditCondition = (object)=> {
+                    if (object.isManual) {
+                        if (this.invoiceEditMode[object.shopId] == _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP || this.invoiceEditMode[object.shopId] == _cxConst.CP_PREFERENCE.GRP_INVOICE_EDIT_MODE.VALUES.GRP_AND_DOCS) {
+                            return (
+                                object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PostingReady ||
+                                object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION ||
+                                object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.PendingReview ||
+                                object.documentStatus == _cxConst.CP_DOCUMENT.STATUS.ERROR
+                            );
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return isCxRole;
+                    }
+
+                }
+            }
+
             if (this.options.query) {
                 this.options.paging = true;
                 this.options.pageNo = (this.options.query.page || 1);

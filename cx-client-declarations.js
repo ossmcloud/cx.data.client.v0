@@ -284,6 +284,7 @@ const CX_EPOS_PROVIDER = {
     SM: 'SM',
     ALOHA: 'ALOHA',
     BIGC: 'BIGC',
+    CBEI: 'CBEI',
 
     THERE: 'THERE',
     //
@@ -304,7 +305,8 @@ const CX_EPOS_PROVIDER = {
             PRISM: 'PRISM',
             SM: 'Station Master',
             THERE: 'Therefore',
-            BIGC: 'Big Commerce'
+            BIGC: 'Big Commerce',
+            CBEI: 'CBE Innova'
         });
     }
 }
@@ -379,6 +381,12 @@ const CX_EPOS_PROVIDERS = {
             type: CX_EPOS_PROVIDER.BIGC,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "API",    "endPoint": "",   "store": ""  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.CBEI,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.API_CONFIG, value: '{   "type": "API",    "endPoint": "",   "eodTime": "HH24:MM", "taxMap": [], "department": {}  }' },
             ]
         },
         {
