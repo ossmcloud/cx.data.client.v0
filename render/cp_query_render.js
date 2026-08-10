@@ -236,7 +236,12 @@ class CPQueryRender extends RenderBase {
                 if (this.dataSource.statusId == _cxConst.CP_QUERY_STATUS.RESOLVED_PENDING) {
                     this.options.buttons.push({ id: 'cp_resolve_query', text: 'Mark as Resolved', function: 'resolveQuery' });
                 }
-                this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
+                // @@TODO: BWG: Re-Open - remove after go-live
+                if (process.env.APP_CONTEXT == 'LIVE') {
+                    this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQueryOld' });    
+                } else {
+                    this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
+                }
             }
 
             if (bwgShopOptions) {
