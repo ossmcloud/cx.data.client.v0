@@ -244,13 +244,14 @@ const CX_WHS_PROVIDER = {
     TMS: 'tms',
     AQUA: 'aqua',
     MORR: 'morr',
+    COSTUK: 'costuk',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons'
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons', COSTUK: 'Cost Cutter UK'
         });
     },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons', COSTUK: 'Cost Cutter UK' });
     },
 }
 // @@TODO: this should come from sys_provider table
