@@ -31,6 +31,12 @@ function enumToList(obj, addEmpty, aliases, dataObjects) {
             object: (dataObject) ? _core.text.toBase64(JSON.stringify(dataObject)) : '',
         });
     }
+
+    enums.sort((a, b) => {
+        if (a.text > b.text) { return 1; }
+        if (a.text < b.text) { return -1; }
+        return 0;
+    })
     return enums;
 }
 function enumGetName(obj, value, aliases) {
