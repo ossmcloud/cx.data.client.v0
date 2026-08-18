@@ -31,6 +31,12 @@ function enumToList(obj, addEmpty, aliases, dataObjects) {
             object: (dataObject) ? _core.text.toBase64(JSON.stringify(dataObject)) : '',
         });
     }
+
+    enums.sort((a, b) => {
+        if (a.text > b.text) { return 1; }
+        if (a.text < b.text) { return -1; }
+        return 0;
+    })
     return enums;
 }
 function enumGetName(obj, value, aliases) {
@@ -286,6 +292,7 @@ const CX_EPOS_PROVIDER = {
     ALOHA: 'ALOHA',
     BIGC: 'BIGC',
     CBEI: 'CBEI',
+    POINT4: 'POINT4',
 
     THERE: 'THERE',
     //
@@ -307,7 +314,8 @@ const CX_EPOS_PROVIDER = {
             SM: 'Station Master',
             THERE: 'Therefore',
             BIGC: 'Big Commerce',
-            CBEI: 'CBE Innova'
+            CBEI: 'CBE Innova',
+            POINT4: 'Point 4'
         });
     }
 }
@@ -388,6 +396,13 @@ const CX_EPOS_PROVIDERS = {
             type: CX_EPOS_PROVIDER.CBEI,
             configDefaults: [
                 { name: EPOS_DTFS_CONFIGS.API_CONFIG, value: '{   "type": "API",    "endPoint": "",   "eodTime": "HH24:MM", "taxMap": [], "department": {}  }' },
+            ]
+        },
+        {
+            type: CX_EPOS_PROVIDER.POINT4,
+            configDefaults: [
+                { name: EPOS_DTFS_CONFIGS.DTFS_PING_FREQ, value: '600' },
+                { name: EPOS_DTFS_CONFIGS.DTFS_DATASOURCE_CONFIG, value: '{   "type": "CXDLL",   "connString": "dll-name;conn-string"  }' },
             ]
         },
         {
