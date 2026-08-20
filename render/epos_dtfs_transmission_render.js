@@ -23,7 +23,7 @@ class EposTransmissionRender extends RenderBase {
             },
             
         ];
-        if (this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING || this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.PENDING) {
+        if (this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.TRANSMITTING || this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.PENDING || this.dataSource.status == _cxConst.EPOS_DTFS_TRANSMISSION.STATUS.FINALIZING) {
             this.options.buttons.push({ id: 'epos_dtfs_transmission_abort', text: 'Abort Transmission', function: 'abort' });
         }
     }
