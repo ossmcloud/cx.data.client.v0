@@ -203,7 +203,7 @@ class cr_cb_transaction extends _persistentTable.Record {
         return '';
     }
 
-    
+
     get canEdit() {
         return (this.status == _declarations.CR_CASH_BOOK.STATUS.New || this.status == _declarations.CR_CASH_BOOK.STATUS.Pending || this.status == _declarations.CR_CASH_BOOK.STATUS.Error)
     }
@@ -259,7 +259,7 @@ class cr_cb_transaction extends _persistentTable.Record {
             if (this.totalAccountLodgement != result.totalAccountLodgement) { this.logInfo(`total a/c lodgment changed from ${this.totalAccountLodgement} to ${result.totalAccountLodgement}`); }
             if (this.tillDifference != result.tillDifference) { this.logInfo(`till difference changed from ${this.tillDifference} to ${result.tillDifference}`); }
         }
-            
+
         this.totalSales = result.totalSales;
         this.totalAccountSales = result.totalAccountSales;
         this.totalLodgement = result.totalLodgement;
@@ -285,7 +285,11 @@ class cr_cb_transaction extends _persistentTable.Record {
             var newLog = await this.cx.table(_schema.cr_cb_transactionAudit).createNew();
             newLog.cbTranId = this.cbTranId;
             newLog.logType = type || _declarations.CX_LOG_TYPE.INFO;
-            newLog.logMessage = message || 'no message provided';
+            if (message && message.constructor.name != 'String') {
+                newLog.logMessage = JSON.stringify(message);
+            } else {
+                newLog.logMessage = message || 'no message provided';
+            }
             newLog.logMessage = newLog.logMessage.substring(0, 255);
             await newLog.save();
         } catch (error) {
