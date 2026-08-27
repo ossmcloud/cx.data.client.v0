@@ -1544,7 +1544,7 @@ const SYS_SERVER_TASK = {
                 MMS_Request_Task: { name: 'Document Matching', desc: 'Document Matching.\n\nOptional parameters:\nshops=[shop1,shop2];\ndelta_days=[number];\ndelta_days_inv=[number];', params: '' },
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 BWG_Service: { name: 'BWG Query Status Service', desc: 'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
-                ERP_Deferred_Posting: { name: 'ERP Deferred Posting Service', desc: 'posts transactions ready for posting.\n\nOptional parameters:\nshops=[shop1,shop2];\nmodules=[CR,CP,CS];\nmax=[int];\nstartDate=[yyyy-MM-dd];', params: '' },
+                ERP_Deferred_Posting: { name: 'ERP Deferred Posting Service', desc: 'posts transactions ready for posting.\n\nOptional parameters:\nshops=[shop1,shop2];\nmodules=[CR,CP,CPG,CS];\nmax=[int];\nstartDate=[yyyy-MM-dd OR go-back-days];\n\nDefault Max is 50 records.\nDefault startDate is 1 month in the past.', params: '' },
             });
         },
         getName: function (value) {
