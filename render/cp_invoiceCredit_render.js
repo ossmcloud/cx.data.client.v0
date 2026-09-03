@@ -13,7 +13,7 @@ class CPInvoiceReturnRender extends RenderBase {
         super(dataSource, options);
         if (!options.path) { options.path = '../cp/invoice'; }
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
-        this.matchingEnabled = this.hasModule('cm');
+        this.matchingEnabled = this.hasModule(_cxConst.CX_MODULE_SYS.CM);
     }
 
 

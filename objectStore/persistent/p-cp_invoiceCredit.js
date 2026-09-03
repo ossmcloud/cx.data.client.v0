@@ -62,6 +62,10 @@ const _fieldNames = {
     ISUSEREDITEDGL: 'isUserEditedGL',
     ISMANUAL: 'isManual',
     INACTIVE: 'inactive',
+    APPROVALSTATUS: 'approvalStatus',
+    APPROVALSTATUSMESSAGE: 'approvalStatusMessage',
+    APPROVALLEVEL: 'approvalLevel',
+    APPROVEDLEVEL: 'approvedLevel',
 
 }
 //
@@ -111,6 +115,10 @@ const _fields = {
     isUserEditedGL: { name: 'isUserEditedGL', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isManual: { name: 'isManual', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     inactive: { name: 'inactive', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
+    approvalStatus: { name: 'approvalStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    approvalStatusMessage: { name: 'approvalStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    approvalLevel: { name: 'approvalLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    approvedLevel: { name: 'approvedLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
 
 }
 //
@@ -386,6 +394,30 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.INACTIVE);
     } set inactive(val) {
         super.setValue(_fieldNames.INACTIVE, val);
+    }
+
+    get approvalStatus() {
+        return super.getValue(_fieldNames.APPROVALSTATUS);
+    } set approvalStatus(val) {
+        super.setValue(_fieldNames.APPROVALSTATUS, val);
+    }
+
+    get approvalStatusMessage() {
+        return super.getValue(_fieldNames.APPROVALSTATUSMESSAGE);
+    } set approvalStatusMessage(val) {
+        super.setValue(_fieldNames.APPROVALSTATUSMESSAGE, val);
+    }
+
+    get approvalLevel() {
+        return super.getValue(_fieldNames.APPROVALLEVEL);
+    } set approvalLevel(val) {
+        super.setValue(_fieldNames.APPROVALLEVEL, val);
+    }
+
+    get approvedLevel() {
+        return super.getValue(_fieldNames.APPROVEDLEVEL);
+    } set approvedLevel(val) {
+        super.setValue(_fieldNames.APPROVEDLEVEL, val);
     }
 
 

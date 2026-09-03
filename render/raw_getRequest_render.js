@@ -39,7 +39,7 @@ class RawGetRequest extends RenderBase {
         } else if (this.options.query.svc == 'dtfs') {
 
             if (!hasThereforeLegacy) { removeModule(modules, _cxConst.CX_MODULE.THEREFORE); }
-            if (this.hasModule('cs')) {
+            if (this.hasModule(_cxConst.CX_MODULE_SYS.CS)) {
                 if (this.options.query.mod == 'stock') {
                     removeModule(modules, _cxConst.CX_MODULE.STATIC);
                     removeModule(modules, _cxConst.CX_MODULE.RETAIL);
@@ -56,7 +56,7 @@ class RawGetRequest extends RenderBase {
         }
 
 
-        if (!this.hasModule('cr')) {
+        if (!this.hasModule(_cxConst.CX_MODULE_SYS.CR)) {
             for (var mx = 0; mx < modules.length; mx++) {
                 if (modules[mx].value == 'retail') {
                     modules.splice(mx, 1);
@@ -64,7 +64,7 @@ class RawGetRequest extends RenderBase {
                 }
             }
         }
-        if (!this.hasModule('cp')) {
+        if (!this.hasModule(_cxConst.CX_MODULE_SYS.CP)) {
             for (var mx = 0; mx < modules.length; mx++) {
                 if (modules[mx].value == 'purchase') {
                     modules.splice(mx, 1);
@@ -78,7 +78,7 @@ class RawGetRequest extends RenderBase {
 
         this.options.title = 'get data request';
 
-        this.dataSource.hasStockModule = this.hasModule('cs');
+        this.dataSource.hasStockModule = this.hasModule(_cxConst.CX_MODULE_SYS.CS);
         this.dataSource.hasThereforeLegacy = hasThereforeLegacy;
         this.dataSource.onlyStockModule = this.options.query.mod == 'stock';
 

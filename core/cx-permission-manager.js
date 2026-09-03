@@ -307,6 +307,14 @@ async function getPermission(recordType, role) {
     }
 
 
+    if (recordType == _cxSchema.ca_setting.TBL_NAME || recordType == _cxSchema.ca_settingShop.TBL_NAME || recordType == _cxSchema.ca_settingApprover.TBL_NAME || recordType == _cxSchema.ca_settingApproverShop.TBL_NAME) {
+        //permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowView = true;
+    }
+
     
     if (!permission.allowView) {
         var ex = new Error('You have no permission to access this record');

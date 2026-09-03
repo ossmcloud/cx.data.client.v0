@@ -117,13 +117,25 @@ const CX_LOGIN_CACHE_TYPE = {
 }
 
 
+const CX_MODULE_SYS = {
+    CX: 'cx',       // general
+    CR: 'cr',       // retail
+    CP: 'cp',       // purchase
+    CM: 'cm',       // matching
+    CS: 'cs',       // stock
+    CA: 'ca',       // purchase approval
+    CC: 'cc',       // capture
+}
+
 const CX_MODULE = {
     STATIC: 'static',
     RETAIL: 'retail',
     PURCHASE: 'purchase',
+    PURCHASE_APPROVAL: 'purchaseApproval',
     THEREFORE: 'therefore',
     STOCK_TAKE: 'stockTake',
     STOCK_VALU: 'stockValuation',
+    CAPTURE: 'capture',
 
     //
     toList: function (addEmpty) {
@@ -131,10 +143,11 @@ const CX_MODULE = {
             STATIC: 'Static Data',
             RETAIL: 'Sales Data',
             PURCHASE: 'Purchase Data',
+            PURCHASE_APPROVAL: 'Purchase Approval',
             THEREFORE: 'Therefore Documents',
             STOCK_TAKE: 'Stock Take',
             STOCK_VALU: 'Stock Valuation',
-
+            CAPTURE: 'Capture'
         });
     }
 
@@ -268,9 +281,10 @@ const CX_ERP_PROVIDER = {
     SAGEINT: 'sageIntacct',
     SAGEACC: 'sageAccount',
     XERO: 'xero',
+    DYN365: 'dynamics365',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting', XERO: 'Xero'
+            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting', XERO: 'Xero', DYN365: 'MS Dynamics 365'
         });
     }
 }
@@ -1107,8 +1121,21 @@ const CP_DOCUMENT = {
             return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
         }
 
-    }
+    },
+
+    APPROVAL_STATUS: {
+        NA: -1,
+        NotRequired: 0,
+        Pending: 10,
+        Approving: 20,
+        Rejected: 30,
+        Approved: 40,
+        ERROR: 90
+    },
+    APPROVAL_LEVELS: 5,
 }
+
+
 
 const CP_DOCUMENT_LINE = {
     STATUS: {
@@ -1873,6 +1900,7 @@ module.exports = {
     CX_LOGIN_CACHE_TYPE: CX_LOGIN_CACHE_TYPE,
     CX_ROLE: CX_ROLE,
     CX_MODULE: CX_MODULE,
+    CX_MODULE_SYS: CX_MODULE_SYS,
     CX_SERVICES: CX_SERVICES,
     CX_LOG_TYPE: CX_LOG_TYPE,
     CX_WHS_PROVIDER: CX_WHS_PROVIDER,

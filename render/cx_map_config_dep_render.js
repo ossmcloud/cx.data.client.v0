@@ -124,11 +124,10 @@ class CxMapConfigRender extends RenderBase {
             { label: 'manual', fieldName: 'manual', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] },
         ];
 
-        if (this.hasModule('cp')) {
+        if (this.hasModule(_cxConst.CX_MODULE_SYS.CP)) {
             this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' }));
         }
 
-        //this.hasModule('cm');
         this.options.columns = [];
         this.options.columns.push({ title: ' ', name: _cxSchema.cx_map_config_dep.DEPMAPCONFIGID });
         this.options.columns.push({ title: 'r', name: 'status_r', unbound: true, align: 'center', width: '15px' });
@@ -143,7 +142,7 @@ class CxMapConfigRender extends RenderBase {
         this.options.columns.push({ title: 'cogs account', name: 'cogsSpec', addValues: [{ name: 'cogsDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
         this.options.columns.push({ title: 'stock (+) account', name: 'stockDebSpec', addValues: [{ name: 'stockDebDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
         this.options.columns.push({ title: 'stock (-) account', name: 'stockCreSpec', addValues: [{ name: 'stockCreDesc', style: 'border-top: 1px dotted rgb(97,97,97);' }] });
-        if (this.hasModule('cp')) {
+        if (this.hasModule(_cxConst.CX_MODULE_SYS.CP)) {
             this.options.columns.push({ title: 'wholesaler', name: 'whsInfo' });
         }
 

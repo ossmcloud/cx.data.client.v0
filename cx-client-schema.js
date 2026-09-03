@@ -1,6 +1,62 @@
 'use strict'
 
 module.exports = {
+    ca_setting: {
+        TBL_NAME: 'ca_setting',
+        SETTINGID: 'settingId',
+        WHOLESALERID: 'wholesalerId',
+        SUPPLIERS: 'suppliers',
+        LEVEL0MIN: 'level0Min',
+        LEVEL0MAX: 'level0Max',
+        LEVEL1MIN: 'level1Min',
+        LEVEL1MAX: 'level1Max',
+        LEVEL2MIN: 'level2Min',
+        LEVEL2MAX: 'level2Max',
+        LEVEL3MIN: 'level3Min',
+        LEVEL3MAX: 'level3Max',
+        LEVEL4MIN: 'level4Min',
+        LEVEL4MAX: 'level4Max',
+        LEVEL5MIN: 'level5Min',
+        LEVEL5MAX: 'level5Max',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    ca_settingApprover: {
+        TBL_NAME: 'ca_settingApprover',
+        SETTINGAPPROVERID: 'settingApproverId',
+        LOGINID: 'loginId',
+        LEVEL: 'level',
+        WHOLESALERID: 'wholesalerId',
+        SUPPLIERS: 'suppliers',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    ca_settingApproverShop: {
+        TBL_NAME: 'ca_settingApproverShop',
+        SETTINGAPPROVERID: 'settingApproverId',
+        SHOPID: 'shopId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    ca_settingShop: {
+        TBL_NAME: 'ca_settingShop',
+        SETTINGID: 'settingId',
+        SHOPID: 'shopId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     cp_accrual: {
         TBL_NAME: 'cp_accrual',
         ACCRID: 'accrId',
@@ -321,6 +377,10 @@ module.exports = {
         ISUSEREDITEDGL: 'isUserEditedGL',
         ISMANUAL: 'isManual',
         INACTIVE: 'inactive',
+        APPROVALSTATUS: 'approvalStatus',
+        APPROVALSTATUSMESSAGE: 'approvalStatusMessage',
+        APPROVALLEVEL: 'approvalLevel',
+        APPROVEDLEVEL: 'approvedLevel',
     },
 
     cp_invoiceCreditLine: {

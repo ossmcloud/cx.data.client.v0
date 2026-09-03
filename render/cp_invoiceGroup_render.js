@@ -11,7 +11,7 @@ class CPInvoiceGroupRender extends RenderBase {
     invoiceEditMode = null;
     constructor(dataSource, options) {
         super(dataSource, options);
-        this.matchingEnabled = this.hasModule('cm');
+        this.matchingEnabled = this.hasModule(_cxConst.CX_MODULE_SYS.CM);
 
 
     }
