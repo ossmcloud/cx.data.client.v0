@@ -49,6 +49,12 @@ const _fieldNames = {
     INACTIVE: 'inactive',
     ISUSEREDITED: 'isUserEdited',
     ISUSEREDITEDGL: 'isUserEditedGL',
+    APPROVALSTATUS: 'approvalStatus',
+    APPROVALSTATUSMESSAGE: 'approvalStatusMessage',
+    APPROVALLEVEL: 'approvalLevel',
+    APPROVEDLEVEL: 'approvedLevel',
+    APPROVEDON: 'approvedOn',
+    APPROVEDBY: 'approvedBy',
 
 }
 //
@@ -85,6 +91,12 @@ const _fields = {
     inactive: { name: 'inactive', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false, default: '0' },
     isUserEdited: { name: 'isUserEdited', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
     isUserEditedGL: { name: 'isUserEditedGL', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    approvalStatus: { name: 'approvalStatus', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    approvalStatusMessage: { name: 'approvalStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
+    approvalLevel: { name: 'approvalLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    approvedLevel: { name: 'approvedLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    approvedOn: { name: 'approvedOn', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
+    approvedBy: { name: 'approvedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -282,6 +294,42 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISUSEREDITEDGL);
     } set isUserEditedGL(val) {
         super.setValue(_fieldNames.ISUSEREDITEDGL, val);
+    }
+
+    get approvalStatus() {
+        return super.getValue(_fieldNames.APPROVALSTATUS);
+    } set approvalStatus(val) {
+        super.setValue(_fieldNames.APPROVALSTATUS, val);
+    }
+
+    get approvalStatusMessage() {
+        return super.getValue(_fieldNames.APPROVALSTATUSMESSAGE);
+    } set approvalStatusMessage(val) {
+        super.setValue(_fieldNames.APPROVALSTATUSMESSAGE, val);
+    }
+
+    get approvalLevel() {
+        return super.getValue(_fieldNames.APPROVALLEVEL);
+    } set approvalLevel(val) {
+        super.setValue(_fieldNames.APPROVALLEVEL, val);
+    }
+
+    get approvedLevel() {
+        return super.getValue(_fieldNames.APPROVEDLEVEL);
+    } set approvedLevel(val) {
+        super.setValue(_fieldNames.APPROVEDLEVEL, val);
+    }
+
+    get approvedOn() {
+        return super.getValue(_fieldNames.APPROVEDON);
+    } set approvedOn(val) {
+        super.setValue(_fieldNames.APPROVEDON, val);
+    }
+
+    get approvedBy() {
+        return super.getValue(_fieldNames.APPROVEDBY);
+    } set approvedBy(val) {
+        super.setValue(_fieldNames.APPROVEDBY, val);
     }
 
 

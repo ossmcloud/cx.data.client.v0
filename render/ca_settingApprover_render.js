@@ -7,53 +7,41 @@ const RenderBase = require('./render_base');
 class CPRecoSettingRender extends RenderBase {
     constructor(dataSource, options) {
         super(dataSource, options);
-        this.title = 'approval settings';
+        this.title = 'approvers settings';
         this.autoLoad = true;
 
         this.autoLoadFields = {};
-        this.autoLoadFields[_cxSchema.ca_setting.SETTINGID] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.WHOLESALERID] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.SUPPLIERS] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.SETTINGAPPROVERID] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.LEVEL] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.LOGINID] = null;
         this.autoLoadFields['shopCount'] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL0MIN] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL0MAX] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL1MIN] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL1MAX] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL2MIN] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL2MAX] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL3MIN] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL3MAX] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL4MIN] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL4MAX] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL5MIN] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.LEVEL5MAX] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.CREATED] = null;
-        this.autoLoadFields[_cxSchema.ca_setting.MODIFIED] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.WHOLESALERID] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.SUPPLIERS] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.CREATED] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.MODIFIED] = null;
     }
 
 
 
     async initColumn(field, column) {
-        if (field.name == _cxSchema.ca_setting.WHOLESALERID) {
+        if (field.name == _cxSchema.ca_settingApprover.WHOLESALERID) {
             column.name = 'wholesalerInfo';
             column.title = 'wholesaler';
             column.addTotals = false;
             column.align = 'left';
             column.nullText = 'none';
             column.width = '150px';
-        } else if (field.name.startsWith('level')) {
+        } else if (field.name == _cxSchema.ca_settingApprover.LOGINID) {
+            column.name = 'loginInfo';
+            column.title = 'login';
+            column.addTotals = false;
+            column.align = 'left';
+            column.width = '150px';
+        } else if (field.name == 'level') {
             column.addTotals = false;
             column.nullText = '';
-            var lvl = column.name.replace('level', '').replace('Min', '').replace('Max', '')
-            var minMax = column.name.endsWith('Min') ? 'Min' : 'Max';
-            if (lvl == '0') {
-                if (minMax == 'Min') { column.hide = true; }
-                column.title = `no approval<br />up to`;
-            } else {
-                column.title = `level ${lvl}<br />(${minMax})`
-            }
             column.width = '75px';
-        } else if (field.name=='shopCount') {
+        } else if (field.name == 'shopCount') {
             column.align = 'center';
             column.width = '50px';
             column.nullText = '';
@@ -61,10 +49,11 @@ class CPRecoSettingRender extends RenderBase {
         }
     }
     async initFilter(field, filter) {
-        if (field.name == _cxSchema.ca_setting.SUPPLIERS) {
-            //filter.replace = await this.filterDropDownOptions(_cxSchema.cp_wholesaler, { fieldName: 'wholesalerId' });
-            //filter.hide = true;
+        if (field.name == _cxSchema.ca_settingApprover.SUPPLIERS) {
             filter.width = '300px';
+        } else if (field.name == _cxSchema.ca_settingApprover.LOGINID) {
+            filter.replace = await this.filterDropDownOptions(_cxSchema.cx_login, { fieldName: 'loginId' });
+            filter.hide = false;
         } else {
             filter.hide = true;
         }
@@ -78,8 +67,8 @@ class CPRecoSettingRender extends RenderBase {
 
 
     async getShopSettingsListOptions() {
-        var configs = this.dataSource.cx.table(_cxSchema.ca_settingShop);
-        await configs.select({ settingId: this.dataSource.id });
+        var configs = this.dataSource.cx.table(_cxSchema.ca_settingApproverShop);
+        await configs.select({ settingApproverId: this.dataSource.id });
         if (configs.count() > 0) { this.options.allowDelete = false; }
 
         var configListOptions = await this.listOptions(configs, { listView: true });
@@ -97,7 +86,7 @@ class CPRecoSettingRender extends RenderBase {
                         }
                     }
                 }];
-                configListOptions.showButtons = [{ id: 'ca_settingShop_add', text: 'Add Shop', function: 'addShop' }];
+                configListOptions.showButtons = [{ id: 'ca_settingApproverShop_add', text: 'Add Shop', function: 'addShop' }];
             }
         }
         return configListOptions;
@@ -107,9 +96,11 @@ class CPRecoSettingRender extends RenderBase {
         var form = { group: 'all', title: '', columnCount: 2, styles: ['min-width: 500px;', 'min-width: 400px; max-width: 400px'], fields: [] }
 
         form.fields.push({
-            group: 'main', title: 'main info', column: 1, columnCount: 2, styles: ['width: 250px', 'min-width: 500px;'], fields: [
-                await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', column: 1, width: '250px' }),
-                { name: _cxSchema.ca_setting.SUPPLIERS, label: 'Suppliers (csv)', width: '100%', column: 2 }
+            group: 'main', title: 'main info', column: 1, columnCount: 4, styles: ['width: 250px', 'width: 75px', 'width: 250px', 'min-width: 500px;'], fields: [
+                await this.fieldDropDownOptions(_cxSchema.cx_login, { id: 'loginId', name: 'loginId', column: 1, width: '250px', validation: '{ "mandatory": true }' }),
+                { name: _cxSchema.ca_settingApprover.LEVEL, label: 'level', width: '75px', column: 2, validation: '{ "mandatory": true, "max": ' + _cxConst.CP_DOCUMENT.APPROVAL_LEVELS + '  }' },
+                await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', column: 3, width: '250px' }),
+                { name: _cxSchema.ca_settingApprover.SUPPLIERS, label: 'Suppliers (csv)', width: '100%', column: 4 }
             ]
         });
         form.fields.push({
@@ -128,22 +119,7 @@ class CPRecoSettingRender extends RenderBase {
                 }
             ]
         });
-
-        var levelsGroup = { group: 'levels', title: 'levels info', column: 1, columnCount: 6, fields: [] };
-        form.fields.push(levelsGroup);
-        for (var l = 0; l <= _cxConst.CP_DOCUMENT.APPROVAL_LEVELS; l++) {
-            levelsGroup.fields.push({
-                group: `level-${l}`, title: `lavel ${l}`, column: (l + 1), columnCount: 2, fields: [
-                    { name: `level${l}Min`, label: 'Min', width: '130px', column: 1 },
-                    { name: `level${l}Max`, label: 'Max', width: '130px', column: 1 },
-                ]
-            })
-        }
-
-
         this.options.fields = [form];
-
-
 
         if (!this.dataSource.isNew()) {
             var supplierConfigs = await this.getShopSettingsListOptions();

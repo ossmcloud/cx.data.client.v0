@@ -60,7 +60,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         query.sql += ` and d.inactive = ${params.inactive == 'true' ? '1' : '0'}`;
-        
+
         if (params.pdt) {
             params.pdt = params.pdt.trim();
             if (params.pdtt == 'all') {
@@ -177,6 +177,27 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         }
         if (params.sta) {
             query.sql += ' and d.documentStatus in (' + params.sta + ')';
+        }
+
+        if (params.aps) {
+            if (params.aps == -9) {
+                query.sql += ' and d.approvalStatus >= 0';
+            } else {
+                query.sql += ' and d.approvalStatus = @approvalStatus';
+                query.params.push({ name: 'approvalStatus', value: params.aps });
+            }
+        }
+        if (params.apb) {
+            query.sql += ' and d.approvedBy = @approvedBy';
+            query.params.push({ name: 'approvedBy', value: params.apb });
+        }
+        if (params.apdf) {
+            query.sql += ' and d.approvedOn >= @approvedOnFrom';
+            query.params.push({ name: 'approvedOnFrom', value: params.apdf });
+        }
+        if (params.apdt) {
+            query.sql += ' and d.approvedOn <= @approvedOnTo';
+            query.params.push({ name: 'approvedOnTo', value: params.apdt });
         }
 
         if (params.su) {
@@ -408,6 +429,19 @@ class cp_invoiceCredit extends _persistentTable.Record {
         return this.queryCount;
     }
 
+    get approvalStatusName() {
+        var name = _declarations.CP_DOCUMENT.APPROVAL_STATUS.getName(this.approvalStatus);
+        if (this.approvalStatus != _declarations.CP_DOCUMENT.APPROVAL_STATUS.NA && this.approvalStatus != _declarations.CP_DOCUMENT.APPROVAL_STATUS.NotRequired) {
+            name = `${name} (lvl: ${this.approvedLevel})`;
+        }
+        return name;
+    }
+    get approvalStatusIcon() {
+        if (this.approvalStatus == null) { return ''; }
+        if (this.approvalStatus == _declarations.CP_DOCUMENT.APPROVAL_STATUS.NA) { return ''; }
+        return _declarations.SVG_ICONS.number(this.approvalLevel, _declarations.CP_DOCUMENT.APPROVAL_STATUS.getStyleInverted(this.approvalStatus, true).bkgColor)
+    }
+
     get logs() {
         return this.#logs;
     } set logs(logs) {
@@ -433,6 +467,9 @@ class cp_invoiceCredit extends _persistentTable.Record {
         if (error && error.message) { error = error.message; }
         await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.ERROR, error, info);
 
+    }
+    async logApproval(message, info) {
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.APPROVAL, message, info);
     }
     async logBase(type, message, info) {
         if (!this.#logs) {

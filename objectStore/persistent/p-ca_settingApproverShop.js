@@ -19,6 +19,7 @@ const _tableName = 'ca_settingApproverShop';
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
+    SETTINGAPPROVERSHOPID: 'settingApproverShopId',
     SETTINGAPPROVERID: 'settingApproverId',
     SHOPID: 'shopId',
     CREATED: 'created',
@@ -31,9 +32,10 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    settingApproverId: { name: 'settingApproverId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    settingApproverShopId: { name: 'settingApproverShopId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    settingApproverId: { name: 'settingApproverId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false },
+    created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
@@ -58,8 +60,14 @@ class Persistent_ca_settingApproverShop extends _cx_data.DBRecord {
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
+    get settingApproverShopId() {
+        return super.getValue(_fieldNames.SETTINGAPPROVERSHOPID);
+    }
+
     get settingApproverId() {
         return super.getValue(_fieldNames.SETTINGAPPROVERID);
+    } set settingApproverId(val) {
+        super.setValue(_fieldNames.SETTINGAPPROVERID, val);
     }
 
     get shopId() {

@@ -19,6 +19,7 @@ const _tableName = 'ca_settingShop';
 // FIELD NAMES (just because they are handy to have here)
 //
 const _fieldNames = {
+    SETTINGSHOPID: 'settingShopId',
     SETTINGID: 'settingId',
     SHOPID: 'shopId',
     CREATED: 'created',
@@ -31,7 +32,8 @@ const _fieldNames = {
 // FIELD SPECIFICATIONS
 //
 const _fields = {
-    settingId: { name: 'settingId', dataType: 'bigint', pk: true, identity: false, maxLength: 8, null: false },
+    settingShopId: { name: 'settingShopId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
+    settingId: { name: 'settingId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
@@ -58,6 +60,10 @@ class Persistent_ca_settingShop extends _cx_data.DBRecord {
     get FieldNames() { return _fieldNames; }
     
     // DEFINE TABLE FIELDS AS PROPERTIES
+    get settingShopId() {
+        return super.getValue(_fieldNames.SETTINGSHOPID);
+    }
+
     get settingId() {
         return super.getValue(_fieldNames.SETTINGID);
     } set settingId(val) {

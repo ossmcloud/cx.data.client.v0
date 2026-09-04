@@ -66,6 +66,8 @@ const _fieldNames = {
     APPROVALSTATUSMESSAGE: 'approvalStatusMessage',
     APPROVALLEVEL: 'approvalLevel',
     APPROVEDLEVEL: 'approvedLevel',
+    APPROVEDON: 'approvedOn',
+    APPROVEDBY: 'approvedBy',
 
 }
 //
@@ -119,6 +121,8 @@ const _fields = {
     approvalStatusMessage: { name: 'approvalStatusMessage', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     approvalLevel: { name: 'approvalLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     approvedLevel: { name: 'approvedLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    approvedOn: { name: 'approvedOn', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
+    approvedBy: { name: 'approvedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -418,6 +422,18 @@ class Persistent_cp_invoiceCredit extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.APPROVEDLEVEL);
     } set approvedLevel(val) {
         super.setValue(_fieldNames.APPROVEDLEVEL, val);
+    }
+
+    get approvedOn() {
+        return super.getValue(_fieldNames.APPROVEDON);
+    } set approvedOn(val) {
+        super.setValue(_fieldNames.APPROVEDON, val);
+    }
+
+    get approvedBy() {
+        return super.getValue(_fieldNames.APPROVEDBY);
+    } set approvedBy(val) {
+        super.setValue(_fieldNames.APPROVEDBY, val);
     }
 
 

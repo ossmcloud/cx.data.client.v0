@@ -11,19 +11,19 @@ class CPRecoSettingRender extends RenderBase {
         this.autoLoad = true;
 
         this.autoLoadFields = {};
-        this.autoLoadFields[_cxSchema.ca_settingShop.SETTINGID] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApproverShop.SETTINGID] = null;
         this.autoLoadFields[_cxSchema.cx_shop.SHOPCODE] = null;
         this.autoLoadFields[_cxSchema.cx_shop.SHOPNAME] = null;
         if (!options.listView) {
-            this.autoLoadFields[_cxSchema.ca_settingShop.CREATED] = null;
-            this.autoLoadFields[_cxSchema.ca_settingShop.MODIFIED] = null;
+            this.autoLoadFields[_cxSchema.ca_settingApproverShop.CREATED] = null;
+            this.autoLoadFields[_cxSchema.ca_settingApproverShop.MODIFIED] = null;
         }
     }
 
 
 
     async initColumn(field, column) {
-        if (field.name == _cxSchema.ca_settingShop.CREATED || field.name == _cxSchema.ca_settingShop.MODIFIED) {
+        if (field.name == _cxSchema.ca_settingApproverShop.CREATED || field.name == _cxSchema.ca_settingApproverShop.MODIFIED) {
             column.width = '150px';
         } else if (field.name == _cxSchema.cx_shop.SHOPCODE) {
             column.width = '150px';

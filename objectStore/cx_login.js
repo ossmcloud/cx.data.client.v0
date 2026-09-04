@@ -23,7 +23,7 @@ class cx_login_Collection extends _persistentTable.Table {
         }
 
 
-        query.sql += ' order by l.loginId';
+        query.sql += ' order by l.firstName';
 
         return await super.select(query)
     }

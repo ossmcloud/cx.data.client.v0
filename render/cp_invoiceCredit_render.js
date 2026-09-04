@@ -3,10 +3,14 @@
 const _core = require('cx-core');
 const _cxSchema = require('../cx-client-schema');
 const _cxConst = require('../cx-client-declarations');
+const _approvalEngine = require('../ca/ca-approval-engine');
 const RenderBase = require('./render_base');
 
 class CPInvoiceReturnRender extends RenderBase {
     matchingEnabled = false;
+    approvalEnabled = false;
+    approvalEngine = null;
+    approvalCanPost = null;
     invoiceEditMode = 0;
     invoiceEditModeGrp = 0;
     constructor(dataSource, options) {
@@ -14,6 +18,11 @@ class CPInvoiceReturnRender extends RenderBase {
         if (!options.path) { options.path = '../cp/invoice'; }
         if (!options.listPath) { options.listPath = '../cp/invoices'; }
         this.matchingEnabled = this.hasModule(_cxConst.CX_MODULE_SYS.CM);
+        this.approvalEnabled = this.hasModule(_cxConst.CX_MODULE_SYS.CA);
+        if (this.approvalEnabled) {
+            this.approvalEngine = _approvalEngine.get(this.cx);
+        }
+
     }
 
 
@@ -168,6 +177,16 @@ class CPInvoiceReturnRender extends RenderBase {
                 ${_cxConst.CP_DOCUMENT.TYPE.getName(this.dataSource.documentType).toLowerCase()}
             </div>
         `;
+
+        if (this.approvalEnabled) {
+            this.options.title += `
+                <div id="approval-status-name" style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.APPROVAL_STATUS.getStyleInverted(this.dataSource.approvalStatus)}">
+                    <img src="/public/images/sruu_approval_dark.png" style="width: 24px; float: left; margin-left: -7px; margin-right: 7px;" />
+                    <span>${_cxConst.CP_DOCUMENT.APPROVAL_STATUS.getName(this.dataSource.approvalStatus)}</span>
+                </div>
+            `;
+        }
+
         this.options.title += `
             <div id="jx_page_title_doc_status" style="${applyStoreColorStyle} ${_cxConst.CP_DOCUMENT.STATUS.getStyleInverted(this.dataSource.documentStatus)}">
                 ${_cxConst.CP_DOCUMENT.STATUS.getName(this.dataSource.documentStatus)}
@@ -183,6 +202,8 @@ class CPInvoiceReturnRender extends RenderBase {
                 </div>
             `;
         }
+
+
 
         if (this.dataSource.isUserEdited) {
             this.options.title += `
@@ -330,6 +351,33 @@ class CPInvoiceReturnRender extends RenderBase {
             ]
         }
 
+        var fieldGroup_approval = null;
+        if (this.approvalEnabled) {
+            fieldGroupStyles.push('width: 250px; min-width: 250px;');
+            fieldGroup_approval = {
+                group: 'approval', title: 'approval info', column: fieldGroupIdx++, columnCount: 1, fields: [
+                    {
+                        group: 'audit0', title: '', column: 1, columnCount: 1, inline: true, fields: [
+                            { name: 'approvalStatusName', label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
+                            { name: _cxSchema.cp_invoiceCredit.APPROVALSTATUSMESSAGE, label: 'status message', column: 1, readOnly: true },
+                        ]
+                    },
+                    {
+                        group: 'audit1', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                            { name: _cxSchema.cp_invoiceCredit.APPROVEDON, label: 'approved on', column: 1, readOnly: true },
+                            { name: _cxSchema.cp_invoiceCredit.APPROVEDBY, label: 'approved by', column: 2, readOnly: true },
+                        ]
+                    },
+                    // {
+                    //     group: 'audit2', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                    //         { name: 'modified', label: 'modified', column: 1, readOnly: true },
+                    //         { name: 'modifiedBy', label: 'modified by', column: 2, readOnly: true },
+                    //     ]
+                    // }
+                ]
+            }
+        }
+
         var fieldGroup_erp = null;
         var s = this.dataSource.documentStatus;
         if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.Posted || s == _cxConst.CP_DOCUMENT.STATUS.PostingError) {
@@ -358,6 +406,7 @@ class CPInvoiceReturnRender extends RenderBase {
         fieldGroup.fields.push(fieldGroup_main);
         fieldGroup.fields.push(fieldGroup_docReferences);
         fieldGroup.fields.push(fieldGroup_totals);
+        if (fieldGroup_approval != null) { fieldGroup.fields.push(fieldGroup_approval); }
         fieldGroup.fields.push(fieldGroup_audit);
         if (fieldGroup_erp != null) { fieldGroup.fields.push(fieldGroup_erp); }
 
@@ -426,6 +475,15 @@ class CPInvoiceReturnRender extends RenderBase {
 
             } else {
 
+                if (this.approvalEnabled) {
+                    if (this.dataSource.approvalStatus == _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Pending || this.dataSource.approvalStatus == _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Approving) {
+                        if (await this.approvalEngine.canApprove(this.dataSource)) {
+                            this.options.buttons.push({ id: 'ca_approve', text: `Approve (lvl: ${this.dataSource.approvedLevel + 1})`, function: 'approveDocument', style: 'color: white; background-color: rgba(0,125,0,1);' });
+                            this.options.buttons.push({ id: 'ca_reject', text: 'Reject', function: 'rejectDocument', style: 'color: white; background-color: rgba(125,0,0,1);' });
+                        }
+                    }
+                }
+
                 var s = this.dataSource.documentStatus;
                 // allow to refresh only under certain statuses
                 if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
@@ -437,10 +495,18 @@ class CPInvoiceReturnRender extends RenderBase {
                 if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.USER) {
                     if (s == _cxConst.CP_DOCUMENT.STATUS.PostingReady && !this.options.formBanner) {
                         if (!this.dataSource.invGrpId) {
-                            var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
-                            var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
-                            var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
-                            this.options.buttons.push(btnPostToErp);
+                            var showPostButton = true;
+                            if (this.approvalEnabled) {
+                                if (this.dataSource.approvalStatus != _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Approved) {
+                                    showPostButton = this.approvalCanPost;
+                                }
+                            }
+                            if (showPostButton) {
+                                var erpShopSetting = this.dataSource.cx.table(_cxSchema.erp_shop_setting);
+                                var erpName = await erpShopSetting.getErpName(this.dataSource.shopId);
+                                var btnPostToErp = { id: 'cp_post_data', text: 'Post to ' + erpName, function: 'postData', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
+                                this.options.buttons.push(btnPostToErp);
+                            }
                         }
                     } else if (s == _cxConst.CP_DOCUMENT.STATUS.PendingReview) {
                         var btnPostToErp = { id: 'cp_flag_reviewed', text: 'Flag as Reviewed', function: 'flagAsReviewed', style: 'color: var(--action-btn-color); background-color: var(--action-btn-bg-color);', };
@@ -496,6 +562,8 @@ class CPInvoiceReturnRender extends RenderBase {
                         this.options.buttons.push({ id: 'cp_run_matching', text: 'Run Matching Process', function: 'runMatching', style: 'color: white; background-color: rgba(0,125,0,1);' });
                     }
                 }
+
+
             }
         }
     }
@@ -520,6 +588,11 @@ class CPInvoiceReturnRender extends RenderBase {
             records: [{ recordType: _cxSchema.cx_shop.TBL_NAME, recordId: this.dataSource.shopId },]
         }
         this.invoiceEditMode = await this.dataSource.cx.cpPref.get(prefContext);
+
+        if (this.approvalEnabled) {
+            prefContext.pref = _cxConst.CP_PREFERENCE.APPROVAL_CAN_POST;
+            this.approvalCanPost = await this.dataSource.cx.cpPref.get(prefContext);
+        }
 
         if (this.options.allowEdit) {
             if (this.dataSource.invGrpId) {
@@ -572,6 +645,8 @@ class CPInvoiceReturnRender extends RenderBase {
             var isBatchProcessing = (this.options.query && (this.options.query.batch == 'T' || this.options.query.batch == 'true'));
             var batchActionSelected = (isBatchProcessing && this.options.query.action);
 
+            var isApprovalView = (this.options.query && (this.options.query.appr == 'T' || this.options.query.appr == 'true'));
+
             this.options.filters = [];
             this.options.showButtons = [];
 
@@ -583,6 +658,9 @@ class CPInvoiceReturnRender extends RenderBase {
                     this.options.showButtons.push({ id: 'cp_batch_submit', text: 'submit for batch processing', function: 'submitForBatchProcessing' });
                 }
                 this.options.filters.push({ fieldName: 'batch', type: _cxConst.RENDER.CTRL_TYPE.HIDDEN });
+            } else if (isApprovalView) {
+                this.options.title = 'invoice / credits approvals';
+                this.options.filters.push({ fieldName: 'appr', type: _cxConst.RENDER.CTRL_TYPE.HIDDEN });
             }
 
 
@@ -607,6 +685,19 @@ class CPInvoiceReturnRender extends RenderBase {
                     this.options.filters.push({ label: 'match status', fieldName: 'mstatus', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: matchStatuses });
                 } else {
                     this.options.filters.push({ label: 'status', fieldName: 'st', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: _cxConst.CP_DOCUMENT.STATUS.toList('- all -') });
+                }
+                if (this.approvalEnabled) {
+                    var approvalStatuses = _cxConst.CP_DOCUMENT.APPROVAL_STATUS.toList();
+                    approvalStatuses.unshift({ value: -9, text: '- any -' });
+                    approvalStatuses.unshift({ value: '', text: '- all -' });
+
+                    this.options.filters.push({ label: 'approval status', fieldName: 'aps', width: '115px', type: _cxConst.RENDER.CTRL_TYPE.SELECT, items: approvalStatuses });
+
+                    if (isApprovalView) {
+                        this.options.filters.push(await this.filterDropDownOptions(_cxSchema.cx_login, { label: 'approved by', fieldName: 'apb' }));
+                        this.options.filters.push({ label: 'approved (from)', fieldName: 'apdf', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+                        this.options.filters.push({ label: 'approved (to)', fieldName: 'apdt', type: _cxConst.RENDER.CTRL_TYPE.DATE, width: '120px' });
+                    }
                 }
                 this.options.filters.push({ label: 'edited', fieldName: 'ued', type: _cxConst.RENDER.CTRL_TYPE.SELECT, width: '75px', items: [{ value: '', text: 'either' }, { value: 'true', text: 'yes' }, { value: 'false', text: 'no' }] });
                 this.options.filters.push({ label: 'supplier', fieldName: 'su', width: '125px', type: _cxConst.RENDER.CTRL_TYPE.TEXT });
@@ -654,6 +745,15 @@ class CPInvoiceReturnRender extends RenderBase {
 
             this.options.columns.push({ name: 'shopInfo', title: 'store', width: '200px' });
             this.options.columns.push({ name: 'status', title: 'status', align: 'center', width: '70px' });
+            if (this.approvalEnabled) {
+                var approveIcon = `<img src="/public/images/sruu_approval_dark.png" style="width: 20px" />`;
+                //this.options.columns.push({ name: 'approvalStatus', title: approveIcon, align: 'center', width: '10px', headerToolTip: 'approval status', toolTip: { valueField: 'approvalStatusName', suppressText: true } });
+                this.options.columns.push({ name: 'approvalStatusIcon', title: approveIcon, align: 'center', width: '10px', headerToolTip: 'approval status', toolTip: { valueField: 'approvalStatusName' } });
+                if (isApprovalView) {
+                    this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.APPROVEDBY, title: 'approved by', nullText: '' })
+                    this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.APPROVEDON, title: 'approved on', nullText: '', align: 'center', width: '130px' })
+                }
+            }
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTTYPE, title: 'type', align: 'center', width: '70px', lookUps: _cxConst.CP_DOCUMENT.TYPE.toList() });
             if (this.matchingEnabled) {
                 var matchIcon = `<img src="/public/images/puzzle_dark.png" style="width: 20px" />`;
@@ -666,9 +766,11 @@ class CPInvoiceReturnRender extends RenderBase {
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.SUPPLIERCODE, title: 'supplier' });
             this.options.columns.push({ name: 'supplierName', title: 'supplier name' });
             this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTNUMBER, title: 'document number' });
-            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, title: 'docket #' });
-            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' });
-            this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
+            if (!isApprovalView) {
+                this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCKETNUMBER, title: 'docket #' });
+                this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTREFERENCE, title: 'reference (erp)' });
+                this.options.columns.push({ name: _cxSchema.cp_invoiceCredit.DOCUMENTSECONDREFERENCE, title: 'reference (cx)' });
+            }
             if (!this.options.listView) {
                 // NOTE: this means it is a sublist of the group invoice so no reason to show this
                 this.options.columns.push({ name: 'groupDocumentNumber', title: 'group invoice', link: { url: '/cp/invoice-group?id={invGrpId}', valueField: _cxSchema.cp_invoiceCredit.INVGRPID } });
@@ -742,6 +844,20 @@ class CPInvoiceReturnRender extends RenderBase {
                     columns: ['queryCount']
                 })
             }
+
+            // if (this.approvalEnabled) {
+            //     var approvalStatuses = _cxConst.CP_DOCUMENT.APPROVAL_STATUS.toList();
+            //     for (let sx = 0; sx < approvalStatuses.length; sx++) {
+            //         const s = approvalStatuses[sx];
+            //         this.options.cellHighlights.push({
+            //             column: 'approvalStatus',
+            //             op: '=',
+            //             value: _cxConst.SVG_ICONS.number(1, _cxConst.CP_DOCUMENT.APPROVAL_STATUS.getStyleInverted(s.value, true).bkgColor),
+            //             // style: _cxConst.CP_DOCUMENT.APPROVAL_STATUS.getStyleInverted(s.value) + 'padding: 7px 1px 7px 1px; border-radius: 6px; width: 12px; display: block; overflow: hidden;',
+            //             columns: ['approvalStatus']
+            //         })
+            //     }
+            // }
 
             var types = _cxConst.CP_DOCUMENT.TYPE.toList();
             for (let sx = 0; sx < types.length; sx++) {

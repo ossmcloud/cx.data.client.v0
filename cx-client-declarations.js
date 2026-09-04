@@ -773,6 +773,7 @@ const CP_PREFERENCE = {
     USER_LANDING_PAGE: 10,
     INV_REQUIRES_REVIEW: 100,
     DEL_GENERATE_INVOICE_ON_TRANSFER: 110,
+    APPROVAL_CAN_POST: 120,
     INVOICE_EDIT_MODE: {
         ID: 200,
         VALUES: {
@@ -1129,8 +1130,71 @@ const CP_DOCUMENT = {
         Pending: 10,
         Approving: 20,
         Rejected: 30,
-        Approved: 40,
-        ERROR: 90
+        Approved: 80,
+        ERROR: 90,
+
+        toList: function (addEmpty) {
+            return enumToList(this, addEmpty, {
+                NA: 'not applicable',
+                NotRequired: 'not required',
+                Pending: 'pending',
+                Approving: 'approving...',
+                Rejected: 'rejected',
+                Approved: 'approved',
+                ERROR: 'ERROR'
+            });
+        },
+        getName: function (value) {
+            if (value == null) { return 'Not Set'; }
+            return enumGetName(this, (value || this.NotRequired), {
+                NA: 'not applicable',
+                NotRequired: 'not required',
+                Pending: 'pending',
+                Approving: 'approving...',
+                Rejected: 'rejected',
+                Approved: 'approved',
+                ERROR: 'ERROR'
+            });
+        },
+
+        getStyleInverted: function (status, returnObject) {
+            var color = 'var(--main-color)'; var bkgColor = '';
+            if (status == null) {
+                color = 'red';
+                bkgColor = 'var(--main-bg-color)';
+            } else if (status == this.NA) {
+                color = 'var(--main-color)';
+                bkgColor = 'var(--main-bg-color)';
+            } else if (status == this.NotRequired) {
+                color = 'white';
+                bkgColor = 'silver';
+            } else if (status == this.Pending) {
+                color = 'yellow';
+                bkgColor = 'goldenrod';
+            } else if (status == this.Approving) {
+                color = 'white';
+                bkgColor = 'mediumblue';
+            } else if (status == this.Rejected) {
+                color = 'white';
+                bkgColor = 'red';
+            } else if (status == this.Approved) {
+                color = 'white';
+                bkgColor = 'green';
+            } else if (status == this.ERROR) {
+                color = '255,255,255';
+                bkgColor = '234,30,37';
+            } else {
+                color = '255,255,255';
+                bkgColor = '128,128,128';
+            }
+
+            var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+            if (styles.color && styles.color.indexOf(',') > 0) { styles.color = 'rgb(' + styles.color + ')'; }
+            if (styles.bkgColor && styles.bkgColor.indexOf(',') > 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+            if (returnObject) { return styles; }
+
+            return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+        }
     },
     APPROVAL_LEVELS: 5,
 }
@@ -1327,6 +1391,7 @@ const CP_DOCUMENT_LOG = {
         INFO: 'INFO',
         WARNING: 'WARNING',
         ERROR: 'ERROR',
+        APPROVAL: 'APPROVAL',
         toList: function (addEmpty) { return enumToList(this); }
     }
 }
@@ -1891,6 +1956,21 @@ const BWG_CONDITIONAL_FIELDS = {
 }
 
 
+
+const SVG_ICONS = {
+    number(no, color) {
+        var x = 9;
+        if (no > 9) { x = 6; }
+        var svg = `
+                <svg height="24" width="24" style="margin-bottom: -7px;" xmlns="http://www.w3.org/2000/svg">
+                    <circle r="10" cx="12" cy="12" fill="${color}" stroke="var(--page-header-bg-color)" stroke-width="3" />
+                    <text x="${x}" y="16" stroke="white" style="font-size: 10px;">${no}</text>
+                </svg>
+            `;
+        return svg;
+    }
+}
+
 module.exports = {
     CX_CURRENCY: CX_CURRENCY,
     CX_SYS_USERS: CX_SYS_USERS,
@@ -1934,6 +2014,8 @@ module.exports = {
     SYS_SERVER_TASK: SYS_SERVER_TASK,
     CS_STOCK_VALUATION: CS_STOCK_VALUATION,
     CS_STOCK_VALUATION_LOG: CS_STOCK_VALUATION_LOG,
+
+    SVG_ICONS: SVG_ICONS,
 
     BWG_DEPARTMENTS: BWG_DEPARTMENTS,
     BWG_DEPOTS: BWG_DEPOTS,

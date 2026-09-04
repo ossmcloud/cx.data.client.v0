@@ -9,9 +9,11 @@ class ca_setting_Collection extends _persistentTable.Table {
 
     buildQuery() {
         return `
-                select	            sett.*, whs.code as wholesalerCode, whs.name as wholesalerName
+                select	            sett.*, whs.code as wholesalerCode, whs.name as wholesalerName,
+                                    (select count(*) from ca_settingShop settShop where settShop.settingId = sett.settingId) as shopCount
                 from	            ca_setting      sett
                 left outer join     cp_wholesaler	whs ON whs.wholesalerId = sett.wholesalerId
+                where   1 = 1
             `;
     }
 
@@ -49,12 +51,13 @@ class ca_setting_Collection extends _persistentTable.Table {
 class ca_setting extends _persistentTable.Record {
     #wholesalerName = '';
     #wholesalerCode = '';
-
+    #shopCount = null;
     constructor(table, defaults) {
         super(table, defaults);
         if (defaults) {
             this.#wholesalerName = defaults['wholesalerName'] || '';
             this.#wholesalerCode = defaults['wholesalerCode'] || '';
+            this.#shopCount = defaults['shopCount'] || null;
         }
     };
 
@@ -64,6 +67,8 @@ class ca_setting extends _persistentTable.Record {
         if (!this.#wholesalerCode) { return null; }
         return `[${this.#wholesalerCode}] ${this.#wholesalerName}`;
     }
+
+    get shopCount() { return this.#shopCount;    }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

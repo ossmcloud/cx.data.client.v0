@@ -75,6 +75,33 @@ class cx_shop_Collection extends _persistentTable.Table {
     }
 
 
+    async selectByCASettingsNot(settingId) {
+        var query = {
+            sql: `  select  s.*, g.groupCode, g.groupName
+                    from    cx_shop s
+                    left    outer join cx_shop_group g on g.shopGroupId = s.shopGroupId
+                    where   s.shopId not in (select shopId from ca_settingShop where settingId = @settingId)
+                    order by g.groupCode, s.shopCode`,
+            params: [{ name: 'settingId', value: settingId }]
+        }
+        return await super.select(query);
+
+    }
+
+    async selectByCAApprSettingsNot(settingApproverId) {
+        var query = {
+            sql: `  select  s.*, g.groupCode, g.groupName
+                    from    cx_shop s
+                    left    outer join cx_shop_group g on g.shopGroupId = s.shopGroupId
+                    where   s.shopId not in (select shopId from ca_settingApproverShop where settingApproverId = @settingApproverId)
+                    order by g.groupCode, s.shopCode`,
+            params: [{ name: 'settingApproverId', value: settingApproverId }]
+        }
+        return await super.select(query);
+
+    }
+
+
     async select(params) {
         if (!params) { params = {}; }
         var query = { sql: '', params: [] };

@@ -39,6 +39,7 @@ module.exports = {
 
     ca_settingApproverShop: {
         TBL_NAME: 'ca_settingApproverShop',
+        SETTINGAPPROVERSHOPID: 'settingApproverShopId',
         SETTINGAPPROVERID: 'settingApproverId',
         SHOPID: 'shopId',
         CREATED: 'created',
@@ -49,6 +50,7 @@ module.exports = {
 
     ca_settingShop: {
         TBL_NAME: 'ca_settingShop',
+        SETTINGSHOPID: 'settingShopId',
         SETTINGID: 'settingId',
         SHOPID: 'shopId',
         CREATED: 'created',
@@ -381,6 +383,8 @@ module.exports = {
         APPROVALSTATUSMESSAGE: 'approvalStatusMessage',
         APPROVALLEVEL: 'approvalLevel',
         APPROVEDLEVEL: 'approvedLevel',
+        APPROVEDON: 'approvedOn',
+        APPROVEDBY: 'approvedBy',
     },
 
     cp_invoiceCreditLine: {
@@ -476,6 +480,12 @@ module.exports = {
         INACTIVE: 'inactive',
         ISUSEREDITED: 'isUserEdited',
         ISUSEREDITEDGL: 'isUserEditedGL',
+        APPROVALSTATUS: 'approvalStatus',
+        APPROVALSTATUSMESSAGE: 'approvalStatusMessage',
+        APPROVALLEVEL: 'approvalLevel',
+        APPROVEDLEVEL: 'approvedLevel',
+        APPROVEDON: 'approvedOn',
+        APPROVEDBY: 'approvedBy',
     },
 
     cp_invoiceGroupLog: {
