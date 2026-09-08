@@ -55,6 +55,7 @@ const _fieldNames = {
     APPROVEDLEVEL: 'approvedLevel',
     APPROVEDON: 'approvedOn',
     APPROVEDBY: 'approvedBy',
+    REJECTREASON: 'rejectReason',
 
 }
 //
@@ -97,6 +98,7 @@ const _fields = {
     approvedLevel: { name: 'approvedLevel', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     approvedOn: { name: 'approvedOn', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     approvedBy: { name: 'approvedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    rejectReason: { name: 'rejectReason', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
 
 }
 //
@@ -330,6 +332,12 @@ class Persistent_cp_invoiceGroup extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.APPROVEDBY);
     } set approvedBy(val) {
         super.setValue(_fieldNames.APPROVEDBY, val);
+    }
+
+    get rejectReason() {
+        return super.getValue(_fieldNames.REJECTREASON);
+    } set rejectReason(val) {
+        super.setValue(_fieldNames.REJECTREASON, val);
     }
 
 

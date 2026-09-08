@@ -1,6 +1,19 @@
 'use strict'
 
 module.exports = {
+    ca_rejectReason: {
+        TBL_NAME: 'ca_rejectReason',
+        REJECTREASONID: 'rejectReasonId',
+        REASON: 'reason',
+        NOTES: 'notes',
+        FORCECOMMENT: 'forceComment',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+        SORTINDEX: 'sortIndex',
+    },
+
     ca_setting: {
         TBL_NAME: 'ca_setting',
         SETTINGID: 'settingId',
@@ -385,6 +398,7 @@ module.exports = {
         APPROVEDLEVEL: 'approvedLevel',
         APPROVEDON: 'approvedOn',
         APPROVEDBY: 'approvedBy',
+        REJECTREASON: 'rejectReason',
     },
 
     cp_invoiceCreditLine: {
@@ -486,6 +500,7 @@ module.exports = {
         APPROVEDLEVEL: 'approvedLevel',
         APPROVEDON: 'approvedOn',
         APPROVEDBY: 'approvedBy',
+        REJECTREASON: 'rejectReason',
     },
 
     cp_invoiceGroupLog: {
