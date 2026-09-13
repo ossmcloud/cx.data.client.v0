@@ -9,6 +9,34 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         return new cp_invoiceCredit(this, defaults);
     }
 
+    async selectByOta(ota) {
+        var query = { sql: '', params: [] };
+        query.sql = ` select    distinct d.*, s.shopCode, s.shopName, 
+                                isnull(supp.traderName, isnull(supp2.traderName, isnull(supp3.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end))) as supplierName,
+                                grp.documentNumber as groupDocumentNumber
+                      from      ${this.type} d
+                      inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+
+                      left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
+                      left outer join   cx_traderAccount supp2          ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cx_traderAccount supp3          ON supp3.shopId = d.shopId AND supp3.wholesalerCode = d.supplierCode AND supp3.traderType = 'S' 
+                      left outer join   cx_traderNameLookUp suppName    ON suppName.shopId = d.shopId AND suppName.traderCode = d.supplierCode AND suppName.traderType = 'S' 
+
+                      left outer join   cp_invoiceGroup  grp            ON grp.invGrpId = d.invGrpId 
+
+                      left join         ca_oneTimeAccessDoc ota         ON ota.documentId = d.invCreId
+
+                      where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+                      and               ota.oneTimeAccessId = @ota`;
+        
+
+        query.sql += ` and d.inactive = 0`;
+
+        query.params.push({ name: 'ota', value: ota})
+
+        return await super.select(query);
+    }
+
     async select(params) {
 
         if (!params) { params = {}; }

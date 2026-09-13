@@ -1,6 +1,42 @@
 'use strict'
 
 module.exports = {
+    ca_oneTimeAccess: {
+        TBL_NAME: 'ca_oneTimeAccess',
+        ONETIMEACCESSID: 'oneTimeAccessId',
+        LOGINID: 'loginId',
+        KEY: 'key',
+        EXPIRESIN: 'expiresIn',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    ca_oneTimeAccessDoc: {
+        TBL_NAME: 'ca_oneTimeAccessDoc',
+        ONETIMEACCESSDOCID: 'oneTimeAccessDocId',
+        ONETIMEACCESSID: 'oneTimeAccessId',
+        DOCUMENTTYPE: 'documentType',
+        DOCUMENTID: 'documentId',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
+    ca_oneTimeAccessLog: {
+        TBL_NAME: 'ca_oneTimeAccessLog',
+        ONETIMEACCESSLOGID: 'oneTimeAccessLogId',
+        ONETIMEACCESSID: 'oneTimeAccessId',
+        SUCCESS: 'success',
+        MESSAGE: 'message',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     ca_rejectReason: {
         TBL_NAME: 'ca_rejectReason',
         REJECTREASONID: 'rejectReasonId',
