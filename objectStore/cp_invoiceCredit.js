@@ -389,7 +389,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
-    get transmissionIdText() { return this.transmissionId.toString(); }
+    get transmissionIdText() { return this.transmissionId?.toString(); }
     //get dateStr() { return _core.date.format({ date: this.date }) }
 
     get postingStatus() { return this.#postingStatus; }
