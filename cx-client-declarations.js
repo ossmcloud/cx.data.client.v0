@@ -242,6 +242,7 @@ const ERP_DTFS_CONFIGS = {
         if (configName == this.API_AUTH_CONFIG) { return true; }
         if (configName == this.API_CONFIG) { return true; }
         if (configName == this.SAGE200_CONFIG) { return true; }
+        if (configName == this.ERP_DATASOURCE_CONFIG) { return true; }
         return false;
     }
 }
@@ -282,9 +283,10 @@ const CX_ERP_PROVIDER = {
     SAGEACC: 'sageAccount',
     XERO: 'xero',
     DYN365: 'dynamics365',
+    SAP: 'sap',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting', XERO: 'Xero', DYN365: 'MS Dynamics 365'
+            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting', XERO: 'Xero', DYN365: 'MS Dynamics 365', SAP: 'SAP Legacy'
         });
     }
 }

@@ -227,6 +227,7 @@ module.exports = {
         if (svcName == 'dtfs') { svcId = '10'; }
         if (svcName == 'sage200') { svcId = '20'; }
         if (svcName == 'sage50') { svcId = '30'; }
+        if (svcName == 'sap') { svcId = '40'; }
         // also, each transmission relates to a single store, so we append the store id
         var transmissionId = svcId + accountId.toString() + shopId.toString();
         // we also use the system ticks we should make it unique
