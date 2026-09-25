@@ -3,7 +3,7 @@
 const _core = require('cx-core');
 const { type } = require('os');
 
-function enumToList(obj, addEmpty, aliases, dataObjects) {
+function enumToList(obj, addEmpty, aliases, dataObjects, noSort) {
     if (!aliases) { aliases = {}; }
 
     var enums = [];
@@ -32,11 +32,13 @@ function enumToList(obj, addEmpty, aliases, dataObjects) {
         });
     }
 
-    enums.sort((a, b) => {
-        if (a.text > b.text) { return 1; }
-        if (a.text < b.text) { return -1; }
-        return 0;
-    })
+    if (!noSort) {
+        enums.sort((a, b) => {
+            if (a.text > b.text) { return 1; }
+            if (a.text < b.text) { return -1; }
+            return 0;
+        })
+    }
     return enums;
 }
 function enumGetName(obj, value, aliases) {
@@ -110,7 +112,7 @@ const CX_LOGIN_TOKEN_TYPE = {
     THEREFORE: 'there',
 
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, null, null, true); }
 }
 const CX_LOGIN_CACHE_TYPE = {
     URL_QUERY: 1
@@ -162,7 +164,7 @@ const CX_SERVICES = {
     MMS: 'mms',
     SVR: 'server',
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty, null, null, true); }
 }
 
 const CX_LOG_TYPE = {
