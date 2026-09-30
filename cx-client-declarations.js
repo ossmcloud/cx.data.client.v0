@@ -268,9 +268,10 @@ const CX_ERP_PROVIDER = {
     SAGEINT: 'sageIntacct',
     SAGEACC: 'sageAccount',
     XERO: 'xero',
+    SAP: 'sap',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting', XERO: 'Xero'
+            SG200: 'Sage 200 Professional', SG200STD: 'Sage 200 Standard', SAGE50: 'Sage 50 Accounts', SAGEINT: 'Sage Intacct', SAGEACC: 'Sage Accounting', XERO: 'Xero', SAP: 'SAP Legacy'
         });
     }
 }
