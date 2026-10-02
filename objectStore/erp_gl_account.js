@@ -154,7 +154,7 @@ class erp_gl_account_Collection extends _persistentTable.Table {
         query.sql = sqlScript.replace('{USE_COST_CENTER}', " and isnull(glTarget.costCentre, '') = isnull(erpSett.erpCostCentre, '')");
 
         var res = await this.cx.exec(query);
-        if (!res) {
+        if (!res.erpGLAccountId) {
             query.sql = sqlScript.replace('{USE_COST_CENTER}', '');
             res = await this.cx.exec(query);
 
