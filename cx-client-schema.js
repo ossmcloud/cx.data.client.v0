@@ -2294,6 +2294,7 @@ module.exports = {
         ISCLOUD: 'isCloud',
         LOGOURL: 'logoUrl',
         ISFLATFILES: 'isFlatFiles',
+        ISOCR: 'isOcr',
     },
 
     sys_serverTask: {

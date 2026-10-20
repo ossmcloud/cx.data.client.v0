@@ -43,6 +43,7 @@ class CxAttachment extends RenderBase {
             column.align = 'left';
             column.width = '50px';
             column.title = 'type';
+            column.data = 'attach-type';
         } else if (field.name == _cxSchema.cx_attachment.SOURCE || field.name == _cxSchema.cx_attachment.ERROR) {
             column.align = 'center';
             column.width = '50px';

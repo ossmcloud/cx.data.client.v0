@@ -25,6 +25,7 @@ const _fieldNames = {
     ISCLOUD: 'isCloud',
     LOGOURL: 'logoUrl',
     ISFLATFILES: 'isFlatFiles',
+    ISOCR: 'isOcr',
 
 }
 //
@@ -37,6 +38,7 @@ const _fields = {
     isCloud: { name: 'isCloud', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: false },
     logoUrl: { name: 'logoUrl', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: true },
     isFlatFiles: { name: 'isFlatFiles', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
+    isOcr: { name: 'isOcr', dataType: 'bit', pk: false, identity: false, maxLength: 1, null: true },
 
 }
 //
@@ -92,6 +94,12 @@ class Persistent_sys_provider extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.ISFLATFILES);
     } set isFlatFiles(val) {
         super.setValue(_fieldNames.ISFLATFILES, val);
+    }
+
+    get isOcr() {
+        return super.getValue(_fieldNames.ISOCR);
+    } set isOcr(val) {
+        super.setValue(_fieldNames.ISOCR, val);
     }
 
 

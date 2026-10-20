@@ -201,6 +201,7 @@ const EPOS_DTFS_CONFIGS = {
     API_CONFIG: 'EPOSApiConfig',
     ONE_DRIVE_CONFIG: 'OneDriveConfig',
     FTP_CONFIG: 'FTPConfig',
+    
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
@@ -267,13 +268,14 @@ const CX_WHS_PROVIDER = {
     AQUA: 'aqua',
     MORR: 'morr',
     COSTUK: 'costuk',
+    BP: 'bp',
     toList: function (addEmpty) {
         return enumToList(this, addEmpty, {
-            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons', COSTUK: 'Cost Cutter UK'
+            BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons', COSTUK: 'Cost Cutter UK', BP: 'BP (OCR)'
         });
     },
     getName: function (value) {
-        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons', COSTUK: 'Cost Cutter UK' });
+        return enumGetName(this, value, { BWG: 'BWG Foods', SCP: 'Southern Co-OP', NISA: 'NISA', CRUNCH: 'CrunchTime', MUS: 'Musgraves', VAL: 'Valero', BAR: 'James A Barry & Co Ltd', BUNZL: 'Bunzl Ireland', SYSCO: 'Sysco Ireland', GBI: 'Gala Retail', JH: 'James Hall', CJL: 'CJ Lang', TMS: 'TMS', AQUA: 'Aquavape', MORR: 'Morrisons', COSTUK: 'Cost Cutter UK', BP: 'BP (OCR)' });
     },
 }
 // @@TODO: this should come from sys_provider table
@@ -1370,10 +1372,11 @@ const CP_WHS_CONFIG = {
     ONE_DRIVE_CONFIG: 'OneDriveConfig',
     FTP_CONFIG: 'FTPConfig',
     EMAIL_CONFIG: 'EmailConfig',
-
+    OCR_OPTIONS: "OCROptions",
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty); },
     toEncrypt: function (configName) {
+        if (configName == CP_WHS_SHOP_CONFIG.OCR_OPTIONS) { return false; }
         return true;
     }
 }
@@ -1383,9 +1386,11 @@ const CP_WHS_SHOP_CONFIG = {
     ONE_DRIVE_CONFIG: 'OneDriveConfig',
     FTP_CONFIG: 'FTPConfig',
     EMAIL_CONFIG: 'EmailConfig',
+    OCR_OPTIONS: "OCROptions",
     //
     toList: function (addEmpty) { return enumToList(this, addEmpty,); },
     toEncrypt: function (configName) {
+        if (configName == CP_WHS_SHOP_CONFIG.OCR_OPTIONS) { return false; }
         return true;
     }
 }
@@ -1619,6 +1624,7 @@ const SYS_SERVER_TASK = {
         Whs_Document_Import: 100,
         Drive_Document_Import: 101,
         FTP_Document_Import: 102,
+        OCR_Document_Import: 103,
         Dtfs_Get_Request: 200,
         EPoS_Api_Service: 201,
         EPoS_Cashbook_Import: 202,
@@ -1634,6 +1640,7 @@ const SYS_SERVER_TASK = {
                 Whs_Document_Import: { name: 'Wholesaler Document Import (API)', desc: 'imports documents from wholesalers that provide an API.\n\nRequired parameters:\nprovider=providerId;\n\nOptional Parameters:\nshops=[shop1,shop2];\nfrom=yyyy-MM-dd;\nto=yyyy-MM-dd;', params: 'provider=' },
                 Drive_Document_Import: { name: 'Cloud Storage Document Import (API)', desc: 'imports wholesaler flat files from cloud storage providers (i.e.: one-drive, google-drive).\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 FTP_Document_Import: { name: 'FTP Storage Document Import', desc: 'imports wholesaler flat files from FTP Servers.\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
+                OCR_Document_Import: { name: 'OCR Document Import', desc: 'imports PDF documents fro one drive.\n\nRequired parameters:\nprovider=providerId;\n\nOptional parameters:\nshops=[shop1,shop2];', params: 'provider=' },
                 Dtfs_Get_Request: { name: 'DTFS Get Request', desc: 'generates get requests for dtfs/erps.\n\nRequired parameters:\nsvc=[dtfs|erps];\nmodule=[static|purchase];\n\nOptional parameters:\nshops=[shop1,shop2];\nday_offset=[n]', params: 'svc=;module=;' },
                 EPoS_Api_Service: { name: 'EPoS API Service', desc: 'cloud EPoS Service.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 EPoS_Cashbook_Import: { name: 'EPoS Cashbook Import', desc: 'EPoS CashBook Import Service (One Drive).\n\nOptional parameters:\nprovider=[eposProvider];\nshops=[shop1,shop2];', params: '' },
@@ -1641,6 +1648,7 @@ const SYS_SERVER_TASK = {
                 Therefore_Service: { name: 'Therefore service', desc: 'gets scanned documents information from therefore.\n\nOptional parameters:\nshops=[shop1,shop2];', params: '' },
                 BWG_Service: { name: 'BWG Query Status Service', desc: 'check status of pending BWG queries.\n\nOptional parameters:\nshops=[shop1,shop2];\ncreated_from=yyyy-MM-dd;\nquery=[query-reference];', params: '' },
                 ERP_Deferred_Posting: { name: 'ERP Deferred Posting Service', desc: 'posts transactions ready for posting.\n\nOptional parameters:\nshops=[shop1,shop2];\nmodules=[CR,CP,CPG,CS];\nmax=[int];\nstartDate=[yyyy-MM-dd OR go-back-days];\n\nDefault Max is 50 records.\nDefault startDate is 1 month in the past.', params: '' },
+                
             });
         },
         getName: function (value) {
@@ -1654,26 +1662,30 @@ const CX_ATTACHMENT = {
     TYPE: {
         None: 0,
         Scanned: 10,
+        OCR: 11,
+        OCRJ: 12,
         File: 20,
-        PDF: 21,
-        CVS: 32,
+        // PDF: 21,
+        // CVS: 32,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 None: 'Unknown',
                 Scanned: 'Scanned',
+                OCR: 'OCR Document',
+                OCRJ: 'OCR Analysis',
                 File: 'File',
-                PDF: 'PDF',
-                CSV: 'CSV'
             });
         },
         getName: function (value) {
             return enumGetName(this, value, {
                 None: 'Unknown',
                 Scanned: 'Scanned',
+                OCR: 'OCR Document',
+                OCRJ: 'OCR Analysis',
                 File: 'File',
-                PDF: 'PDF',
-                CSV: 'CSV'
+                // PDF: 'PDF',
+                // CSV: 'CSV'
             });
         },
     },

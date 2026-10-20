@@ -13,6 +13,7 @@ class CPInvoiceReturnRender extends RenderBase {
     approvalCanPost = null;
     invoiceEditMode = 0;
     invoiceEditModeGrp = 0;
+    hasPdfAttachment = false;
     constructor(dataSource, options) {
         super(dataSource, options);
         if (!options.path) { options.path = '../cp/invoice'; }
@@ -447,6 +448,10 @@ class CPInvoiceReturnRender extends RenderBase {
         var attachmentOptions = await this.getAttachmentListOptions();
         if (attachmentOptions) {
             this.options.fields.push({ group: 'attachments_list', title: 'attachments', column: 1, fields: [attachmentOptions.options], collapsed: true });
+
+            if (attachmentOptions.options.records.length > 0 && attachmentOptions.options.records[0].source == 'OCR') {
+                this.hasPdfAttachment = true;
+            }
         }
 
     }
@@ -454,6 +459,10 @@ class CPInvoiceReturnRender extends RenderBase {
     async buildFormActions(query) {
         // test button
         if (process.env.APP_CONTEXT == 'LOCAL') { this.options.buttons.push({ id: 'cp_test_function', text: 'Test', function: 'testFunction' }); }
+
+        if (this.hasPdfAttachment) {
+            this.options.buttons.push({ id: 'cp_splitView_function', text: '&#x25EB;', function: 'showFile' });
+        }
 
         if (this.options.mode == 'view') {
 
