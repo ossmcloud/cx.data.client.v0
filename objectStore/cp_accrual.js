@@ -11,6 +11,24 @@ class cp_accrual_Collection extends _persistentTable.Table {
         return new cp_accrual(this, defaults);
     }
 
+    // NOTE: only return accruals of the user shops (the base fetch does not filter by shop)
+    async fetch(id, returnNull) {
+        if (this.cx.cxSvc == true) { return await super.fetch(id, returnNull); }
+        if (!id) { throw new Error('cp_accrual::fetch - missing required argument [id]'); }
+        var query = {
+            sql: `select * from ${this.type} where ${this.FieldNames.ACCRID} = @accrId and ${this.FieldNames.SHOPID} in ${this.cx.shopList}`,
+            params: [{ name: 'accrId', value: id }],
+            noResult: 'null',
+            returnFirst: true,
+        };
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) {
+            if (returnNull) { return null; }
+            throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`);
+        }
+        return super.populate(rawRecord);
+    }
+
 
     async select(params) {
         if (!params) { params = {}; }
