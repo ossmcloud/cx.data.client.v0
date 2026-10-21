@@ -3,6 +3,7 @@
 const _core = require('cx-core');
 const _persistentTable = require('./persistent/p-cr_cb_transaction');
 const _declarations = require('../cx-client-declarations');
+const _sqlUtils = require('../core/cx-sql-utils');
 const _schema = require('../cx-client-schema');
 const _cx_render = require('../cx-client-render');
 //
@@ -94,7 +95,7 @@ class cr_cb_transaction_Collection extends _persistentTable.Table {
                     query.params.push({ name: 'status', value: params.st });
                 }
                 if (params.sta) {
-                    query.sql += ' and l.status in (' + params.sta + ')';
+                    query.sql += ' and l.status in (' + _sqlUtils.toIntList(params.sta) + ')';
                     //query.params.push({ name: 'statuses', value: [1,2] });
                 }
             }

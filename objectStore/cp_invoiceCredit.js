@@ -2,6 +2,7 @@
 //
 const _persistentTable = require('./persistent/p-cp_invoiceCredit');
 const _declarations = require('../cx-client-declarations');
+const _sqlUtils = require('../core/cx-sql-utils');
 const _schema = require('../cx-client-schema');
 //
 class cp_invoiceCredit_Collection extends _persistentTable.Table {
@@ -46,7 +47,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         var accrualJoin = ''; var accrualTotals = '';
         if (params.accrId) {
             accrualJoin = `
-                join cp_accrualDocument accrDoc on accrDoc.invCreId = d.invCreId and accrDoc.accrId = ${params.accrId}
+                join cp_accrualDocument accrDoc on accrDoc.invCreId = d.invCreId and accrDoc.accrId = @accrId
                 join (
                     select  accrDocId, sum(lineNet) as accrTotNet, sum(lineVat) as accrTotVat, sum(lineGross) as accrTotGross, sum(lineDRS) as accrTotDRS
                     from	cp_accrualDocumentLine 
@@ -94,25 +95,28 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             if (params.pdtt == 'all') {
                 query.sql += `
                     and (
-                            dl.itemCode like '%${params.pdt}%'
-                        or  dl.itemDescription like '%${params.pdt}%'
-                        or  dl.itemBarcode like '%${params.pdt}%'
-                        or  dl.itemBarcodeOuter like '%${params.pdt}%'
+                            dl.itemCode like '%' + @pdt + '%'
+                        or  dl.itemDescription like '%' + @pdt + '%'
+                        or  dl.itemBarcode like '%' + @pdt + '%'
+                        or  dl.itemBarcodeOuter like '%' + @pdt + '%'
                     )
                 `
             } else if (params.pdtt == 'barcode') {
                 query.sql += `
                     and (
-                            dl.itemBarcode like '%${params.pdt}%'
-                        or  dl.itemBarcodeOuter like '%${params.pdt}%'
+                            dl.itemBarcode like '%' + @pdt + '%'
+                        or  dl.itemBarcodeOuter like '%' + @pdt + '%'
                     )
                 `
             } else if (params.pdtt == 'code') {
-                query.sql += `and dl.itemCode like '%${params.pdt}%' `
+                query.sql += `and dl.itemCode like '%' + @pdt + '%' `
             } else if (params.pdtt == 'descr') {
-                query.sql += `and dl.itemDescription like '%${params.pdt}%' `
+                query.sql += `and dl.itemDescription like '%' + @pdt + '%' `
             }
         }
+
+        if (params.accrId) { query.params.push({ name: 'accrId', value: params.accrId }); }
+        if (params.pdt) { query.params.push({ name: 'pdt', value: params.pdt }); }
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -204,7 +208,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.params.push({ name: 'documentStatus', value: params.st });
         }
         if (params.sta) {
-            query.sql += ' and d.documentStatus in (' + params.sta + ')';
+            query.sql += ' and d.documentStatus in (' + _sqlUtils.toIntList(params.sta) + ')';
         }
 
         if (params.aps) {

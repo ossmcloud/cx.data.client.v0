@@ -4,6 +4,7 @@ const _ex = require('cx-core/errors/cx-errors');
 const _cx_render = require('../cx-client-render');
 const _cx_schema = require('../cx-client-schema');
 const _persistentTable = require('./persistent/p-cx_shop');
+const _sqlUtils = require('../core/cx-sql-utils');
 
 //
 class cx_shop_Collection extends _persistentTable.Table {
@@ -13,7 +14,7 @@ class cx_shop_Collection extends _persistentTable.Table {
 
     async updateGroup(groupId, shops) {
         var query = {
-            sql: `update cx_shop set shopGroupId = @shopGroupId where shopId in (${shops.replace('-', ',')})`,
+            sql: `update cx_shop set shopGroupId = @shopGroupId where shopId in (${_sqlUtils.toIntList(String(shops).replace(/-/g, ','))})`,
             params: [{ name: 'shopGroupId', value: groupId }]
         }
         await this.cx.exec(query);
@@ -148,7 +149,8 @@ class cx_shop_Collection extends _persistentTable.Table {
             query.sql += ` and ${this.FieldNames.TAXMAPCONFIGID} = @${this.FieldNames.TAXMAPCONFIGID}`;
             query.params.push({ name: this.FieldNames.TAXMAPCONFIGID, value: params.txcfg });
         }
-        if (params.order) {
+        // NOTE: order comes from the request, only allow a list of column names with optional direction
+        if (params.order && /^\s*[A-Za-z_][\w.]*(\s+(asc|desc))?(\s*,\s*[A-Za-z_][\w.]*(\s+(asc|desc))?)*\s*$/i.test(params.order)) {
             query.sql += ` order by ${params.order}`;   
         } else {
             query.sql += ` order by ${this.FieldNames.SHOPCODE}`;

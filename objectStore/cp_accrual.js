@@ -2,6 +2,7 @@
 //
 const _schema = require('../cx-client-schema');
 const _declarations = require('../cx-client-declarations');
+const _sqlUtils = require('../core/cx-sql-utils');
 const _persistentTable = require('./persistent/p-cp_accrual');
 //
 class cp_accrual_Collection extends _persistentTable.Table {
@@ -25,15 +26,17 @@ class cp_accrual_Collection extends _persistentTable.Table {
                 `
         };
 
-        if (params.SKIP_sta) { query.sql += ' and a.documentStatus in (' + params.SKIP_sta + ')'; }
+        if (!query.params) { query.params = []; }
+        if (params.SKIP_sta) { query.sql += ' and a.documentStatus in (' + _sqlUtils.toIntList(params.SKIP_sta) + ')'; }
         if (params.SKIP_ref) {
             query.sql += `
                 and (
-                    a.documentNumber like '${params.SKIP_ref}%' or
-                    a.documentReference like '${params.SKIP_ref}%' or
-                    a.documentSecondReference like '${params.SKIP_ref}%'
+                    a.documentNumber like @SKIP_ref + '%' or
+                    a.documentReference like @SKIP_ref + '%' or
+                    a.documentSecondReference like @SKIP_ref + '%'
                 )
             `;
+            query.params.push({ name: 'SKIP_ref', value: params.SKIP_ref });
         }
 
         this.queryFromParams(query, params, 'a');
