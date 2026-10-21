@@ -2265,6 +2265,18 @@ module.exports = {
         SHOPCOUNT: 'shopCount',
     },
 
+    sys_doc: {
+        TBL_NAME: 'sys_doc',
+        DOCID: 'docId',
+        NAME: 'name',
+        DESCRIPTION: 'description',
+        CONTENT: 'content',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     sys_erp_tran_type: {
         TBL_NAME: 'sys_erp_tran_type',
         TRANTYPEID: 'tranTypeId',
