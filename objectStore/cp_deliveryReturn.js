@@ -3,6 +3,7 @@
 const _persistentTable = require('./persistent/p-cp_deliveryReturn');
 const _core = require('cx-core');
 const _declarations = require('../cx-client-declarations');
+const _sqlUtils = require('../core/cx-sql-utils');
 const _schema = require('../cx-client-schema');
 const _cx_render = require('../cx-client-render');
 
@@ -27,7 +28,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
         var accrualJoin = ''; var accrualTotals = '';
         if (params.accrId) {
             accrualJoin = `
-                join cp_accrualDocument accrDoc on accrDoc.delRetId = d.delRetId and accrDoc.accrId = ${params.accrId}
+                join cp_accrualDocument accrDoc on accrDoc.delRetId = d.delRetId and accrDoc.accrId = @accrId
                 join (
                     select  accrDocId, sum(lineNet) as accrTotNet, sum(lineVat) as accrTotVat, sum(lineGross) as accrTotGross, sum(lineDRS) as accrTotDRS
                     from	cp_accrualDocumentLine 
@@ -88,22 +89,24 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
                 if (params.pdtt == 'all') {
                     query.sql += `
                     and (
-                            dl.eposCode like '%${params.pdt}%'
-                        or  dl.eposDescription like '%${params.pdt}%'
-                        or  dl.eposBarcode like '%${params.pdt}%'
+                            dl.eposCode like '%' + @pdt + '%'
+                        or  dl.eposDescription like '%' + @pdt + '%'
+                        or  dl.eposBarcode like '%' + @pdt + '%'
                     )
                 `
                 } else if (params.pdtt == 'barcode') {
-                    query.sql += `and dl.eposBarcode like '%${params.pdt}%'`;
+                    query.sql += `and dl.eposBarcode like '%' + @pdt + '%'`;
                 } else if (params.pdtt == 'code') {
-                    query.sql += `and dl.eposCode like '%${params.pdt}%' `
+                    query.sql += `and dl.eposCode like '%' + @pdt + '%' `
                 } else if (params.pdtt == 'descr') {
-                    query.sql += `and dl.eposDescription like '%${params.pdt}%' `
+                    query.sql += `and dl.eposDescription like '%' + @pdt + '%' `
                 }
             }
         }
 
         query.sql += ` and d.inactive = ${params.inactive == 'true' ? '1' : '0'}`;
+        if (params.accrId) { query.params.push({ name: 'accrId', value: params.accrId }); }
+        if (params.pdt && !isGenerateInvoice) { query.params.push({ name: 'pdt', value: params.pdt }); }
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -156,7 +159,7 @@ class cp_deliveryReturn_Collection extends _persistentTable.Table {
             query.params.push({ name: 'documentStatus', value: params.st });
         }
         if (params.sta) {
-            query.sql += ' and d.documentStatus in (' + params.sta + ')';
+            query.sql += ' and d.documentStatus in (' + _sqlUtils.toIntList(params.sta) + ')';
         }
         if (params.su) {
             query.sql += ' and (d.supplierCode like @supplierCode or supp.traderName like @supplierCode)';
