@@ -47,7 +47,7 @@ const _fields = {
     attachmentId: { name: 'attachmentId', dataType: 'bigint', pk: true, identity: true, maxLength: 8, null: false },
     recordType: { name: 'recordType', dataType: 'varchar', pk: false, identity: false, maxLength: 50, null: false },
     recordId: { name: 'recordId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
-    shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: false },
+    shopId: { name: 'shopId', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     typeId: { name: 'typeId', dataType: 'int', pk: false, identity: false, maxLength: 4, null: false },
     source: { name: 'source', dataType: 'varchar', pk: false, identity: false, maxLength: 20, null: false },
     name: { name: 'name', dataType: 'varchar', pk: false, identity: false, maxLength: 255, null: false },

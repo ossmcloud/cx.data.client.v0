@@ -1691,16 +1691,19 @@ const CX_ATTACHMENT = {
     SOURCE: {
         Therefore: 'there',
         OneDrive: 'one',
+        Blob: 'blob',
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 Therefore: 'Therefore',
                 OneDrive: 'One Drive',
+                Blob: 'Sruu Blob Storage',
             });
         },
         getName: function (value) {
             return enumGetName(this, value, {
                 Therefore: 'Therefore',
                 OneDrive: 'One Drive',
+                Blob: 'Sruu Blob Storage',
             });
         },
     }

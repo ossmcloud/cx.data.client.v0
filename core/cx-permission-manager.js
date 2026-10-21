@@ -300,6 +300,13 @@ async function getPermission(recordType, role) {
         permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
     }
 
+    if (recordType == _cxSchema.sys_doc.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowView = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+    }
+
     if (recordType == _cxSchema.cs_stockValuation.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = false;
