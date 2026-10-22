@@ -1666,6 +1666,7 @@ const CX_ATTACHMENT = {
         File: 20,
         // PDF: 21,
         // CVS: 32,
+        Signature: 30,
 
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
@@ -1674,6 +1675,7 @@ const CX_ATTACHMENT = {
                 OCR: 'OCR Document',
                 OCRJ: 'OCR Analysis',
                 File: 'File',
+                Signature: 'Signature',
             });
         },
         getName: function (value) {
@@ -1683,6 +1685,7 @@ const CX_ATTACHMENT = {
                 OCR: 'OCR Document',
                 OCRJ: 'OCR Analysis',
                 File: 'File',
+                Signature: 'Signature',
                 // PDF: 'PDF',
                 // CSV: 'CSV'
             });
