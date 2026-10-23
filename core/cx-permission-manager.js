@@ -307,6 +307,14 @@ async function getPermission(recordType, role) {
         permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
     }
 
+    // NOTE: read-only, chats are only written by the ai assistant (which chats a role can see is enforced by sys_aiChat.select / fetch)
+    if (recordType == _cxSchema.sys_aiChat.TBL_NAME || recordType == _cxSchema.sys_aiChatTurn.TBL_NAME || recordType == _cxSchema.sys_aiChatToolCall.TBL_NAME) {
+        permission.allowEdit = false;
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowDelete = false;
+    }
+
     if (recordType == _cxSchema.cs_stockValuation.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = false;
