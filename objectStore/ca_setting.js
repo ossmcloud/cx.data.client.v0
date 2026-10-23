@@ -1,5 +1,6 @@
 'use strict'
 //
+const _declarations = require('../cx-client-declarations');
 const _persistentTable = require('./persistent/p-ca_setting');
 //
 class ca_setting_Collection extends _persistentTable.Table {
@@ -72,7 +73,25 @@ class ca_setting extends _persistentTable.Record {
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION
+        this.validateLevels();
         return await super.save()
+    }
+
+    // NOTE: levels must not overlap, apart from level 0 the min is the max of the previous level with a max set
+    //       (same rule as jca_setting.js, the min input is read-only on the form so it is not posted)
+    validateLevels() {
+        var hasValue = (v) => { return (v !== null && v !== undefined && v !== ''); };
+        var prevMax = null;
+        for (var l = 0; l <= _declarations.CP_DOCUMENT.APPROVAL_LEVELS; l++) {
+            var max = this[`level${l}Max`];
+            if (l > 0) { this[`level${l}Min`] = (hasValue(max)) ? prevMax : null; }
+
+            var min = this[`level${l}Min`];
+            if (hasValue(min) && hasValue(max) && Number(min) > Number(max)) {
+                throw new Error(`level ${l} min [${min}] cannot be greater than its max [${max}]`);
+            }
+            if (hasValue(max)) { prevMax = max; }
+        }
     }
 }
 //

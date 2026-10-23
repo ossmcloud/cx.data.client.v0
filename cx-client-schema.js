@@ -84,6 +84,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        APPROVELOWERLEVELS: 'approveLowerLevels',
     },
 
     ca_settingApproverShop: {

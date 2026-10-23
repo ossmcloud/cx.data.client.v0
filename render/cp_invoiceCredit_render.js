@@ -358,8 +358,13 @@ class CPInvoiceReturnRender extends RenderBase {
             fieldGroup_approval = {
                 group: 'approval', title: 'approval info', column: fieldGroupIdx++, columnCount: 1, fields: [
                     {
-                        group: 'audit0', title: '', column: 1, columnCount: 1, inline: true, fields: [
-                            { name: 'approvalStatusName', label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
+                        group: 'approvalInfo', title: '', column: 1, columnCount: 1, inline: true, fields: [
+                            {
+                                group: 'approvalInfoInner', title: '', column: 1, columnCount: 2, inline: true, fields: [
+                                    { name: 'approvalStatusName', label: 'status', column: 1, readOnly: true, lookUps: _cxConst.CP_DOCUMENT.STATUS.toList() },
+                                    { name: 'approvalLevel', label: 'level', column: 2, noFormat: true, readOnly: true },
+                                ]
+                            },
                             { name: _cxSchema.cp_invoiceCredit.APPROVALSTATUSMESSAGE, label: 'status message', column: 1, readOnly: true },
                         ]
                     },
@@ -484,16 +489,19 @@ class CPInvoiceReturnRender extends RenderBase {
 
             } else {
 
+                var s = this.dataSource.documentStatus;
+
                 if (this.approvalEnabled) {
-                    if (this.dataSource.approvalStatus == _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Pending || this.dataSource.approvalStatus == _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Approving) {
+                    // no approval while the document is being processed
+                    var processing = (s == _cxConst.CP_DOCUMENT.STATUS.Generating || s == _cxConst.CP_DOCUMENT.STATUS.REFRESH || s == _cxConst.CP_DOCUMENT.STATUS.Posting || s == _cxConst.CP_DOCUMENT.STATUS.PostingRunning
+                        || s == _cxConst.CP_DOCUMENT.STATUS.DeleteAndPull || s == _cxConst.CP_DOCUMENT.STATUS.Delete);
+                    if (!processing && (this.dataSource.approvalStatus == _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Pending || this.dataSource.approvalStatus == _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Approving)) {
                         if (await this.approvalEngine.canApprove(this.dataSource)) {
-                            this.options.buttons.push({ id: 'ca_approve', text: `Approve (lvl: ${this.dataSource.approvedLevel + 1})`, function: 'approveDocument', style: 'color: white; background-color: rgba(0,125,0,1);' });
+                            this.options.buttons.push({ id: 'ca_approve', text: `Approve`, function: 'approveDocument', style: 'color: white; background-color: rgba(0,125,0,1);' });
                             this.options.buttons.push({ id: 'ca_reject', text: 'Reject', function: 'rejectDocument', style: 'color: white; background-color: rgba(125,0,0,1);' });
                         }
                     }
                 }
-
-                var s = this.dataSource.documentStatus;
                 // allow to refresh only under certain statuses
                 if (s == _cxConst.CP_DOCUMENT.STATUS.New || s == _cxConst.CP_DOCUMENT.STATUS.Ready || s == _cxConst.CP_DOCUMENT.STATUS.PostingReady || s == _cxConst.CP_DOCUMENT.STATUS.PendingReview || s == _cxConst.CP_DOCUMENT.STATUS.NEED_ATTENTION || s == _cxConst.CP_DOCUMENT.STATUS.ERROR) {
                     this.options.buttons.push({ id: 'cp_refresh_data', text: 'Refresh Data', function: 'refreshData' });

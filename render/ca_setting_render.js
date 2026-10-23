@@ -134,7 +134,8 @@ class CPRecoSettingRender extends RenderBase {
         for (var l = 0; l <= _cxConst.CP_DOCUMENT.APPROVAL_LEVELS; l++) {
             levelsGroup.fields.push({
                 group: `level-${l}`, title: `lavel ${l}`, column: (l + 1), columnCount: 2, fields: [
-                    { name: `level${l}Min`, label: 'Min', width: '130px', column: 1 },
+                    // NOTE: apart from level 0, min is the max of the previous level (set by jca_setting.js and on save)
+                    { name: `level${l}Min`, label: 'Min', width: '130px', column: 1, readOnly: (l > 0) },
                     { name: `level${l}Max`, label: 'Max', width: '130px', column: 1 },
                 ]
             })

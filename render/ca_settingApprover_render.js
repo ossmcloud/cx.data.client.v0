@@ -14,6 +14,7 @@ class CPRecoSettingRender extends RenderBase {
         this.autoLoadFields[_cxSchema.ca_settingApprover.SETTINGAPPROVERID] = null;
         this.autoLoadFields[_cxSchema.ca_settingApprover.LEVEL] = null;
         this.autoLoadFields[_cxSchema.ca_settingApprover.LOGINID] = null;
+        this.autoLoadFields[_cxSchema.ca_settingApprover.APPROVELOWERLEVELS] = null;
         this.autoLoadFields['shopCount'] = null;
         this.autoLoadFields[_cxSchema.ca_settingApprover.WHOLESALERID] = null;
         this.autoLoadFields[_cxSchema.ca_settingApprover.SUPPLIERS] = null;
@@ -41,6 +42,10 @@ class CPRecoSettingRender extends RenderBase {
             column.addTotals = false;
             column.nullText = '';
             column.width = '75px';
+        } else if (field.name == _cxSchema.ca_settingApprover.APPROVELOWERLEVELS) {
+            column.align = 'center';
+            column.width = '75px';
+            column.nullText = '';
         } else if (field.name == 'shopCount') {
             column.align = 'center';
             column.width = '50px';
@@ -100,7 +105,8 @@ class CPRecoSettingRender extends RenderBase {
                 await this.fieldDropDownOptions(_cxSchema.cx_login, { id: 'loginId', name: 'loginId', column: 1, width: '250px', validation: '{ "mandatory": true }' }),
                 { name: _cxSchema.ca_settingApprover.LEVEL, label: 'level', width: '75px', column: 2, validation: '{ "mandatory": true, "max": ' + _cxConst.CP_DOCUMENT.APPROVAL_LEVELS + '  }' },
                 await this.fieldDropDownOptions(_cxSchema.cp_wholesaler, { id: 'wholesalerId', name: 'wholesalerId', column: 3, width: '250px' }),
-                { name: _cxSchema.ca_settingApprover.SUPPLIERS, label: 'Suppliers (csv)', width: '100%', column: 4 }
+                { name: _cxSchema.ca_settingApprover.SUPPLIERS, label: 'Suppliers (csv)', width: '100%', column: 4 },
+                { name: _cxSchema.ca_settingApprover.APPROVELOWERLEVELS, label: 'approve lower levels', column: 1 },
             ]
         });
         form.fields.push({

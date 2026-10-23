@@ -32,18 +32,12 @@ class CAApprovalEngine {
         // check if logged in user is an approver for the current level
 
         var approveLevel = document.approvedLevel + 1;
-
         var canApprove = false;
 
-
         // @@TODO: what about the suppliers...
-
         for (var rx = 0; rx < this.#approverConfigs.records.length; rx++) {
             var a = this.#approverConfigs.records[rx];
-
-            // @@TODO: if toogle canApproveLowerLevels ion
-            // if (a.level >= approveLevel) {
-            if (a.level == approveLevel) {
+            if ((a.approveLowerLevels && a.level >= approveLevel) || a.level == approveLevel) {
                 if (a.shopCount > 0) {
                     var shop = await a.getShop(document.shopId);
                     if (!shop) { continue; }
@@ -56,10 +50,32 @@ class CAApprovalEngine {
         return canApprove;
     }
 
-    async approve(documentId, message) {
+    // NOTE: true if the logged in user can approve the document and is a final level approver allowed to approve lower levels
+    async isFinalLevelApprover(document) {
+        if (!await this.canApprove(document)) { return false; }
+
+        for (var rx = 0; rx < this.#approverConfigs.records.length; rx++) {
+            var a = this.#approverConfigs.records[rx];
+            if (a.approveLowerLevels && a.level == document.approvalLevel) {
+                if (a.shopCount > 0) {
+                    var shop = await a.getShop(document.shopId);
+                    if (!shop) { continue; }
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    async approve(documentId, message, final) {
         var document = await this.cx.table(_cxSchema.cp_invoiceCredit).fetch(documentId);
         try {
-            document.approvedLevel++;
+            if (final) {
+                document.approvedLevel = document.approvalLevel;
+            } else {
+                document.approvedLevel++;
+            }
             if (document.approvedLevel == document.approvalLevel) {
                 document.approvalStatus = _cxConst.CP_DOCUMENT.APPROVAL_STATUS.Approved;
             } else {

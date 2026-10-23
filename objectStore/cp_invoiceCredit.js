@@ -464,7 +464,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get approvalStatusName() {
         var name = _declarations.CP_DOCUMENT.APPROVAL_STATUS.getName(this.approvalStatus);
         if (this.approvalStatus != _declarations.CP_DOCUMENT.APPROVAL_STATUS.NA && this.approvalStatus != _declarations.CP_DOCUMENT.APPROVAL_STATUS.NotRequired) {
-            name = `${name} (lvl: ${this.approvedLevel})`;
+            name = `${name} (lvl: ${this.approvedLevel || '0'})`;
         }
         return name;
     }
