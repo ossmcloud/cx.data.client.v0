@@ -40,10 +40,13 @@ class CAApprovalEngine {
 
         for (var rx = 0; rx < this.#approverConfigs.records.length; rx++) {
             var a = this.#approverConfigs.records[rx];
+
+            // @@TODO: if toogle canApproveLowerLevels ion
+            // if (a.level >= approveLevel) {
             if (a.level == approveLevel) {
                 if (a.shopCount > 0) {
                     var shop = await a.getShop(document.shopId);
-                    if (!shop) { break; }
+                    if (!shop) { continue; }
                 }
                 canApprove = true;
                 break;

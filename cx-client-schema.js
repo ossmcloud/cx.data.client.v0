@@ -2242,6 +2242,7 @@ module.exports = {
         CREATEDBY: 'createdBy',
         MODIFIED: 'modified',
         MODIFIEDBY: 'modifiedBy',
+        DESCRIPTION: 'description',
     },
 
     sys_customScriptShop: {
