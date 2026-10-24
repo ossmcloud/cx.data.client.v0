@@ -2286,6 +2286,20 @@ module.exports = {
         CREATEDBY: 'createdBy',
     },
 
+    sys_aiPrompt: {
+        TBL_NAME: 'sys_aiPrompt',
+        AIPROMPTID: 'aiPromptId',
+        NAME: 'name',
+        PROMPT: 'prompt',
+        EXECSEQUENCE: 'execSequence',
+        INACTIVE: 'inactive',
+        DESCRIPTION: 'description',
+        CREATED: 'created',
+        CREATEDBY: 'createdBy',
+        MODIFIED: 'modified',
+        MODIFIEDBY: 'modifiedBy',
+    },
+
     sys_customScript: {
         TBL_NAME: 'sys_customScript',
         SCRIPTID: 'scriptId',

@@ -315,6 +315,14 @@ async function getPermission(recordType, role) {
         permission.allowDelete = false;
     }
 
+    // NOTE: account prompts are injected in every ai chat, only CX_ADMIN can see / change them
+    if (recordType == _cxSchema.sys_aiPrompt.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+        permission.allowView = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+    }
+
     if (recordType == _cxSchema.cs_stockValuation.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = false;
