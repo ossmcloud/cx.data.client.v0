@@ -2284,6 +2284,8 @@ module.exports = {
         DURATIONMS: 'durationMs',
         CREATED: 'created',
         CREATEDBY: 'createdBy',
+        RATEANSWER: 'rateAnswer',
+        RATECOMMENT: 'rateComment',
     },
 
     sys_aiPrompt: {

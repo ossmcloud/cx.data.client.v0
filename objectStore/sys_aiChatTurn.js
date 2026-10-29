@@ -4,6 +4,8 @@ const { escapeHtml } = require('./sys_aiChat');
 const _persistentTable = require('./persistent/p-sys_aiChatTurn');
 //
 const PROMPT_PREVIEW_CHARS = 150;
+// NOTE: user feedback on the reply, rateAnswer is the position in the list (same labels as the assistant panel, jx-ai.js)
+const RATES = ['very poor', 'poor', 'ok', 'good', 'very good'];
 //
 class sys_aiChatTurn_Collection extends _persistentTable.Table {
     createNew(defaults) {
@@ -30,6 +32,8 @@ class sys_aiChatTurn extends _persistentTable.Record {
         return escapeHtml(prompt);
     }
     get errorMessageHtml() { return escapeHtml(this.errorMessage); }
+    get rateText() { return this.rateAnswer ? `${this.rateAnswer} - ${RATES[this.rateAnswer - 1] ?? ''}` : null; }
+    get rateCommentHtml() { return escapeHtml(this.rateComment); }
 
     async save() {
         // NOTE: BUSINESS CLASS LEVEL VALIDATION

@@ -37,6 +37,8 @@ const _fieldNames = {
     DURATIONMS: 'durationMs',
     CREATED: 'created',
     CREATEDBY: 'createdBy',
+    RATEANSWER: 'rateAnswer',
+    RATECOMMENT: 'rateComment',
 
 }
 //
@@ -61,6 +63,8 @@ const _fields = {
     durationMs: { name: 'durationMs', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
     created: { name: 'created', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: false, default: 'now' },
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    rateAnswer: { name: 'rateAnswer', dataType: 'int', pk: false, identity: false, maxLength: 4, null: true },
+    rateComment: { name: 'rateComment', dataType: 'varchar', pk: false, identity: false, maxLength: 300, null: true },
 
 }
 //
@@ -186,6 +190,18 @@ class Persistent_sys_aiChatTurn extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.CREATEDBY);
     } set createdBy(val) {
         super.setValue(_fieldNames.CREATEDBY, val);
+    }
+
+    get rateAnswer() {
+        return super.getValue(_fieldNames.RATEANSWER);
+    } set rateAnswer(val) {
+        super.setValue(_fieldNames.RATEANSWER, val);
+    }
+
+    get rateComment() {
+        return super.getValue(_fieldNames.RATECOMMENT);
+    } set rateComment(val) {
+        super.setValue(_fieldNames.RATECOMMENT, val);
     }
 
 

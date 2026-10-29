@@ -98,6 +98,8 @@ class SysAiChatRender extends RenderBase {
                 { name: 'promptPreview', title: 'prompt' },
                 { name: 'finishReason', title: 'finish', width: '80px', nullText: '' },
                 { name: 'errorMessageHtml', title: 'error', width: '200px', nullText: '' },
+                { name: 'rateText', title: 'rate', width: '80px', nullText: '' },
+                { name: 'rateCommentHtml', title: 'rate comment', width: '200px', nullText: '' },
                 { name: 'toolRounds', title: 'rounds', width: '50px', align: 'right' },
                 { name: 'tokensIn', title: 'tokens in', width: '80px', align: 'right', formatNumber: 'N0', addTotals: true },
                 { name: 'tokensCached', title: 'tokens cached', width: '80px', align: 'right', formatNumber: 'N0', addTotals: true },
