@@ -238,7 +238,7 @@ class CPQueryRender extends RenderBase {
                 }
                 this.options.buttons.push({ id: 'cp_reopen_query', text: 'Re-Open', function: 'reopenQuery' });
             }
-
+            
             if (bwgShopOptions) {
                 this.options.buttons.push({ id: 'cp_check_pod', text: 'Check POD', function: 'checkQueryPOD' });
             }
