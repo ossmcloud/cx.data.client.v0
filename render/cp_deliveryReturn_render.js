@@ -10,7 +10,7 @@ class CPDeliveryReturnRender extends RenderBase {
         super(dataSource, options);
         if (!options.path) { options.path = '../cp/delivery'; }
         if (!options.listPath) { options.listPath = '../cp/deliveries'; }
-        this.matchingEnabled = this.hasModule('cm');
+        this.matchingEnabled = this.hasModule(_cxConst.CX_MODULE_SYS.CM);
     }
 
     async getDocumentLineListOptions() {

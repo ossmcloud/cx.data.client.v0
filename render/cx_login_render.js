@@ -139,7 +139,7 @@ class CXLogin extends RenderBase {
                 ]
             });
 
-           
+
         }
 
 
@@ -174,7 +174,7 @@ class CXLogin extends RenderBase {
             { value: 9, text: 'Locked' },
             { value: 99, text: 'Deleted' },
         ]
-        
+
         this.options.columns = [
             { name: _cxSchema.cx_login.LOGINID, title: ' ', align: 'center' },
             { name: _cxSchema.cx_login.MASTERLOGINID, title: 'id', align: 'center', width: '50px' },
@@ -225,6 +225,26 @@ class CXLogin extends RenderBase {
             style: 'background-color: rgb(127,127,127); color: white; ' + applyStyle,
             columns: ['status']
         });
+    }
+
+
+    async dropDown(options) {
+        if (!options) { options = {}; }
+        if (this.options.placeHolder == undefined) { this.options.placeHolder = 'select a user'; }
+        if (this.options.label == undefined) { this.options.label = 'user'; }
+        options.noPaging = true;
+
+        // load collection if required
+        if (this.dataSource.count() == 0 && !this.options.noLoad) { await this.dataSource.select(options); }
+        // populate drop down items
+        var dropDownItems = [];
+        this.dataSource.each(function (record) {
+            dropDownItems.push({
+                value: record.loginId,
+                text: `${record.firstName || ''} ${record.lastName || ''}`.trim(),
+            });
+        });
+        this.options.items = dropDownItems;
     }
 }
 

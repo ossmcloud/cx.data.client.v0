@@ -32,6 +32,7 @@ const _fieldNames = {
     CREATEDBY: 'createdBy',
     MODIFIED: 'modified',
     MODIFIEDBY: 'modifiedBy',
+    DESCRIPTION: 'description',
 
 }
 //
@@ -51,6 +52,7 @@ const _fields = {
     createdBy: { name: 'createdBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
     modified: { name: 'modified', dataType: 'datetime', pk: false, identity: false, maxLength: 8, null: true },
     modifiedBy: { name: 'modifiedBy', dataType: 'bigint', pk: false, identity: false, maxLength: 8, null: true },
+    description: { name: 'description', dataType: 'varchar', pk: false, identity: false, maxLength: 4000, null: true },
 
 }
 //
@@ -146,6 +148,12 @@ class Persistent_sys_customScript extends _cx_data.DBRecord {
         return super.getValue(_fieldNames.MODIFIEDBY);
     } set modifiedBy(val) {
         super.setValue(_fieldNames.MODIFIEDBY, val);
+    }
+
+    get description() {
+        return super.getValue(_fieldNames.DESCRIPTION);
+    } set description(val) {
+        super.setValue(_fieldNames.DESCRIPTION, val);
     }
 
 

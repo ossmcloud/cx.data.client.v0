@@ -46,7 +46,7 @@ class CxShopRender extends RenderBase {
                 group: 'main', title: 'main info', columnCount: 4, fields: [
                     {
                         group: 'main1', title: '', column: 1, columnCount: 3, inline: true, fields: [
-                            { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 6  }', readOnly: (this.dataSource.id > 0) },
+                            { name: 'shopCode', label: 'code', column: 1, validation: '{ "mandatory": true, "max": 20  }', readOnly: (this.dataSource.id > 0) },
                             { name: 'currencyCode', label: 'currency', column: 2, width: '100px', validation: '{ "mandatory": true  }', readOnly: (this.dataSource.id > 0), lookUps: _cxConst.CX_CURRENCY.toList() },
                             await this.fieldDropDownOptions(_cxSchema.cx_shop_group, { id: 'shopGroupId', name: 'shopGroupId', column: 3, }),
                         ]

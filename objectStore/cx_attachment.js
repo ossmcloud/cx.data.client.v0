@@ -20,7 +20,7 @@ class cx_attachment_Collection extends _persistentTable.Table {
             query.sql = `
                 select  a.*, s.shopCode, s.shopName
                 from    cx_attachment a
-                join    cx_shop s ON s.shopId = a.shopId
+                left outer join cx_shop s ON s.shopId = a.shopId
 
                 where   1 = 1
             `;

@@ -2,11 +2,40 @@
 //
 const _persistentTable = require('./persistent/p-cp_invoiceCredit');
 const _declarations = require('../cx-client-declarations');
+const _sqlUtils = require('../core/cx-sql-utils');
 const _schema = require('../cx-client-schema');
 //
 class cp_invoiceCredit_Collection extends _persistentTable.Table {
     createNew(defaults) {
         return new cp_invoiceCredit(this, defaults);
+    }
+
+    async selectByOta(ota) {
+        var query = { sql: '', params: [] };
+        query.sql = ` select    distinct d.*, s.shopCode, s.shopName, 
+                                isnull(supp.traderName, isnull(supp2.traderName, isnull(supp3.traderName, case when suppName.traderName is null then null else '&#x2048;' + suppName.traderName end))) as supplierName,
+                                grp.documentNumber as groupDocumentNumber
+                      from      ${this.type} d
+                      inner join        cx_shop s ON s.shopId = d.${this.FieldNames.SHOPID}
+
+                      left outer join	cx_traderAccount supp           ON supp.traderAccountId = d.traderAccountId
+                      left outer join   cx_traderAccount supp2          ON supp2.shopId = d.shopId AND supp2.traderCode = d.supplierCode AND supp2.traderType = 'S' 
+                      left outer join   cx_traderAccount supp3          ON supp3.shopId = d.shopId AND supp3.wholesalerCode = d.supplierCode AND supp3.traderType = 'S' 
+                      left outer join   cx_traderNameLookUp suppName    ON suppName.shopId = d.shopId AND suppName.traderCode = d.supplierCode AND suppName.traderType = 'S' 
+
+                      left outer join   cp_invoiceGroup  grp            ON grp.invGrpId = d.invGrpId 
+
+                      left join         ca_oneTimeAccessDoc ota         ON ota.documentId = d.invCreId
+
+                      where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}
+                      and               ota.oneTimeAccessId = @ota`;
+        
+
+        query.sql += ` and d.inactive = 0`;
+
+        query.params.push({ name: 'ota', value: ota})
+
+        return await super.select(query);
     }
 
     async select(params) {
@@ -18,7 +47,7 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
         var accrualJoin = ''; var accrualTotals = '';
         if (params.accrId) {
             accrualJoin = `
-                join cp_accrualDocument accrDoc on accrDoc.invCreId = d.invCreId and accrDoc.accrId = ${params.accrId}
+                join cp_accrualDocument accrDoc on accrDoc.invCreId = d.invCreId and accrDoc.accrId = @accrId
                 join (
                     select  accrDocId, sum(lineNet) as accrTotNet, sum(lineVat) as accrTotVat, sum(lineGross) as accrTotGross, sum(lineDRS) as accrTotDRS
                     from	cp_accrualDocumentLine 
@@ -60,31 +89,34 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
                       where             d.${this.FieldNames.SHOPID} in ${this.cx.shopList}`;
 
         query.sql += ` and d.inactive = ${params.inactive == 'true' ? '1' : '0'}`;
-        
+
         if (params.pdt) {
             params.pdt = params.pdt.trim();
             if (params.pdtt == 'all') {
                 query.sql += `
                     and (
-                            dl.itemCode like '%${params.pdt}%'
-                        or  dl.itemDescription like '%${params.pdt}%'
-                        or  dl.itemBarcode like '%${params.pdt}%'
-                        or  dl.itemBarcodeOuter like '%${params.pdt}%'
+                            dl.itemCode like '%' + @pdt + '%'
+                        or  dl.itemDescription like '%' + @pdt + '%'
+                        or  dl.itemBarcode like '%' + @pdt + '%'
+                        or  dl.itemBarcodeOuter like '%' + @pdt + '%'
                     )
                 `
             } else if (params.pdtt == 'barcode') {
                 query.sql += `
                     and (
-                            dl.itemBarcode like '%${params.pdt}%'
-                        or  dl.itemBarcodeOuter like '%${params.pdt}%'
+                            dl.itemBarcode like '%' + @pdt + '%'
+                        or  dl.itemBarcodeOuter like '%' + @pdt + '%'
                     )
                 `
             } else if (params.pdtt == 'code') {
-                query.sql += `and dl.itemCode like '%${params.pdt}%' `
+                query.sql += `and dl.itemCode like '%' + @pdt + '%' `
             } else if (params.pdtt == 'descr') {
-                query.sql += `and dl.itemDescription like '%${params.pdt}%' `
+                query.sql += `and dl.itemDescription like '%' + @pdt + '%' `
             }
         }
+
+        if (params.accrId) { query.params.push({ name: 'accrId', value: params.accrId }); }
+        if (params.pdt) { query.params.push({ name: 'pdt', value: params.pdt }); }
 
         if (params.s) {
             query.sql += ' and d.shopId = @shopId';
@@ -176,7 +208,28 @@ class cp_invoiceCredit_Collection extends _persistentTable.Table {
             query.params.push({ name: 'documentStatus', value: params.st });
         }
         if (params.sta) {
-            query.sql += ' and d.documentStatus in (' + params.sta + ')';
+            query.sql += ' and d.documentStatus in (' + _sqlUtils.toIntList(params.sta) + ')';
+        }
+
+        if (params.aps) {
+            if (params.aps == -9) {
+                query.sql += ' and d.approvalStatus >= 0';
+            } else {
+                query.sql += ' and d.approvalStatus = @approvalStatus';
+                query.params.push({ name: 'approvalStatus', value: params.aps });
+            }
+        }
+        if (params.apb) {
+            query.sql += ' and d.approvedBy = @approvedBy';
+            query.params.push({ name: 'approvedBy', value: params.apb });
+        }
+        if (params.apdf) {
+            query.sql += ' and d.approvedOn >= @approvedOnFrom';
+            query.params.push({ name: 'approvedOnFrom', value: params.apdf });
+        }
+        if (params.apdt) {
+            query.sql += ' and d.approvedOn <= @approvedOnTo';
+            query.params.push({ name: 'approvedOnTo', value: params.apdt });
         }
 
         if (params.su) {
@@ -340,7 +393,7 @@ class cp_invoiceCredit extends _persistentTable.Record {
     get shopName() { return this.#shopName; }
     get shopCode() { return this.#shopCode; }
     get shopInfo() { return `[${this.#shopCode}] ${this.#shopName}`; }
-    get transmissionIdText() { return this.transmissionId.toString(); }
+    get transmissionIdText() { return this.transmissionId?.toString(); }
     //get dateStr() { return _core.date.format({ date: this.date }) }
 
     get postingStatus() { return this.#postingStatus; }
@@ -408,6 +461,19 @@ class cp_invoiceCredit extends _persistentTable.Record {
         return this.queryCount;
     }
 
+    get approvalStatusName() {
+        var name = _declarations.CP_DOCUMENT.APPROVAL_STATUS.getName(this.approvalStatus);
+        if (this.approvalStatus != _declarations.CP_DOCUMENT.APPROVAL_STATUS.NA && this.approvalStatus != _declarations.CP_DOCUMENT.APPROVAL_STATUS.NotRequired) {
+            name = `${name} (lvl: ${this.approvedLevel || '0'})`;
+        }
+        return name;
+    }
+    get approvalStatusIcon() {
+        if (this.approvalStatus == null) { return ''; }
+        if (this.approvalStatus == _declarations.CP_DOCUMENT.APPROVAL_STATUS.NA) { return ''; }
+        return _declarations.SVG_ICONS.number(this.approvalLevel, _declarations.CP_DOCUMENT.APPROVAL_STATUS.getStyleInverted(this.approvalStatus, true).bkgColor)
+    }
+
     get logs() {
         return this.#logs;
     } set logs(logs) {
@@ -433,6 +499,9 @@ class cp_invoiceCredit extends _persistentTable.Record {
         if (error && error.message) { error = error.message; }
         await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.ERROR, error, info);
 
+    }
+    async logApproval(message, info) {
+        await this.logBase(_declarations.CP_DOCUMENT_LOG.STATUS.APPROVAL, message, info);
     }
     async logBase(type, message, info) {
         if (!this.#logs) {

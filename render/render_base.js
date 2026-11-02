@@ -66,7 +66,7 @@ class RenderBase {
         if (this.dataSource.table) {
             // this if the data source is a record
             this.options.primaryKey = this.dataSource.table.primaryKeys[0].name;
-        } else if (this.dataSource.primaryKeys) {
+        } else if (this.dataSource.primaryKeys && this.dataSource.primaryKeys.length > 0) {
             // this if the data source is a table
             this.options.primaryKey = this.dataSource.primaryKeys[0].name;
         }
@@ -95,7 +95,7 @@ class RenderBase {
         if (!this.options.cellHighlights) { this.options.cellHighlights = []; }
 
         if (this.options.query == undefined) { this.options.query = {}; }
-        
+
     }
 
     async getUserListOptions() {
@@ -127,15 +127,24 @@ class RenderBase {
         var sortIdx = 0; var sortIdxFilter = 0;
         var dataSource = this.dataSource;
         var userListOptions = await this.getUserListOptions();
-        
+
         var fields = this.autoLoadFields || dataSource.fields;
 
         for (var f in fields) {
             var field = fields[f];
-            if (field == null) { field = dataSource.fields[f]; }
+            if (field == null) {
+                field = dataSource.fields[f];
+                if (field === undefined) {
+                    field = {
+                        fieldName: f,
+                        name: f
+                    }
+                }
+            }
+
 
             var column = { name: f, title: f.fromCamelCase() };
-            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: (field.fieldName ||  f), inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
+            var filter = { id: 'cx_' + f, label: f.fromCamelCase(), fieldName: (field.fieldName || f), inputType: _cxConst.RENDER.CTRL_TYPE.TEXT, width: '130px' };
             if (field.pk) {
                 column.align = 'center';
                 column.title = ' ';
@@ -202,7 +211,7 @@ class RenderBase {
                         } else {
                             this.#dataSourceFilters.push(filter);
                             if (field.dataType == 'datetime' || field.dataType == 'date') {
-                               //field.dataType = 'date';
+                                //field.dataType = 'date';
                                 var filter2 = {};
                                 for (var fk in filter) { filter2[fk] = filter[fk]; }
                                 filter2.id += '_2';
@@ -358,7 +367,7 @@ class RenderBase {
         if (this.autoLoad === true) { await this.initColumnsAndFilters(); }
 
         this.options.linkTarget = this.cx.prefLinkTarget;
-        
+
         await this._list(this.options.request, this.options.h);
     }
     async _list(request, h) {

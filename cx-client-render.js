@@ -11,7 +11,7 @@ async function getCustomOptions(renderType, table) {
 }
 
 async function getDefaultOptions(renderType, table, options) {
-    var renderer = require(`./render/${((table.table) ? table.table.type: table.type)}_render`);
+    var renderer = require(`./render/${((table.table) ? table.table.type : table.type)}_render`);
     var renderOptions = new renderer(table, options);
     return renderOptions.get(renderType, options.dropDownSelectOptions);
 }
@@ -20,7 +20,7 @@ async function setLoginLookUpColumns(dataSource, options) {
     if (options.columns) {
         var users = await dataSource.cx.table(_cxSchema.cx_login).selectList(true);
         options.columns.forEach(col => {
-            if (col.name == 'createdBy' || col.name == 'modifiedBy') {
+            if (col.name == 'createdBy' || col.name == 'modifiedBy' || col.name == 'approvedBy') {
                 col.lookUps = users;
             }
         });
@@ -36,6 +36,8 @@ async function setLoginLookUpFields(dataSource, fields, users) {
             if (field.name == 'createdBy' || field.name == 'modifiedBy') {
                 field.lookUps = users;
                 field.readOnly = true;
+            } else if (field.name == 'approvedBy') {
+                field.lookUps = users;
             }
             //
             if (field.fields) { setLoginLookUpFields(dataSource, field.fields, users); }

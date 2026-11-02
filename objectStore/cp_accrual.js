@@ -2,12 +2,31 @@
 //
 const _schema = require('../cx-client-schema');
 const _declarations = require('../cx-client-declarations');
+const _sqlUtils = require('../core/cx-sql-utils');
 const _persistentTable = require('./persistent/p-cp_accrual');
 //
 class cp_accrual_Collection extends _persistentTable.Table {
    
     createNew(defaults) {
         return new cp_accrual(this, defaults);
+    }
+
+    // NOTE: only return accruals of the user shops (the base fetch does not filter by shop)
+    async fetch(id, returnNull) {
+        if (this.cx.cxSvc == true) { return await super.fetch(id, returnNull); }
+        if (!id) { throw new Error('cp_accrual::fetch - missing required argument [id]'); }
+        var query = {
+            sql: `select * from ${this.type} where ${this.FieldNames.ACCRID} = @accrId and ${this.FieldNames.SHOPID} in ${this.cx.shopList}`,
+            params: [{ name: 'accrId', value: id }],
+            noResult: 'null',
+            returnFirst: true,
+        };
+        var rawRecord = await this.db.exec(query);
+        if (!rawRecord) {
+            if (returnNull) { return null; }
+            throw new Error(`${this.type} record [${id}] does not exist, was deleted or you do not have permission!`);
+        }
+        return super.populate(rawRecord);
     }
 
 
@@ -25,15 +44,17 @@ class cp_accrual_Collection extends _persistentTable.Table {
                 `
         };
 
-        if (params.SKIP_sta) { query.sql += ' and a.documentStatus in (' + params.SKIP_sta + ')'; }
+        if (!query.params) { query.params = []; }
+        if (params.SKIP_sta) { query.sql += ' and a.documentStatus in (' + _sqlUtils.toIntList(params.SKIP_sta) + ')'; }
         if (params.SKIP_ref) {
             query.sql += `
                 and (
-                    a.documentNumber like '${params.SKIP_ref}%' or
-                    a.documentReference like '${params.SKIP_ref}%' or
-                    a.documentSecondReference like '${params.SKIP_ref}%'
+                    a.documentNumber like @SKIP_ref + '%' or
+                    a.documentReference like @SKIP_ref + '%' or
+                    a.documentSecondReference like @SKIP_ref + '%'
                 )
             `;
+            query.params.push({ name: 'SKIP_ref', value: params.SKIP_ref });
         }
 
         this.queryFromParams(query, params, 'a');

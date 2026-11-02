@@ -75,14 +75,15 @@ class cp_query_Collection extends _persistentTable.Table {
 
         if (isDelivery) {
             query.sql += `
-                and         del.delRetId =              ${docId}
+                and         del.delRetId =              @docId
             `;
         } else {
             query.sql += `
-                and         doc.invCreId =              ${docId}
+                and         doc.invCreId =              @docId
             `;
         }
 
+        query.params = [{ name: 'docId', value: docId }];
         query.sql += `
             and         (q.statusId   <               ${_cxConst.CP_QUERY_STATUS.RESOLVED}
             or          q.statusId   =               ${_cxConst.CP_QUERY_STATUS.ERROR})
@@ -113,7 +114,7 @@ class cp_query_Collection extends _persistentTable.Table {
                     left outer      join cx_traderAccount     supp ON supp.traderAccountId = del.traderAccountId
                     left outer		join cp_wholesalerShop whsShop ON whsShop.shopId = del.shopId
                     left outer		join cp_wholesaler    whs ON whs.wholesalerId    = whsShop.wholesalerId
-                    where           del.delRetId = ${docId}
+                    where           del.delRetId = @docId
                 `;
         } else {
             docInfoSql = `
@@ -129,11 +130,11 @@ class cp_query_Collection extends _persistentTable.Table {
                     left outer join cp_wholesalerShop whsShop ON whsShop.shopId = doc.shopId
                     left outer join cp_wholesaler    whs ON whs.wholesalerId    = isnull(grp.wholesalerId, whsShop.wholesalerId)
                     
-                    where           doc.invCreId = ${docId}
+                    where           doc.invCreId = @docId
                 `;
         }
 
-        return await this.cx.exec({ sql: docInfoSql, returnFirst: true });
+        return await this.cx.exec({ sql: docInfoSql, params: [{ name: 'docId', value: docId }], returnFirst: true });
     }
 
 

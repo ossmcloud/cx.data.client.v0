@@ -21,6 +21,7 @@ class SysCustomScript extends RenderBase {
         this.autoLoadFields[_cxSchema.sys_customScript.EXECSEQUENCE] = null;
         this.autoLoadFields['shopCount'] = { name: 'shopCount', title: 'stores' };
         this.autoLoadFields[_cxSchema.sys_customScript.SCRIPTNAME] = null;
+        this.autoLoadFields[_cxSchema.sys_customScript.DESCRIPTION] = null;
         this.autoLoadFields[_cxSchema.sys_customScript.INACTIVE] = null;
         this.autoLoadFields[_cxSchema.sys_customScript.CREATED] = null;
         this.autoLoadFields[_cxSchema.sys_customScript.MODIFIED] = null;
@@ -41,17 +42,10 @@ class SysCustomScript extends RenderBase {
         } else if (field.name == 'shopCount') {
             column.align = 'center';
             column.width = '50px';
+        } else if (field.name == _cxSchema.sys_customScript.DESCRIPTION) {
+            column.nullText = '';
         }
-        // else if (field.name == _cxSchema.cp_queryType.REQUIRESDISPUTEDAMOUNT) {
-        //     column.lookUps = _cxConst.CP_QUERY_TYPE_REQ_DISPUTED.toList();
-        //     column.addTotals = false;
-        //     column.align = 'center';
-        //     column.width = '150px';
-        // } else if (field.name == _cxSchema.cp_queryType.NAME) {
-        //     column.width = '200px';
-        // } else if (field.name == _cxSchema.cp_queryType.CODE) {
-        //     column.width = '120px';
-        // }
+
     }
 
     async initFilter(field, filter) {
@@ -134,6 +128,7 @@ class SysCustomScript extends RenderBase {
         });
 
         header.fields.push({ name: _cxSchema.sys_customScript.INACTIVE, label: 'is inactive', column: 2 });
+        header.fields.push({ name: _cxSchema.sys_customScript.DESCRIPTION, label: 'description', column: 3, type: _cxConst.RENDER.CTRL_TYPE.TEXT_AREA, rows: 4, validation: '{"max": 4000}' });
 
         var sqlText = {
             group: 'sql', title: 'script sql', columnCount: 1, fields: [

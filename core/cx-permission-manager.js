@@ -300,12 +300,44 @@ async function getPermission(recordType, role) {
         permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
     }
 
+    if (recordType == _cxSchema.sys_doc.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowView = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+    }
+
+    // NOTE: read-only, chats are only written by the ai assistant (which chats a role can see is enforced by sys_aiChat.select / fetch)
+    if (recordType == _cxSchema.sys_aiChat.TBL_NAME || recordType == _cxSchema.sys_aiChatTurn.TBL_NAME || recordType == _cxSchema.sys_aiChatToolCall.TBL_NAME) {
+        permission.allowEdit = false;
+        permission.allowNew = false;
+        permission.allowView = (role >= _cxConst.CX_ROLE.CX_SUPPORT);
+        permission.allowDelete = false;
+    }
+
+    // NOTE: account prompts are injected in every ai chat, only CX_ADMIN can see / change them
+    if (recordType == _cxSchema.sys_aiPrompt.TBL_NAME) {
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+        permission.allowView = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.CX_ADMIN);
+    }
+
     if (recordType == _cxSchema.cs_stockValuation.TBL_NAME) {
         permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
         permission.allowNew = false;
         permission.allowDelete = false;
     }
 
+
+    if (recordType == _cxSchema.ca_setting.TBL_NAME || recordType == _cxSchema.ca_settingShop.TBL_NAME || recordType == _cxSchema.ca_settingApprover.TBL_NAME
+        || recordType == _cxSchema.ca_settingApproverShop.TBL_NAME || recordType == _cxSchema.ca_rejectReason.TBL_NAME) {
+        //permission.allowEdit = (role >= _cxConst.CX_ROLE.USER);
+        permission.allowEdit = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowNew = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowDelete = (role >= _cxConst.CX_ROLE.SUPERVISOR);
+        permission.allowView = true;
+    }
 
     
     if (!permission.allowView) {

@@ -37,20 +37,21 @@ class cs_stockValuation_Collection extends _persistentTable.Table {
             } else if (options.fieldName == 'pdtt') {
                 var value = params.pdt.trim();
                 if (!value) { return false; }
+                query.params.push({ name: 'pdt', value: value });
                 if (options.paramValue == 'all') {
                     return `
                         and (
-                                dl.eposCode like '%${value}%'
-                            or  dl.eposDescription like '%${value}%'
-                            or  dl.eposBarcode like '%${value}%'
+                                dl.eposCode like '%' + @pdt + '%'
+                            or  dl.eposDescription like '%' + @pdt + '%'
+                            or  dl.eposBarcode like '%' + @pdt + '%'
                         )
                     `;
                 } else if (options.paramValue == 'barcode') {
-                    return `and dl.eposBarcode like '%${value}%' `;
+                    return `and dl.eposBarcode like '%' + @pdt + '%' `;
                 } else if (options.paramValue == 'code') {
-                    return `and dl.eposCode like '%${value}%' `;
+                    return `and dl.eposCode like '%' + @pdt + '%' `;
                 } else if (options.paramValue == 'descr') {
-                    return `and dl.eposDescription like '%${value}%' `;
+                    return `and dl.eposDescription like '%' + @pdt + '%' `;
                 } else {
                     return false;
                 }
