@@ -95,8 +95,7 @@ class cx_attachment extends _persistentTable.Record {
         } else if (this.source == _declarations.CX_ATTACHMENT.SOURCE.OneDrive) {
             return `<img src="/public/images/onedrive.ico" style="width: 16px" title="One Drive ${this.type}" />`;
         } else if (this.source == _declarations.CX_ATTACHMENT.SOURCE.SharePoint) {
-            // @@TODO: Share Point Icon
-            return `<img src="/public/images/onedrive.ico" style="width: 16px" title="Share Point ${this.type}" />`;
+            return `<img src="/public/images/sharepoint.ico" style="width: 16px" title="Share Point ${this.type}" />`;
         }
 
         return `<img src="/public/images/attach_${this.cx.theme}.png" style="width: 16px" title="${_declarations.CX_ATTACHMENT.SOURCE.getName(this.source)} ${this.type}" />`;

@@ -103,16 +103,44 @@ const CX_LOGIN_TOKEN_STATUS = {
     ACTIVE: 1,
 
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty); }
+    toList: function (addEmpty) { return enumToList(this, addEmpty); },
+    getStyleInverted: function (status, returnObject) {
+        var color = 'var(--main-color)'; var bkgColor = '';
+        if (status == this.ACTIVE) {
+            color = '0,100,0';
+            bkgColor = '138,201,38';
+        } else if (status == this.EXPIRED) {
+            color = '255,255,255';
+            bkgColor = '128,128,128';
+        } else if (status == this.INVALID) {
+            color = '255,255,255';
+            bkgColor = '234,30,37';
+        }
+
+        var styles = { color: color, bkgColor: bkgColor, colorRgb: color, bkgColorRgb: bkgColor };
+        if (styles.color && styles.color.indexOf('var') < 0) { styles.color = 'rgb(' + styles.color + ')'; }
+        if (styles.bkgColor && styles.bkgColor.indexOf('var') < 0) { styles.bkgColor = 'rgb(' + styles.bkgColor + ')'; }
+        if (returnObject) { return styles; }
+        return `color: ${styles.color}; background-color: ${styles.bkgColor};`;
+    }
 }
 const CX_LOGIN_TOKEN_TYPE = {
     ERP: 'erp',
     EPOS: 'epos',
     ONE: 'one',
     THEREFORE: 'there',
+    SHAREPOINT: 'shp',
 
     //
-    toList: function (addEmpty) { return enumToList(this, addEmpty, null, null, true); }
+    toList: function (addEmpty) {
+        return enumToList(this, addEmpty, {
+            ERP: 'ERP',
+            EPOS: 'EPoS',
+            ONE: 'One Drive',
+            THEREFORE: 'Therefore',
+            SHAREPOINT: 'Share Point',
+        }, null, true);
+    }
 }
 const CX_LOGIN_CACHE_TYPE = {
     URL_QUERY: 1
