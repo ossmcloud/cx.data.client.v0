@@ -1695,11 +1695,13 @@ const CX_ATTACHMENT = {
     SOURCE: {
         Therefore: 'there',
         OneDrive: 'one',
+        SharePoint: 'sharep',
         Blob: 'blob',
         toList: function (addEmpty) {
             return enumToList(this, addEmpty, {
                 Therefore: 'Therefore',
                 OneDrive: 'One Drive',
+                SharePoint: 'Share Point',
                 Blob: 'Sruu Blob Storage',
             });
         },
@@ -1707,6 +1709,7 @@ const CX_ATTACHMENT = {
             return enumGetName(this, value, {
                 Therefore: 'Therefore',
                 OneDrive: 'One Drive',
+                SharePoint: 'Share Point',
                 Blob: 'Sruu Blob Storage',
             });
         },
