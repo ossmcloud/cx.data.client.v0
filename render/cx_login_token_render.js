@@ -30,8 +30,8 @@ class CXLoginToken extends RenderBase {
             column.title = 'type';
             column.addTotals = false;
             column.align = 'center';
-            column.width = '50px';
-            //column.lookUps = _cxConst.CX_LOGIN_TOKEN_STATUS.CX_LOGIN_TOKEN_STATUS.toList();
+            column.width = '100px';
+            column.lookUps = _cxConst.CX_LOGIN_TOKEN_TYPE.toList();
             column.hide = false;
         } else if (field.name == _cxSchema.cx_login_token.STATUS) {
             column.title = 'token status';
@@ -62,7 +62,23 @@ class CXLoginToken extends RenderBase {
 
         this.options.showButtons = [];
         this.options.showButtons.push({ id: 'cx_login_token_new_onedrive', text: 'One Drive', function: 'getOneDriveToken' });
+        this.options.showButtons.push({ id: 'cx_login_token_new_onedrive', text: 'Share Point', function: 'getSharePointToken' });
         this.options.showButtons.push({ id: 'cx_login_token_new_therefore', text: 'Therefore', function: 'setThereforeToken' });
+
+        // status badge, same style as the document status in cp_invoiceCredit_render
+        if (!this.options.cellHighlights) { this.options.cellHighlights = []; }
+        var applyStyle = 'padding: 5px 7px 1px 7px; border-radius: 5px; width: calc(100% - 14px); display: block; overflow: hidden; text-align: center;';
+        var statuses = _cxConst.CX_LOGIN_TOKEN_STATUS.toList();
+        for (let sx = 0; sx < statuses.length; sx++) {
+            const s = statuses[sx];
+            this.options.cellHighlights.push({
+                column: _cxSchema.cx_login_token.STATUS,
+                op: '=',
+                value: s.value,
+                style: _cxConst.CX_LOGIN_TOKEN_STATUS.getStyleInverted(s.value) + applyStyle,
+                columns: [_cxSchema.cx_login_token.STATUS]
+            });
+        }
 
 
     }
@@ -108,6 +124,10 @@ class CXLoginToken extends RenderBase {
 
             if (this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.ONE) {
                 this.options.buttons.push({ id: 'cx_login_one_list_files', text: 'List items in Root Folder', function: 'oneDrive_listRoot' });
+            }
+
+            if (this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.SHAREPOINT) {
+                this.options.buttons.push({ id: 'cx_login_shp_list_sites', text: 'Open SharePoint Site', function: 'sharePoint_listSites' });
             }
 
             if (this.dataSource.cx.roleId >= _cxConst.CX_ROLE.CX_SUPPORT && this.dataSource.type == _cxConst.CX_LOGIN_TOKEN_TYPE.EPOS && this.dataSource.status == _cxConst.CX_LOGIN_TOKEN_STATUS.ACTIVE) {
